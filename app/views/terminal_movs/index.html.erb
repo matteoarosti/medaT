@@ -1,0 +1,37 @@
+    <script type="text/javascript">
+        function hasOption (name) {
+            return window.location.search.indexOf(name) >= 0;
+        }
+
+        Ext.Loader.setConfig({
+        	enabled: true,
+        	paths  : {
+        		Sc : '/js/Sc'
+        	}
+        });
+        Ext.Loader.setPath('Ext.ux', '../ux');
+        Ext.require([
+            'Ext.grid.*',
+            'Ext.data.*',
+            'Ext.util.*',
+            'Ext.Action',
+            'Ext.tab.*',
+            'Ext.button.*',
+            'Ext.form.*',
+            'Ext.layout.container.Card',
+            'Ext.layout.container.Border',
+            //'Ext.ux.ajax.SimManager',
+            //'Ext.ux.PreviewPlugin',
+            'Ext.grid.plugin.BufferedRenderer',
+            'Ext.*'
+        ]);
+        Ext.onReady(function(){
+            if (hasOption('simjax')) {
+                initAjaxSim();
+            }
+
+
+            Ext.QuickTips.init();            
+            myApp = new FeedViewer.App();
+        });
+    </script>

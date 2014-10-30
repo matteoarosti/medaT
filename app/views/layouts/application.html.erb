@@ -6,6 +6,15 @@
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Meda T" %>">
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    
+    <!-- ExtJS -->
+	<link rel="stylesheet" type="text/css" href="/ext-5.0.1/ext-theme-crisp-all.css">
+    <script type="text/javascript" src="/ext-5.0.1/ext-all.js"></script> 
+    <script type="text/javascript" src="/ext-5.0.1/ext-theme-crisp.js"></script>
+       
+	<script type="text/javascript" src="/ext-5.0.1/ext-locale-it.js"></script>    
+    <!-- //ExtJS -->
+    
     <%= csrf_meta_tags %>
   </head>
   <body>

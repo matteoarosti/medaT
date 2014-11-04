@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141024202133) do
+ActiveRecord::Schema.define(version: 20141104152723) do
+
+  create_table "shipowners", force: true do |t|
+    t.string   "name",                 limit: 50
+    t.string   "short_name",           limit: 3
+    t.string   "email",                limit: 50
+    t.decimal  "estimate_hourly_cost",            precision: 5, scale: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

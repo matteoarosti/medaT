@@ -1,0 +1,2 @@
+module ShipownersHelper
+end

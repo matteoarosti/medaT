@@ -200,37 +200,11 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	     
         	     
         	    ]
-        	}, {
-        	    title: '', height: 90,
-        	    bodyStyle: 'padding: 5px',        	    
-        	    items: [
-        	      {         
-        	    	 flex: 1,
-                     xtype: 'fieldset', border: true, collapsible: false,
-                     title: 'Visita doganale import',
-                     //combineErrors: true,
-                     //msgTarget : 'side',
-                 	layout: {
-                	    type: 'vbox',
-                	    //align : 'stretch',
-                	    pack  : 'start',
-                	},
-                     defaults: {
-                         //flex: 1,
-                         hideLabel: false,
-                         labelWidth: 140,
-                     	 xtype: 'textfield',
-                     	 margin: '1 0 0 0'
-                     },
-                     items: [
-                        {fieldLabel: 'Numero movimento'},
-                        {fieldLabel: 'Data', xtype: 'datefield', margin: '1 0 5 0'}
-                     ]
-        	     }   
-        	    ]
-        	}, 
+        	}
         	
-        	 {
+        	
+        	
+        	, {
         	    title: 'Distinta movimenti', flex: 50,
         	    xtype: 'gridpanel',
         	    store: new Ext.data.Store({

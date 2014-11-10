@@ -1,4 +1,8 @@
+    
+    <script type="text/javascript" src="/viewer/FeedViewer.js"></script>
+    <script type="text/javascript" src="/FeedViewer/my_models.js"></script>    
     <script type="text/javascript">
+    
         function hasOption (name) {
             return window.location.search.indexOf(name) >= 0;
         }
@@ -20,8 +24,8 @@
             'Ext.form.*',
             'Ext.layout.container.Card',
             'Ext.layout.container.Border',
-            //'Ext.ux.ajax.SimManager',
-            //'Ext.ux.PreviewPlugin',
+            'Ext.ux.ajax.SimManager',
+            'Ext.ux.PreviewPlugin',
             'Ext.grid.plugin.BufferedRenderer',
             'Ext.*'
         ]);
@@ -31,7 +35,18 @@
             }
 
 
+// ****** PER BUG UPDATE PROXY SU BUFFERED STORE
+Ext.define('Ext.ux.fixed.BufferedStore', {
+    override: 'Ext.data.BufferedStore',
+    contains: function(record) {
+        return this.indexOf(record) > -1;
+    }
+});
+
+
+
             Ext.QuickTips.init();            
             myApp = new FeedViewer.App();
         });
-    </script>
+    </script>    
+    

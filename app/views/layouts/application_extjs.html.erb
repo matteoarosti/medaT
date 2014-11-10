@@ -9,23 +9,82 @@
      #disattivo, altrimenti provoca errori con css extjs
      #stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
      %>
+	<%= stylesheet_link_tag 'application_extjs', media: 'all', 'data-turbolinks-track' => true %>     
     
     <!-- ExtJS -->
-	 <link rel="stylesheet" type="text/css" href="/ext-5.0.1/ext-theme-crisp-all.css">
-     <script type="text/javascript" src="/ext-5.0.1/ext-all.js"></script> 
-     <script type="text/javascript" src="/ext-5.0.1/ext-theme-crisp.js"></script>       
-	 <script type="text/javascript" src="/ext-5.0.1/ext-locale-it.js"></script>    
-    <!-- //ExtJS -->
-    
+	 <link rel="stylesheet" type="text/css" href="/ext-5.0.1_only/ext-theme-crisp-all.css">
+     <script type="text/javascript" src="/ext-5.0.1_only/ext-all-debug.js"></script> 
+     <script type="text/javascript" src="/ext-5.0.1_only/ext-theme-crisp.js"></script>       
+	 <script type="text/javascript" src="/ext-5.0.1_only/ext-locale-it.js"></script>    
+     <!-- //ExtJS -->
+     
+  <!--   
+	<link rel="stylesheet" type="text/css" href="/ext-5.0.1/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css">
+    <script type="text/javascript" src="/ext-5.0.1/build/ext-all-debug.js"></script> 
+    <script type="text/javascript" src="/ext-5.0.1/build/packages/ext-theme-crisp/build/ext-theme-crisp-debug.js"></script>
+    <script type="text/javascript" src="/ext-5.0.1/packages/ext-locale/build/ext-locale-it.js"></script>
+  -->     
+     
+         
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 
     
-    <%= csrf_meta_tags %>    
+    <%= csrf_meta_tags %> 
+    
+    <script type="text/javascript">
+		try {
+		  // FORZO IL PASSAGGIO DEL TOKEN PER LE ESECUZIONI AJAX
+		  // altrimenti ho CSRF authenticity token error
+		  // (token richiesto da protect_from_forgery)
+		  m_token = Ext.select("meta[name='csrf-token']").elements[0].getAttribute('content');
+		 
+		  // Ensure the Rails CSRF token is always sent
+		  Ext.Ajax.on('beforerequest', function(o,r) {
+		    r.headers = Ext.apply({
+		      'Accept': 'application/json',
+		      'X-CSRF-Token': m_token
+		    }, r.headers || {});
+		  });
+		} catch (e) {
+		   console.log('CSRF protection appears to be disabled');
+		   console.log(e);
+		}   
+		
+		
+		
+		// ****** PER BUG UPDATE PROXY SU BUFFERED STORE	
+		Ext.define('Ext.ux.fixed.BufferedStore', {
+		    override: 'Ext.data.BufferedStore',
+		    contains: function(record) {
+		        return this.indexOf(record) > -1;
+		    }
+		});	
+		
+		//font awesome di default
+		Ext.setGlyphFontFamily('FontAwesome');
+		 
+    </script>    
+    
+    
+
+    
+<!--    
+	<script type="text/javascript" src="/FeedViewer/MovimentoPanel.js"></script>
+	<script type="text/javascript" src="/FeedViewer/ScGrid.js"></script>	
+    <script type="text/javascript" src="/viewer/FeedPost.js"></script>
+    <script type="text/javascript" src="/viewer/FeedDetail.js"></script>
+    <script type="text/javascript" src="/viewer/FeedGrid.js"></script>
+    <script type="text/javascript" src="/viewer/FeedInfo.js"></script>
+    <script type="text/javascript" src="/viewer/FeedPanel.js"></script>
+    <script type="text/javascript" src="/viewer/01_MenuPanel.js"></script>
+
+    <script type="text/javascript" src="/viewer/FeedWindow.js"></script>
+    <script type="text/javascript" src="/viewer/Sim.js"></script>
+-->    
+    
+   <%= yield %>    
     
   </head>
   <body>
-
-   <%= yield %>
-
   </body>
 </html>

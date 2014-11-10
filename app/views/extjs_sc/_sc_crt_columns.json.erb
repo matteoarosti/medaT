@@ -1,0 +1,12 @@
+
+<% sc_columns.each do |k_col_def, col_def|%>
+  <% 
+  	logger.info "------"
+    logger.info col_def.to_yaml
+    logger.info "------" 
+  %>
+  <% case col_def[:xtype] 
+     when 'textcolumn' %><%= col_def %>
+  <% when 'numbercolumn' %>ccccc
+  <% end %>
+<% end %>

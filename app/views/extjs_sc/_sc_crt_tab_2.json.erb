@@ -1,0 +1,12 @@
+{success:true,
+ "items":{"xtype":"sc_grid",
+          "title":"aaaaa",
+          "closable":true,
+  columns: [{"text":"id","dataIndex":"id","xtype":"numbercolumn","align":"right","format":"0"},{"text":"denominazione","dataIndex":"denominazione","flex":1},{"text":"cap","dataIndex":"cap","flex":1},{"text":"created_at","dataIndex":"created_at","xtype":"datecolumn","format":"d/m/Y H:i:s","width":140},{"text":"updated_at","dataIndex":"updated_at","xtype":"datecolumn","format":"d/m/Y H:i:s","width":140}],
+  viewModel: {
+  	data: {mRecord22: 'jsjjjj'},
+  	stores:   {customers: {"xtype":"Ext.data.Store","autoLoad":true,"autoSync":false,"proxy":{"url":"/terminal_movs/sc_list","api":{"read":"/terminal_movs/sc_list","create":"/terminal_movs/sc_create","update":"/terminal_movs/sc_update","destroy":"/terminal_movs/sc_destroy","save":"/terminal_movs/sc_update"},"method":"POST","type":"ajax","actionMethods":"POST","reader":{"type":"json","method":"POST","rootProperty":"items","totalProperty":"total"},"writer":{"type":"json","rootProperty":"data","writeAllFields":true}},"fields":["denominazione"],"pageSize":500,"leadingBufferZone":300,"buffered":true}}
+  }
+  }}
+             
+    

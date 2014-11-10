@@ -21,3 +21,5 @@ module MedaT
     # config.i18n.default_locale = :de
   end
 end
+
+Rails.application.config.assets.precompile += %w( application_extjs.css )

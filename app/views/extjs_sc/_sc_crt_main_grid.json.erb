@@ -1,0 +1,13 @@
+{
+  xtype: 'sc_grid',
+  title: 'aaaaa',
+  closable: true,
+  
+  columns: <%= raw(sc_columns.to_json) -%>,
+  form_fields: <%= raw(sc_form_fields.to_json) -%>,
+  
+  viewModel: {
+  	data: {mRecord22: 'jsjjjj'},
+  	stores:   {customers: <%= raw(sc_store.to_json) -%>}
+  }
+}

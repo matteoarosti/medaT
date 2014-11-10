@@ -50,8 +50,7 @@ function acs_show_panel_std(app, url, jsonData, tab_id, listeners, loadBodyMask)
 
 
 Ext.define('FeedViewer.App', {
-	//requires : [ 'Ext.container.Viewport', 'FeedViewer.MovimentoPanel', 'FeedViewer.ScGrid'],
-	requires : [ 'Ext.container.Viewport'],	
+	requires : [ 'Ext.container.Viewport', 'FeedViewer.MovimentoPanel', 'FeedViewer.ScGrid', 'FeedViewer.MenuPanel'],
     extend: 'Ext.container.Viewport',
     
     initComponent: function(){
@@ -130,15 +129,10 @@ Ext.define('FeedViewer.App', {
     		                children:
     		                [
     		                 { 
-                                 task:'Vettori',
-                                 url: '/vettores/sc_crt_tab', 
+                                 task:'Ship Owner',
+                                 url: '/shipowners/extjs_sc_crt_tab', 
                                  leaf:true, 
                                  iconCls:'task' 
-                             }, {
-                                 task:'Porti',
-                                 url: '/portos/sc_crt_tab',                                 
-                                 leaf:true,
-                                 iconCls:'task'                             	 
                              }    		                 
     		                ]
     		            }, {

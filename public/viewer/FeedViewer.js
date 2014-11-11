@@ -129,11 +129,30 @@ Ext.define('FeedViewer.App', {
     		                children:
     		                [
     		                 { 
-                                 task:'Ship Owner',
+                                 task:'Ship Owners',
                                  url: '/shipowners/extjs_sc_crt_tab', 
-                                 leaf:true, 
-                                 iconCls:'task' 
-                             }    		                 
+                                 leaf:true 
+                             }, { 
+                                 task:'Carriers',
+                                 url: '/carriers/extjs_sc_crt_tab', 
+                                 leaf:true 
+                             }, { 
+                                 task:'Equipment',
+                                 url: '/equipment/extjs_sc_crt_tab', 
+                                 leaf:true 
+                             }, { 
+                                 task:'Ports',
+                                 url: '/ports/extjs_sc_crt_tab', 
+                                 leaf:true 
+                             }, { 
+                                 task:'Shippers',
+                                 url: '/shippers/extjs_sc_crt_tab', 
+                                 leaf:true 
+                             }, { 
+                                 task:'Ships',
+                                 url: '/ships/extjs_sc_crt_tab', 
+                                 leaf:true 
+                             }   		                 
     		                ]
     		            }, {
     		                task:'Movimenti',  
@@ -193,7 +212,8 @@ Ext.define('FeedViewer.App', {
 			return;
     	}
 
-    	acs_show_panel_std(this, rec.get('url'), {}, 'tttt');
+		if (rec.isLeaf() == true)
+    		acs_show_panel_std(this, rec.get('url'), {}, 'tttt');
 		return;
     	
     },   

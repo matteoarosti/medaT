@@ -90,7 +90,7 @@ Ext.define('FeedViewer.ScGrid', {
 			    margin: '40 10 10 10',
 			    items: [
 			    	{text: 'Crea nuovo', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add', handler: function(){
-			    		new_rec = Ext.create('Shipowner', {});
+			    		new_rec = Ext.create(this.down('grid').getStore().model.entityName, {});
 			    		new_rec.set('id', null);
 			    		this.down('grid').getStore().insert(0, new_rec);
                 		newPanel = this.createEditView();
@@ -110,7 +110,7 @@ Ext.define('FeedViewer.ScGrid', {
                     	myApp.feedInfo.add(newPanel).show();			    			
 			    		}, scope: this},
 			    	{text: 'Duplica', iconCls: 'fa fa-files-o fa-2x', handler: function(){
-			    		new_rec = Ext.create('Shipowner', {});
+			    		new_rec = Ext.create(this.down('grid').getStore().model.entityName, {});
 			    		new_rec.set(this.down('grid').getView().getSelectionModel().getSelection()[0].data);
 			    		new_rec.set('id', null);
 			    		this.down('grid').getStore().insert(0, new_rec);

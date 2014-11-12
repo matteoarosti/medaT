@@ -165,7 +165,11 @@ Ext.define('FeedViewer.App', {
                                  leaf:true, 
                                  iconCls:'task',
                                  op: 'OPEN_MOVIMENTO'
-                             }    		                 
+                             }, { 
+                                 task:'Handling Headers',
+                                 url: '/handling_headers/extjs_sc_crt_tab', 
+                                 leaf:true 
+                             }      		                     		                 
     		                ]
     		            }
     		         ]

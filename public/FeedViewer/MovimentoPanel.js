@@ -17,6 +17,12 @@ Ext.define('FeedViewer.MovimentoPanel', {
     animCollapse: true,
     layout: 'fit',
     title: 'Menu',
+    
+	viewModel: {
+    			data: {
+    				rec: null
+    			}
+    		},    
 
     /**
      * @event feedremove Fired when a feed is removed
@@ -44,19 +50,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
      * @private
      * @return {Ext.view.View}
      */
-    createView: function(){
-    	    	
-    	this.store = Ext.create('Ext.data.TreeStore', {
-    		fields: ['task'],
-    	    proxy: {
-    	        data : this.voci_menu,
-    	        type: 'memory',
-    	        reader: {
-    	            type: 'json',
-    	        }
-    	    },
-    	});
-    	
+    createView: function(){    	
     	
         this.view = Ext.create('Ext.form.Panel', {
         	layout: {
@@ -93,7 +87,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      	 margin: '1 0 0 0'
                      },
                      items: [
-                        {fieldLabel: 'Numero movimento'},
+                        {fieldLabel: 'id', bind: '{rec.id}'},
                         {fieldLabel: 'Data', xtype: 'datefield'},
                         {fieldLabel: 'Campagna'},
                         {
@@ -109,8 +103,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
                         	  {fieldLabel: 'Tipo container', width: 220}, {fieldLabel: 'OH', width: 90, labelWidth: 40, labelAlign: 'right', anchor: '-10'}
                         	]
                         },
-                        {fieldLabel: 'Numero container'},
-                        {fieldLabel: 'Stato movimento', margin: '1 0 5 0'}
+                        {fieldLabel: 'container_number', bind: '{rec.container_number}'},
+                        {fieldLabel: 'container_status', margin: '1 0 5 0', bind: '{rec.container_status}'}
                         
 /*                        
                         {
@@ -206,6 +200,12 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	
         	, {
         	    title: 'Distinta movimenti', flex: 50,
+        	    tools: [{  
+		                xtype: 'button',
+		                text: 'Aggiungi <i class="fa fa-plus-circle"></i>'
+		                //, iconCls: 'fa fa-plus-circle fa-lg'
+		            }
+                ],
         	    xtype: 'gridpanel',
         	    store: new Ext.data.Store({
         	    	fields: [{name: 'data', dateFormat: 'Y-n-d h:i:s A'}, 'eu', 'pv', 'seq'],
@@ -213,7 +213,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	            type: 'memory',
         	            reader: {
         	                type: 'json',
-        	                root: 'items'
+        	                rootProperty: 'items'
         	            }
         	        },
         	        data: {
@@ -245,14 +245,18 @@ Ext.define('FeedViewer.MovimentoPanel', {
 					if (val == 'E') metaData.tdAttr = 'data-qtip="Entrata"';
 					if (val == 'U') metaData.tdAttr = 'data-qtip="Uscita"';					
 					
-					if (val == 'E') return '<img style="margin: 0px; padding 0px;" width=30 src="' +'images/Round_Web_Icons/PNG/download.png' + '">';
-	 				if (val == 'U') return '<img style="margin: 0px; padding 0px;" width=30 src="' +'images/Round_Web_Icons/PNG/upload.png' + '">';
+					//if (val == 'E') return '<img style="margin: 0px; padding 0px;" width=30 src="' +'images/Round_Web_Icons/PNG/download.png' + '">';
+	 				//if (val == 'U') return '<img style="margin: 0px; padding 0px;" width=30 src="' +'images/Round_Web_Icons/PNG/upload.png' + '">';
+	 				if (val == 'E') return '<i class="fa fa-download fa-2x" style="color:green;"></i>';
+	 				if (val == 'U') return '<i class="fa fa-upload fa-2x" style="color:red;"></i>';
 				},
 				get_image_PV: function(val, metaData){
 					if (val == 'P') metaData.tdAttr = 'data-qtip="Pieno"';
 					if (val == 'V') metaData.tdAttr = 'data-qtip="Vuoto"';					
 					
-					if (val == 'P') return '<img style="margin: 0px; padding 0px;" width=30 src="' +'images/Round_Web_Icons/PNG/box.png' + '">';
+					//if (val == 'P') return '<img style="margin: 0px; padding 0px;" width=30 src="' +'images/Round_Web_Icons/PNG/box.png' + '">';
+					if (val == 'P') return '<i class="fa fa-square fa-2x" style="color:brown;"></i>';
+					if (val == 'V') return '<i class="fa fa-square-o fa-2x" style="color:brown;"></i>';
 				},
         	       
                         	    
@@ -267,6 +271,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
     },
 
     onViewReady: function(){
+     console.log(this);
     },
 
 

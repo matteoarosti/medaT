@@ -184,3 +184,27 @@ Ext.define("Shipper", { extend: "Ext.data.Model",
         }        
     }    
 });
+
+Ext.define("HandlingHeaders", { extend: "Ext.data.Model",
+    fields: [],     
+    proxy: {
+        type: 'ajax',
+		api: {
+            read: '/handling_headers/sc_read',
+            create: '/handling_headers/sc_create',
+            update: '/handling_headers/sc_update',
+            destroy: '/handling_headers/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }        
+    }    
+});

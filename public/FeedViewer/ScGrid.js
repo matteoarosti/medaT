@@ -150,10 +150,6 @@ Ext.define('FeedViewer.ScGrid', {
     				rec: null
     			}
     		},
-    		items2222: [
-    		    {fieldLabel: 'Id', bind: '{rec.id}'},
-    			{fieldLabel: 'Denominazione', bind: '{rec.denominazione}'}
-    		],
     		items: this.form_fields,
     		tbar: [{
     			text: 'Salva e chiudi', cls: 'btn-confirm', scale: 'medium',

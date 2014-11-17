@@ -4,7 +4,9 @@
   closable: true,
   
   columns: <%= raw(sc_columns.to_json) -%>,
-  form_fields: <%= raw(sc_form_fields.to_json) -%>,
+  //form_fields: <%= raw(sc_form_fields.to_json) -%>,
+  form_fields: <%= render :partial=>"sc_form_fields" -%>,
+  <% logger.info sc_form_fields.to_json -%>
       
   viewModel: {
   	data: {mRecord22: 'jsjjjj'},

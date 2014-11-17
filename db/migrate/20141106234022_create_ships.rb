@@ -4,7 +4,8 @@ class CreateShips < ActiveRecord::Migration
       t.string      :name,                  :limit => 50
       t.string      :shot_name,             :limit => 4
       t.string      :call_sign,             :limit => 4
-      t.integer     :shipowner_id,          :limit => 4
+      ##t.integer     :shipowner_id,          :limit => 4
+      t.belongs_to :shipowner
       t.timestamps
     end
   end

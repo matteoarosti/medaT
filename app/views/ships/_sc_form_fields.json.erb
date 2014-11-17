@@ -1,0 +1,31 @@
+[
+	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
+	{"fieldLabel":"name222","bind":"{rec.name}","maxLength":50},
+	{"fieldLabel":"shot_name","bind":"{rec.shot_name}","maxLength":4},
+	{"fieldLabel":"call_sign","bind":"{rec.call_sign}","maxLength":4},
+	{
+		"xtype":"combobox",
+		"fieldLabel":"shipowner_id",
+		"multiselect":false,
+		"displayField":"name",
+		"valueField":"id",
+		//"queryMode":"local",
+		"forceSelection": true,
+		"triggerAction": "all",  
+		
+			"store": Ext.create('Ext.data.Store', {
+			    model: 'Shipowner',
+			    proxy: {
+			        type: 'ajax',
+			        url: '<%= url_for(:controller=>'shipowners', :action=>'get_combo_data') -%>',
+			        reader: {
+			            type: 'json'
+			        }       
+			    },			    
+			    autoLoad: true
+			}),					
+		"bind":"{rec.shipowner_id}",					  
+		},
+	{"fieldLabel":"created_at","bind":"{rec.created_at}"},
+	{"fieldLabel":"updated_at","bind":"{rec.updated_at}"}
+]

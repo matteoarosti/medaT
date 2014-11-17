@@ -1,0 +1,53 @@
+[
+	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
+	{"fieldLabel":"container_number","bind":"{rec.container_number}","maxLength":11},
+	{"fieldLabel":"handling_status","bind":"{rec.handling_status}"},
+	{"fieldLabel":"container_status","bind":"{rec.container_status}"},
+	{
+		"xtype":"combobox",
+		"fieldLabel":"shipowner_id",
+		"multiselect":false,
+		"displayField":"name",
+		"valueField":"id",
+		"queryMode":"local",
+		
+			"store": Ext.create('Ext.data.Store', {
+			    model: 'Shipowner',
+			    proxy: {
+			        type: 'ajax',
+			        url: '<%= url_for(:controller=>'shipowners', :action=>'get_combo_data') -%>',
+			        reader: {
+			            type: 'json'
+			        }       
+			    },			    
+			    autoLoad: true
+			}),					
+		"bind":"{rec.shipowner_id}",					  
+		},
+	{
+		"xtype":"combobox",
+		"fieldLabel":"equipment_id",
+		"multiselect":false,
+		"displayField":"name",
+		"valueField":"id",
+		"queryMode":"local",
+		
+			"store": Ext.create('Ext.data.Store', {
+			    model: 'Shipowner',
+			    proxy: {
+			        type: 'ajax',
+			        url: '<%= url_for(:controller=>'equipment', :action=>'get_combo_data') -%>',
+			        reader: {
+			            type: 'json'
+			        }       
+			    },			    
+			    autoLoad: true
+			}),					
+		"bind":"{rec.shipowner_id}",					  
+		},
+	{"fieldLabel":"over_hight","bind":"{rec.over_hight}"},
+	{"fieldLabel":"transhipment","bind":"{rec.transhipment}"},
+	{"fieldLabel":"notes","bind":"{rec.notes}","maxLength":255},
+	{"fieldLabel":"created_at","bind":"{rec.created_at}"},
+	{"fieldLabel":"updated_at","bind":"{rec.updated_at}"}
+]

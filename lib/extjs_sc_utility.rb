@@ -8,7 +8,9 @@
   ###################################################################
   def self.extjs_sc_columns
     ret = []
-    columns.map {|c| ret << extjs_sc_crt_column(c)}
+    columns.map {|c|
+      ret << extjs_sc_crt_column(c)
+    }
     ret
   end
   
@@ -19,7 +21,12 @@
   end     
 
 
-end
+ #defaults
+ def self.as_json_prop()
+     return {}
+ end
+
+end #ActiveRecord::Base
 
  
  
@@ -29,6 +36,14 @@ end
  #######################################
  def extjs_sc_crt_column(c)
   ret = {}
+  
+  if c.name[-3,3].to_s == '_id'
+   ret[:text] = c.name
+   ret[:dataIndex] = c.name + '_Name'
+   ##ret[:renderer] = 'function(a, b, c){console.log(a); console.log(b);console.log(c)}'
+   return ret
+  end
+  
   ret[:text] = c.name
   ret[:dataIndex] = c.name  
   case c.type
@@ -51,7 +66,26 @@ end
  #definizione colonna PER FORM FIELD
  #######################################
  def extjs_sc_crt_field(c)
-  ret = {}
+ 
+  ret = {} 
+ 
+  if c.name[-3,3].to_s == '_id'
+    ret[:xtype]       = 'combobox'
+    ret[:fieldLabel]  = c.name
+    ret[:multiselect] = false
+    ret[:displayField] = 'title'
+    ret[:valueField]  = 'codice'
+    ret[:queryMode]   = 'local'
+    ret[:bind] = {
+      :value      => "{rec.#{c.name}}",
+      #:selection => valore iniziale??
+      :store      => '' 
+    }
+    
+   return ret
+  end 
+ 
+ 
   ret[:fieldLabel] = c.name
   ret[:bind] = "{rec.#{c.name}}"  
   

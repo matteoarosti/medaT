@@ -138,7 +138,11 @@ Ext.define("Port", { extend: "Ext.data.Model",
 });
 
 Ext.define("Ship", { extend: "Ext.data.Model",
-    fields: [],     
+	reference: 'Shipowner',
+    fields: [
+    	//{name: 'shipowner_id_Name', mapping: 'shipowner.name'},
+    	//{name: 'shipowner_id_Name', convert: function(value, rec){console.log(value); console.log(rec); return rec.data.shipowner.name;}}
+    ],     
     proxy: {
         type: 'ajax',
 		api: {

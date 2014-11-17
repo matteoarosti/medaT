@@ -21,11 +21,11 @@ function acs_show_panel_std(app, url, jsonData, tab_id, listeners, loadBodyMask)
 		        jsonData: jsonData,	        
 		        success : function(result, request){
 		            var jsonData = Ext.decode(result.responseText);
-		            mp.add(jsonData.items);
+		            mp.add(jsonData.items);		            
 		            mp.doLayout();
 		            mp.show();
-		            //mp_tab = Ext.getCmp(tab_id).show();
-		            mp_tab = app.feedInfo.show(tab_id);
+					//mostro l'ultimo tab aggiunto
+		            mp.setActiveTab(mp.items.length - 1);
 		        },
 		        failure    : function(result, request){
 		            Ext.Msg.alert('Message', 'No data to be loaded');
@@ -50,7 +50,7 @@ function acs_show_panel_std(app, url, jsonData, tab_id, listeners, loadBodyMask)
 
 
 Ext.define('FeedViewer.App', {
-	requires : [ 'Ext.container.Viewport', 'FeedViewer.MovimentoPanel', 'FeedViewer.ScGrid', 'FeedViewer.MenuPanel'],
+	requires : [ 'Ext.container.Viewport', 'FeedViewer.MovimentoPanel', 'FeedViewer.ScGrid', 'FeedViewer.MenuPanel', 'FeedViewer.NewHandlingHeaderPanel'],
     extend: 'Ext.container.Viewport',
     
     initComponent: function(){
@@ -161,10 +161,10 @@ Ext.define('FeedViewer.App', {
     		                children:
     		                [
     		                 { 
-                                 task:'Movimento di prova',  
+                                 task:'Aggiungi movimento',  
                                  leaf:true, 
                                  iconCls:'task',
-                                 op: 'OPEN_MOVIMENTO'
+                                 op: 'NEW_HANDLING_HEADER'
                              }, { 
                                  task:'Handling Headers',
                                  url: '/handling_headers/extjs_sc_crt_tab', 
@@ -197,6 +197,9 @@ Ext.define('FeedViewer.App', {
         return this.feedInfo;
     },
     
+    
+    
+/*    
     createNewTab: function(){
         this.newTab = Ext.create('FeedViewer.MovimentoPanel', {
 			title: 'Movimento #123',
@@ -204,15 +207,20 @@ Ext.define('FeedViewer.App', {
         });
         
      return this.newTab;
-    },	
+    },
+*/    	
 	
 	
     onVoceMenuSelect: function(menu, s, rec){
 		//aggiungo al tab il nuovo panel
-    	if (rec.get('op') == 'OPEN_MOVIMENTO'){
-    		this.createNewTab();
-			this.feedInfo.add(this.newTab);
-			this.feedInfo.setActiveTab(this.newTab);
+    	if (rec.get('op') == 'NEW_HANDLING_HEADER'){
+    		//this.createNewTab();
+			//this.feedInfo.add(this.newTab);
+			//this.feedInfo.setActiveTab(this.newTab);
+			
+			//Mostro la win per inserire il codice container	        
+	        Ext.create('FeedViewer.NewHandlingHeaderPanel').show();
+			
 			return;
     	}
 

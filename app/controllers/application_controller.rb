@@ -22,14 +22,22 @@ class ApplicationController < ActionController::Base
   end
   
   
+ 
+  def get_combo_data
+    model_class = extjs_sc_model.to_s
+    render json: model_class.constantize.limit(500)
+  end
+  
+  
   ##########################################
    def extjs_sc_list
   ########################################## 
     model_class = extjs_sc_model.to_s
       
     ret = {}
-    ret[:items] = model_class.constantize.limit(params[:limit]).offset(params[:start])
-    ret[:total] = model_class.constantize.count
+    ret[:items] = model_class.constantize.extjs_default_scope.limit(params[:limit]).offset(params[:start]).as_json(model_class.constantize.as_json_prop)
+    ret[:total] = model_class.constantize.extjs_default_scope.count
+    
     render json: ret
    end  
   
@@ -37,22 +45,24 @@ class ApplicationController < ActionController::Base
   ########################################## 
    def sc_update
   ########################################## 
+  
     item = extjs_sc_model.constantize.find(params[:data][:id])
     params[:data].permit!
     item.update(params[:data])
     item.save!()
-    render json: {:success => true, :data=>[item]}
+    render json: {:success => true, :data=>[item.as_json(extjs_sc_model.constantize.as_json_prop)]}
    end 
   
   ########################################## 
    def sc_create
   ########################################## 
-    item = extjs_sc_model.constantize.new()
+    item = extjs_sc_model.constantize.new()    
     params[:data].permit!
-    item.update(params[:data])
+    #filtro solo gli attributi presenti nel model e salvo
+    crete_params = params[:data].select{|k,v| extjs_sc_model.constantize.column_names.include? k}
+    item.update(crete_params)
     item.save!()
-    logger.info item.to_yaml
-    render json: {:success => true, :data=>[item]}
+    render json: {:success => true, :data=>[item.as_json(extjs_sc_model.constantize.as_json_prop)]}
    end   
   
   ########################################## 

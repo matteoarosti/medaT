@@ -62,8 +62,63 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 					xtype: 'fieldset', border: false, flex: 1,
 					items: [        	
 	        			{"fieldLabel":"Inserisci il numero container","name":"container_number", "xtype": "textfield", "labelAlign": "top", "anchor": "100%"},
-	        			{xtype: "button", text: "Verifica e inserisci", iconCls: 'fa fa-search'}
-	        		]}
+	        			{xtype: "button", text: "Verifica e inserisci", iconCls: 'fa fa-search', handler: function() {
+	    	            	var l_form = this.up('form').getForm();
+	    	            	var l_grid = this.up('panel').down('grid');
+
+		    					if(l_form.isValid()){	            	
+		    			          l_grid.store.proxy.extraParams.container_number = l_form.findField('container_number').getValue();
+		    			          l_grid.store.load();
+		    				    }            	                	                
+		    	            }
+	        				
+	        			}
+	        		]} 
+	        		
+	        		
+	        	//GRID con movimenti per container	        		
+					, {
+						xtype: 'grid',
+						loadMask: true,
+						flex: 1,
+						
+						layout: {
+                			type: 'vbox',
+                			align: 'stretch'
+     					},
+									
+						store: {
+							xtype: 'store',
+							autoLoad: false,	
+							proxy: {
+								url: 'terminal_movs/new_mov_search_container_number', 
+								extraParams: {container_number: null},
+								method: 'POST',
+								type: 'ajax',
+					
+								//Add these two properties
+								actionMethods: {
+									read: 'POST'
+								},
+					
+								reader: {
+									type: 'json',
+									method: 'POST',
+									rootProperty: 'items'
+								}
+							},
+								
+							fields: [] //serve
+						}, //store
+						columns: [{header: 'Movimento', dataIndex: 'descr', flex: 1},
+						          {header: 'Stato', dataIndex: 'stato', flex: 1}]
+						 
+					}	        		
+	        		
+	        		
+	        		
+	        		
+	        		
         		
         		//HELP
 	        		, {

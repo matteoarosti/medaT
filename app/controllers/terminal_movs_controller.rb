@@ -3,44 +3,27 @@ class TerminalMovsController < ApplicationController
   layout "application_extjs", only: [:index]
   
 
+#ingresso (apertura viewport Extjs)
   def index
   end
-  
-  
-  #EXTJS SCAFFOLD
-  def sc_crt_tab_PORTI_DELETEEEEE
-    @sc_columns = []  
-    Porto.columns.map {|c| @sc_columns << sc_crt_column(c)}
-    render :partial=>"sc_crt_tab", :locals=>{:sc_columns => @sc_columns, :sc_store => sc_crt_store()}            
-  end
-  
 
 
-##########################################
- def sc_list_DELETEEEEEEE
-########################################## 
-
-  0.times do |i|
-   n = Porto.new
-    n.denominazione = i
-   n.save
-  end
+#da form per nuovo movimento: verifico validita' numero container, esistenza movimento aperto
+def new_mov_search_container_number
+ ret = {}
+ ret[:items] = []
+ hhs = HandlingHeaders.container(params[:container_number]).order('id').limit(1000)
+ hhs.each do |hh|
+  ret[:items] << hh
+ end
  
-  ret = {}
-  ret[:items] = Porto.limit(params[:limit]).offset(params[:start])
-  ret[:total] = Porto.count
-  render json: ret
- end  
+ if ret[:items].length == 0
+  ret[:items] << {:stato => 'NEW', :descr => 'Crea nuovo movimento'}
+ end
+ 
+ render json: ret
+end
 
-########################################## 
- def sc_update_DELETEEEEEEE
-########################################## 
-  item = Porto.find(params[:data][:id])
-  params[:data].permit!
-  item.update(params[:data])
-  item.save()
-  render json: {:success => true, :data=>item}
- end 
  
   
 end

@@ -111,8 +111,29 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 							fields: [] //serve
 						}, //store
 						columns: [{header: 'Movimento', dataIndex: 'descr', flex: 1},
-						          {header: 'Stato', dataIndex: 'stato', flex: 1}]
-						 
+						          {header: 'Stato', dataIndex: 'stato_descr', width: 80},
+								  {header: 'Azione', dataIndex: 'op_descr', width: 80},
+						          ],
+						
+						
+						listeners : {
+						    itemdblclick: function(dv, rec, item, index, e) {
+						        //apro il movimento
+						        if (rec.get('stato') == 'NEW'){
+									new_rec = Ext.create('HandlingHeaders', {});
+						    		new_rec.set('id', null);
+						    		new_rec.set('container_number', rec.get('container_number'));
+						    		new_rec.set('handling_status', 'NEW');
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Movimento #123',
+										closable: true			
+							        });
+			                		newPanel.getViewModel().setData({rec: new_rec, is_container_editable: false});
+			                    	myApp.feedInfo.add(newPanel).show();
+			                    	this.close();						         
+						        }
+						    }, scope: this
+						}						 
 					}	        		
 	        		
 	        		

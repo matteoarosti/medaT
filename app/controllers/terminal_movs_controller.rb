@@ -18,7 +18,8 @@ def new_mov_search_container_number
  end
  
  if ret[:items].length == 0
-  ret[:items] << {:stato => 'NEW', :descr => 'Crea nuovo movimento'}
+  ret[:items] << {:container_number => params[:container_number], 
+        :stato => 'NEW', :stato_descr => '', :descr => 'Nuovo movimento', :op => 'NEW', :op_descr => '[ Crea ]'}
  end
  
  render json: ret

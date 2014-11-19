@@ -71,7 +71,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	     {         
         	    	 flex: 1,
                      xtype: 'fieldset', border: true, collapsible: false,
-                     title: 'Dati generali',
+                     title: 'Dati generali e container',
                      //combineErrors: true,
                      //msgTarget : 'side',
                  	layout: {
@@ -89,7 +89,36 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      items: [
                         {fieldLabel: 'id', bind: '{rec.id}'},
                         {fieldLabel: 'Data', xtype: 'datefield'},
-                        {fieldLabel: 'Campagna'},
+                        
+						{
+							xtype: 'combobox',
+							fieldLabel: 'Compagnia',
+							multiselect: false,
+							displayField : 'name',
+							valueField:  id,
+							forceSelection: true,
+							triggerAction: 'all',  
+							
+								store: Ext.create('Ext.data.Store', {
+								    model: 'Shipowner',
+								    proxy: {
+								        type: 'ajax',
+								        url: '/shipowners/get_combo_data',
+								        reader: {
+								            type: 'json'
+								        }       
+								    },			    
+								    autoLoad: true
+								}),					
+							bind: {
+								value: '{rec.shipowner_id}',
+								editable: '{is_container_editable}'
+							}						  
+							},
+
+
+
+
                         {
                         	xtype: 'fieldcontainer',
                         	layout: {
@@ -103,7 +132,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
                         	  {fieldLabel: 'Tipo container', width: 220}, {fieldLabel: 'OH', width: 90, labelWidth: 40, labelAlign: 'right', anchor: '-10'}
                         	]
                         },
-                        {fieldLabel: 'container_number', bind: '{rec.container_number}'},
+                        {fieldLabel: 'container_number', bind: '{rec.container_number}', editable: false},
                         {fieldLabel: 'container_status', margin: '1 0 5 0', bind: '{rec.container_status}'}
                         
 /*                        
@@ -154,11 +183,11 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	     }, {         
         	    	 flex: 1,
                      xtype: 'fieldset', border: true, collapsible: false,
-                     title: 'Posizione peso',
+                     title: 'Azioni',
                      //combineErrors: true,
                      //msgTarget : 'side',
                  	layout: {
-                	    type: 'vbox',
+                	    type: 'hbox',
                 	    //align : 'stretch',
                 	    pack  : 'start',
                 	},
@@ -170,25 +199,25 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      	 margin: '1 0 0 0'
                      },
                      items: [
-                        {fieldLabel: 'Fila'},
-                        {fieldLabel: 'Posizione'},
-                        {fieldLabel: 'Livello'},
-                        {fieldLabel: 'Lato'},
-                        {fieldLabel: 'Peso'},                        
-                        {
-    			            xtype: 'fieldcontainer',
-    			            title: '',
-    			            defaultType: 'checkbox',
-    			            layout: 'hbox',
-    						border: false,
-    			            items: [{
-				                boxLabel: 'No TML',
-				                checked: false,			                
-				                inputValue: 'Y',
-				                labelAlign: 'left'
-				            }
-    			            ]
-                        }
+
+ 						{ xtype : "button", text : "Salva", flex: 1,  handler: function(){
+						    rec = this.getViewModel().getData().rec;
+						    form = this.down('form').getForm();
+						    console.log(rec);
+						    
+		    				 if (form.isValid()) { 
+		    					 rec.save({
+									success: function(rec, op) {
+									//aggiorno il recordset con il record ritornato dal server (per id, updated_at...)
+									console.log('success');	
+									},
+		    					 
+		    					 });
+		    				 }						    
+						    
+						    			    			
+						 }, scope: this }
+                                                
                      ]
         	     }
         	     

@@ -59,8 +59,8 @@ class ApplicationController < ActionController::Base
     item = extjs_sc_model.constantize.new()    
     params[:data].permit!
     #filtro solo gli attributi presenti nel model e salvo
-    crete_params = params[:data].select{|k,v| extjs_sc_model.constantize.column_names.include? k}
-    item.update(crete_params)
+    create_params = params[:data].select{|k,v| extjs_sc_model.constantize.column_names.include? k}
+    item.update(create_params)
     item.save!()
     render json: {:success => true, :data=>[item.as_json(extjs_sc_model.constantize.as_json_prop)]}
    end   

@@ -119,16 +119,19 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						listeners : {
 						    itemdblclick: function(dv, rec, item, index, e) {
 						        //apro il movimento
-						        if (rec.get('stato') == 'NEW'){
+						        if (rec.get('stato') == 'CRT'){
 									new_rec = Ext.create('HandlingHeaders', {});
 						    		new_rec.set('id', null);
 						    		new_rec.set('container_number', rec.get('container_number'));
-						    		new_rec.set('handling_status', 'NEW');
+						    		new_rec.set('handling_status', 'CRT');
 							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
 										title: 'Movimento #123',
 										closable: true			
 							        });
-			                		newPanel.getViewModel().setData({rec: new_rec, is_container_editable: false});
+			                		newPanel.getViewModel().setData({rec: new_rec, 
+			                			is_handling_editable: true,
+			                			is_container_editable: true
+			                		});
 			                    	myApp.feedInfo.add(newPanel).show();
 			                    	this.close();						         
 						        }

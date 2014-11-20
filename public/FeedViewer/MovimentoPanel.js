@@ -20,8 +20,26 @@ Ext.define('FeedViewer.MovimentoPanel', {
     
 	viewModel: {
     			data: {
-    				rec: null
-    			}
+    				rec: null,
+    				is_handling_editable: false,
+    				is_container_editable: false
+    			}, 
+    			formulas: {
+    		        // We'll explain formulas in more detail soon.
+    		        is_rec_crt:{
+    		          bind: {bindTo: '{rec}'},
+    		          get: function (rec) {
+    		        	console.log('is_rec_crt');
+    		        	if (rec){
+    		        	 if (rec.get('handling_status') == 'CRT')
+    		        		 return true;
+    		        	}
+    		        	return false;
+    		            //return (get.rec.get('container_status') == 'ANEW') ? true : false;
+    		        }
+    		       }
+    			
+    		    }    			
     		},    
 
     /**
@@ -87,8 +105,19 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      	 margin: '1 0 0 0'
                      },
                      items: [
-                        {fieldLabel: 'id', bind: '{rec.id}'},
-                        {fieldLabel: 'Data', xtype: 'datefield'},
+                        {fieldLabel: 'id', bind: '{rec.id}', disabled: true},
+                        {fieldLabel: 'handling_status', bind: '{rec.handling_status}', disabled: true},
+                        {fieldLabel: 'handling_type', bind: '{rec.handling_type}', xtype: 'combo',
+                        	bind: {disabled: '{!is_handling_editable}'},
+                        	displayField: 'descr', valueField: 'cod',                        	
+                        	store: {
+                        	  fields: ['cod', 'descr'],
+                        	  data: [ 
+                        	         {cod: 'TMOV', descr: 'Movimento terminal'},
+                        	         {cod: 'AFRI', descr: 'Allaccio frito'}
+                        	  ]
+                        	}
+                        },
                         
 						{
 							xtype: 'combobox',
@@ -110,10 +139,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 								    },			    
 								    autoLoad: true
 								}),					
-							bind: {
-								value: '{rec.shipowner_id}',
-								editable: '{is_container_editable}'
-							}						  
+							 bind: {value: '{rec.shipowner_id}', disabled: '{!is_container_editable}'}						  
 							},
 
 
@@ -129,11 +155,12 @@ Ext.define('FeedViewer.MovimentoPanel', {
                             	 labelWidth: 140
                             },                        	
                         	items: [
-                        	  {fieldLabel: 'Tipo container', width: 220}, {fieldLabel: 'OH', width: 90, labelWidth: 40, labelAlign: 'right', anchor: '-10'}
+                        	  {fieldLabel: 'Tipo container', width: 220, bind: {value: '{rec.container_type}', disabled: '{!is_container_editable}'}}, 
+                        	  {fieldLabel: 'OH', width: 90, labelWidth: 40, labelAlign: 'right', anchor: '-10', bind: {value: '{rec.container_OH}', disabled: '{!is_container_editable}'}}
                         	]
                         },
-                        {fieldLabel: 'container_number', bind: '{rec.container_number}', editable: false},
-                        {fieldLabel: 'container_status', margin: '1 0 5 0', bind: '{rec.container_status}'}
+                        {fieldLabel: 'container_number', bind: '{rec.container_number}', disabled: true},
+                        {fieldLabel: 'container_status', margin: '1 0 5 0', bind: '{rec.container_status}', disabled: true}
                         
 /*                        
                         {
@@ -181,7 +208,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
                         {fieldLabel: 'ID FM'}                        
                      ]
         	     }, {         
-        	    	 flex: 1,
+        	    	 width: 200,
                      xtype: 'fieldset', border: true, collapsible: false,
                      title: 'Azioni',
                      //combineErrors: true,
@@ -200,17 +227,34 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      },
                      items: [
 
- 						{ xtype : "button", text : "Salva", flex: 1,  handler: function(){
+ 						{ xtype : "button", text : 'Salva', flex: 1,
+ 							
+						    bind: {
+								visible: '{is_handling_editable}'
+							},						    
+ 							
+ 							
+ 							handler: function(){
 						    rec = this.getViewModel().getData().rec;
 						    form = this.down('form').getForm();
-						    console.log(rec);
 						    
 		    				 if (form.isValid()) { 
-		    					 rec.save({
-									success: function(rec, op) {
-									//aggiorno il recordset con il record ritornato dal server (per id, updated_at...)
-									console.log('success');	
-									},
+		    					 this.getViewModel().getData().rec.save({
+									success: function(rec, op) {										
+									//TODO: aggiorno il recordset con il record ritornato dal server (per id, updated_at...)
+									console.log('success');
+									//this.getViewModel().getData().rec.set('handling_status', 'NEW');
+									this.getViewModel().setData({is_handling_editable: false});
+									this.getViewModel().setData({is_container_editable: false});
+									
+									var result = Ext.JSON.decode(op.getResponse().responseText);									
+									
+									rec.set(result.data[0]);
+									this.getViewModel().setData({rec: rec});
+									
+									console.log(this.getViewModel().getData());
+									this.doLayout();									
+									}, scope: this,
 		    					 
 		    					 });
 		    				 }						    
@@ -231,8 +275,11 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	    title: 'Distinta movimenti', flex: 50,
         	    tools: [{  
 		                xtype: 'button',
-		                text: 'Aggiungi <i class="fa fa-plus-circle"></i>'
-		                //, iconCls: 'fa fa-plus-circle fa-lg'
+		                text: 'Aggiungi <i class="fa fa-plus-circle"></i>',
+		                //, iconCls: 'fa fa-plus-circle fa-lg', xxx
+		                handler: function(){	
+		                	acs_show_win_std('Seleziona tipo dettaglio', '/terminal_movs/add_handling_items', {rec: this.getViewModel().getData().rec.data	});
+		                }, scope: this
 		            }
                 ],
         	    xtype: 'gridpanel',

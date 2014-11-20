@@ -33,6 +33,74 @@ function acs_show_panel_std(app, url, jsonData, tab_id, listeners, loadBodyMask)
 		    });
 	}	
 }
+
+
+
+function acs_show_win_std(titolo, url, jsonData, width, height, listeners, iconCls, maximize, loadBodyMask, open_vars, help_codice){
+	
+	if(typeof(width)==='undefined'  || width==null)  width  = 600;
+	if(typeof(height)==='undefined' || height==null) height = 400;
+	if(typeof(listeners)==='undefined' || listeners==null) listeners = {};	
+	if(typeof(iconCls)==='undefined'  || iconCls==null) iconCls = 'iconSpedizione';	
+	
+	if (loadBodyMask == 'Y')
+		Ext.getBody().mask('Loading... ', 'loading').show();	
+	
+
+	if (!typeof(help_codice) === 'undefined'){
+			tools = [
+				{
+				    type:'help',
+				    tooltip: 'Help',
+				    handler: function(event, toolEl, panel){
+				        show_win_help('MAIN_SEARCH');
+				    }
+				}								
+			]
+	} else tools = [];
+	
+	print_w = new Ext.Window({
+		  width: width
+		, height: height
+		, plain: true
+		, title: titolo
+		, layout: 'fit'
+		, border: true
+		, closable: true
+		, listeners: listeners
+    	, iconCls: iconCls
+    	, maximizable: true
+    	, open_vars: open_vars
+    	, tools: tools
+	});	
+	
+	if (maximize == 'Y')
+		print_w.show().maximize();
+	else
+		print_w.show();
+
+	//carico la form dal json ricevuto da php
+	Ext.Ajax.request({
+	        url        : url,
+	        method     : 'POST',
+	        waitMsg    : 'Data loading',
+	        jsonData: jsonData,	        
+	        success : function(result, request){
+	            var jsonData = Ext.decode(result.responseText);
+	            print_w.add(jsonData.items);
+	            print_w.doLayout();
+	        },
+	        failure    : function(result, request){
+	            Ext.Msg.alert('Message', 'No data to be loaded');
+	        }
+	    });	
+}
+
+
+
+
+
+
 // ----------------------------------------
 
 

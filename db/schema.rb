@@ -50,7 +50,6 @@ ActiveRecord::Schema.define(version: 20141110215337) do
 
   create_table "handling_headers", force: true do |t|
     t.string   "container_number", limit: 11
-    t.integer  "handling_status",  limit: 1
     t.integer  "container_status", limit: 2
     t.integer  "shipowner_id",     limit: 8
     t.integer  "equipment_id",     limit: 8
@@ -59,6 +58,8 @@ ActiveRecord::Schema.define(version: 20141110215337) do
     t.string   "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "handling_status",  limit: 5
+    t.string   "handling_type",    limit: 5
   end
 
   create_table "handling_items", force: true do |t|

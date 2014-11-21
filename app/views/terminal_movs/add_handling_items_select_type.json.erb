@@ -1,0 +1,33 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'panel',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+         xtype: 'button',
+         hideLabel: false,
+         labelWidth: 140,
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     	 scale: 'medium', textAlign: 'left',
+     	 handler: function(){
+     	 	new_win = acs_show_win_std('Inserimento dettaglio', '/terminal_movs/add_handling_items', {op: this.op, rec_id: <%= @rec_id.to_s -%>});
+     	 	this.up('window').close();
+     	 }
+     },	  
+   items: [
+    {xtype : "button", op:'SBARCO', text : '<i class="fa fa-download fa-2x" style="color:green;"></i> <span style="margin-left: 20px;">Sbarco</span>', height: 60},
+    {xtype : "button", op:'USCITA_PER_SCARICO', text : '<i class="fa fa-upload fa-2x" style="color:red;"></i> <span style="margin-left: 20px;">Uscita per scarico</span>', height: 60},
+    {xtype : "button", op:'RIENTRO_DA_SCARICO', text : '<i class="fa fa-download fa-2x" style="color:green;"></i> <span style="margin-left: 20px;">Rientro da scarico</span>', height: 60},
+    {xtype : "button", op:'IMBARCO', text : '<i class="fa fa-upload fa-2x" style="color:red;"></i> <span style="margin-left: 20px;">Imbarco</span>', height: 60},
+    
+   ]
+  }
+ ]
+}

@@ -29,7 +29,6 @@ Ext.define('FeedViewer.MovimentoPanel', {
     		        is_rec_crt:{
     		          bind: {bindTo: '{rec}'},
     		          get: function (rec) {
-    		        	console.log('is_rec_crt');
     		        	if (rec){
     		        	 if (rec.get('handling_status') == 'CRT')
     		        		 return true;
@@ -107,8 +106,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      items: [
                         {fieldLabel: 'id', bind: '{rec.id}', disabled: true},
                         {fieldLabel: 'handling_status', bind: '{rec.handling_status}', disabled: true},
-                        {fieldLabel: 'handling_type', bind: '{rec.handling_type}', xtype: 'combo',
-                        	bind: {disabled: '{!is_handling_editable}'},
+                        {fieldLabel: 'handling_type', xtype: 'combo',
+                        	bind: {value: '{rec.handling_type}', disabled: '{!is_handling_editable}'},
                         	displayField: 'descr', valueField: 'cod',                        	
                         	store: {
                         	  fields: ['cod', 'descr'],
@@ -124,13 +123,14 @@ Ext.define('FeedViewer.MovimentoPanel', {
 							fieldLabel: 'Compagnia',
 							multiselect: false,
 							displayField : 'name',
-							valueField:  id,
+							valueField:  'id',
 							forceSelection: true,
 							triggerAction: 'all',  
 							
 								store: Ext.create('Ext.data.Store', {
 								    model: 'Shipowner',
 								    proxy: {
+								        autoload: true,
 								        type: 'ajax',
 								        url: '/shipowners/get_combo_data',
 								        reader: {
@@ -138,7 +138,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 								        }       
 								    },			    
 								    autoLoad: true
-								}),					
+								}), 					
 							 bind: {value: '{rec.shipowner_id}', disabled: '{!is_container_editable}'}						  
 							},
 
@@ -278,7 +278,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 		                text: 'Aggiungi <i class="fa fa-plus-circle"></i>',
 		                //, iconCls: 'fa fa-plus-circle fa-lg', xxx
 		                handler: function(){	
-		                	acs_show_win_std('Seleziona tipo dettaglio', '/terminal_movs/add_handling_items', {rec: this.getViewModel().getData().rec.data	});
+		                	acs_show_win_std('Seleziona tipo dettaglio', '/terminal_movs/add_handling_items_select_type', {rec_id: this.getViewModel().getData().rec.get('id')});
 		                }, scope: this
 		            }
                 ],

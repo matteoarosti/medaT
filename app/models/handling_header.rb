@@ -1,7 +1,8 @@
-class HandlingHeaders < ActiveRecord::Base
+class HandlingHeader < ActiveRecord::Base
 
  belongs_to :shipowner
  belongs_to :equipment
+ has_many :handling_items
    
  scope :extjs_default_scope, -> { eager_load(:shipowner, :equipment) }
  scope :container, ->(container_number) {where("container_number = ?", container_number)}

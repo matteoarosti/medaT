@@ -120,7 +120,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						    itemdblclick: function(dv, rec, item, index, e) {
 						        //apro il movimento
 						        if (rec.get('stato') == 'CRT'){
-									new_rec = Ext.create('HandlingHeaders', {});
+									new_rec = Ext.create('HandlingHeader', {});
 						    		new_rec.set('id', null);
 						    		new_rec.set('container_number', rec.get('container_number'));
 						    		new_rec.set('handling_status', 'CRT');

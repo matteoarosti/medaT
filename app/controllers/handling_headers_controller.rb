@@ -1,7 +1,7 @@
 class HandlingHeadersController < ApplicationController
 
  def extjs_sc_model
-  'HandlingHeaders'
+  'HandlingHeader'
  end 
 
 
@@ -16,6 +16,22 @@ def sc_create  #OVERRIDE DEL METODO STANDARD
     item.update(create_params)
     item.save!()
     render json: {:success => true, :data=>[item.as_json(extjs_sc_model.constantize.as_json_prop)]}
+end
+
+
+
+# Inserimento dettaglio movimento
+##################################################
+def hitems_sc_create  
+##################################################
+   hh = HandlingHeader.find(params[:data][:handling_header_id])
+   hi = hh.handling_items.new()
+   params[:data].permit!
+   hi.update(params[:data])
+   hi.save!()   
+   render json: {:success => true}
+
+ 
 end
 
 

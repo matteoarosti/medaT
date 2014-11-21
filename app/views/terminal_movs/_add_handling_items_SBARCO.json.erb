@@ -1,0 +1,47 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+         xtype: 'button',
+         hideLabel: false,
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     	 scale: 'medium', textAlign: 'left',
+     	 handler: function(){
+     	 	acs_show_win_std('Inserimento dettaglio', '/terminal_movs/add_handling_items', {rec_id: <%= @rec_id.to_s -%>});
+     	 	this.up('window').close();
+     	 }
+     },	  
+   items: [
+    {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
+   // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},
+    {xtype: 'textfield', name: 'ship_id', fieldLabel: 'Nave'},
+    {xtype: 'textfield', name: 'voyage', fieldLabel: 'Voyage'}    
+   ],
+	buttons:
+        [{
+            text: 'Salva',
+            handler: function (btn, evt) {              
+             form = this.up('form').getForm();
+             if (form.isValid()) {
+             	new_rec = Ext.create('HandlingItem', {});
+             	new_rec.data = form.getValues();
+             	new_rec.save({
+					success: function(rec, op) {										
+					 this.up('window').close();								
+					}, scope: this,				 
+		    	});
+             }             
+            }
+        }]   
+  }
+ ]
+}

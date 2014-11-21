@@ -94,6 +94,8 @@ function acs_show_win_std(titolo, url, jsonData, width, height, listeners, iconC
 	            Ext.Msg.alert('Message', 'No data to be loaded');
 	        }
 	    });	
+	    
+  return print_w;	    
 }
 
 

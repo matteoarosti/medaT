@@ -8,11 +8,13 @@ class TerminalMovsController < ApplicationController
   end
 
 
-#da form per nuovo movimento: verifico validita' numero container, esistenza movimento aperto
+#verifico validita' numero container, mostro elenco movimento o voce per crearne uno nuovo
+#############################################################
 def new_mov_search_container_number
+#############################################################
  ret = {}
  ret[:items] = []
- hhs = HandlingHeaders.container(params[:container_number]).order('id').limit(1000)
+ hhs = HandlingHeader.container(params[:container_number]).order('id').limit(1000)
  hhs.each do |hh|
   ret[:items] << hh
  end
@@ -27,4 +29,23 @@ end
 
 
   
+# scelta tipo operazione per nuovo inserimento  
+#############################################################
+def add_handling_items_select_type
+#############################################################
+ @rec_id = params[:rec_id]
 end
+  
+#inserimento nuovo dettaglio movimento
+#############################################################
+def add_handling_items
+#############################################################
+ @rec_id = params[:rec_id]
+ @op     = params[:op]
+ @new_rec = HandlingHeader.find(@rec_id).handling_items.new()
+ render :partial => "add_handling_items_" + @op
+end  
+  
+  
+  
+end #class

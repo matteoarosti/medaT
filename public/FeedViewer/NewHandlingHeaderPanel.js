@@ -36,8 +36,8 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
     initComponent: function(){
         Ext.apply(this, {
             items: this.createView(),
-            height: 300,
-    		width: 540
+            height: 400,
+    		width: 740
         });
         this.callParent(arguments);
     },
@@ -112,14 +112,17 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						}, //store
 						columns: [{header: 'Movimento', dataIndex: 'descr', flex: 1},
 						          {header: 'Stato', dataIndex: 'stato_descr', width: 80},
-								  {header: 'Azione', dataIndex: 'op_descr', width: 80},
+								  {header: 'Azione', dataIndex: 'op_descr', width: 100},
 						          ],
 						
 						
 						listeners : {
 						    itemdblclick: function(dv, rec, item, index, e) {
-						        //apro il movimento
-						        if (rec.get('stato') == 'CRT'){
+						    
+						    	console.log(rec);
+						    	
+						        //Creo nuovo movimento
+						        if (rec.get('op') == 'CRT'){
 									new_rec = Ext.create('HandlingHeader', {});
 						    		new_rec.set('id', null);
 						    		new_rec.set('container_number', rec.get('container_number'));
@@ -128,13 +131,26 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 										title: 'Movimento #123',
 										closable: true			
 							        });
+							     } 
+							     
+							    //Carico il movimento e lo apro in gestione 
+						        if (rec.get('op') == 'EDIT'){						         
+									new_rec = HandlingHeader.load(rec.get('handling_id'));
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Movimento #123',
+										closable: true			
+							        });
+							     }							     
+							       
 			                		newPanel.getViewModel().setData({rec: new_rec, 
-			                			is_handling_editable: true,
-			                			is_container_editable: true
+			                			is_handling_editable: rec.get('op') == 'CRT' ? true : false,
+			                			is_container_editable: rec.get('is_container_editable')
 			                		});
 			                    	myApp.feedInfo.add(newPanel).show();
+									//mostro l'ultimo tab aggiunto
+						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);			                    	
 			                    	this.close();						         
-						        }
+						        
 						    }, scope: this
 						}						 
 					}	        		

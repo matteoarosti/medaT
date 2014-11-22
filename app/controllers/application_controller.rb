@@ -41,6 +41,13 @@ class ApplicationController < ActionController::Base
     render json: ret
    end  
   
+  
+  ########################################## 
+   def sc_read
+  ##########################################   
+    item = extjs_sc_model.constantize.find(params[:id])
+    render json: {:success => true, :data=>item.as_json(extjs_sc_model.constantize.as_json_prop)}
+   end  
 
   ########################################## 
    def sc_update

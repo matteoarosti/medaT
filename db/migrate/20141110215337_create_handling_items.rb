@@ -15,7 +15,11 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.boolean     :codeco_sent
       t.string      :notes,                 :limit => 255
       t.timestamps
-      t.timestamps
+
+
+      #Matteo
+      t.string      :eu,                    :limit => 1
+      t.string      :pv,                    :limit => 1
     end
   end
 end

@@ -203,7 +203,8 @@ Ext.define("HandlingHeader", { extend: "Ext.data.Model",
             type: 'json',
             successProperty: 'success',
             rootProperty: 'items',
-            messageProperty: 'message'
+            messageProperty: 'message',
+            rootProperty: 'data'            
         },
         writer: {
             type: 'json',

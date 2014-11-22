@@ -20,6 +20,19 @@ end
 
 
 
+
+
+# Inserimento dettaglio movimento
+##################################################
+def hitems_sc_list  
+##################################################
+  ret = {}
+   ret[:items] = HandlingItem.handlingHeader(params[:handling_id]).limit(1000).as_json(HandlingItem.as_json_prop)
+   ret[:success] = true
+   render json: ret 
+end
+
+
 # Inserimento dettaglio movimento
 ##################################################
 def hitems_sc_create  
@@ -29,9 +42,7 @@ def hitems_sc_create
    params[:data].permit!
    hi.update(params[:data])
    hi.save!()   
-   render json: {:success => true}
-
- 
+   render json: {:success => true} 
 end
 
 

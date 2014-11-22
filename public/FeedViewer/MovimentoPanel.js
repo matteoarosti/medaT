@@ -75,6 +75,13 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	    align : 'stretch',
         	    pack  : 'start',
         	},
+        	listeners: {
+	            afterrender: function (comp) {
+	            	//associo i dettagli al record caricato
+	                comp.down('gridpanel').store.proxy.extraParams.handling_id = this.getViewModel().getData().rec.id;
+	                comp.down('gridpanel').store.reload();
+	            }, scope: this 	
+        	},
         	items:[{
         	    title: '', //flex: 40,
         	    xtype: 'panel',
@@ -121,7 +128,6 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						{
 							xtype: 'combobox',
 							fieldLabel: 'Compagnia',
-							multiselect: false,
 							displayField : 'name',
 							valueField:  'id',
 							forceSelection: true,
@@ -162,22 +168,6 @@ Ext.define('FeedViewer.MovimentoPanel', {
                         {fieldLabel: 'container_number', bind: '{rec.container_number}', disabled: true},
                         {fieldLabel: 'container_status', margin: '1 0 5 0', bind: '{rec.container_status}', disabled: true}
                         
-/*                        
-                        {
-    			            xtype: 'fieldcontainer',
-    			            title: '',
-    			            defaultType: 'checkbox',
-    			            layout: 'hbox',
-    						border: false,
-    			            items: [{
-				                boxLabel: 'Transhipment',
-				                checked: false,			                
-				                inputValue: 'Y',
-				                labelAlign: 'left'
-				            }
-    			            ]
-                        }
-*/                        
                         
                         
                      ]
@@ -242,7 +232,6 @@ Ext.define('FeedViewer.MovimentoPanel', {
 		    					 this.getViewModel().getData().rec.save({
 									success: function(rec, op) {										
 									//TODO: aggiorno il recordset con il record ritornato dal server (per id, updated_at...)
-									console.log('success');
 									//this.getViewModel().getData().rec.set('handling_status', 'NEW');
 									this.getViewModel().setData({is_handling_editable: false});
 									this.getViewModel().setData({is_container_editable: false});
@@ -251,8 +240,11 @@ Ext.define('FeedViewer.MovimentoPanel', {
 									
 									rec.set(result.data[0]);
 									this.getViewModel().setData({rec: rec});
-									
-									console.log(this.getViewModel().getData());
+												
+									//imposto handling_id anche sulla grid di dettaglio
+									this.down('gridpanel').store.proxy.extraParams.handling_id = rec.id
+									this.down('gridpanel').store.reload()
+																		
 									this.doLayout();									
 									}, scope: this,
 		    					 
@@ -278,15 +270,19 @@ Ext.define('FeedViewer.MovimentoPanel', {
 		                text: 'Aggiungi <i class="fa fa-plus-circle"></i>',
 		                //, iconCls: 'fa fa-plus-circle fa-lg', xxx
 		                handler: function(){	
-		                	acs_show_win_std('Seleziona tipo dettaglio', '/terminal_movs/add_handling_items_select_type', {rec_id: this.getViewModel().getData().rec.get('id')});
+		                	acs_show_win_std('Seleziona tipo dettaglio', '/terminal_movs/add_handling_items_select_type',
+		                		 {rec_id: this.getViewModel().getData().rec.get('id')},
+		                		 null, null, null, null, null, null, {mov_panel: this});
 		                }, scope: this
 		            }
                 ],
         	    xtype: 'gridpanel',
         	    store: new Ext.data.Store({
-        	    	fields: [{name: 'data', dateFormat: 'Y-n-d h:i:s A'}, 'eu', 'pv', 'seq'],
+        	    	autoLoad: false,
+        	    	fields: [],
         	    	proxy: {
-        	            type: 'memory',
+        	            type: 'ajax',
+        	            url: '/handling_headers/hitems_sc_list',
         	            reader: {
         	                type: 'json',
         	                rootProperty: 'items'
@@ -304,12 +300,15 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	        }
         	    }),
         	    columns: [
-        	       {text: 'P', width: 25, dataIndex: 'seq'},
-        	       {text: 'Data/ora', width: 160, dataIndex: 'data', xtype:  'datecolumn', format: 'Y-m-d H:i:s'}, 
+        	       {text: 'P', width: 25, dataIndex: 'seq', renderer : function(value, metaData, record, rowIndex)
+						    {
+						        return rowIndex + 1;
+						    }},
+        	       {text: 'Data/ora', width: 160, dataIndex: 'created_at', xtype:  'datecolumn', format: 'd-m-Y H:i:s'}, 
         	       {text: 'E/U', width: 40, dataIndex: 'eu', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_EU(value, metaData);}},
                    {text: 'P/V', width: 40, dataIndex: 'pv', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_PV(value, metaData);}},
-				   {text: 'Nave', width: 130, dataIndex: 'nave'},
-				   {text: 'Voy', width: 60, dataIndex: 'voy'},
+				   {text: 'Nave', width: 130, dataIndex: 'ship_id_Name'},
+				   {text: 'Voy', width: 60, dataIndex: 'voyage'},
 				   {text: 'Vettore', width: 130, dataIndex: 'vettore'},                				                      				                      
 				   {text: 'Autista', flex: 1, dataIndex: 'autista'},
 				   {text: 'Imb', width: 50, dataIndex: 'imb', xtype: 'checkcolumn'},				                   				                      				                      				   
@@ -347,6 +346,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
     },
 
     onViewReady: function(){
+     console.log('onViewReady');
      console.log(this);
     },
 

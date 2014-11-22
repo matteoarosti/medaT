@@ -15,13 +15,36 @@ def new_mov_search_container_number
  ret = {}
  ret[:items] = []
  hhs = HandlingHeader.container(params[:container_number]).order('id').limit(1000)
- hhs.each do |hh|
-  ret[:items] << hh
+ handling_EDIT_exists = false
+  hhs.each do |hh|
+    if hh.handling_status == 'CLOSE'
+     op = 'VIEW'
+     op_descr = '[ Visualizza ]'
+    else
+     handling_EDIT_exists = true    
+     op = 'EDIT' 
+     op_descr = '[ Modifica ]'
+    end
+     
+    ret[:items] << {
+        :handling_id  => hh.id,
+        :container_number => hh.container_number, :is_container_editable => false,
+        :stato => hh.handling_status, :stato_descr => hh.handling_status, :op => op, :op_descr => op_descr,
+        :descr => "Movimento ##{hh.id.to_s}, #{HandlingHeader::TYPES[hh.handling_type]}"
+      }
+  end
+ 
+ #se non ci sono movimenti aperti, ne propongo uno nuovo
+ if ret[:items].length > 0 && !handling_EDIT_exists
+  ret[:items] << {:container_number => params[:container_number], :is_container_editable => false,
+        :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo movimento per il container richiesto', :op => 'CRT', :op_descr => '[ Crea ]'} 
  end
  
+ 
+ #se non ci sono movimenti aperti, ne propongo uno nuovo con possibilita' di creare container
  if ret[:items].length == 0
-  ret[:items] << {:container_number => params[:container_number], 
-        :stato => 'CRT', :stato_descr => '', :descr => 'Nuovo movimento', :op => 'NEW', :op_descr => '[ Crea ]'}
+  ret[:items] << {:container_number => params[:container_number], :is_container_editable => true,
+        :stato => 'CRT', :stato_descr => '', :descr => 'Crea il nuovo container e il nuovo movimento', :op => 'CRT', :op_descr => '[ Crea ]'}
  end
  
  render json: ret

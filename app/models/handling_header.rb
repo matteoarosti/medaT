@@ -8,6 +8,9 @@ class HandlingHeader < ActiveRecord::Base
  scope :container, ->(container_number) {where("container_number = ?", container_number)}
 
 
+ TYPES = {
+  "TMOV" => 'Movimentazione Terminal'
+ }
 
 
 

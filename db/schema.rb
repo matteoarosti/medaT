@@ -116,8 +116,8 @@ ActiveRecord::Schema.define(version: 20141110215337) do
 
   create_table "ships", force: true do |t|
     t.string   "name",         limit: 50
-    t.string   "shot_name",    limit: 4
-    t.string   "call_sign",    limit: 4
+    t.string   "short_name",    limit: 4
+    t.string   "call_sign",    limit: 10
     t.integer  "shipowner_id"
     t.datetime "created_at"
     t.datetime "updated_at"

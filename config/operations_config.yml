@@ -1,0 +1,70 @@
+########################################################################
+TMOV:
+#MOVIMENTO_STANDARD_TERMINAL:
+# (tipo di testata movimento)
+########################################################################
+ movimento_iniziale: SBARCO,INGRESSO_DA_CARICO
+ SBARCO:
+  set:
+   container_in_terminal: Y
+ USCITA_PER_CARICO:
+  check:
+   container_in_terminal: Y
+   container_status: DISPONIBILE
+  set:
+   container_in_terminal: N
+ RICHIESTA_PREVENTIVO:
+  check:
+   container_in_terminal: Y
+  set:
+   container_status: DANNEGGIATO
+ INGRESSO_DA_CARICO:
+  check:
+   container_in_terminal: N
+  set:
+   container_in_terminal: Y
+ USCITA_PER_IMBARCO:
+  check:
+   container_in_terminal: Y
+   container_PV: P
+  set:
+   movimento_status: CLOSE
+ VISITA_DOGANALE:
+  check:
+   container_in_terminal: Y
+ USCITA_PER_RIPARAZIONE:
+  check:
+   container_in_terminal: Y
+  set:
+   container_in_terminal: N
+ RIENTRO_DA_RIPARAZIONE:
+  check:
+   container_in_terminal: N
+   container_status: DANNEGGIATO
+  set:
+   container_in_terminal: Y
+   container_status: DISPONIBILE   
+   
+########################################################################
+MOVIMENTO_SOLO_ALLACCIO_FRIGO:
+########################################################################
+ movimento_iniziale: INGRESSO_PER_ALLACCIO_FRIGO
+ INGRESSO_PER_ALLACCIO_FRIGO:
+  set:
+   container_in_terminal: Y
+ USCITA_DA_ALLACCIO_FRIGO:
+  check:
+   is_container_frigo: Y
+   container_in_terminal: N
+  set:
+   movimento_status: CLOSE
+   
+########################################################################   
+MOVIMENTO_SOLO_VISITA_DOGANALE_ESTERNA:
+########################################################################
+ movimento_iniziale: VISITA_DOGANALE
+ VISITA_DOGANALE:
+  set:
+   movimento_status: CLOSE   
+  
+  

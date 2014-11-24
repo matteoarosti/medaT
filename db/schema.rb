@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20141110215337) do
   end
 
   create_table "equipment", force: true do |t|
-    t.string   "type",       limit: 4
+    t.string   "equipment_type", limit: 4
     t.integer  "size",       limit: 2
     t.string   "sizetype",   limit: 50
     t.string   "iso",        limit: 4

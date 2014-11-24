@@ -1,0 +1,15 @@
+<h2>Import Headers</h2>
+
+
+<%= form_tag({action: :import_file}, multipart: true) do %>
+    <%= file_field_tag 'file' %>
+    <%= text_field_tag 'ship' %>
+    <%= text_field_tag 'voyage' %>
+    <%= text_field_tag 'ld' %>
+    <%= submit_tag "import" %>
+<% end %>
+
+<%= form_tag :action => 'check_container' do %>
+    <%= text_field_tag 'container_number' %>
+    <%= submit_tag "check" %>
+<% end %>

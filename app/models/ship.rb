@@ -13,7 +13,10 @@ class Ship < ActiveRecord::Base
         :include=>{:shipowner => {:only=>[:name]}},
         :methods => :shipowner_id_Name
       }
- end     
-  
+ end
+
+ def self.get_id_by_name(name)
+   Ship.where(:name => name).first.id
+ end
 
 end

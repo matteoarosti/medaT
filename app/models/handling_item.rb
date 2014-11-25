@@ -12,8 +12,6 @@ class HandlingItem < ActiveRecord::Base
  end
  
  
- 
- 
 ################################################################   
 #per decodifica chiavi in extjs_scaffold
 ################################################################   
@@ -26,5 +24,8 @@ class HandlingItem < ActiveRecord::Base
         :methods => [:ship_id_Name]
       }
  end 
+ 
+ 
+ 
  
 end

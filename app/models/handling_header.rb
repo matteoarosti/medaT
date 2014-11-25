@@ -8,11 +8,61 @@ class HandlingHeader < ActiveRecord::Base
  scope :container, ->(container_number) {where("container_number = ?", container_number)}
 
 
+#COSTANTI
  TYPES = {
   "TMOV" => 'Movimentazione Terminal'
  }
 
 
+
+ #in base allo stato, al tipo e all'ultima operazione
+ # ritorno le operazioni ammesse su un handling header
+################################################################
+ def get_operations()
+################################################################
+  operatios_config = load_op_config    
+  h_type_config = get_handling_type_config(operatios_config)
+  
+  #in base allo stato
+  case self.handling_status
+   when 'NEW'    #nuovo movimento, ritorno le operazioni per il movimento iniziale
+    ret = []
+    
+    h_type_config['movimento_iniziale'].split(',').each do |op_id_yaml|
+     op_id = op_id_yaml.strip
+     op_config = h_type_config[op_id]
+     new_op = {
+      :cod    => op_id,
+      :label  => op_config['label'],
+      :icon   => op_config['icon']
+     }
+     ret << new_op
+    end 
+
+   when 'OPEN'
+   else
+    return []
+  end
+  
+  return ret
+ 
+ end
+ 
+ 
+################################################################
+def get_handling_type_config(operatios_config)
+################################################################
+ operatios_config[self.handling_type.to_s]
+end
+ 
+ 
+ 
+################################################################
+def load_op_config
+################################################################
+ YAML.load_file("config/operations_config.yml")
+end
+ 
 
 
 

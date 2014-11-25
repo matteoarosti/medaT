@@ -24,10 +24,17 @@
      	 }
      },	  
    items: [
+   
+   <% @operations.each do |op| %>
+		{xtype : "button", op:'<%= op[:cod] -%>', text : '<%= raw(op[:icon]) -%><span style="margin-left: 20px;"><%= op[:label] -%></span>', height: 60},     
+   <% end %>
+   
+/*   
     {xtype : "button", op:'SBARCO', text : '<i class="fa fa-download fa-2x" style="color:green;"></i> <span style="margin-left: 20px;">Sbarco</span>', height: 60},
     {xtype : "button", op:'USCITA_PER_SCARICO', text : '<i class="fa fa-upload fa-2x" style="color:red;"></i> <span style="margin-left: 20px;">Uscita per scarico</span>', height: 60},
     {xtype : "button", op:'RIENTRO_DA_SCARICO', text : '<i class="fa fa-download fa-2x" style="color:green;"></i> <span style="margin-left: 20px;">Rientro da scarico</span>', height: 60},
     {xtype : "button", op:'IMBARCO', text : '<i class="fa fa-upload fa-2x" style="color:red;"></i> <span style="margin-left: 20px;">Imbarco</span>', height: 60},
+*/    
     
    ]
   }

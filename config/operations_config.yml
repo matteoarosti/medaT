@@ -5,6 +5,8 @@ TMOV:
 ########################################################################
  movimento_iniziale: SBARCO,INGRESSO_DA_CARICO
  SBARCO:
+  label: Sbarco da nave
+  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
   set:
    container_in_terminal: Y
  USCITA_PER_CARICO:
@@ -19,6 +21,8 @@ TMOV:
   set:
    container_status: DANNEGGIATO
  INGRESSO_DA_CARICO:
+  label: 'Ingresso da carico'
+  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
   check:
    container_in_terminal: N
   set:

@@ -7,8 +7,11 @@ TMOV:
  SBARCO:
   label: Sbarco da nave
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
+  check:
+   container_in_terminal: false
+   handling_header_status: NEW
   set:
-   container_in_terminal: Y
+   container_in_terminal: true
  USCITA_PER_CARICO:
   check:
    container_in_terminal: Y

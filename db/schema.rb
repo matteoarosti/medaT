@@ -49,27 +49,26 @@ ActiveRecord::Schema.define(version: 20141110215337) do
   end
 
   create_table "handling_headers", force: true do |t|
-    t.string   "container_number", limit: 11
-    t.integer  "container_status", limit: 2
-    t.integer  "shipowner_id",     limit: 8
-    t.integer  "equipment_id",     limit: 8
+    t.string   "container_number",      limit: 11
+    t.integer  "shipowner_id",          limit: 8
+    t.integer  "equipment_id",          limit: 8
     t.boolean  "over_hight"
     t.boolean  "transhipment"
     t.string   "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "handling_status",  limit: 5
-    t.string   "handling_type",    limit: 5
-    t.string   "container_type",   limit: 5
+    t.string   "handling_type",         limit: 5
+    t.string   "container_type",        limit: 5
     t.boolean  "container_OH"
+    t.string   "handling_status",       limit: 5
+    t.boolean  "container_in_terminal",            default: false
+    t.string   "container_status",      limit: 5
   end
 
   create_table "handling_items", force: true do |t|
     t.integer  "handling_header_id", limit: 8
     t.datetime "date"
-    t.integer  "handling_type_id",   limit: 8
-    t.integer  "handling_type",      limit: 1
-    t.integer  "container_status",   limit: 1
+    t.string   "handling_item_type", limit: 10
     t.integer  "ship_id",            limit: 8
     t.string   "voyage",             limit: 15
     t.integer  "carrier_id",         limit: 8

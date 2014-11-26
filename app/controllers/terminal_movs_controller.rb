@@ -30,7 +30,7 @@ def new_mov_search_container_number
         :handling_id  => hh.id,
         :container_number => hh.container_number, :is_container_editable => false,
         :stato => hh.handling_status, :stato_descr => hh.handling_status, :op => op, :op_descr => op_descr,
-        :descr => "Movimento ##{hh.id.to_s}, #{HandlingHeader::TYPES[hh.handling_type]}"
+        :descr => "Movimento ##{hh.id.to_s}, #{HandlingHeader::TYPES[hh.handling_item_type]}"
       }
   end
  
@@ -70,6 +70,7 @@ def add_handling_items
  @rec_id = params[:rec_id]
  @op     = params[:op]
  @new_rec = HandlingHeader.find(@rec_id).handling_items.new()
+ @new_rec.handling_item_type = @op
  render :partial => "add_handling_items_" + @op
 end  
   

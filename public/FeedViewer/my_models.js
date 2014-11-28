@@ -236,3 +236,26 @@ Ext.define("HandlingItem", { extend: "Ext.data.Model",
         }        
     }    
 });
+Ext.define("User", { extend: "Ext.data.Model",
+    fields: [],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '/user_managers/hitems_sc_read',
+            create: '/user_managers/hitems_sc_create',
+            update: '/user_managers/hitems_sc_update',
+            destroy: '/user_managers/hitems_sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});

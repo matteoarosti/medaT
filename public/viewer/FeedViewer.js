@@ -224,24 +224,37 @@ Ext.define('FeedViewer.App', {
                                  leaf:true 
                              }   		                 
     		                ]
-    		            }, {
-    		                task:'Movimenti',  
-    		                iconCls:'task-folder', 
-    		                expanded: true,
-    		                children:
-    		                [
-    		                 { 
-                                 task:'Aggiungi movimento',  
-                                 leaf:true, 
-                                 iconCls:'task',
-                                 op: 'NEW_HANDLING_HEADER'
-                             }, { 
-                                 task:'Handling Headers',
-                                 url: '/handling_headers/extjs_sc_crt_tab', 
-                                 leaf:true 
-                             }      		                     		                 
-    		                ]
-    		            }
+                        }, {
+                        task:'Movimenti',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                    task:'Users',
+                                    url: '/ships/extjs_sc_crt_tab',
+                                    leaf:true,
+                                    iconCls:'task',
+                                    op: 'NEW_HANDLING_HEADER'
+                                }, {
+                                task:'Handling Headers',
+                                url: '/handling_headers/extjs_sc_crt_tab',
+                                leaf:true
+                            }
+                            ]
+                    }, {
+                        task:'Gestione Utenti',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                task:'Users',
+                                url: '/user_managers/extjs_sc_crt_tab',
+                                leaf:true
+                            }
+                            ]
+                    }
     		         ]
             },
             listeners: {

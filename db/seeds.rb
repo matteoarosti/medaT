@@ -35,3 +35,6 @@ Port.create(port_code: 'CYLMA', city: 'LYMASSOL', country: 'CYPRUS')
 Port.create(port_code: 'EGALY', city: 'ALESSANDRIA', country: 'EGYPT')
 Port.create(port_code: 'GRPIR', city: 'PIRAEUS', country: 'GREECE')
 Port.create(port_code: 'LBBRU', city: 'BEIRUT', country: 'LEBANON')
+
+Booking.create(num_booking: '123456')
+Booking.create(num_booking: '77777777')

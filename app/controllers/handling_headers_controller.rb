@@ -22,7 +22,7 @@ end
 
 
 
-# Inserimento dettaglio movimento
+# Visualizzazione grid dettagli
 ##################################################
 def hitems_sc_list  
 ##################################################
@@ -39,12 +39,26 @@ def hitems_sc_create
 ##################################################
    hh = HandlingHeader.find(params[:data][:handling_header_id])
    hi = hh.handling_items.new()
+
    params[:data].permit!
-   hi.update(params[:data])
-   hi.save!()   
-   render json: {:success => true} 
+   hi.assign_attributes(params[:data])
+
+   #se supera i vari controlli salvo il dettalio e aggiorno la testata
+   if hh.validate_insert_item(hi)[:is_valid]
+    hi.save!()
+    hh.sincro_save_header(hi)
+    ret_status = true
+   else
+    ret_status = false
+   end 
+       
+   render json: {:success => ret_status, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]} 
 end
 
 
+
+  def get_booking_combo_data
+    render json: Booking.limit(500)
+  end
 
 end

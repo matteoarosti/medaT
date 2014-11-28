@@ -69,7 +69,9 @@ def add_handling_items
 #############################################################
  @rec_id = params[:rec_id]
  @op     = params[:op]
- @new_rec = HandlingHeader.find(@rec_id).handling_items.new()
+ @hh     = HandlingHeader.find(@rec_id)
+ @new_rec = @hh.handling_items.new()
+ @new_rec.handling_item_type = @op
  render :partial => "add_handling_items_" + @op
 end  
   

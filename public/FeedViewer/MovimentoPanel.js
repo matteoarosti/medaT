@@ -190,7 +190,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      	 margin: '1 0 0 0'
                      },
                      items: [
-                        {fieldLabel: 'Booking'},
+                        {fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}},
                         {fieldLabel: 'Destinazione'},
                         {fieldLabel: 'Sigillo Esp.1'},                        
                         {fieldLabel: 'Sigillo Esp.2'},
@@ -304,13 +304,14 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						    {
 						        return rowIndex + 1;
 						    }},
-        	       {text: 'Data/ora', width: 160, dataIndex: 'created_at', xtype:  'datecolumn', format: 'd-m-Y H:i:s'}, 
+        	       {text: 'Data/ora', width: 160, dataIndex: 'created_at', xtype:  'datecolumn', format: 'd-m-Y H:i:s'},
+        	       {text: 'Op', width: 160, dataIndex: 'handling_item_type', width: 100},        	        
         	       {text: 'E/U', width: 40, dataIndex: 'eu', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_EU(value, metaData);}},
                    {text: 'P/V', width: 40, dataIndex: 'pv', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_PV(value, metaData);}},
 				   {text: 'Nave', width: 130, dataIndex: 'ship_id_Name'},
 				   {text: 'Voy', width: 60, dataIndex: 'voyage'},
-				   {text: 'Vettore', width: 130, dataIndex: 'vettore'},                				                      				                      
-				   {text: 'Autista', flex: 1, dataIndex: 'autista'},
+				   {text: 'Vettore', width: 130, dataIndex: 'carrier_id_Name'},                				                      				                      
+				   {text: 'Autista', flex: 1, dataIndex: 'driver'},
 				   {text: 'Imb', width: 50, dataIndex: 'imb', xtype: 'checkcolumn'},				                   				                      				                      				   
 				   {text: 'MP', width: 50, dataIndex: 'mp', xtype: 'checkcolumn'},				                   				                      				                      				   
 				   {text: 'IMO', width: 50, dataIndex: 'imo', xtype: 'checkcolumn'}

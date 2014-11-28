@@ -1,52 +1,100 @@
 ########################################################################
-TMOV:
 #MOVIMENTO_STANDARD_TERMINAL:
-# (tipo di testata movimento)
+TMOV:
 ########################################################################
- movimento_iniziale: SBARCO,INGRESSO_DA_CARICO
- SBARCO:
+ movimento_iniziale: E_SBARCO,E_CARICO
+ ASS_BOOK:
+  label: Assegna booking
+  icon: '<i class="fa fa-ticket fa-2x" style="color:white;"></i>'
+  check:
+   with_booking: false   
+#   container_status: DISPONIBILE         
+  set:
+   booking_copy: true
+   with_booking: true
+ E_SBARCO:
   label: Sbarco da nave
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
-  set:
-   container_in_terminal: Y
- USCITA_PER_CARICO:
   check:
-   container_in_terminal: Y
-   container_status: DISPONIBILE
+   container_in_terminal: false
+   handling_header_status: NEW
   set:
-   container_in_terminal: N
- RICHIESTA_PREVENTIVO:
+   container_in_terminal: true
+   container_PV_copy: true   
+ U_SCARICO:
+  label: Uscita per scarico
+  icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
   check:
-   container_in_terminal: Y
+   container_in_terminal: true
+   container_PV: P
+#   container_status: DISPONIBILE
+  set:  
+   container_in_terminal: false   
+ U_CARICO:
+  label: Uscita per carico
+  icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
+  check:
+   with_booking: true  
+   container_in_terminal: true
+   container_PV: V
+#   container_status: DISPONIBILE
+  set:  
+   container_in_terminal: false
+ RIC_PREV:
+  label: Richiesta di preventivo
+  icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'   
+  check:
+   container_in_terminal: true
   set:
    container_status: DANNEGGIATO
- INGRESSO_DA_CARICO:
+ E_CARICO:
   label: 'Ingresso da carico'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
   check:
-   container_in_terminal: N
+   container_in_terminal: false
+   container_PV: V   
   set:
-   container_in_terminal: Y
- USCITA_PER_IMBARCO:
+   container_in_terminal: true
+   container_PV_copy: true   
+ E_SCARICO:
+  label: 'Ingresso da scarico'
+  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
   check:
-   container_in_terminal: Y
+   container_in_terminal: false
    container_PV: P
   set:
-   movimento_status: CLOSE
- VISITA_DOGANALE:
+   container_in_terminal: true
+   container_PV_copy: true   
+ U_IMBARCO:
+  label: Uscita per imbarco
+  icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
   check:
-   container_in_terminal: Y
- USCITA_PER_RIPARAZIONE:
-  check:
-   container_in_terminal: Y
+   with_booking: true  
+   container_in_terminal: true
+   container_PV: P
   set:
-   container_in_terminal: N
- RIENTRO_DA_RIPARAZIONE:
+   container_in_terminal: false
+   movimento_status: CLOSE
+ VIS_DOG:
+  icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 
+  label: Visita doganale 
   check:
-   container_in_terminal: N
+   container_in_terminal: true
+ U_RIPARA:
+  label: Uscita per riparazione
+  icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'   
+  check:
+   container_in_terminal: true
+  set:
+   container_in_terminal: false
+ E_RIPARA:
+  label: Rientro da riparazione
+  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
+  check:
+   container_in_terminal: false
    container_status: DANNEGGIATO
   set:
-   container_in_terminal: Y
+   container_in_terminal: true
    container_status: DISPONIBILE   
    
 ########################################################################
@@ -55,11 +103,11 @@ MOVIMENTO_SOLO_ALLACCIO_FRIGO:
  movimento_iniziale: INGRESSO_PER_ALLACCIO_FRIGO
  INGRESSO_PER_ALLACCIO_FRIGO:
   set:
-   container_in_terminal: Y
+   container_in_terminal: true
  USCITA_DA_ALLACCIO_FRIGO:
   check:
-   is_container_frigo: Y
-   container_in_terminal: N
+   is_container_frigo: true
+   container_in_terminal: false
   set:
    movimento_status: CLOSE
    

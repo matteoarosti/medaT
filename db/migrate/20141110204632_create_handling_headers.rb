@@ -19,7 +19,9 @@ class CreateHandlingHeaders < ActiveRecord::Migration
 	  #Campi auto-alimentati su aggiunta item (per validazione movimenti, ....)
     t.string     :handling_status,           :limit => 5	  
 	  t.boolean    :container_in_terminal,     :default => false
-    t.string     :container_status,          :limit => 5	  	        
+    t.string     :container_status,          :limit => 5
+    t.string     :container_PV,              :limit => 1
+    t.integer    :booking_id    
       
     end
   end

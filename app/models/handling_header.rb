@@ -2,12 +2,21 @@ class HandlingHeader < ActiveRecord::Base
 
  belongs_to :shipowner
  belongs_to :equipment
+ belongs_to :booking
  has_many :handling_items
    
  scope :extjs_default_scope, -> { eager_load(:shipowner, :equipment) }
  scope :container, ->(container_number) {where("container_number = ?", container_number)}
 
  def handling_header_status() return self.handling_status end
+ 
+ def self.as_json_prop()
+     return {
+        :include=>{:shipowner => {:only=>[:name]}, :equipment => {:only=>[:type]}},
+        :methods => [:shipowner_id_Name, :equipment_id_Name, :booking_id_Name]
+      }
+ end     
+ 
 
 #COSTANTI
  TYPES = {
@@ -21,13 +30,14 @@ class HandlingHeader < ActiveRecord::Base
 ################################################################
  def get_operations()
 ################################################################
-  operatios_config = load_op_config    
+  operatios_config = load_op_config
+  ret = []      
   h_type_config = get_handling_type_config(operatios_config)
+  hi = self.handling_items.new()
   
   #in base allo stato
   case self.handling_status
    when 'NEW'    #nuovo movimento, ritorno le operazioni per il movimento iniziale
-    ret = []
     
     h_type_config['movimento_iniziale'].split(',').each do |op_id_yaml|
      op_id = op_id_yaml.strip
@@ -41,6 +51,23 @@ class HandlingHeader < ActiveRecord::Base
     end 
 
    when 'OPEN'
+    for op_id, op_config in h_type_config
+      next if op_id == 'movimento_iniziale'
+      
+      hi.handling_item_type = op_id
+      op_valid = self.validate_insert_item(hi)
+      
+      if op_valid[:is_valid] == true
+         new_op = {
+          :cod    => op_id,
+          :label  => op_config['label'],
+          :icon   => op_config['icon']
+         }
+         ret << new_op       
+      end
+       
+    end #per ogni op
+    return ret
    else
     return []
   end
@@ -94,7 +121,6 @@ def sincro_save_header(hi)
 
  operatios_config = load_op_config    
  h_type_config = get_handling_type_config(operatios_config)
-
   
   #su nuovo handling header assegno lo stato di OPEN
   if self.handling_status == 'NEW'
@@ -106,7 +132,7 @@ def sincro_save_header(hi)
   op_config_set = op_config['set'] || {}
 
   for set_op_name, set_op_value in op_config_set 
-   self.send("sincro_set_#{set_op_name}", set_op_value)
+   self.send("sincro_set_#{set_op_name}", set_op_value, hi)
   end
  
  self.save!
@@ -115,12 +141,46 @@ end
 
 
 
+################################################################
+def with_booking()
+################################################################
+ if self.booking_id == nil
+  return false
+ else
+  return true
+ end
+end
+
 
 ################################################################
-def sincro_set_container_in_terminal(value)
+def sincro_set_container_in_terminal(value, hi)
 ################################################################
  self.container_in_terminal = value
 end
+
+################################################################
+def sincro_set_container_PV_copy(value, hi)
+################################################################
+ self.container_PV  = hi.pv
+end
+
+################################################################
+def sincro_set_booking_copy(value, hi)
+################################################################
+ self.booking_id  = hi.booking_id
+end
+
+################################################################
+def sincro_set_with_booking(value, hi)
+################################################################
+end
+
+################################################################
+def sincro_set_movimento_status(value, hi)
+################################################################
+ self.handling_status = value
+end
+
  
  
  
@@ -150,13 +210,9 @@ end
  def equipment_id_Name
   self.equipment.name if self.equipment
  end 
- 
- def self.as_json_prop()
-     return {
-        :include=>{:shipowner => {:only=>[:name]}, :equipment => {:only=>[:type]}},
-        :methods => [:shipowner_id_Name, :equipment_id_Name]
-      }
- end     
+ def booking_id_Name
+  self.booking.num_booking if self.booking
+ end 
 
 
 end

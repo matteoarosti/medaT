@@ -63,6 +63,8 @@ ActiveRecord::Schema.define(version: 20141110215337) do
     t.string   "handling_status",       limit: 5
     t.boolean  "container_in_terminal",            default: false
     t.string   "container_status",      limit: 5
+    t.string   "container_PV",          limit: 1
+    t.integer  "booking_id"
   end
 
   create_table "handling_items", force: true do |t|
@@ -81,6 +83,7 @@ ActiveRecord::Schema.define(version: 20141110215337) do
     t.datetime "updated_at"
     t.string   "eu",                 limit: 1
     t.string   "pv",                 limit: 1
+    t.integer  "booking_id"
   end
 
   create_table "ports", force: true do |t|

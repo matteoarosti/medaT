@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
-  root to: 'visitors#index'
+  ##root to: 'visitors#index'
+  root to: 'terminal_movs#index'
+  
+  
   devise_for :users
   resources :users
   

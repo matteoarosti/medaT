@@ -52,9 +52,13 @@ def hitems_sc_create
     ret_status = false
    end 
        
-   render json: {:success => ret_status} 
+   render json: {:success => ret_status, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]} 
 end
 
 
+
+  def get_booking_combo_data
+    render json: Booking.limit(500)
+  end
 
 end

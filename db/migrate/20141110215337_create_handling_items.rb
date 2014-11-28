@@ -16,10 +16,10 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.string      :notes,                 :limit => 255
       t.timestamps
 
-
       #Matteo
       t.string      :eu,                    :limit => 1
       t.string      :pv,                    :limit => 1
+      t.integer     :booking_id
     end
   end
 end

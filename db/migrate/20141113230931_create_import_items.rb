@@ -2,7 +2,7 @@ class CreateImportItems < ActiveRecord::Migration
   def change
     create_table :import_items do |t|
       t.integer     :import_header_id,      :limit => 8
-      t.integer     :ship_owner_id,         :limit => 8
+      t.integer     :shipowner_id,          :limit => 8
       t.string      :container_number,      :limit => 15
       t.string      :container_status,      :limit => 1 #F/E Full or Empty
       t.integer     :equipment_id,          :limit => 6

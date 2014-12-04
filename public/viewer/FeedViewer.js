@@ -231,14 +231,25 @@ Ext.define('FeedViewer.App', {
                         children:
                             [
                                 {
-                                    task:'Users',
-                                    url: '/ships/extjs_sc_crt_tab',
+                                    task:'Inserisci nuovo',
                                     leaf:true,
                                     iconCls:'task',
                                     op: 'NEW_HANDLING_HEADER'
                                 }, {
                                 task:'Handling Headers',
                                 url: '/handling_headers/extjs_sc_crt_tab',
+                                leaf:true
+                            }
+                            ]
+                    }, {
+                        task:'Import',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                task:'Nuovo import',
+                                url: '/import_headers/new_import',
                                 leaf:true
                             }
                             ]

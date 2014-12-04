@@ -1,0 +1,97 @@
+{
+ "success": true,
+ "items": [
+
+   {
+    xtype: 'container',
+	title: 'Nuovo Import', closable: true,    
+    items: [
+    
+	 {
+   			xtype: 'form',
+	        frame: true,
+
+	        bodyPadding: '10 10 0',
+	
+	        defaults: {
+	            anchor: '100%',
+	            allowBlank: false,
+	            msgTarget: 'side',
+	            labelWidth: 50
+	        },
+	
+	        items: [
+			  {
+				xtype: 'combobox', name: 'ship_id',
+				fieldLabel: 'Nave',
+				displayField : 'name',
+				valueField:  'id',
+				forceSelection: true,
+				allowBlank: false,
+				triggerAction: 'all',  
+				
+					store: Ext.create('Ext.data.Store', {
+					    model: 'Shipowner',
+					    proxy: {
+					        autoload: true,
+					        type: 'ajax',
+					        url: '/ships/get_combo_data',
+					        reader: {
+					            type: 'json'
+					        }       
+					    },			    
+					}), 											  
+				}, {
+		            xtype: 'textfield', name: 'voyage',
+		            fieldLabel: 'Viaggio'
+		        }
+
+		        ,{
+		            xtype: 'filefield',
+		            emptyText: 'Seleziona un file dal tuo archivio',
+		            fieldLabel: 'File',
+		            name: 'file',
+		            buttonText: '',
+		            buttonConfig: {
+		                iconCls: 'upload-icon'
+		            }
+		        },
+				{fieldLabel: 'Tipo', xtype: 'combo', name: 'ld',
+                    	displayField: 'descr', valueField: 'cod',                        	
+                    	store: {
+                    	  fields: ['cod', 'descr'],
+                    	  data: [ 
+                    	         {cod: 'L', descr: 'Load'},
+                    	         {cod: 'D', descr: 'Discharge'}
+                    	  ]
+                    	}
+                },	        
+				{xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}
+		        
+		        ],
+	
+	        buttons: [{
+	            text: 'Importa',
+	            handler: function(){
+	                var form = this.up('form').getForm();
+	                if(form.isValid()){
+	                    form.submit({
+	                        url: '<%= url_for(:action=>'import_file') -%>',
+	                        waitMsg: 'Uploading your photo...',
+	                        success: function(fp, o) {
+	                            msg('Success', 'Processed file "' + o.result.file + '" on the server');
+	                        }
+	                    });
+	                }
+	            }
+	        }]
+	   }    
+    ]
+   }
+
+
+	    
+
+  
+ ]
+}

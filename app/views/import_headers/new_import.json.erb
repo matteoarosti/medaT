@@ -77,7 +77,7 @@
 	                if(form.isValid()){
 	                    form.submit({
 	                        url: '<%= url_for(:action=>'import_file') -%>',
-	                        waitMsg: 'Uploading your photo...',
+	                        waitMsg: 'Importazione in corso....',
 	                        success: function(fp, o) {
 	                            msg('Success', 'Processed file "' + o.result.file + '" on the server');
 	                        }

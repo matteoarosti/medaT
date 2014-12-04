@@ -24,3 +24,7 @@ gem 'font-awesome-sass'
 
 gem 'tzinfo-data'
 gem 'tzinfo'
+
+gem 'therubyracer'
+gem 'roo'
+gem 'iconv'

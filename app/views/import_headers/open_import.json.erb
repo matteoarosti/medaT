@@ -1,0 +1,86 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  title: 'Import',
+  layout: 'fit',
+  items: [
+ 
+/* 
+   {
+    xtype: 'form',
+    height: 100,
+    layout: {
+	    type: 'hbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+    padding: '10 10 10 10',
+    items: [
+     {xtype: 'textfield', value: '<%= @ih.ship.name.to_s -%>', fieldLabel: 'Nave', editable: false, flex: 1},
+     {xtype: 'textfield', value: '<%= @ih.voyage.to_s -%>', fieldLabel: 'Viaggio', editable: false, flex: 1}
+    ]
+   }
+*/   
+
+   
+   // grid con righe import
+		, {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Righe import', flex: 50,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            type: 'ajax',
+        	            url: '/import_headers/get_import_row',
+        	            extraParams: {import_header_id: <%= @ih.id -%>},
+        	            reader: {
+        	                type: 'json',
+        	                rootProperty: 'items'
+        	            }
+        	        }
+        	    }),
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: 'Seq',
+			        width: 50,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Container',
+			        width: 300,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h1>' + rec.get('container_number') + '</h1>';
+			        }			        
+			    }, {
+			        dataIndex: 'id',
+			        title: 'Id',
+			        flex: 1,
+			        //xtype:'templatecolumn', tpl:'<h1>aaaa</h1><h3></h3>{ship_id}</br>lllll'
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }]
+			    
+
+                        	    
+        	}    
+   
+   
+   
+  ]
+ }
+ ]
+}

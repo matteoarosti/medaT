@@ -1,0 +1,69 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [    
+	{
+		xtype: 'combobox', name: 'ship_id',
+		fieldLabel: 'Nave',
+		displayField : 'name',
+		valueField:  'id',
+		forceSelection: true,
+		allowBlank: false,
+		triggerAction: 'all',  
+		
+			store: Ext.create('Ext.data.Store', {
+			    model: 'Shipowner',
+			    proxy: {
+			        autoload: true,
+			        type: 'ajax',
+			        url: '/ships/get_combo_data',
+			        reader: {
+			            type: 'json'
+			        }       
+			    },			    
+			}), 											  
+		},
+    {xtype: 'textfield', name: 'voyage', fieldLabel: 'Voyage'}        
+   ],
+   
+   
+	buttons:
+        [{
+            text: 'Apri',
+            handler: function (btn, evt) {              
+             form = this.up('form').getForm();
+             win  = this.up('window');
+             if (form.isValid()) {
+
+				//invio la richiesta per verificare se esiste
+					form.submit({
+	                        url: '<%= url_for(:action=>'search_import') -%>',
+	                        waitMsg: 'Ricerca in corso....',
+	                        success: function(fp, o) {
+	                        	win.close();
+	                            acs_show_panel_std(myApp, '<%= url_for(:action=>'open_import') -%>', {import_header_id: o.result.import_id}, 'Import');
+	                        },
+							failure: function(fp, o) {
+	                            Ext.Msg.alert('Import non trovato', 'Modfificare i parametri e ripetere la richiesta');	                            
+	                        }	                        
+	                    });				
+				
+             }             
+            }
+        }]   
+  }
+ ]
+}

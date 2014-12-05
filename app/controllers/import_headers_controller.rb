@@ -1,7 +1,7 @@
 class ImportHeadersController < ApplicationController
 
   def extjs_sc_model
-    'ImportHeaders'
+    'ImportHeader'
   end
 
 #  def import_file(ship_id, voyage, import_type)
@@ -22,8 +22,20 @@ class ImportHeadersController < ApplicationController
 
     #Lettura del file excel
     ImportHeader.import(import_header_id, params[:file])
-    redirect_to root_url, notice: "Items imported."
+    
+    
+    #redirect_to root_url, notice: "Items imported."
+    
+    #restituisco il numero di id dell'import e il numero di righe
+    hi = ImportHeader.find(import_header_id)
+    ret = {}
+    ret[:success] = true
+    ret[:import_id] = import_header_id
+    ret[:num_rows] = hi.import_items.count 
+    render json: ret 
   end
+  
+  
 
   def check_container
     retval = ImportHeader.check_digit(params[:container_number])
@@ -35,10 +47,35 @@ class ImportHeadersController < ApplicationController
 def new_import
 end
 
-def new_import_exe
+# Form per find import (in base a nave e viaggio)
+def find_import
+end
+
+# Verifico l'esistenza di un import (dato nave e viaggio)
+def search_import
+ ret = {}
+ ih = ImportHeader.find_by :ship_id => params[:ship_id], :voyage => params[:voyage]
+ if ih.nil?
+   ret[:success] = false
+ else
+   ret[:success] = true
+   ret[:import_id] = ih.id
+ end
+ render json: ret
 end
 
 
+def open_import
+ @ih = ImportHeader.find(params[:import_header_id])
+end
+
+def get_import_row
+ @ih = ImportHeader.find(params[:import_header_id])
+ ret = {}
+   ret[:items] = @ih.import_items.as_json()
+   ret[:success] = true
+   render json: ret 
+end
 
 
 end

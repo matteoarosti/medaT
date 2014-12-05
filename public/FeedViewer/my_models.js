@@ -259,3 +259,26 @@ Ext.define("User", { extend: "Ext.data.Model",
         }
     }
 });
+Ext.define("ImportHeader", { extend: "Ext.data.Model",
+    fields: [],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '/import_header/hitems_sc_read',
+            create: '/import_header/hitems_sc_create',
+            update: '/import_header/hitems_sc_update',
+            destroy: '/import_header/hitems_sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});

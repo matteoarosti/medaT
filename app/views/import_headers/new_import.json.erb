@@ -79,13 +79,21 @@
 	                        url: '<%= url_for(:action=>'import_file') -%>',
 	                        waitMsg: 'Importazione in corso....',
 	                        success: function(fp, o) {
-	                            msg('Success', 'Processed file "' + o.result.file + '" on the server');
-	                        }
+	                            Ext.Msg.alert('Import terminato', 'Import #id: ' + o.result.import_id + ', numero righe: ' + o.result.num_rows);
+	                        },
+							failure: function(fp, o) {
+	                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+	                            console.log('Failure!');	                            
+	                        }	                        
 	                    });
 	                }
 	            }
 	        }]
-	   }    
+	   } 
+	   
+	   
+	   
+	      
     ]
    }
 

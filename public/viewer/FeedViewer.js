@@ -251,6 +251,15 @@ Ext.define('FeedViewer.App', {
                                 task:'Nuovo import',
                                 url: '/import_headers/new_import',
                                 leaf:true
+                            }, {
+                                task:'Apri import',
+                                url: '/import_headers/find_import',
+                                op: 'new_win',
+                                leaf:true
+                            }, {
+                                task:'Elenco',
+                                url: '/import_headers/extjs_sc_crt_tab',
+                                leaf:true
                             }
                             ]
                     }, {
@@ -318,9 +327,15 @@ Ext.define('FeedViewer.App', {
 			return;
     	}
 
-		if (rec.isLeaf() == true)
-    		acs_show_panel_std(this, rec.get('url'), {}, 'tttt');
-		return;
+    	
+		if (rec.isLeaf() == true){
+			if (rec.get('op') == 'new_win')
+				acs_show_win_std(rec.get('task'), rec.get('url'), rec.get('jsonData'));			
+			else				
+    			acs_show_panel_std(this, rec.get('url'), {}, 'tttt');
+			
+			return;
+		}	
     	
     },   
     

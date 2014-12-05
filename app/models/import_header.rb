@@ -1,5 +1,10 @@
 class ImportHeader < ActiveRecord::Base
 
+  has_many :import_items
+  belongs_to :ship
+  
+  scope :extjs_default_scope, -> {}  
+
   #Aggiunge un record alla tabella
   def self.add_record(ship_id, voyage, import_type)
 

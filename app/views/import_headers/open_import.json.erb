@@ -60,20 +60,94 @@
 			    }, {
 			        dataIndex: 'container_number',
 			        text: 'Container',
-			        width: 300,
+			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         return '<h1>' + rec.get('container_number') + '</h1>';
 			        }			        
 			    }, {
-			        dataIndex: 'id',
-			        title: 'Id',
-			        flex: 1,
-			        //xtype:'templatecolumn', tpl:'<h1>aaaa</h1><h3></h3>{ship_id}</br>lllll'
+			        dataIndex: 'container_number',
+			        text: 'Note',
+			        flex: 1	        
+			    }, {
+			        text: 'Ok', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         return '<h5>' + (rowIndex + 1) + '</h5>';
-			        }			        
-			    }]
+			        	if (Ext.isEmpty(rec.get('status')) == false) return '';
+			            var id = Ext.id();
+			            setTimeout(function() {
+			                var buttonOK = Ext.create('Ext.button.Button', {
+								text: '<i class="fa fa-check-circle fa-3x"></i>',
+		                		scale: 'large',			                    
+			                        handler: function(grid, rowIndex, colIndex, a, b) {
+										Ext.Ajax.request({
+										   method: 'POST',
+										   url: '<%= url_for(:controller=>'import_items', :action=>'set_ok') -%>',
+										   params: {rec_id: rec.get('id')},
+										   success: function(response, opts) {
+										      store.remove(rec);
+										   },
+										   failure: function(response, opts) {
+										      console.log('server-side failure with status code ' + response.status);
+										   }
+										});
+
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }, {
+			        text: 'Danneggiato', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        	if (Ext.isEmpty(rec.get('status')) == false) return '';			        
+			            var id = Ext.id();
+			            setTimeout(function() {
+
+			                var buttonRotto = Ext.create('Ext.button.Button', {
+								text: '<i class="fa fa-warning fa-3x"></i>',
+		                		scale: 'large',			                    
+			                        handler: function(grid, rowIndex, colIndex, a, b) {
+										Ext.Ajax.request({
+										   method: 'POST',
+										   url: '<%= url_for(:controller=>'import_items', :action=>'set_danneggiato') -%>',
+										   params: {rec_id: rec.get('id')},
+										   success: function(response, opts) {
+										      store.remove(rec);
+										   },
+										   failure: function(response, opts) {
+										      console.log('server-side failure with status code ' + response.status);
+										   }
+										});
+
+			                        }, scope: rec
+
+			                });			                
+			                if (Ext.get(id)) {
+			                    buttonRotto.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }   
+        
+        ],
 			    
+			    
+
+			    
+			    listeners2: {
+					    cellclick: function(gridView,htmlElement,columnIndex,dataRecord){
+					        console.log(gridView);
+					        console.log(htmlElement);
+					        console.log(columnIndex);
+					        console.log(dataRecord);
+					    }
+					}
+				    
 
                         	    
         	}    

@@ -9,6 +9,8 @@ class CreateImportItems < ActiveRecord::Migration
       t.decimal     :weight,                :precision => 5, :scale => 2
       t.decimal     :temperature,           :precision => 5, :scale => 2
       t.string      :imo,                   :limit => 4
+      t.string      :status,                :limit => 5 #OK, DANNEGGIATO, ...
+      t.text        :note,                  :limit => 64.kilobytes 
       t.timestamps
     end
   end

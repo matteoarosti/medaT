@@ -62,6 +62,32 @@
 		
 		//font awesome di default
 		Ext.setGlyphFontFamily('FontAwesome');
+		
+
+
+
+    function renderInstall(value, id, r)
+    { 
+            var m_id = Ext.id();
+				Ext.Function.defer(createGridButton, 30, this, ['Install', m_id, r]);
+                //createGridButton.defer(1, this, ['Install', id, r]);
+                return('<div id="' + m_id + '"></div>');
+ 
+    }
+    function createGridButton(value, id, record) {
+        new Ext.Button({
+            text: value
+            //,iconCls: IconManager.getIcon('package_add')
+            ,handler : function(btn, e) {
+                // do whatever you want here
+            }
+        }).render(document.body, id);
+    }
+		
+		
+		
+		
+		
 		 
     </script>    
     

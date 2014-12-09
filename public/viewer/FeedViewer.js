@@ -242,12 +242,29 @@ Ext.define('FeedViewer.App', {
                             }
                             ]
                     }, {
-                        task:'Import',
+                        task:'Booking',
                         iconCls:'task-folder',
                         expanded: true,
                         children:
                             [
                                 {
+                                    task:'Inserisci nuovo',
+                                    leaf:true,
+                                    url: '/bookings/form_new',
+                                    op: 'new_win'
+                                }, {
+                                task:'Ricerca',
+                                url: '/bookings/form_search',
+                                leaf:true,
+                                op: 'new_win'
+                            }
+                            ]
+                    }, {
+                        task:'Import',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [{
                                 task:'Nuovo import',
                                 url: '/import_headers/new_import',
                                 leaf:true
@@ -260,8 +277,7 @@ Ext.define('FeedViewer.App', {
                                 task:'Elenco',
                                 url: '/import_headers/extjs_sc_crt_tab',
                                 leaf:true
-                            }
-                            ]
+                            }]
                     }, {
                         task:'Gestione Utenti',
                         iconCls:'task-folder',
@@ -300,18 +316,7 @@ Ext.define('FeedViewer.App', {
         return this.feedInfo;
     },
     
-    
-    
-/*    
-    createNewTab: function(){
-        this.newTab = Ext.create('FeedViewer.MovimentoPanel', {
-			title: 'Movimento #123',
-			closable: true			
-        });
-        
-     return this.newTab;
-    },
-*/    	
+  	
 	
 	
     onVoceMenuSelect: function(menu, s, rec){

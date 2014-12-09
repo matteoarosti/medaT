@@ -282,3 +282,26 @@ Ext.define("ImportHeader", { extend: "Ext.data.Model",
         }
     }
 });
+Ext.define("Booking", { extend: "Ext.data.Model",
+    fields: [],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: '/bookings/sc_read',
+            create: '/bookings/sc_create',
+            update: '/bookings/sc_update',
+            destroy: '/bookings/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});

@@ -1,0 +1,112 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+    {xtype: 'hiddenfield', name: 'id', value: '<%= @item.id -%>'},
+    {xtype: 'textfield', fieldLabel: 'Booking', name: 'num_booking', value: '<%= @item.num_booking -%>', maxLength: 15, allowBlank: false},        
+	{
+		xtype: 'combobox', name: 'shipowner_id', value: '<%= @item.shipowner_id -%>', 
+		fieldLabel: 'Compagnia',
+		displayField : 'name',
+		valueField:  'id',
+		forceSelection: true,
+		allowBlank: false,
+		triggerAction: 'all',  
+		
+			store: Ext.create('Ext.data.Store', {
+			    model: 'Shipowner',
+			    proxy: {
+			        autoload: true,
+			        type: 'ajax',
+			        url: '/shipowners/get_combo_data',			        
+			        reader: {
+			            type: 'json'
+			        }       
+			    },			    
+			}), 											  
+		},
+    {xtype: 'textfield', fieldLabel: 'Viaggio', name: 'voyage', value: '<%= @item.voyage -%>', maxLength: 15, allowBlank: false},
+	{
+		xtype: 'combobox', name: 'equipment_id', value: '<%= @item.equipment_id -%>',
+		fieldLabel: 'Tipo Container',
+		displayField : 'sizetype',
+		valueField:  'id',
+		forceSelection: true,
+		allowBlank: false,
+		triggerAction: 'all',  
+		
+			store: Ext.create('Ext.data.Store', {
+			    model: 'Equipment',
+			    proxy: {
+			        autoload: true,
+			        type: 'ajax',
+			        url: '/equipment/get_combo_data',			        
+			        reader: {
+			            type: 'json'
+			        }       
+			    },			    
+			}), 											  
+		},  
+	{
+		xtype: 'combobox', name: 'port_id', value: '<%= @item.port_id -%>',
+		fieldLabel: 'Destinazione',
+		displayField : 'city',
+		valueField:  'id',
+		forceSelection: true,
+		allowBlank: false,
+		triggerAction: 'all',  
+		
+			store: Ext.create('Ext.data.Store', {
+			    model: 'Port',
+			    proxy: {
+			        autoload: true,
+			        type: 'ajax',
+			        url: '/ports/get_combo_data',			        
+			        reader: {
+			            type: 'json'
+			        }       
+			    },			    
+			}), 											  
+		},
+	{xtype: 'datefield', fieldLabel: 'ETA', name: 'eta', value: '<%= @item.eta -%>', allowBlank: false},		 		  
+    		
+   ],
+   
+   
+	buttons:
+        [{
+            text: 'Salva',
+            handler: function (btn, evt) {              
+             form = this.up('form').getForm();
+             if (form.isValid()) {
+             	new_rec = Ext.create('Booking', {});
+             	new_rec.data = form.getValues();
+             	new_rec.save({
+					success: function(rec, op) {
+					
+					 //
+					 
+					 //chiudo										
+					 this.up('window').close();	
+					 							
+					}, scope: this,				 
+		    	});
+             }             
+            }
+        }]   
+  }
+ ]
+}

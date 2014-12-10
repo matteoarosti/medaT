@@ -17,7 +17,7 @@
      	 margin: '10 10 0 10',
      	 scale: 'medium', textAlign: 'left',
      	 handler: function(){
-     	 	new_win = acs_show_win_std('Inserimento dettaglio', '/terminal_movs/add_handling_items', 
+     	 	new_win = acs_show_win_std('Insert Item', '/terminal_movs/add_handling_items',
      	 		{op: this.op, rec_id: <%= @rec_id.to_s -%>},
      	 		null, null, null, null, null, null, this.up('window').open_vars);
      	 	this.up('window').close();

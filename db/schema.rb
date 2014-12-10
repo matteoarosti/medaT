@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20141113230931) do
     t.string   "container_type",        limit: 5
     t.boolean  "container_OH"
     t.string   "handling_status",       limit: 5
-    t.boolean  "container_in_terminal",            default: false
+    t.boolean  "container_in_terminal", default: false
     t.string   "container_status",      limit: 5
     t.string   "container_PV",          limit: 1
     t.integer  "booking_id"

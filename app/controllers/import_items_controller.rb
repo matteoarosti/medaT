@@ -20,7 +20,7 @@ class ImportItemsController < ApplicationController
    render json: ret
   end
 
-  def set_danneggiato
+  def set_damaged
    rec = ImportItem.find(params[:rec_id])
    rec.status = 'CHECK'
    rec.save!

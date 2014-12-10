@@ -17,12 +17,12 @@
    items: [
     {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
     {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},    
-    {xtype: 'hiddenfield', name: 'eu', value: '<%= @hh.container_PV.to_s -%>'},    
+    {xtype: 'hiddenfield', name: 'fe', value: '<%= @hh.container_FE.to_s -%>'},
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},
     
 	{
 		xtype: 'combobox', name: 'ship_id',
-		fieldLabel: 'Nave',
+		fieldLabel: 'Ship',
 		displayField : 'name',
 		valueField:  'id',
 		forceSelection: true,
@@ -47,7 +47,7 @@
    
 	buttons:
         [{
-            text: 'Salva',
+            text: 'Save',
             handler: function (btn, evt) {              
              form = this.up('form').getForm();
              if (form.isValid()) {

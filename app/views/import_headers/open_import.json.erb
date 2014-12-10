@@ -113,7 +113,7 @@
 			                        handler: function(grid, rowIndex, colIndex, a, b) {
 										Ext.Ajax.request({
 										   method: 'POST',
-										   url: '<%= url_for(:controller=>'import_items', :action=>'set_danneggiato') -%>',
+										   url: '<%= url_for(:controller=>'import_items', :action=>'set_damaged') -%>',
 										   params: {rec_id: rec.get('id')},
 										   success: function(response, opts) {
 										      store.remove(rec);

@@ -17,7 +17,7 @@
    items: [
     {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
     {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},    
-    {xtype: 'hiddenfield', name: 'eu', value: 'E'},
+    {xtype: 'hiddenfield', name: 'io', value: 'I'},
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},
     
 	{
@@ -42,16 +42,16 @@
 			}), 											  
 		},
     {xtype: 'textfield', name: 'voyage', fieldLabel: 'Voyage'},
-    {xtype: 'combo', name: 'pv',
-    	fieldLabel: 'Pieno/Vuoto',
+    {xtype: 'combo', name: 'fe',
+    	fieldLabel: 'Full/Empty',
     	displayField: 'descr', valueField: 'cod',
 		forceSelection: true,
 		allowBlank: false,
     	store: {
     	  fields: ['cod', 'descr'],
     	  data: [ 
-    	         {cod: 'P', descr: 'Pieno'},
-    	         {cod: 'V', descr: 'Vuoto'}
+    	         {cod: 'F', descr: 'Full'},
+    	         {cod: 'E', descr: 'Empty'}
     	  ]
     	}
     }        
@@ -60,7 +60,7 @@
    
 	buttons:
         [{
-            text: 'Salva',
+            text: 'Save',
             handler: function (btn, evt) {              
              form = this.up('form').getForm();
              if (form.isValid()) {

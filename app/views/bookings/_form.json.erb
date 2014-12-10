@@ -3,6 +3,8 @@
  "items": [
   {
    xtype: 'form',
+   title: 'Modifica booking',
+   closable: true,
    flex: 1,
 	layout: {
 	    type: 'vbox',
@@ -24,7 +26,8 @@
 		valueField:  'id',
 		forceSelection: true,
 		allowBlank: false,
-		triggerAction: 'all',  
+		triggerAction: 'all',
+		autoSelect: true,  
 		
 			store: Ext.create('Ext.data.Store', {
 			    model: 'Shipowner',
@@ -36,7 +39,14 @@
 			            type: 'json'
 			        }       
 			    },			    
-			}), 											  
+			}), 
+			
+			listeners: {
+			        afterrender: function(comp){
+			        	//comp.setValue(333);
+			        	//comp.setRawValue('sssss');
+			        },
+			    }
 		},
     {xtype: 'textfield', fieldLabel: 'Viaggio', name: 'voyage', value: '<%= @item.voyage -%>', maxLength: 15, allowBlank: false},
 	{
@@ -81,7 +91,8 @@
 			    },			    
 			}), 											  
 		},
-	{xtype: 'datefield', fieldLabel: 'ETA', name: 'eta', value: '<%= @item.eta -%>', allowBlank: false},		 		  
+	{xtype: 'datefield', fieldLabel: 'ETA', name: 'eta', value: '<%= @item.eta -%>', allowBlank: false},
+	{xtype: 'textfield', fieldLabel: 'Quantità', name: 'quantity', value: '<%= @item.quantity -%>', allowBlank: false}	
     		
    ],
    

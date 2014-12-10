@@ -1,0 +1,99 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	
+     
+    items: [
+	        	//ricerca numero container
+	        		{
+					xtype: 'fieldset', border: false, flex: 1,
+					items: [        	
+	        			{"fieldLabel":"Inserisci il numero booking","name":"num_booking", "xtype": "textfield", "labelAlign": "top", "anchor": "100%"},
+	        			
+	        			{xtype: "button", text: "Cerca", iconCls: 'fa fa-search', handler: function() {
+	    	            	var l_form = this.up('form').getForm();
+	    	            	var l_grid = this.up('panel').down('grid');
+
+		    					if(l_form.isValid()){	            	
+		    			          l_grid.store.proxy.extraParams.num_booking = l_form.findField('num_booking').getValue();
+		    			          l_grid.store.load();
+		    				    }            	                	                
+		    	            }
+	        				
+	        			}
+	        		]} 
+	        		
+	        		
+	        	//GRID con movimenti per container	        		
+					, {
+						xtype: 'grid',
+						loadMask: true,
+						flex: 1,
+						
+						layout: {
+                			type: 'vbox',
+                			align: 'stretch'
+     					},
+									
+						store: {
+							xtype: 'store',
+							autoLoad: false,	
+							proxy: {
+								url: 'bookings/search_num_booking', 
+								extraParams: {container_number: null},
+								method: 'POST',
+								type: 'ajax',
+					
+								//Add these two properties
+								actionMethods: {
+									read: 'POST'
+								},
+					
+								reader: {
+									type: 'json',
+									method: 'POST',
+									rootProperty: 'items'
+								}
+							},
+								
+							fields: [] //serve
+						}, //store
+						columns: [{header: 'Numero', dataIndex: 'num_booking', flex: 1},
+						          {header: 'Stato', dataIndex: 'status', width: 80},
+						          {header: 'Compagnia', dataIndex: 'shipowner_id_Name', width: 120},
+						          {header: 'Tipo', dataIndex: 'equipment_id_Name', width: 120},
+						          {header: 'Quantità', dataIndex: 'quantity', width: 70},
+						          ],
+						
+						
+						listeners : {
+						    itemdblclick: function(dv, rec, item, index, e) {						    	
+						    	acs_show_panel_std(myApp, '<%= url_for(:action=>'form_edit') -%>', {rec_id: rec.get('id')}, 'Modifica');
+						    	dv.up('window').close();
+						    }, scope: this
+						}						 
+					}	        		
+	        		
+	        		
+	        		
+	        		
+	        		
+        		
+        		    
+    ]  
+     
+  
+  }
+ ]
+}

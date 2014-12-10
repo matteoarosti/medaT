@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141119000452) do
+ActiveRecord::Schema.define(version: 20141113230931) do
 
   create_table "bookings", force: true do |t|
     t.string   "num_booking",  limit: 25
@@ -96,13 +96,15 @@ ActiveRecord::Schema.define(version: 20141119000452) do
 
   create_table "import_items", force: true do |t|
     t.integer  "import_header_id", limit: 8
-    t.integer  "ship_owner_id",    limit: 8
+    t.integer  "shipowner_id",     limit: 8
     t.string   "container_number", limit: 15
     t.string   "container_status", limit: 1
     t.integer  "equipment_id",     limit: 8
-    t.decimal  "weight",                      precision: 5, scale: 2
-    t.decimal  "temperature",                 precision: 5, scale: 2
+    t.decimal  "weight",                            precision: 5, scale: 2
+    t.decimal  "temperature",                       precision: 5, scale: 2
     t.string   "imo",              limit: 4
+    t.string   "status",           limit: 5
+    t.text     "note",             limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end

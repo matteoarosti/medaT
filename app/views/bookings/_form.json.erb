@@ -3,8 +3,11 @@
  "items": [
   {
    xtype: 'form',
-   title: 'Modifica booking',
-   closable: true,
+      
+   <% if op=='UPDATE' %>
+   	<%= raw("title:  'Modifica booking',".as_json)  -%>
+   	<%= raw("closable: true,".as_json) -%>
+   <% end %>	
    flex: 1,
 	layout: {
 	    type: 'vbox',
@@ -20,19 +23,18 @@
     {xtype: 'hiddenfield', name: 'id', value: '<%= @item.id -%>'},
     {xtype: 'textfield', fieldLabel: 'Booking', name: 'num_booking', value: '<%= @item.num_booking -%>', maxLength: 15, allowBlank: false},        
 	{
-		xtype: 'combobox', name: 'shipowner_id', value: '<%= @item.shipowner_id -%>', 
+		xtype: 'combobox', name: 'shipowner_id', value: <%= raw @item.shipowner_id.to_json -%>, 
 		fieldLabel: 'Compagnia',
 		displayField : 'name',
 		valueField:  'id',
 		forceSelection: true,
 		allowBlank: false,
-		triggerAction: 'all',
-		autoSelect: true,  
+		triggerAction: 'all',  
 		
 			store: Ext.create('Ext.data.Store', {
 			    model: 'Shipowner',
+			    autoLoad: true,
 			    proxy: {
-			        autoload: true,
 			        type: 'ajax',
 			        url: '/shipowners/get_combo_data',			        
 			        reader: {
@@ -50,7 +52,7 @@
 		},
     {xtype: 'textfield', fieldLabel: 'Viaggio', name: 'voyage', value: '<%= @item.voyage -%>', maxLength: 15, allowBlank: false},
 	{
-		xtype: 'combobox', name: 'equipment_id', value: '<%= @item.equipment_id -%>',
+		xtype: 'combobox', name: 'equipment_id', value: <%= raw @item.equipment_id.to_json -%>,
 		fieldLabel: 'Tipo Container',
 		displayField : 'sizetype',
 		valueField:  'id',
@@ -60,8 +62,8 @@
 		
 			store: Ext.create('Ext.data.Store', {
 			    model: 'Equipment',
+			    autoLoad: true,
 			    proxy: {
-			        autoload: true,
 			        type: 'ajax',
 			        url: '/equipment/get_combo_data',			        
 			        reader: {
@@ -71,7 +73,7 @@
 			}), 											  
 		},  
 	{
-		xtype: 'combobox', name: 'port_id', value: '<%= @item.port_id -%>',
+		xtype: 'combobox', name: 'port_id', value: <%= raw @item.port_id.to_json -%>,
 		fieldLabel: 'Destinazione',
 		displayField : 'port_code',
 		valueField:  'id',
@@ -81,8 +83,8 @@
 		
 			store: Ext.create('Ext.data.Store', {
 			    model: 'Port',
+			    autoLoad: true,
 			    proxy: {
-			        autoload: true,
 			        type: 'ajax',
 			        url: '/ports/get_combo_data',			        
 			        reader: {
@@ -108,11 +110,13 @@
              	new_rec.save({
 					success: function(rec, op) {
 					
-					 //
-					 
-					 //chiudo										
-					 this.up('window').close();	
-					 							
+   <% if op=='CREATE' %>					 										
+					 this.up('window').close();
+   <% end %>				 	
+   
+   <% if op=='UPDATE' %>					 										
+					 this.up('form').close();
+   <% end %>					 							
 					}, scope: this,				 
 		    	});
              }             

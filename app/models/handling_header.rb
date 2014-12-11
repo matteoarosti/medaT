@@ -38,10 +38,11 @@ class HandlingHeader < ActiveRecord::Base
   #in base allo stato
   case self.handling_status
    when 'NEW'    #nuovo movimento, ritorno le operazioni per il movimento iniziale
-    
-    h_type_config['movimento_iniziale'].split(',').each do |op_id_yaml|
+
+    h_type_config['initial_handling'].split(',').each do |op_id_yaml|
      op_id = op_id_yaml.strip
-     op_config = h_type_config[op_id]
+     op_config = h_type_config[op_id]     
+         
      new_op = {
       :cod    => op_id,
       :label  => op_config['label'],
@@ -52,7 +53,7 @@ class HandlingHeader < ActiveRecord::Base
 
    when 'OPEN'
     for op_id, op_config in h_type_config
-      next if op_id == 'movimento_iniziale'
+      next if op_id == 'initial_handling'
       
       hi.handling_item_type = op_id
       op_valid = self.validate_insert_item(hi)
@@ -87,7 +88,7 @@ def validate_insert_item(hi)
   
   #su nuovo handling header verifico che l'op sia tra quelle dichiarate come movimento iniziale
   if self.handling_status == 'NEW'
-   if !h_type_config['movimento_iniziale'].split(',').include?(hi.handling_item_type)
+   if !h_type_config['initial_handling'].split(',').include?(hi.handling_item_type)
     ret[:is_valid] = false
     ret[:message]  = 'Operazione non ammessa come iniziale'
     logger.info ret.to_yaml
@@ -159,9 +160,9 @@ def sincro_set_container_in_terminal(value, hi)
 end
 
 ################################################################
-def sincro_set_container_PV_copy(value, hi)
+def sincro_set_container_FE_copy(value, hi)
 ################################################################
- self.container_PV  = hi.pv
+ self.container_FE  = hi.container_FE
 end
 
 ################################################################
@@ -208,7 +209,7 @@ end
   self.shipowner.name if self.shipowner
  end
  def equipment_id_Name
-  self.equipment.name if self.equipment
+  self.equipment.sizetype if self.equipment
  end 
  def booking_id_Name
   self.booking.num_booking if self.booking

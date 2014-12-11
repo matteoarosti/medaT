@@ -12,7 +12,7 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.timestamps
       
 	  #Matteo
-	  t.string     :handling_type,             :limit => 5	  
+	  t.string     :handling_type,             :limit => 5	   #TMOV, ...
 	  t.string     :container_type,        	   :limit => 5
 	  t.boolean    :container_OH
 	  
@@ -20,7 +20,7 @@ class CreateHandlingHeaders < ActiveRecord::Migration
     t.string     :handling_status,           :limit => 5	  
 	  t.boolean    :container_in_terminal,     :default => false
     t.string     :container_status,          :limit => 5
-    t.string     :container_PV,              :limit => 1
+    t.string     :container_FE,              :limit => 1
     t.integer    :booking_id    
       
     end

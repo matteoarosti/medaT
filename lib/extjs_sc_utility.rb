@@ -1,4 +1,5 @@
   #PER EXTJS SCAFFOLD
+  
  
  
  class ActiveRecord::Base

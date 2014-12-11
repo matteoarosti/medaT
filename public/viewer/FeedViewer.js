@@ -256,7 +256,7 @@ Ext.define('FeedViewer.App', {
                                 task:'Ricerca',
                                 url: '/bookings/form_search',
                                 leaf:true,
-                                op: 'new_win'
+                                op: 'new_tab'
                             }
                             ]
                     }, {

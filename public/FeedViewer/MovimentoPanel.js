@@ -120,7 +120,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
                         	  fields: ['cod', 'descr'],
                         	  data: [ 
                         	         {cod: 'TMOV', descr: 'Movimento terminal'},
-                        	         {cod: 'AFRI', descr: 'Allaccio frito'}
+                        	         {cod: 'FRCON', descr: 'Allaccio frito'},
+                        	         {cod: 'INSPE', descr: 'Visita doganale'}
                         	  ]
                         	}
                         },
@@ -134,16 +135,14 @@ Ext.define('FeedViewer.MovimentoPanel', {
 							triggerAction: 'all',  
 							
 								store: Ext.create('Ext.data.Store', {
-								    model: 'Shipowner',
+								    model: 'Shipowner', autoLoad: true,
 								    proxy: {
-								        autoload: true,
 								        type: 'ajax',
 								        url: '/shipowners/get_combo_data',
 								        reader: {
 								            type: 'json'
 								        }       
 								    },			    
-								    autoLoad: true
 								}), 					
 							 bind: {value: '{rec.shipowner_id}', disabled: '{!is_container_editable}'}						  
 							},
@@ -161,8 +160,28 @@ Ext.define('FeedViewer.MovimentoPanel', {
                             	 labelWidth: 140
                             },                        	
                         	items: [
-                        	  {fieldLabel: 'Tipo container', width: 220, bind: {value: '{rec.container_type}', disabled: '{!is_container_editable}'}}, 
-                        	  {fieldLabel: 'OH', width: 90, labelWidth: 40, labelAlign: 'right', anchor: '-10', bind: {value: '{rec.container_OH}', disabled: '{!is_container_editable}'}}
+                        	  {
+								xtype: 'combobox',
+								fieldLabel: 'Tipo container',
+								displayField : 'sizetype',
+								valueField:  'id',
+								forceSelection: true,
+								triggerAction: 'all',  
+								
+									store: Ext.create('Ext.data.Store', {
+									    model: 'Equipment',
+									    autoLoad: true,							    
+									    proxy: {
+									        type: 'ajax',
+									        url: '/equipment/get_combo_data',
+									        reader: {
+									            type: 'json'
+									        }       
+									    },			    
+									}), 					
+								 bind: {value: '{rec.equipment_id}', disabled: '{!is_container_editable}'}						  
+							  },  
+                        	  //{fieldLabel: 'OH', width: 90, labelWidth: 40, labelAlign: 'right', anchor: '-10', bind: {value: '{rec.container_OH}', disabled: '{!is_container_editable}'}}
                         	]
                         },
                         {fieldLabel: 'container_number', bind: '{rec.container_number}', disabled: true},
@@ -306,8 +325,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						    }},
         	       {text: 'Data/ora', width: 160, dataIndex: 'created_at', xtype:  'datecolumn', format: 'd-m-Y H:i:s'},
         	       {text: 'Op', width: 160, dataIndex: 'handling_item_type', width: 100},        	        
-        	       {text: 'E/U', width: 40, dataIndex: 'eu', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_EU(value, metaData);}},
-                   {text: 'P/V', width: 40, dataIndex: 'pv', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_PV(value, metaData);}},
+        	       {text: 'E/U', width: 40, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_IO(value, metaData);}},
+                   {text: 'P/V', width: 40, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_FE(value, metaData);}},
 				   {text: 'Nave', width: 130, dataIndex: 'ship_id_Name'},
 				   {text: 'Voy', width: 60, dataIndex: 'voyage'},
 				   {text: 'Vettore', width: 130, dataIndex: 'carrier_id_Name'},                				                      				                      
@@ -317,22 +336,19 @@ Ext.define('FeedViewer.MovimentoPanel', {
 				   {text: 'IMO', width: 50, dataIndex: 'imo', xtype: 'checkcolumn'}
         	       ],
         	       
-				get_image_EU: function(val, metaData){
-					if (val == 'E') metaData.tdAttr = 'data-qtip="Entrata"';
-					if (val == 'U') metaData.tdAttr = 'data-qtip="Uscita"';					
+				get_image_IO: function(val, metaData){
+					if (val == 'I') metaData.tdAttr = 'data-qtip="Entrata"';
+					if (val == 'O') metaData.tdAttr = 'data-qtip="Uscita"';					
 					
-					//if (val == 'E') return '<img style="margin: 0px; padding 0px;" width=30 src="' +'images/Round_Web_Icons/PNG/download.png' + '">';
-	 				//if (val == 'U') return '<img style="margin: 0px; padding 0px;" width=30 src="' +'images/Round_Web_Icons/PNG/upload.png' + '">';
-	 				if (val == 'E') return '<i class="fa fa-download fa-2x" style="color:green;"></i>';
-	 				if (val == 'U') return '<i class="fa fa-upload fa-2x" style="color:red;"></i>';
+	 				if (val == 'I') return '<i class="fa fa-download fa-2x" style="color:green;"></i>';
+	 				if (val == 'O') return '<i class="fa fa-upload fa-2x" style="color:red;"></i>';
 				},
-				get_image_PV: function(val, metaData){
-					if (val == 'P') metaData.tdAttr = 'data-qtip="Pieno"';
-					if (val == 'V') metaData.tdAttr = 'data-qtip="Vuoto"';					
+				get_image_FE: function(val, metaData){
+					if (val == 'F') metaData.tdAttr = 'data-qtip="Pieno"';
+					if (val == 'E') metaData.tdAttr = 'data-qtip="Vuoto"';					
 					
-					//if (val == 'P') return '<img style="margin: 0px; padding 0px;" width=30 src="' +'images/Round_Web_Icons/PNG/box.png' + '">';
-					if (val == 'P') return '<i class="fa fa-square fa-2x" style="color:brown;"></i>';
-					if (val == 'V') return '<i class="fa fa-square-o fa-2x" style="color:brown;"></i>';
+					if (val == 'F') return '<i class="fa fa-square fa-2x" style="color:brown;"></i>';
+					if (val == 'E') return '<i class="fa fa-square-o fa-2x" style="color:brown;"></i>';
 				},
         	       
                         	    

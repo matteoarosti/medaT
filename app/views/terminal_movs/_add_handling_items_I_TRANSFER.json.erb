@@ -17,8 +17,8 @@
    items: [
     {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
     {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},  
-    {xtype: 'hiddenfield', name: 'io', value: 'O'},
-    {xtype: 'hiddenfield', name: 'fe', value: '<%= @hh.container_FE.to_s -%>'},
+    {xtype: 'hiddenfield', name: 'handling_type', value: 'I'},
+    {xtype: 'hiddenfield', name: 'container_FE', value: 'E'},
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},   
     
 	{
@@ -42,7 +42,7 @@
 			    },			    
 			}), 											  
 		},
-    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver'}
+    {xtype: 'textfield', name: 'driver', fieldLabel: 'Autista'}        
    ],
    
    

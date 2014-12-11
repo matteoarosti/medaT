@@ -56,7 +56,7 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: true
- I_DISCHARGE:
+ I_TRANSFER:
   label: 'Input From Discharge'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
   check:
@@ -98,7 +98,8 @@ TMOV:
    container_status: AVAILABLE
 
 ########################################################################
-HANDLING_ONLY_FRIDGE_CONNECTION:
+#HANDLING_ONLY_FRIDGE_CONNECTION:
+FRCON:
 ########################################################################
  initial_handling: IN_FRO_FRIDGE_CONNECTION
  IN_FRO_FRIDGE_CONNECTION:
@@ -112,7 +113,8 @@ HANDLING_ONLY_FRIDGE_CONNECTION:
    handling_status: CLOSE
 
 ########################################################################
-HANDLING_ONLY_CUSTOMS_INSPECTION:
+#HANDLING_ONLY_CUSTOMS_INSPECTION:
+INSPE:
 ########################################################################
  initial_handling: CUSTOMS_INPSECTION
  CUSTOMS_INPSECTION:

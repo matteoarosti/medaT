@@ -3,6 +3,7 @@
  "items": [
   {
    xtype: 'form',
+   title: 'Ricerca booking', closable: true,
    flex: 1,
 	layout: {
 	    type: 'vbox',
@@ -17,7 +18,7 @@
     items: [
 	        	//ricerca numero container
 	        		{
-					xtype: 'fieldset', border: false, flex: 1,
+					xtype: 'fieldset', border: false, height: 100,
 					items: [        	
 	        			{"fieldLabel":"Inserisci il numero booking","name":"num_booking", "xtype": "textfield", "labelAlign": "top", "anchor": "100%"},
 	        			
@@ -41,10 +42,7 @@
 						loadMask: true,
 						flex: 1,
 						
-						layout: {
-                			type: 'vbox',
-                			align: 'stretch'
-     					},
+						layout: 'fit',
 									
 						store: {
 							xtype: 'store',

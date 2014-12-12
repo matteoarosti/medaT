@@ -4,6 +4,7 @@ class CreateImportHeaders < ActiveRecord::Migration
       t.integer     :ship_id,               :limit => 8
       t.string      :voyage,                :limit => 15
       t.string      :import_type,           :limit => 1 #L/D Load or Discharge
+      t.string      :import_status,         :limit => 5 #OPEN/CLOSE
       t.timestamps
     end
   end

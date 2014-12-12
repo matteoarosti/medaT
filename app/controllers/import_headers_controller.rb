@@ -72,9 +72,17 @@ end
 def get_import_row
  @ih = ImportHeader.find(params[:import_header_id])
  ret = {}
-   ret[:items] = @ih.import_items.as_json()
+   ret[:items] = @ih.import_items.order(:container_number).as_json(ImportItem.as_json_prop)
    ret[:success] = true
    render json: ret 
+end
+
+
+def get_voyage_by_ship
+ ret = {}
+ ret[:success] = true
+ ret[:items] = ImportHeader.where("ship_id = ?", params[:ship_id]).where("import_status = ?", params[:import_status])
+ render json: ret
 end
 
 

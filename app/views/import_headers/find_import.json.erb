@@ -14,7 +14,33 @@
      	 margin: '10 10 0 10',
      },	  
      
-   items: [    
+   items: [
+   
+		{
+            xtype: 'radiogroup',
+            fieldLabel: 'Stato import',
+            layout: 'hbox',
+            items: [{
+                boxLabel: 'Aperto',
+                name: 'import_status',
+                inputValue: 'OPEN',
+                checked: true,
+                width: 150                
+            }, {
+                boxLabel: 'Chiuso',
+                name: 'import_status',
+                inputValue: 'CLOSE'
+            }],
+            
+			listeners: {
+			        change: function(field, newValue, oldValue) {
+			          this.up('form').refresh_voyage_combo();
+			        }
+			    }            
+        },
+   
+   
+       
 	{
 		xtype: 'combobox', name: 'ship_id',
 		fieldLabel: 'Nave',
@@ -34,9 +60,40 @@
 			            type: 'json'
 			        }       
 			    },			    
-			}), 											  
+			}), 
+			
+		listeners: {
+		    change: function(combo, record, index) {
+			  this.up('form').refresh_voyage_combo();			  
+		    }
+		  }													  
 		},
-    {xtype: 'textfield', name: 'voyage', fieldLabel: 'Voyage'}        
+		
+   
+   	{
+		xtype: 'combobox', name: 'voyage',
+		fieldLabel: 'Vojage',
+		displayField : 'voyage',
+		valueField:  'voyage',
+		forceSelection: true,
+		allowBlank: false,
+		triggerAction: 'all',  
+		
+			store: Ext.create('Ext.data.Store', {
+			    fields: [],
+			    autoLoad: false,			    
+			    proxy: {
+			        actionMethods: {read: 'POST'},
+			        extraParams: {},
+			        type: 'ajax',
+			        url: '/import_headers/get_voyage_by_ship',
+			        reader: {
+			            type: 'json',
+			            rootProperty: 'items'
+			        }       
+			    },			    
+			}), 											  
+		},        
    ],
    
    
@@ -63,7 +120,13 @@
 				
              }             
             }
-        }]   
+        }],
+        
+    refresh_voyage_combo: function(){
+		      field_voyage = this.getForm().findField('voyage');
+		      field_voyage.getStore().proxy.extraParams =  this.getForm().getValues();
+		      field_voyage.getStore().load();
+    }    
   }
  ]
 }

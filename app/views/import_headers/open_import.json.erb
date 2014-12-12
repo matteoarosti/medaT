@@ -60,14 +60,36 @@
 			    }, {
 			        dataIndex: 'container_number',
 			        text: 'Container',
-			        flex: 1,
+			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         return '<h1>' + rec.get('container_number') + '</h1>';
 			        }			        
 			    }, {
 			        dataIndex: 'container_number',
-			        text: 'Note',
-			        flex: 1	        
+			        text: 'Dettagli',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';
+			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';
+			         ret += '<tr><th>Weight</th><td>' + rec.get('weight') + '</td></tr>';			         
+			         ret += '</table>';
+			         return ret;
+			         
+			        }			        	        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Stato/temperatura',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';
+			         ret += '<tr><th>Stato</th><td>' + rec.get('container_status') + '</td></tr>';
+			         ret += '<tr><th>Temperature</th><td>' + rec.get('temperature') + '</td></tr>';			         
+			         ret += '</table>';
+			         return ret;
+			         
+			        }			        	        
 			    }, {
 			        text: 'Ok', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {

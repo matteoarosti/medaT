@@ -44,9 +44,16 @@
 				}, {
 		            xtype: 'textfield', name: 'voyage',
 		            fieldLabel: 'Viaggio'
-		        }
-
-		        ,{
+		        }, {fieldLabel: 'Tipo', xtype: 'combo', name: 'ld',
+                    	displayField: 'descr', valueField: 'cod',                        	
+                    	store: {
+                    	  fields: ['cod', 'descr'],
+                    	  data: [ 
+                    	         {cod: 'L', descr: 'Load'},
+                    	         {cod: 'D', descr: 'Discharge'}
+                    	  ]
+                    	}
+                }, {
 		            xtype: 'filefield',
 		            emptyText: 'Seleziona un file dal tuo archivio',
 		            fieldLabel: 'File',
@@ -56,16 +63,7 @@
 		                iconCls: 'upload-icon'
 		            }
 		        },
-				{fieldLabel: 'Tipo', xtype: 'combo', name: 'ld',
-                    	displayField: 'descr', valueField: 'cod',                        	
-                    	store: {
-                    	  fields: ['cod', 'descr'],
-                    	  data: [ 
-                    	         {cod: 'L', descr: 'Load'},
-                    	         {cod: 'D', descr: 'Discharge'}
-                    	  ]
-                    	}
-                },	        
+        
 				{xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}
 		        
 		        ],

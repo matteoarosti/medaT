@@ -1,5 +1,16 @@
 class ImportItem < ActiveRecord::Base
 
+ belongs_to :equipment
+  
+ def equipment_id_Name
+  self.equipment.sizetype if self.equipment
+ end  
+ 
+ def self.as_json_prop()
+     return {
+        :methods => :equipment_id_Name
+      }
+ end 
 
   def self.AddRecord(import_header_id, shipowner_id, container_number, container_status, equipment_id, weight, temperature, imo)
     ImportItem.create(:import_header_id => import_header_id,

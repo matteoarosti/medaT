@@ -28,6 +28,14 @@ class HandlingItem < ActiveRecord::Base
       }
  end 
  
+
+def container_FE_get_data_json
+ [
+  {:cod=>'F', :descr=>'Full'},
+  {:cod=>'E', :descr=>'Empty'}
+ ]
+end 
+ 
  
  
  

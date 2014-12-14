@@ -20,41 +20,12 @@
     {xtype: 'hiddenfield', name: 'handling_type', value: 'I'},
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},
     
-	{
-		xtype: 'combobox', name: 'ship_id',
-		fieldLabel: 'Nave',
-		displayField : 'name',
-		valueField:  'id',
-		forceSelection: true,
-		allowBlank: false,
-		triggerAction: 'all',  
-		
-			store: Ext.create('Ext.data.Store', {
-			    model: 'Shipowner',
-			    proxy: {
-			        autoload: true,
-			        type: 'ajax',
-			        url: '/ships/get_combo_data',
-			        reader: {
-			            type: 'json'
-			        }       
-			    },			    
-			}), 											  
-		},
-    {xtype: 'textfield', name: 'voyage', fieldLabel: 'Voyage'},
-    {xtype: 'combo', name: 'container_FE',
-    	fieldLabel: 'Full/Empty',
-    	displayField: 'descr', valueField: 'cod',
-		forceSelection: true,
-		allowBlank: false,
-    	store: {
-    	  fields: ['cod', 'descr'],
-    	  data: [ 
-    	         {cod: 'F', descr: 'Full'},
-    	         {cod: 'E', descr: 'Empty'}
-    	  ]
-    	}
-    }        
+	<%= raw extjs_std_combo_model('ship', @new_rec) -%>,
+    <%= raw extjs_std_textfield('voyage', @new_rec) -%>,
+    <%= raw extjs_std_combo('container_FE', @new_rec, 
+    	:store => extjs_std_store_data(@new_rec.container_FE_get_data_json)
+    	) -%>
+
    ],
    
    

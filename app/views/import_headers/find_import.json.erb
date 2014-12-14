@@ -39,61 +39,17 @@
 			    }            
         },
    
-   
-       
-	{
-		xtype: 'combobox', name: 'ship_id',
-		fieldLabel: 'Nave',
-		displayField : 'name',
-		valueField:  'id',
-		forceSelection: true,
-		allowBlank: false,
-		triggerAction: 'all',  
-		
-			store: Ext.create('Ext.data.Store', {
-			    model: 'Shipowner',
-			    proxy: {
-			        autoload: true,
-			        type: 'ajax',
-			        url: '/ships/get_combo_data',
-			        reader: {
-			            type: 'json'
-			        }       
-			    },			    
-			}), 
-			
-		listeners: {
-		    change: function(combo, record, index) {
-			  this.up('form').refresh_voyage_combo();			  
-		    }
-		  }													  
-		},
-		
-   
-   	{
-		xtype: 'combobox', name: 'voyage',
-		fieldLabel: 'Vojage',
-		displayField : 'voyage',
-		valueField:  'voyage',
-		forceSelection: true,
-		allowBlank: false,
-		triggerAction: 'all',  
-		
-			store: Ext.create('Ext.data.Store', {
-			    fields: [],
-			    autoLoad: false,			    
-			    proxy: {
-			        actionMethods: {read: 'POST'},
-			        extraParams: {},
-			        type: 'ajax',
-			        url: '/import_headers/get_voyage_by_ship',
-			        reader: {
-			            type: 'json',
-			            rootProperty: 'items'
-			        }       
-			    },			    
-			}), 											  
-		},        
+	<%= raw extjs_std_combo_model('ship', @item,
+			:listeners => "change: function(combo, record, index) {
+				  this.up('form').refresh_voyage_combo();			  
+			    }") -%>,   
+
+	
+	<%= raw extjs_std_combo('voyage', @item,
+			:displayField => 'voyage',
+			:store => extjs_std_store_url('/import_headers/get_voyage_by_ship')) -%>,
+		 		
+		       
    ],
    
    

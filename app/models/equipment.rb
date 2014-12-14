@@ -11,4 +11,8 @@ class Equipment < ActiveRecord::Base
     Equipment.where(:equipment_type => equipment_type).first.id
   end
 
+  def self.combo_displayField
+   'sizetype'
+  end
+
 end

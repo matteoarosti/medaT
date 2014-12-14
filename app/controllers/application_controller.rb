@@ -24,8 +24,11 @@ class ApplicationController < ActionController::Base
   
  
   def get_combo_data
+    ret = {}
     model_class = extjs_sc_model.to_s
-    render json: model_class.constantize.limit(500)
+    ret[:success] = true
+    ret[:items] = model_class.constantize.limit(500)
+    render json: ret
   end
   
   

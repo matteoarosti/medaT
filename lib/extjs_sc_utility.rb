@@ -3,10 +3,15 @@
  
  
  class ActiveRecord::Base
+ 
 
   ###################################################################
   # EXTJS SCAFFOLD
   ###################################################################
+  def self.combo_displayField
+   'name'
+  end
+  
   def self.extjs_sc_columns
     ret = []
     columns.map {|c|

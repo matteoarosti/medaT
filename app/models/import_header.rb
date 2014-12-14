@@ -3,12 +3,23 @@ class ImportHeader < ActiveRecord::Base
   has_many :import_items
   belongs_to :ship
   
-  scope :extjs_default_scope, -> {}  
+  scope :extjs_default_scope, -> {}
+  
+ def self.as_json_prop()
+     return {
+        :methods => :ship_id_Name
+      }
+ end   
+ 
+ def ship_id_Name
+  self.ship.name if self.ship
+ end 
 
   #Aggiunge un record alla tabella
   def self.add_record(ship_id, voyage, import_type)
 
     import_header = ImportHeader.new
+    import_header.import_status = 'OPEN'
     import_header.ship_id = ship_id
     import_header.voyage = voyage
     import_header.import_type = import_type

@@ -45,10 +45,12 @@ class ImportHeadersController < ApplicationController
 
 # Form per upload e caricamento file
 def new_import
+ @item = ImportHeader.new
 end
 
 # Form per find import (in base a nave e viaggio)
 def find_import
+ @item = ImportHeader.new
 end
 
 # Verifico l'esistenza di un import (dato nave e viaggio)

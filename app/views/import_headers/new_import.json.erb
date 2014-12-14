@@ -21,30 +21,9 @@
 	        },
 	
 	        items: [
-			  {
-				xtype: 'combobox', name: 'ship_id',
-				fieldLabel: 'Nave',
-				displayField : 'name',
-				valueField:  'id',
-				forceSelection: true,
-				allowBlank: false,
-				triggerAction: 'all',  
-				
-					store: Ext.create('Ext.data.Store', {
-					    model: 'Shipowner',
-					    proxy: {
-					        autoload: true,
-					        type: 'ajax',
-					        url: '/ships/get_combo_data',
-					        reader: {
-					            type: 'json'
-					        }       
-					    },			    
-					}), 											  
-				}, {
-		            xtype: 'textfield', name: 'voyage',
-		            fieldLabel: 'Viaggio'
-		        }, {fieldLabel: 'Tipo', xtype: 'combo', name: 'ld',
+			  <%= raw extjs_std_combo_model('ship', @item) -%>,
+			  <%= raw extjs_std_textfield('voyage', @item) -%>,
+			  {fieldLabel: 'Tipo', xtype: 'combo', name: 'ld',
                     	displayField: 'descr', valueField: 'cod',                        	
                     	store: {
                     	  fields: ['cod', 'descr'],

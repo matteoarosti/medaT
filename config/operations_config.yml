@@ -21,8 +21,8 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: true
- O_DISCHARGE:
-  label: Out for Discharge
+ O_EMPTYING:
+  label: Out for Emptying
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
   check:
    container_in_terminal: true
@@ -30,11 +30,11 @@ TMOV:
 #   container_status: AVAILABLE
   set:  
    container_in_terminal: false   
- O_LOAD:
-  label: Out for Load
+ O_FILLING:
+  label: Out for Filling
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
   check:
-   with_booking: true  
+   with_booking: true
    container_in_terminal: true
    container_FE: E
 #   container_status: AVAILABLE
@@ -47,8 +47,8 @@ TMOV:
    container_in_terminal: true
   set:
    container_status: DAMAGED
- I_LOAD:
-  label: 'In From Load'
+ I_FILLING:
+  label: 'In From Filling'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
   check:
    container_in_terminal: false
@@ -69,7 +69,7 @@ TMOV:
   label: Out For Load
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
   check:
-   with_booking: true  
+   with_booking: true
    container_in_terminal: true
    container_FE: F
   set:

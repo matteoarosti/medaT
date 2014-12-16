@@ -164,7 +164,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
                         	  {
 								xtype: 'combobox',
 								fieldLabel: 'Tipo container',
-								displayField : 'sizetype',
+								displayField : 'equipment_type',
 								valueField:  'id',
 								forceSelection: true,
 								triggerAction: 'all',  

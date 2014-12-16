@@ -12,7 +12,7 @@ class Equipment < ActiveRecord::Base
   end
 
   def self.combo_displayField
-   'sizetype'
+   'equipment_type'
   end
 
 end

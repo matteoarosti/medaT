@@ -140,7 +140,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 								        type: 'ajax',
 								        url: '/shipowners/get_combo_data',
 								        reader: {
-								            type: 'json'
+								            type: 'json',
+								            rootProperty: 'items'
 								        }       
 								    },			    
 								}), 					
@@ -175,7 +176,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 									        type: 'ajax',
 									        url: '/equipment/get_combo_data',
 									        reader: {
-									            type: 'json'
+									            type: 'json',
+									            rootProperty: 'items'
 									        }       
 									    },			    
 									}), 					

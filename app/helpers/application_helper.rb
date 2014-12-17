@@ -2,6 +2,8 @@ module ApplicationHelper
 
  def extjs_std_combo(name, item, p = {})
  
+  value = item.send(name) || p[:value]
+ 
   if p[:displayField].nil?
     p[:valueField] = 'cod'
     p[:displayField] = 'descr'
@@ -11,7 +13,7 @@ module ApplicationHelper
   
   ret = "
     {
-      xtype: 'combobox', name: #{name.to_json}, value: #{p[:value].to_json}, 
+      xtype: 'combobox', name: #{name.to_json}, value: #{value.to_json}, 
       fieldLabel: #{name.humanize.to_json},
       displayField: #{p[:displayField].to_json},
       valueField: #{p[:valueField].to_json || p[:displayField].to_json},
@@ -57,6 +59,10 @@ module ApplicationHelper
  
  def extjs_std_hiddenfield(name, item) 
   ret = "{xtype: 'hiddenfield', name: #{name.to_json}, value: #{item.send(name).to_json}}" 
+ end
+
+ def extjs_std_textareafield(name, item)
+  ret = "{xtype: 'textareafield', name: #{name.to_json}, value: #{item.send(name).to_json}, fieldLabel: #{name.humanize.to_json}, anchor: '100%', grow: true}"
  end
 
 

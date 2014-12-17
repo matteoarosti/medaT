@@ -251,7 +251,9 @@ Ext.define('FeedViewer.App', {
                                     task:'Inserisci nuovo',
                                     leaf:true,
                                     url: '/bookings/form_new',
-                                    op: 'new_win'
+                                    op: 'new_win',
+                                    width: 700,
+                                    height: 500
                                 }, {
                                 task:'Ricerca',
                                 url: '/bookings/form_search',
@@ -335,7 +337,7 @@ Ext.define('FeedViewer.App', {
     	
 		if (rec.isLeaf() == true){
 			if (rec.get('op') == 'new_win')
-				acs_show_win_std(rec.get('task'), rec.get('url'), rec.get('jsonData'));			
+				acs_show_win_std(rec.get('task'), rec.get('url'), rec.get('jsonData'), rec.get('width'), rec.get('height'));			
 			else				
     			acs_show_panel_std(this, rec.get('url'), {}, 'tttt');
 			

@@ -9,4 +9,9 @@ class Shipowner < ActiveRecord::Base
    Shipowner.where(:short_name => short_name).first.id
  end
 
+  def self.combo_displayField
+   'short_name'
+  end
+
+
 end

@@ -20,4 +20,15 @@ class Booking < ActiveRecord::Base
       }
  end
  
+ 
+ 
+#valori per combo
+def status_get_data_json
+ [
+  {:cod=>'OPEN', :descr=>'Open'},
+  {:cod=>'CLOSE', :descr=>'Close'}
+ ]
+end 
+ 
+ 
 end

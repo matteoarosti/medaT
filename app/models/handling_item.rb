@@ -29,6 +29,7 @@ class HandlingItem < ActiveRecord::Base
  end 
  
 
+#valori per combo
 def container_FE_get_data_json
  [
   {:cod=>'F', :descr=>'Full'},

@@ -9,8 +9,8 @@ class CreateBookings < ActiveRecord::Migration
       t.integer     :port_id,               :limit => 6
       t.date        :eta
       t.integer     :quantity,              :limit => 6
-      t.string      :status,                :limit => 15
-      t.string      :notes,                 :limit => 255
+      t.string      :status,                :limit => 5             #OPEN/CLOSE
+      t.text        :notes,                 :limit => 64.kilobytes
       t.timestamps
     end
   end

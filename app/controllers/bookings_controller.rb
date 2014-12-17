@@ -43,7 +43,11 @@ class BookingsController < ApplicationController
 def search_num_booking
 #############################################################
   ret = {}
-   ret[:items] = Booking.like_num_booking(params[:num_booking]).limit(1000).as_json(Booking.as_json_prop)
+   bk = Booking.where('1=1')
+   bk = bk.like_num_booking(params[:num_booking])
+   bk = bk.where('status = ?', params[:status])  unless params[:status].blank?
+   #ret[:items] = Booking.like_num_booking(params[:num_booking]).limit(1000).as_json(Booking.as_json_prop)
+   ret[:items] = bk.limit(1000).as_json(Booking.as_json_prop)
    ret[:success] = true
    render json: ret
 end

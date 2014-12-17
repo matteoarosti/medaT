@@ -36,7 +36,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
     initComponent: function(){
         Ext.apply(this, {
             items: this.createView(),
-            height: 400,
+            height: 600,
     		width: 740
         });
         this.callParent(arguments);
@@ -57,23 +57,82 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
         	},
         	items: [
 
-	        	//ricerca numero container
-	        		{
-					xtype: 'fieldset', border: false, flex: 1,
-					items: [        	
-	        			{"fieldLabel":"Inserisci il numero container","name":"container_number", "xtype": "textfield", "labelAlign": "top", "anchor": "100%"},
-	        			{xtype: "button", text: "Verifica e inserisci", iconCls: 'fa fa-search', handler: function() {
-	    	            	var l_form = this.up('form').getForm();
-	    	            	var l_grid = this.up('panel').down('grid');
+				
+				{
+					xtype: 'container',
+					layout: {
+        	    		type: 'hbox', align : 'stretch', pack: 'start'
+        			},
+					height: 150,
+					items: [
 
-		    					if(l_form.isValid()){	            	
-		    			          l_grid.store.proxy.extraParams.container_number = l_form.findField('container_number').getValue();
-		    			          l_grid.store.load();
-		    				    }            	                	                
-		    	            }
-	        				
-	        			}
-	        		]} 
+			        	//ricerca numero container
+			        	{
+							xtype: 'form', border: true, flex: 1, bodyPadding: 10, margin: '0 5 0 0', buttonAlign : 'center', frame: true,							
+							items: [        	
+			        			{"fieldLabel":"Inserisci il numero container","name":"container_number", "xtype": "textfield", "labelAlign": "top", "anchor": "100%"},
+			        			
+								, {
+						            xtype: 'radiogroup',
+						            fieldLabel: '',
+						            layout: 'hbox',
+						            items: [{
+						                boxLabel: 'Aperto',
+						                name: 'status',
+						                inputValue: 'OPEN',
+						                checked: true,
+						                width: 150                
+						            }, {
+						                boxLabel: 'Chiuso',
+						                name: 'status',
+						                inputValue: 'CLOSE'
+						            }]
+						        }
+						        
+			        		], 
+
+
+						buttons: [
+							{
+				            text: 'Verifica',
+				            handler: function (btn, evt) {              
+								var l_form = this.up('form').getForm();
+			    	            var l_grid = this.up('form').up('form').down('grid');
+					             if (l_form.isValid()) {
+			    					  l_grid.store.proxy.extraParams = {}	            	
+			    			          l_grid.store.proxy.extraParams = l_form.getValues();
+			    			          l_grid.store.load();				             
+					             	}
+				             	}
+				            }							
+						]
+			        	}
+			        	
+			        	
+			        	//ricerca per booking
+			        	, {
+							xtype: 'form', border: true, flex: 1, bodyPadding: 10, margin: '0 0 0 5', buttonAlign : 'center', frame: true,
+							items: [        	
+			        			{"fieldLabel":"Inserisci il numero di booking","name":"booking_number", "xtype": "textfield", "labelAlign": "top", "anchor": "100%"},			        			
+			        		], 
+
+						buttons: [
+							{
+				            text: 'Verifica',
+				            handler: function (btn, evt) {              
+								var l_form = this.up('form').getForm();
+			    	            var l_grid = this.up('form').up('form').down('grid');
+					             if (l_form.isValid()) {
+			    					  l_grid.store.proxy.extraParams = {}	            	
+			    			          l_grid.store.proxy.extraParams = l_form.getValues();
+			    			          l_grid.store.load();				             
+					             	}
+				             	}
+				            }							
+						]			        		
+			        	}			        	
+			        ]
+			    } 
 	        		
 	        		
 	        	//GRID con movimenti per container	        		
@@ -81,6 +140,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						xtype: 'grid',
 						loadMask: true,
 						flex: 1,
+						margin: '30 5 5 5',
 						
 						layout: {
                 			type: 'vbox',
@@ -91,7 +151,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 							xtype: 'store',
 							autoLoad: false,	
 							proxy: {
-								url: 'terminal_movs/new_mov_search_container_number', 
+								url: 'terminal_movs/new_mov_search_handling', 
 								extraParams: {container_number: null},
 								method: 'POST',
 								type: 'ajax',
@@ -111,6 +171,8 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 							fields: [] //serve
 						}, //store
 						columns: [{header: 'Movimento', dataIndex: 'descr', flex: 1},
+								  {header: 'Container', dataIndex: 'container_number', width: 80},
+								  {header: 'Booking', dataIndex: 'num_booking', width: 80},
 						          {header: 'Stato', dataIndex: 'stato_descr', width: 80},
 								  {header: 'Azione', dataIndex: 'op_descr', width: 100},
 						          ],

@@ -7,6 +7,7 @@ class HandlingHeader < ActiveRecord::Base
    
  scope :extjs_default_scope, -> { eager_load(:shipowner, :equipment) }
  scope :container, ->(container_number) {where("container_number = ?", container_number)}
+ scope :booking, ->(booking_number) {where("container_number = ?", container_number)}
 
  def handling_header_status() return self.handling_status end
  
@@ -168,7 +169,9 @@ end
 ################################################################
 def sincro_set_booking_copy(value, hi)
 ################################################################
+ b = Booking.find(hi.booking_id)
  self.booking_id  = hi.booking_id
+ self.num_booking = b.num_booking
 end
 
 ################################################################

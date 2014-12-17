@@ -18,16 +18,39 @@
     items: [
 	        	//ricerca numero container
 	        		{
-					xtype: 'fieldset', border: false, height: 100,
+					xtype: 'form', border: false, height: 130, border: true, bodyPadding: 10,
 					items: [        	
 	        			{"fieldLabel":"Inserisci il numero booking","name":"num_booking", "xtype": "textfield", "labelAlign": "top", "anchor": "100%"},
 	        			
+						{
+				            xtype: 'radiogroup',
+				            fieldLabel: '',
+				            layout: 'hbox',
+				            items: [{
+				                boxLabel: 'Aperto',
+				                name: 'status',
+				                inputValue: 'OPEN',
+				                checked: true,
+				                width: 150                
+				            }, {
+				                boxLabel: 'Chiuso',
+				                name: 'status',
+				                inputValue: 'CLOSE',
+				                width: 150
+				            }, {
+				                boxLabel: 'Entrambi',
+				                name: 'status',
+				                inputValue: '',
+				                width: 150
+				            }]
+				        },	        			
+	        			
 	        			{xtype: "button", text: "Cerca", iconCls: 'fa fa-search', handler: function() {
 	    	            	var l_form = this.up('form').getForm();
-	    	            	var l_grid = this.up('panel').down('grid');
+	    	            	var l_grid = this.up('form').up('form').down('grid');
 
 		    					if(l_form.isValid()){	            	
-		    			          l_grid.store.proxy.extraParams.num_booking = l_form.findField('num_booking').getValue();
+		    			          l_grid.store.proxy.extraParams = l_form.getValues();
 		    			          l_grid.store.load();
 		    				    }            	                	                
 		    	            }

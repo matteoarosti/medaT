@@ -10,12 +10,24 @@ class TerminalMovsController < ApplicationController
 
 #verifico validita' numero container, mostro elenco movimento o voce per crearne uno nuovo
 #############################################################
-def new_mov_search_container_number
+def new_mov_search_handling
 #############################################################
  ret = {}
  ret[:items] = []
- hhs = HandlingHeader.container(params[:container_number]).order('id').limit(1000)
+ 
+  hhs = HandlingHeader.where('1 = 1')
+  hhs = hhs.where('container_number LIKE ?', "%#{params[:container_number]}%") unless params[:container_number].blank?
+  hhs = hhs.where('num_booking LIKE ?', "%#{params[:booking_number]}%") unless params[:booking_number].blank?
+  if params[:status] == 'CLOSE' 
+    hhs = hhs.where('handling_status = ?', 'CLOSE')
+  else
+    hhs = hhs.where('handling_status <> ?', 'CLOSE')
+  end 
+ 
+ #hhs = HandlingHeader.container(params[:container_number]).order('id').limit(1000)
+ 
  handling_EDIT_exists = false
+ 
   hhs.each do |hh|
     if hh.handling_status == 'CLOSE'
      op = 'VIEW'
@@ -27,22 +39,22 @@ def new_mov_search_container_number
     end
      
     ret[:items] << {
-        :handling_id  => hh.id,
+        :handling_id  => hh.id, :num_booking  => hh.num_booking,
         :container_number => hh.container_number, :is_container_editable => false,
         :stato => hh.handling_status, :stato_descr => hh.handling_status, :op => op, :op_descr => op_descr,
         :descr => "Movimento ##{hh.id.to_s}, #{HandlingHeader::TYPES[hh.handling_type]}"
       }
   end
  
- #se non ci sono movimenti aperti, ne propongo uno nuovo
- if ret[:items].length > 0 && !handling_EDIT_exists
+ #se non ci sono movimenti aperti, ne propongo uno nuovo (se cercavo per num container)
+ if ret[:items].length > 0 && !handling_EDIT_exists && !params[:container_number].blank?
   ret[:items] << {:container_number => params[:container_number], :is_container_editable => false,
         :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo movimento per il container richiesto', :op => 'CRT', :op_descr => '[ Crea ]'} 
  end
  
  
  #se non ci sono movimenti aperti, ne propongo uno nuovo con possibilita' di creare container
- if ret[:items].length == 0
+ if ret[:items].length == 0  && !params[:container_number].blank?
   ret[:items] << {:container_number => params[:container_number], :is_container_editable => true,
         :stato => 'CRT', :stato_descr => '', :descr => 'Crea il nuovo container e il nuovo movimento', :op => 'CRT', :op_descr => '[ Crea ]'}
  end

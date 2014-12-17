@@ -22,6 +22,7 @@ class CreateHandlingHeaders < ActiveRecord::Migration
     t.string     :container_status,          :limit => 5
     t.string     :container_FE,              :limit => 1
     t.integer    :booking_id    
+    t.string     :num_booking,               :limit => 25
       
     end
   end

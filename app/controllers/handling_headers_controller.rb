@@ -40,19 +40,38 @@ def hitems_sc_create
    hh = HandlingHeader.find(params[:data][:handling_header_id])
    hi = hh.handling_items.new()
 
+   #se ho ricevuto "num_booking", lo vado a decodifica in "booking_id"
+   if !params[:data][:num_booking].blank?
+    b = Booking.get_by_num(params[:data][:num_booking])
+    if b.nil?
+     logger.info 'Booking non trovato'
+     render json: {:success => false, :message => 'Booking non trovato'}
+     return
+    else
+     logger.info 'Booking trovato'
+     params[:data][:booking_id] = b.id
+     params[:data].delete(:num_booking)    
+    end
+   end
+   
+
+
    params[:data].permit!
    hi.assign_attributes(params[:data])
 
    #se supera i vari controlli salvo il dettalio e aggiorno la testata
-   if hh.validate_insert_item(hi)[:is_valid]
+   validate_insert_item = hh.validate_insert_item(hi)
+   if validate_insert_item[:is_valid]
     hi.save!()
     hh.sincro_save_header(hi)
     ret_status = true
+    message = ''
    else
     ret_status = false
+    message = validate_insert_item[:message]
    end 
        
-   render json: {:success => ret_status, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]} 
+   render json: {:success => ret_status, :message => message, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]} 
 end
 
 

@@ -43,7 +43,8 @@
 			    },			    
 			}), 											  
 		},
-    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver'}
+    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver', allowBlank: false},
+	{xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: false}    
    ],
    
    
@@ -58,17 +59,27 @@
              	new_rec.save({
 					success: function(rec, op) {
 
-					 //ricarico la testata e i dettagli
-					 rec = this.up('window').open_vars.mov_panel.getViewModel().getData().rec;
-					 var result = Ext.JSON.decode(op.getResponse().responseText);																		
-					 rec.set(result.hh[0]);
-					 this.up('window').open_vars.mov_panel.getViewModel().setData({rec: rec});					 
-					 this.up('window').open_vars.mov_panel.down('grid').store.reload();
-					 
-					 //chiudo										
-					 this.up('window').close();
+						 //ricarico la testata e i dettagli
+						 rec = this.up('window').open_vars.mov_panel.getViewModel().getData().rec;
+						 var result = Ext.JSON.decode(op.getResponse().responseText);																		
+						 rec.set(result.hh[0]);
+						 this.up('window').open_vars.mov_panel.getViewModel().setData({rec: rec});					 
+						 this.up('window').open_vars.mov_panel.down('grid').store.reload();
+						 
+						 //chiudo										
+						 this.up('window').close();
 					 								
-					}, scope: this,				 
+					}, scope: this,
+					
+					failure: function(rec, op) {
+						var result = Ext.JSON.decode(op.getResponse().responseText);
+						Ext.MessageBox.show({
+	                        title: 'EXCEPTION',
+	                        msg: result.message,
+	                        icon: Ext.MessageBox.ERROR,
+	                        buttons: Ext.Msg.OK
+                    	})
+					} 				 
 		    	});
              }             
             }

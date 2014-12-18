@@ -57,7 +57,7 @@ class HandlingHeader < ActiveRecord::Base
       next if op_id == 'initial_handling'
       
       hi.handling_item_type = op_id
-      op_valid = self.validate_insert_item(hi)
+      op_valid = self.validate_insert_item(hi, 'get_operations')
       
       if op_valid[:is_valid] == true
          new_op = {
@@ -80,7 +80,7 @@ class HandlingHeader < ActiveRecord::Base
 # Verifico la correttezza di un hi in fase di inserimento
 # (in base al tipo, allo stato del hh, ....) 
 ################################################################ 
-def validate_insert_item(hi)
+def validate_insert_item(hi, name_function = '')
 ################################################################
  ret = {:is_valid => true, :message => nil}
  operatios_config = load_op_config    
@@ -110,6 +110,26 @@ def validate_insert_item(hi)
    end
   end
  
+  #se ha "booking_copy" = true verifico l'esistenza, la validita' e l'ammissibilita' del booking
+  op_config_set = op_config['set'] || {}
+  if name_function != 'get_operations' && op_config_set['booking_copy'] == true
+   if hi.booking.nil?
+    ret[:is_valid] = false
+    ret[:message]  = "Booking non presente" 
+    logger.info ret.to_yaml
+    return ret      
+   end
+   
+   verifica_validazione = hi.booking.valida_insert_item(hi)
+   logger.info verifica_validazione.to_yaml
+   if verifica_validazione[:is_valid] == false
+    ret[:is_valid] = false
+    ret[:message]  = verifica_validazione[:message] 
+    logger.info ret.to_yaml
+    return ret   
+   end
+   
+  end 
   
  return ret
 end 

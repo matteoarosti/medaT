@@ -13,7 +13,7 @@ class Booking < ActiveRecord::Base
   self.equipment.sizetype if self.equipment
  end
  
-  def self.as_json_prop()
+ def self.as_json_prop()
      return {
         :include=>{:shipowner => {:only=>[:name]}, :equipment => {:only=>[:size]}},
         :methods => [:shipowner_id_Name, :equipment_id_Name]
@@ -21,6 +21,9 @@ class Booking < ActiveRecord::Base
  end
  
  
+ def self.get_by_num(num)
+  Booking.where('num_booking = ?', num).first
+ end
  
 #valori per combo
 def status_get_data_json
@@ -29,6 +32,14 @@ def status_get_data_json
   {:cod=>'CLOSE', :descr=>'Close'}
  ]
 end 
+
+
+def valida_insert_item(hi)
+ ret = {}
+ ret[:is_valid] = true
+ ret[:message]  = 'Booking: impossibile inserire il nuovo movimento'
+ ret 
+end
  
  
 end

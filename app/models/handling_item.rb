@@ -2,6 +2,7 @@ class HandlingItem < ActiveRecord::Base
  belongs_to :handling_header
  belongs_to :ship
  belongs_to :carrier
+ belongs_to :booking
  
  scope :extjs_default_scope, -> {}
  scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)}

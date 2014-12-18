@@ -1,5 +1,6 @@
 class Booking < ActiveRecord::Base
 
+ belongs_to :handling_header
  belongs_to :shipowner
  belongs_to :equipment
 
@@ -34,11 +35,66 @@ def status_get_data_json
 end 
 
 
+#valido l'inserimento di un nuovo movimento nel booking
+# - verifico che compagnia e equipment siano gli stessi tra handling_header e booking
+# - verifico di non aver superato il numero (quantita') indicato nel booking
 def valida_insert_item(hi)
  ret = {}
+ 
+ #controllo lo stato del booking
+ if self.status != 'OPEN'
+   ret[:is_valid] = false
+   ret[:message]  = 'Il booking non e\' in stato OPEN'
+   return ret
+ end 
+ 
+ #controllo compagnia
+ if hi.handling_header.shipowner_id != self.shipowner_id
+   ret[:is_valid] = false
+   ret[:message]  = 'La compagnia impostata nel booking e nella testata del movimento non coincidono'
+   return ret
+ end 
+ 
+ #controllo equipment
+ if hi.handling_header.equipment_id != self.equipment_id
+   ret[:is_valid] = false
+   ret[:message]  = 'Il tipo di container (equipment) impostato nel booking e nella testata del movimento non coincidono'
+   return ret
+ end 
+ 
+ #controllo su quantita' booking (escludendo la testata in corso nel caso di salvataggi)
+ num_impegni_booking = self.get_num_impegni(hi.handling_header.id)
+ if self.quantity <= num_impegni_booking
+   ret[:is_valid] = false
+   ret[:message]  = "Booking pieno, impossibile assegnare altro movimento (q: #{self.quantity}, imp: #{num_impegni_booking})"
+   return ret 
+ end
+ 
  ret[:is_valid] = true
- ret[:message]  = 'Booking: impossibile inserire il nuovo movimento'
- ret 
+ ret[:message]  = ''
+ return ret 
+end
+
+
+#num_impegni su booking (escludendo eventualmente un header_handling)
+def get_num_impegni(escludi_header_id = 0)
+ hh_count = HandlingHeader.where('1 = 1').where('booking_id = ?', self.id)
+ hh_count = hh_count.where('id <> ?', escludi_header_id) if (escludi_header_id != 0)
+ return hh_count.count  
+end
+
+#gestisto lo status (OPEN/CLOSE) in base al numero di movimenti abbinagi
+def refresh_status()
+ message = nil
+ self.quantity > self.get_num_impegni() ? new_status = 'OPEN' : new_status = 'CLOSE'
+ if self.status != new_status
+  self.status = new_status
+  self.save!
+  message = "Lo stato del booking e' stato modificato in #{new_status}"
+ end
+ 
+ return {:message => message}
+ 
 end
  
  

@@ -56,7 +56,18 @@
    <% if op=='UPDATE' %>					 										
 					 this.up('form').close();
    <% end %>					 							
-					}, scope: this,				 
+					}, scope: this,				
+					
+					failure: function(rec, op) {
+						var result = Ext.JSON.decode(op.getResponse().responseText);
+						Ext.MessageBox.show({
+	                        title: 'EXCEPTION',
+	                        msg: result.message,
+	                        icon: Ext.MessageBox.ERROR,
+	                        buttons: Ext.Msg.OK
+                    	})					
+					}, scope: this,					
+					 
 		    	});
              }             
             }

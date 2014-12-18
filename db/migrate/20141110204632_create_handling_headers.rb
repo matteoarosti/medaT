@@ -4,7 +4,6 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.string      :container_number,       :limit => 11
 
       t.integer     :shipowner_id,           :limit => 6
-      t.integer     :shipowner_id,           :limit => 6
       t.integer     :equipment_id,           :limit => 6
       t.boolean     :over_hight
       t.boolean     :transhipment

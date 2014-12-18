@@ -28,10 +28,16 @@ class BookingsController < ApplicationController
    item = Booking.find(params[:data][:id])   
   end
  
-  to_save_params = params[:data].select{|k,v| Booking.column_names.include?(k) && k != 'id'}
-  logger.info to_save_params.to_yaml  
+  to_save_params = params[:data].select{|k,v| Booking.column_names.include?(k) && k != 'id'}  
   to_save_params.permit!
   item.update(to_save_params)
+  
+  #verifico validita' quantity
+  if item.get_num_impegni() > item.quantity
+   render json: {:success => false, :message=>"La quantità indicata è inferiore al numero dei movimenti attualmnete abbinati al booking"}
+   return
+  end
+  
   item.save!()  
   render json: {:success => true, :data=>[item.as_json(Booking.as_json_prop)]}  
   

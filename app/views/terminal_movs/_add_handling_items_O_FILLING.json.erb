@@ -58,7 +58,18 @@
              	new_rec.data = form.getValues();
              	new_rec.save({
 					success: function(rec, op) {
+						var result = Ext.JSON.decode(op.getResponse().responseText);
 
+						//se e' stato ritornato un messaggio (es: booking CLOSE)
+						if (result.message.length > 0)
+							Ext.MessageBox.show({
+		                        title: 'Notifica',
+		                        msg: result.message,
+		                        //icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})						
+						
+						
 						 //ricarico la testata e i dettagli
 						 rec = this.up('window').open_vars.mov_panel.getViewModel().getData().rec;
 						 var result = Ext.JSON.decode(op.getResponse().responseText);																		

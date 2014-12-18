@@ -63,9 +63,9 @@ def hitems_sc_create
    validate_insert_item = hh.validate_insert_item(hi)
    if validate_insert_item[:is_valid]
     hi.save!()
-    hh.sincro_save_header(hi)
-    ret_status = true
-    message = ''
+    r = hh.sincro_save_header(hi)
+    ret_status  = r[:success]
+    message     = r[:message]
    else
     ret_status = false
     message = validate_insert_item[:message]

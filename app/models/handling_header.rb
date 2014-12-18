@@ -140,7 +140,7 @@ end
 ################################################################ 
 def sincro_save_header(hi)
 ################################################################
-
+ message = []
  operatios_config = load_op_config    
  h_type_config = get_handling_type_config(operatios_config)
   
@@ -157,8 +157,15 @@ def sincro_save_header(hi)
    self.send("sincro_set_#{set_op_name}", set_op_value, hi)
   end
  
+ #salvo handling_header
  self.save!
- return true
+ 
+ #se e' un handling_item che gestisce il bookin, aggiorno lo stato del booking
+ ret_booking = {} 
+ ret_booking = hi.handling_header.booking.refresh_status if op_config_set['booking_copy'] == true
+ message << ret_booking[:message] unless ret_booking[:message].blank?  
+ 
+ return {:success => true, :message => message}
 end  
 
 

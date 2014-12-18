@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 20141113230931) do
     t.integer  "port_id",      limit: 8
     t.date     "eta"
     t.integer  "quantity",     limit: 8
-    t.string   "status",       limit: 15
-    t.string   "notes"
+    t.string   "status",       limit: 5
+    t.text     "notes",        limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -61,16 +61,19 @@ ActiveRecord::Schema.define(version: 20141113230931) do
     t.string   "container_type",        limit: 5
     t.boolean  "container_OH"
     t.string   "handling_status",       limit: 5
-    t.boolean  "container_in_terminal", default: false
+    t.boolean  "container_in_terminal",            default: false
     t.string   "container_status",      limit: 5
-    t.string   "container_PV",          limit: 1
+    t.string   "container_FE",          limit: 1
     t.integer  "booking_id"
+    t.string   "num_booking",           limit: 25
   end
 
   create_table "handling_items", force: true do |t|
     t.integer  "handling_header_id", limit: 8
     t.datetime "date"
-    t.string   "handling_item_type", limit: 10
+    t.string   "handling_item_type", limit: 15
+    t.string   "handling_type",      limit: 1
+    t.string   "container_FE",       limit: 1
     t.integer  "ship_id",            limit: 8
     t.string   "voyage",             limit: 15
     t.integer  "carrier_id",         limit: 8
@@ -81,15 +84,14 @@ ActiveRecord::Schema.define(version: 20141113230931) do
     t.string   "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "eu",                 limit: 1
-    t.string   "pv",                 limit: 1
     t.integer  "booking_id"
   end
 
   create_table "import_headers", force: true do |t|
-    t.integer  "ship_id",     limit: 8
-    t.string   "voyage",      limit: 15
-    t.string   "import_type", limit: 1
+    t.integer  "ship_id",       limit: 8
+    t.string   "voyage",        limit: 15
+    t.string   "import_type",   limit: 1
+    t.string   "import_status", limit: 5
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -104,7 +106,7 @@ ActiveRecord::Schema.define(version: 20141113230931) do
     t.decimal  "temperature",                       precision: 5, scale: 2
     t.string   "imo",              limit: 4
     t.string   "status",           limit: 5
-    t.text     "note",             limit: 16777215
+    t.text     "notes",            limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -141,7 +143,7 @@ ActiveRecord::Schema.define(version: 20141113230931) do
 
   create_table "ships", force: true do |t|
     t.string   "name",         limit: 50
-    t.string   "short_name",   limit: 4
+    t.string   "short_name",   limit: 10
     t.string   "call_sign",    limit: 10
     t.integer  "shipowner_id"
     t.datetime "created_at"

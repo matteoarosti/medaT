@@ -3,15 +3,6 @@
 TMOV:
 ########################################################################
  initial_handling: I_DISCHARGE,I_TRANSFER
- ASS_BOOK:
-  label: Assign booking
-  icon: '<i class="fa fa-ticket fa-2x" style="color:white;"></i>'
-  check:
-   with_booking: false   
-#   container_status: AVAILABLE
-  set:
-   booking_copy: true
-   with_booking: true
  I_DISCHARGE:
   label: Discharge From Ship
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -30,16 +21,26 @@ TMOV:
 #   container_status: AVAILABLE
   set:  
    container_in_terminal: false   
+ I_EMPTYING:
+  label: In after Emptying
+  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
+  check:
+   container_in_terminal: false
+   container_FE: F
+  set:
+   container_in_terminal: true
+   container_FE_copy: false
  O_FILLING:
   label: Out for Filling
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
   check:
-   with_booking: true
+   with_booking: false
    container_in_terminal: true
    container_FE: E
 #   container_status: AVAILABLE
   set:  
    container_in_terminal: false
+   booking_copy: true
  REQ_ESTIMATE:
   label: Estimate Request
   icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'   
@@ -57,11 +58,11 @@ TMOV:
    container_in_terminal: true
    container_FE_copy: true
  I_TRANSFER:
-  label: 'Input From Discharge'
+  label: 'In By Transfer From Other Terminal'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
   check:
    container_in_terminal: false
-   container_FE: F
+   handling_header_status: NEW
   set:
    container_in_terminal: true
    container_FE_copy: true
@@ -69,11 +70,10 @@ TMOV:
   label: Out For Load
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
   check:
-   with_booking: true
    container_in_terminal: true
-   container_FE: F
   set:
    container_in_terminal: false
+   container_FE_copy: true
    movimento_status: CLOSE
  CUST_INSP:
   icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 

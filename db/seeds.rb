@@ -14,10 +14,14 @@ Shipowner.create(name: 'SAF', short_name: 'SAF', email: 'info@saf.com', estimate
 Shipowner.create(name: 'HAN', short_name: 'HAN', email: 'info@han.com', estimate_hourly_cost: 9.0)
 Shipowner.create(name: 'SGL', short_name: 'SGL', email: 'info@sgl.com', estimate_hourly_cost: 9.0)
 
-Ship.create(name: 'BF MELODY', short_name: 'BFML', call_sign: 'VCD6D')
-Ship.create(name: 'KING BYRON', short_name: 'KYBY', call_sign: 'QW5D7')
-Ship.create(name: 'CLIPPER', short_name: 'CLPR', call_sign: 'GVFD56SD')
-Ship.create(name: 'DIRHAMI', short_name: 'DRHM', call_sign: 'VCD6D')
+Ship.create(name: 'BF MELODY', short_name: 'BDY', call_sign: 'VCD6D')
+Ship.create(name: 'KING BYRON', short_name: 'KBYR', call_sign: 'QW5D7')
+Ship.create(name: 'CLIPPER', short_name: 'CLP', call_sign: 'GVFD56SD')
+Ship.create(name: 'DIRHAMI', short_name: 'DIRH', call_sign: 'VCD6D')
+Ship.create(name: 'BF EUPHORIA', short_name: 'BEPHR', call_sign: 'V2CB7')
+Ship.create(name: 'ALLEGRO', short_name: 'ALGR', call_sign: 'V2CQ5')
+Ship.create(name: 'BF CONFIANZA', short_name: 'CNFZ', call_sign: 'CQFB')
+Ship.create(name: 'STINA', short_name: 'STNA', call_sign: 'V2BW7')
 
 Equipment.create(equipment_type: '20DV', size: '20', sizetype: '20 FOOT BOX', iso: '2200')
 Equipment.create(equipment_type: '20RF', size: '20', sizetype: '20 FOOT BOX REEFER', iso: '2230')

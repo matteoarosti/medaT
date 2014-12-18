@@ -18,32 +18,12 @@
     {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
     {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},  
     {xtype: 'hiddenfield', name: 'handling_type', value: 'O'},
-    {xtype: 'hiddenfield', name: 'container_FE', value: '<%= @hh.container_FE.to_s -%>'},
+    {xtype: 'hiddenfield', name: 'container_FE', value: 'F'},
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},   
-    
-	{
-		xtype: 'combobox', name: 'carrier_id',
-		fieldLabel: 'Carrier',
-		displayField : 'name',
-		valueField:  'id',
-		forceSelection: true,
-		allowBlank: false,
-		triggerAction: 'all',  
-		
-			store: Ext.create('Ext.data.Store', {
-			    model: 'Shipowner',
-			    proxy: {
-			        autoload: true,
-			        type: 'ajax',
-			        url: '/carriers/get_combo_data',
-			        reader: {
-			            type: 'json',
-			            rootProperty: 'items'
-			        }       
-			    },			    
-			}), 											  
-		},
-    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver'}
+
+    <%= raw extjs_std_combo_model('carrier', @new_rec) -%>,
+    <%= raw extjs_std_textfield('driver', @new_rec) -%>,
+
    ],
    
    

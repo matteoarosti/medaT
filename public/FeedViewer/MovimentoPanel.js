@@ -129,7 +129,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						{
 							xtype: 'combobox',
 							fieldLabel: 'Compagnia',
-							displayField : 'name',
+							displayField : 'short_name',
 							valueField:  'id',
 							forceSelection: true,
 							triggerAction: 'all',  

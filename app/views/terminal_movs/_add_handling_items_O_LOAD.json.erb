@@ -18,13 +18,11 @@
     {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
     {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},    
     {xtype: 'hiddenfield', name: 'handling_type', value: 'I'},
+    {xtype: 'hiddenfield', name: 'container_FE', value: '<%= @hh.container_FE.to_s -%>'},
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},
     
 	<%= raw extjs_std_combo_model('ship', @new_rec) -%>,
     <%= raw extjs_std_textfield('voyage', @new_rec) -%>,
-    <%= raw extjs_std_combo('container_FE', @new_rec,
-    	:store => extjs_std_store_data(@new_rec.container_FE_get_data_json)
-    	) -%>
 
    ],
    

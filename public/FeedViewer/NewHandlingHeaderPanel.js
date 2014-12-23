@@ -183,13 +183,45 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						    
 						    	//Check Digit non valido
 						    	if (parseInt(rec.get('valid_CD')) != 0){
-									Ext.MessageBox.show({
+									Ext.Msg.confirm({
 				                        title: 'EXCEPTION',
-				                        msg: 'Numero container non valido. Check Digit Error: ' + rec.get('valid_CD'),
+				                        msg: 'Numero container non valido. Check Digit Error: ' + rec.get('valid_CD') + '<BR/>Proseguire ugualmente?',
 				                        icon: Ext.MessageBox.ERROR,
-				                        buttons: Ext.Msg.OK
-			                    	});
-			                    	return false;					    		
+				                        buttons: Ext.Msg.YESNO,
+										fn: function(btn){                    
+										         if (btn == "no"){ //NO, esco
+										           return false;              
+										        }
+										        if (btn == "yes"){ //YES, proseguo
+										            
+												        //Creo nuovo movimento
+												        if (rec.get('op') == 'CRT'){
+															new_rec = Ext.create('HandlingHeader', {});
+												    		new_rec.set('id', null);
+												    		new_rec.set('container_number', rec.get('container_number'));
+												    		new_rec.set('handling_status', 'CRT');
+													        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+																title: 'Movimento #123',
+																closable: true			
+													        });
+													     }		
+													     
+																		     
+								                		newPanel.getViewModel().setData({rec: new_rec, 
+								                			is_handling_editable: rec.get('op') == 'CRT' ? true : false,
+								                			is_container_editable: rec.get('is_container_editable')
+								                		});
+								                    	myApp.feedInfo.add(newPanel).show();
+														//mostro il tab appena aggiunto (l'ultimo)
+											            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);			                    	
+								                    	this.close();						         													     
+																		     
+													 return false;    
+													     								                       
+										        }
+										   }, scope: this   
+			                    	});	
+			                     return false;				    		
 						    	}
 						    	 
 						    						    	

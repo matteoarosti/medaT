@@ -3,6 +3,7 @@ class CreateHandlingItems < ActiveRecord::Migration
     create_table :handling_items do |t|
       t.integer     :handling_header_id,    :limit => 8
       t.datetime    :date
+      t.string      :operation_type,        :limit => 2  #es: MT, VD, AF, ...
       t.string      :handling_item_type,    :limit => 15  #es: SBARCO, IMBARCO, VISITA DOGANALE, ...
       t.string      :handling_type,         :limit => 1 #IN or OUT
       t.string      :container_FE,          :limit => 1 #FULL or EMPTY

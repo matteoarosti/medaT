@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20141113230931) do
   create_table "handling_items", force: true do |t|
     t.integer  "handling_header_id", limit: 8
     t.datetime "date"
+    t.string   "operation_type",     limit: 2
     t.string   "handling_item_type", limit: 15
     t.string   "handling_type",      limit: 1
     t.string   "container_FE",       limit: 1

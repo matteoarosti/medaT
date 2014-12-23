@@ -41,13 +41,6 @@ TMOV:
   set:  
    container_in_terminal: false
    booking_copy: true
- REQ_ESTIMATE:
-  label: Estimate Request
-  icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'   
-  check:
-   container_in_terminal: true
-  set:
-   container_status: DAMAGED
  I_FILLING:
   label: 'In From Filling'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
@@ -75,6 +68,13 @@ TMOV:
    container_in_terminal: false
    container_FE_copy: true
    movimento_status: CLOSE
+ REQ_ESTIMATE:
+  label: Estimate Request
+  icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'
+  check:
+   container_in_terminal: true
+  set:
+   container_status: DAMAGED
  CUST_INSP:
   icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 
   label: Custom Inspections

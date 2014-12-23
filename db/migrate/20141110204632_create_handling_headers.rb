@@ -9,22 +9,32 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.boolean     :transhipment
       t.string      :notes,                  :limit => 255
       t.timestamps
-      
-	  #Matteo
-	  t.string     :handling_type,             :limit => 5	   #TMOV, ...
-	  t.string     :container_type,        	   :limit => 5
-	  t.boolean    :container_OH
-	  
-	  #Campi auto-alimentati su aggiunta item (per validazione movimenti, ....)
-    t.string     :handling_status,           :limit => 5	  
-	  t.boolean    :container_in_terminal,     :default => false
-    t.string     :container_status,          :limit => 5
-    t.string     :container_FE,              :limit => 1
-    t.integer    :booking_id    
-    t.string     :num_booking,               :limit => 25
-    
-    t.string      :seal,                     :limit => 15 #sigillo    
-      
+
+      #Matteo
+      t.string     :handling_type,             :limit => 5	   #TMOV, ...
+      t.string     :container_type,        	   :limit => 5
+      t.boolean    :container_OH
+
+      #Campi auto-alimentati su aggiunta item (per validazione movimenti, ....)
+      t.string     :handling_status,           :limit => 5
+      t.boolean    :container_in_terminal,     :default => false
+      t.string     :container_status,          :limit => 5
+      t.string     :container_FE,              :limit => 1
+      t.integer    :booking_id
+      t.string     :num_booking,               :limit => 25
+      t.string     :seal_exp_shipowner,        :limit => 15
+      t.string     :seal_exp_others,           :limit => 15
+      t.decimal    :temperature_exp,           :precision => 5, :scale => 2
+      t.decimal    :weight_exp,                :precision => 5, :scale => 2
+      t.string     :imo_exp,                   :limit => 3
+      t.string     :bill_of_lading,            :limit => 25
+      t.string     :seal_imp_shipowner,        :limit => 15
+      t.string     :seal_imp_others,           :limit => 15
+      t.decimal    :temperature_imp,           :precision => 5, :scale => 2
+      t.decimal    :weight_imp,                :precision => 5, :scale => 2
+      t.string     :imo_imp,                   :limit => 3
+
     end
   end
 end
+

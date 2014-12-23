@@ -181,8 +181,18 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						listeners : {
 						    itemdblclick: function(dv, rec, item, index, e) {
 						    
-						    	console.log(rec);
-						    	
+						    	//Check Digit non valido
+						    	if (parseInt(rec.get('valid_CD')) != 0){
+									Ext.MessageBox.show({
+				                        title: 'EXCEPTION',
+				                        msg: 'Numero container non valido. Check Digit Error: ' + rec.get('valid_CD'),
+				                        icon: Ext.MessageBox.ERROR,
+				                        buttons: Ext.Msg.OK
+			                    	});
+			                    	return false;					    		
+						    	}
+						    	 
+						    						    	
 						        //Creo nuovo movimento
 						        if (rec.get('op') == 'CRT'){
 									new_rec = Ext.create('HandlingHeader', {});
@@ -209,7 +219,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 			                			is_container_editable: rec.get('is_container_editable')
 			                		});
 			                    	myApp.feedInfo.add(newPanel).show();
-									//mostro l'ultimo tab aggiunto
+									//mostro il tab appena aggiunto (l'ultimo)
 						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);			                    	
 			                    	this.close();						         
 						        

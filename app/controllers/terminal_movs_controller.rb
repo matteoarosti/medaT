@@ -83,6 +83,7 @@ def add_handling_items
  @hh     = HandlingHeader.find(@rec_id)
  @new_rec = @hh.handling_items.new()
  @new_rec.handling_item_type = @op
+ @new_rec.datetime_op = Time.now
  render :partial => "add_handling_items_" + @op
 end  
   

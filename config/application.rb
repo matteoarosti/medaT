@@ -26,3 +26,4 @@ module MedaT
 end
 
 Rails.application.config.assets.precompile += %w( application_extjs.css )
+Rails.application.config.time_zone = 'Rome'

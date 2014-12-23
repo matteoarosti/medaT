@@ -21,6 +21,7 @@
     {xtype: 'hiddenfield', name: 'container_FE', value: '<%= @hh.container_FE.to_s -%>'},
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},   
     
+	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
 	{
 		xtype: 'combobox', name: 'carrier_id',
 		fieldLabel: 'Carrier',
@@ -43,7 +44,7 @@
 			    },			    
 			}), 											  
 		},
-    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver', allowBlank: false},
+    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver', allowBlank: false},    
 	{xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: false}    
    ],
    

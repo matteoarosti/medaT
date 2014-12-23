@@ -20,6 +20,7 @@
     {xtype: 'hiddenfield', name: 'fe', value: '<%= @hh.container_FE.to_s -%>'},
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},
     
+	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
 	{
 		xtype: 'combobox', name: 'ship_id',
 		fieldLabel: 'Ship',

@@ -226,29 +226,14 @@ Ext.define('FeedViewer.MovimentoPanel', {
 		                        {fieldLabel: 'container_status', bind: '{rec.container_status}', disabled: true}
 
 							]
-						},  
-						
-						{
-			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Booking',
-			                combineErrors: true,
-			                msgTarget : 'side',
-			                layout: 'hbox',
-			                anchor: '100%',
-			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
-			                items: [
-		                        {fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}},
-		                        {fieldLabel: 'Destinazione', disabled: true}
-							]
 						}
-                        
                         
                      ]
         	     }, 
         	     
         	     
         	     {         
-        	    	 width: 220,
+        	    	 width: 260,
                      xtype: 'fieldset', border: true, collapsible: false,
                      title: 'Import',
                      defaults: {
@@ -314,7 +299,18 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			                items: [
 		                        {anchor: '100%', disabled: true, bind: {value: '{rec.imo_imp}'}}
 							]
-						}                                                
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Bill of lading',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {anchor: '100%', disabled: true, bind: {value: '{rec.bill_of_lading}'}}
+							]
+						}                                               
                      ]
         	     }, 
         	     
@@ -322,7 +318,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	     
     	     
         	     {         
-        	    	 width: 220,
+        	    	 width: 260,
                      xtype: 'fieldset', border: true, collapsible: false,
                      title: 'Export',
                      defaults: {
@@ -388,7 +384,20 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			                items: [
 		                        {anchor: '100%', disabled: true, bind: {value: '{rec.imo_exp}'}}
 							]
-						}                                                
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Booking',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}},
+		                        {fieldLabel: 'Destinazione', disabled: true}
+							]
+						}
+                                                                        
                      ]
         	     }, 
         	     

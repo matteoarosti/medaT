@@ -95,14 +95,11 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	     {         
         	    	 flex: 1,
                      xtype: 'fieldset', border: true, collapsible: false,
-                     title: 'Dati generali e container',
-                     //combineErrors: true,
-                     //msgTarget : 'side',
-                 	layout: {
-                	    type: 'vbox',
-                	    //align : 'stretch',
-                	    pack  : 'start',
-                	},
+                     title: 'Dati generali e container', 
+                 	//layout: {                 		
+                	//    type: 'vbox',
+                	    //pack  : 'start',
+                	//},
                      defaults: {
                          //flex: 1,
                          hideLabel: false,
@@ -111,113 +108,296 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      	 margin: '1 0 0 0'
                      },
                      items: [
-                        {fieldLabel: 'id', bind: '{rec.id}', disabled: true},
-                        {fieldLabel: 'handling_status', bind: '{rec.handling_status}', disabled: true},
-                        {fieldLabel: 'handling_type', xtype: 'combo',
-                        	bind: {value: '{rec.handling_type}', disabled: '{!is_handling_editable}'},
-                        	displayField: 'descr', valueField: 'cod',                        	
-                        	store: {
-                        	  fields: ['cod', 'descr'],
-                        	  data: [ 
-                        	         {cod: 'TMOV', descr: 'Movimento terminal'},
-                        	         {cod: 'FRCON', descr: 'Allaccio frito'},
-                        	         {cod: 'INSPE', descr: 'Visita doganale'}
-                        	  ]
-                        	}
-                        },
+                        
                         
 						{
-							xtype: 'combobox',
-							fieldLabel: 'Compagnia',
-							displayField : 'short_name',
-							valueField:  'id',
-							forceSelection: true,
-							triggerAction: 'all',  
-							
-								store: Ext.create('Ext.data.Store', {
-								    model: 'Shipowner', autoLoad: true,
-								    proxy: {
-								        type: 'ajax',
-								        url: '/shipowners/get_combo_data',
-								        reader: {
-								            type: 'json',
-								            rootProperty: 'items'
-								        }       
-								    },			    
-								}), 					
-							 bind: {value: '{rec.shipowner_id}', disabled: '{!is_container_editable}'}						  
-							},
-
-
-
-
-                        {
-                        	xtype: 'fieldcontainer',
-                        	layout: {
-                        	    type: 'hbox',
-                        	},                        	
-                            defaults: {
-                            	 xtype: 'textfield',
-                            	 labelWidth: 140
-                            },                        	
-                        	items: [
-                        	  {
-								xtype: 'combobox',
-								fieldLabel: 'Tipo container',
-								displayField : 'equipment_type',
-								valueField:  'id',
-								forceSelection: true,
-								triggerAction: 'all',  
-								
-									store: Ext.create('Ext.data.Store', {
-									    model: 'Equipment',
-									    autoLoad: true,							    
-									    proxy: {
-									        type: 'ajax',
-									        url: '/equipment/get_combo_data',
-									        reader: {
-									            type: 'json',
-									            rootProperty: 'items'
-									        }       
-									    },			    
-									}), 					
-								 bind: {value: '{rec.equipment_id}', disabled: '{!is_container_editable}'}						  
-							  },  
-                        	  //{fieldLabel: 'OH', width: 90, labelWidth: 40, labelAlign: 'right', anchor: '-10', bind: {value: '{rec.container_OH}', disabled: '{!is_container_editable}'}}
-                        	]
-                        },
-                        {fieldLabel: 'container_number', bind: '{rec.container_number}', disabled: true},
-                        {fieldLabel: 'container_status', margin: '1 0 5 0', bind: '{rec.container_status}', disabled: true}
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Handling id/status',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'id', bind: '{rec.id}', disabled: true, width: 80},
+		                        {fieldLabel: 'handling_status', bind: '{rec.handling_status}', disabled: true, anchor: '100%'}
+							]
+						},                        
                         
+                        
+                        
+						{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Handling type',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+			                        {fieldLabel: 'handling_type', xtype: 'combo',
+			                        	bind: {value: '{rec.handling_type}', disabled: '{!is_handling_editable}'},
+			                        	displayField: 'descr', valueField: 'cod', 
+			                        	anchor: '100%',                       	
+			                        	store: {
+			                        	  fields: ['cod', 'descr'],
+			                        	  data: [ 
+			                        	         {cod: 'TMOV', descr: 'Movimento terminal'},
+			                        	         {cod: 'FRCON', descr: 'Allaccio frito'},
+			                        	         {cod: 'INSPE', descr: 'Visita doganale'}
+			                        	  ]
+			                        	}
+			                        }			                
+			                ]
+			            },
+			            
+			            
+			            
+			            
+						{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Shipowner/Equip.',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+								{
+									xtype: 'combobox',
+									fieldLabel: 'Compagnia',
+									displayField : 'short_name',
+									valueField:  'id',
+									forceSelection: true,
+									triggerAction: 'all',
+					                anchor: '100%',							  
+									
+										store: Ext.create('Ext.data.Store', {
+										    model: 'Shipowner', autoLoad: true,
+										    proxy: {
+										        type: 'ajax',
+										        url: '/shipowners/get_combo_data',
+										        reader: {
+										            type: 'json',
+										            rootProperty: 'items'
+										        }       
+										    },			    
+										}), 					
+									 bind: {value: '{rec.shipowner_id}', disabled: '{!is_container_editable}'}						  
+									},
+		                        	  {
+										xtype: 'combobox',
+										fieldLabel: 'Tipo container',
+										displayField : 'equipment_type',
+										valueField:  'id',
+										forceSelection: true,
+										triggerAction: 'all',  
+					                	anchor: '100%',								
+										
+											store: Ext.create('Ext.data.Store', {
+											    model: 'Equipment',
+											    autoLoad: true,							    
+											    proxy: {
+											        type: 'ajax',
+											        url: '/equipment/get_combo_data',
+											        reader: {
+											            type: 'json',
+											            rootProperty: 'items'
+											        }       
+											    },			    
+											}), 					
+										 bind: {value: '{rec.equipment_id}', disabled: '{!is_container_editable}'}						  
+									  },									
+			                ]
+			            },			            
+                        
+
+
+						{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Container num/status',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'container_number', bind: '{rec.container_number}', disabled: true},
+		                        {fieldLabel: 'container_status', bind: '{rec.container_status}', disabled: true}
+
+							]
+						},  
+						
+						{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Booking',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}},
+		                        {fieldLabel: 'Destinazione', disabled: true}
+							]
+						}
                         
                         
                      ]
-        	     }, {         
-        	    	 flex: 1,
+        	     }, 
+        	     
+        	     
+        	     {         
+        	    	 width: 220,
                      xtype: 'fieldset', border: true, collapsible: false,
-                     title: 'Dati viaggio',
-                     //combineErrors: true,
-                     //msgTarget : 'side',
-                 	layout: {
-                	    type: 'vbox',
-                	    //align : 'stretch',
-                	    pack  : 'start',
-                	},
+                     title: 'Import',
                      defaults: {
-                         //flex: 1,
                          hideLabel: false,
-                         labelWidth: 140,
+                         labelWidth: 100,
                      	 xtype: 'textfield',
                      	 margin: '1 0 0 0'
                      },
                      items: [
-                        {fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}},
-                        {fieldLabel: 'Destinazione'},
-                        {fieldLabel: 'Sigillo Esp.1', disabled: true, bind: {value: '{rec.seal}'}},                        
-                        {fieldLabel: 'ID FM'}                        
+                     
+						{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Seal ShipOwn.',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'Seal ShipOwn', anchor: '100%', disabled: true, bind: {value: '{rec.seal_imp_shipowner}'}}
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Seal others',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'Seal Others', anchor: '100%', disabled: true, bind: {value: '{rec.seal_imp_others}'}}
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Temperature',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {anchor: '100%', disabled: true, bind: {value: '{rec.temperature_imp}'}}
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Weight',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {anchor: '100%', disabled: true, bind: {value: '{rec.weight_imp}'}}
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'IMO',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {anchor: '100%', disabled: true, bind: {value: '{rec.imo_imp}'}}
+							]
+						}                                                
                      ]
-        	     }, {         
-        	    	 width: 200,
+        	     }, 
+        	     
+        	     
+        	     
+    	     
+        	     {         
+        	    	 width: 220,
+                     xtype: 'fieldset', border: true, collapsible: false,
+                     title: 'Export',
+                     defaults: {
+                         hideLabel: false,
+                         labelWidth: 100,
+                     	 xtype: 'textfield',
+                     	 margin: '1 0 0 0'
+                     },
+                     items: [
+                     
+						{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Seal ShipOwn.',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'Seal ShipOwn', anchor: '100%', disabled: true, bind: {value: '{rec.seal_exp_shipowner}'}}
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Seal others',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'Seal Others', anchor: '100%', disabled: true, bind: {value: '{rec.seal_exp_others}'}}
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Temperature',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {anchor: '100%', disabled: true, bind: {value: '{rec.temperature_exp}'}}
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Weight',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {anchor: '100%', disabled: true, bind: {value: '{rec.weight_exp}'}}
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'IMO',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {anchor: '100%', disabled: true, bind: {value: '{rec.imo_exp}'}}
+							]
+						}                                                
+                     ]
+        	     }, 
+        	     
+
+        	     
+        	     
+        	     
+        	     {         
+        	    	 width: 130,
                      xtype: 'fieldset', border: true, collapsible: false,
                      title: 'Azioni',
                      //combineErrors: true,

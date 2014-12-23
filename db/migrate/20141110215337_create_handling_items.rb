@@ -2,7 +2,7 @@ class CreateHandlingItems < ActiveRecord::Migration
   def change
     create_table :handling_items do |t|
       t.integer     :handling_header_id,    :limit => 8
-      t.datetime    :date
+      t.datetime    :datetime_op
       t.string      :operation_type,        :limit => 2  #es: MT, VD, AF, ...
       t.string      :handling_item_type,    :limit => 15  #es: SBARCO, IMBARCO, VISITA DOGANALE, ...
       t.string      :handling_type,         :limit => 1 #IN or OUT

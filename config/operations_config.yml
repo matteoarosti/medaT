@@ -12,7 +12,8 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: true
-   opt_type: 'MT'
+   operation_type: 'MT'
+   seal_imp_copy: true
  O_EMPTYING:
   label: Out for Emptying
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
@@ -22,7 +23,7 @@ TMOV:
 #   container_status: AVAILABLE
   set:  
    container_in_terminal: false
-   opt_type: 'MT'
+   operation_type: 'MT'
  I_EMPTYING:
   label: In after Emptying
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -32,7 +33,7 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: false
-   opt_type: 'MT'
+   operation_type: 'MT'
  O_FILLING:
   label: Out for Filling
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
@@ -44,7 +45,7 @@ TMOV:
   set:  
    container_in_terminal: false
    booking_copy: true
-   opt_type: 'MT'
+   operation_type: 'MT'
  I_FILLING:
   label: 'In From Filling'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
@@ -54,7 +55,7 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: true
-   opt_type: 'MT'
+   operation_type: 'MT'
  I_TRANSFER:
   label: 'In By Transfer From Other Terminal'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
@@ -64,7 +65,7 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: true
-   opt_type: 'MT'
+   operation_type: 'MT'
  O_LOAD:
   label: Out For Load
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
@@ -74,7 +75,7 @@ TMOV:
    container_in_terminal: false
    container_FE_copy: true
    movimento_status: CLOSE
-   opt_type: 'MT'
+   operation_type: 'MT'
  REQ_ESTIMATE:
   label: Estimate Request
   icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'
@@ -82,14 +83,14 @@ TMOV:
    container_in_terminal: true
   set:
    container_status: DAMAGED
-   opt_type: 'RE'
+   operation_type: 'RE'
  CUST_INSP:
   icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 
   label: Custom Inspections
   check:
    container_in_terminal: true
   set:
-   opt_type: 'CI'
+   operation_type: 'CI'
 
 ########################################################################
 #HANDLING_ONLY_FRIDGE_CONNECTION:

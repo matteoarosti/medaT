@@ -23,7 +23,8 @@
 	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
 	<%= raw extjs_std_combo_model('ship', @new_rec) -%>,
     <%= raw extjs_std_textfield('voyage', @new_rec) -%>,
-	<%= raw extjs_std_textfield('seal', @new_rec, :allowBlank => true) -%>,    
+	<%= raw extjs_std_textfield('seal_shipowner', @new_rec, :allowBlank => true) -%>,    
+	<%= raw extjs_std_textfield('seal_others', @new_rec, :allowBlank => true) -%>,
     <%= raw extjs_std_combo('container_FE', @new_rec,
     	:store => extjs_std_store_data(@new_rec.container_FE_get_data_json)
     	) -%>

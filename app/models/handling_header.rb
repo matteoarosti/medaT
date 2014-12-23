@@ -202,9 +202,16 @@ def sincro_set_booking_copy(value, hi)
 end
 
 ################################################################
-def sincro_set_seal_copy(value, hi)
+def sincro_set_seal_imp_copy(value, hi)
 ################################################################
- self.seal = hi.seal unless hi.seal.blank?
+ self.seal_imp_shipowner  = hi.seal_shipowner unless hi.seal_shipowner.blank?
+ self.seal_imp_others     = hi.seal_others unless hi.seal_others.blank?
+end
+################################################################
+def sincro_set_seal_exp_copy(value, hi)
+################################################################
+ self.seal_exp_shipowner  = hi.seal_shipowner unless hi.seal_shipowner.blank?
+ self.seal_exp_others     = hi.seal_others unless hi.seal_others.blank?
 end
 
 ################################################################

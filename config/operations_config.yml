@@ -12,6 +12,7 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: true
+   opt_type: 'MT'
  O_EMPTYING:
   label: Out for Emptying
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
@@ -20,7 +21,8 @@ TMOV:
    container_FE: F
 #   container_status: AVAILABLE
   set:  
-   container_in_terminal: false   
+   container_in_terminal: false
+   opt_type: 'MT'
  I_EMPTYING:
   label: In after Emptying
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -30,6 +32,7 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: false
+   opt_type: 'MT'
  O_FILLING:
   label: Out for Filling
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
@@ -41,6 +44,7 @@ TMOV:
   set:  
    container_in_terminal: false
    booking_copy: true
+   opt_type: 'MT'
  I_FILLING:
   label: 'In From Filling'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
@@ -50,6 +54,7 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: true
+   opt_type: 'MT'
  I_TRANSFER:
   label: 'In By Transfer From Other Terminal'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
@@ -59,6 +64,7 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: true
+   opt_type: 'MT'
  O_LOAD:
   label: Out For Load
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
@@ -68,6 +74,7 @@ TMOV:
    container_in_terminal: false
    container_FE_copy: true
    movimento_status: CLOSE
+   opt_type: 'MT'
  REQ_ESTIMATE:
   label: Estimate Request
   icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'
@@ -75,27 +82,14 @@ TMOV:
    container_in_terminal: true
   set:
    container_status: DAMAGED
+   opt_type: 'RE'
  CUST_INSP:
   icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 
   label: Custom Inspections
   check:
    container_in_terminal: true
- O_REPAIR:
-  label: Out For Repair
-  icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'   
-  check:
-   container_in_terminal: true
   set:
-   container_in_terminal: false
- I_REPAIR:
-  label: In From Repair
-  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
-  check:
-   container_in_terminal: false
-   container_status: DAMAGED
-  set:
-   container_in_terminal: true
-   container_status: AVAILABLE
+   opt_type: 'CI'
 
 ########################################################################
 #HANDLING_ONLY_FRIDGE_CONNECTION:

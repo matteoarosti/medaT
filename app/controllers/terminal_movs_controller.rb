@@ -55,7 +55,10 @@ def new_mov_search_handling
  
  #se non ci sono movimenti aperti, ne propongo uno nuovo con possibilita' di creare container
  if ret[:items].length == 0  && !params[:container_number].blank?
-  ret[:items] << {:container_number => params[:container_number], :is_container_editable => true,
+  #verifico il check digiti
+  valid_CD = ImportHeader.check_digit(params[:container_number])
+  
+  ret[:items] << {:container_number => params[:container_number], :is_container_editable => true, :valid_CD => valid_CD,
         :stato => 'CRT', :stato_descr => '', :descr => 'Crea il nuovo container e il nuovo movimento', :op => 'CRT', :op_descr => '[ Crea ]'}
  end
  
@@ -83,6 +86,7 @@ def add_handling_items
  @hh     = HandlingHeader.find(@rec_id)
  @new_rec = @hh.handling_items.new()
  @new_rec.handling_item_type = @op
+ @new_rec.datetime_op = Time.now
  render :partial => "add_handling_items_" + @op
 end  
   

@@ -135,7 +135,9 @@ class ApplicationController < ActionController::Base
  end  
   
   
-  
+ def generate_datetime(data, time)
+  Time.zone.parse(data + ' ' + time)
+ end
   
     
 end

@@ -39,6 +39,11 @@ def hitems_sc_create
 ##################################################
    hh = HandlingHeader.find(params[:data][:handling_header_id])
    hi = hh.handling_items.new()
+   
+   #datetime_op (data e ora) lo trasformo in datetime
+   params[:data][:datetime_op] = generate_datetime(params[:data][:datetime_op_date], params[:data][:datetime_op_time]) 
+   params[:data].delete(:datetime_op_date)
+   params[:data].delete(:datetime_op_time)
 
    #se ho ricevuto "num_booking", lo vado a decodifica in "booking_id"
    if !params[:data][:num_booking].blank?

@@ -49,20 +49,44 @@ module ApplicationHelper
  end
  
  
- def extjs_std_textfield(name, item)
-  ret = "{xtype: 'textfield', fieldLabel: #{name.humanize.to_json}, name: #{name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: false}" 
+ def extjs_std_textfield(name, item, p = {})
+  ret = "{xtype: 'textfield', fieldLabel: #{name.humanize.to_json}, name: #{name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false}}" 
  end
  
  def extjs_std_datefield(name, item) 
   ret = "{xtype: 'datefield', fieldLabel: #{name.humanize.to_json}, name: #{name.to_json}, value: #{item.send(name).to_json}, allowBlank: false}" 
  end
  
+ def extjs_std_timefield(name, item) 
+  ret = "{xtype: 'timefield', fieldLabel: #{name.humanize.to_json}, name: #{name.to_json}, value: #{item.send(name).to_json}, allowBlank: false}" 
+ end
+   
  def extjs_std_hiddenfield(name, item) 
   ret = "{xtype: 'hiddenfield', name: #{name.to_json}, value: #{item.send(name).to_json}}" 
  end
 
  def extjs_std_textareafield(name, item)
   ret = "{xtype: 'textareafield', name: #{name.to_json}, value: #{item.send(name).to_json}, fieldLabel: #{name.humanize.to_json}, anchor: '100%', grow: true}"
+ end
+
+ def extjs_std_datetimefield(name, item) 
+  name_date = name + "_date"
+  name_time = name + "_time"
+  ret = "
+            {
+                xtype: 'fieldcontainer',
+                fieldLabel: #{name.humanize.to_json},
+                combineErrors: true,
+                msgTarget : 'side',
+                layout: 'hbox',
+                defaults: {
+                    flex: 1,
+                    hideLabel: true
+                },                
+                items: ["  
+  ret += " {xtype: 'datefield', name: #{name_date.to_json}, value: #{item.send(name).to_date.to_json}, allowBlank: false}"
+  ret += ",{xtype: 'timefield', name: #{name_time.to_json}, value: #{item.send(name).to_s(:time).to_json}, allowBlank: false}"  
+  ret += "]}" 
  end
 
 

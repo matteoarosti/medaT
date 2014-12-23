@@ -202,6 +202,12 @@ def sincro_set_booking_copy(value, hi)
 end
 
 ################################################################
+def sincro_set_seal_copy(value, hi)
+################################################################
+ self.seal = hi.seal unless hi.seal.blank?
+end
+
+################################################################
 def sincro_set_with_booking(value, hi)
 ################################################################
 end
@@ -210,6 +216,13 @@ end
 def sincro_set_movimento_status(value, hi)
 ################################################################
  self.handling_status = value
+end
+
+################################################################
+def sincro_set_operation_type(value, hi)
+################################################################
+ hi.operation_type = value
+ hi.save!
 end
 
  

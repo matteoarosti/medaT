@@ -21,6 +21,8 @@
     {xtype: 'hiddenfield', name: 'fe', value: 'E'},
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},   
     
+    
+	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
 	{
 		xtype: 'combobox', name: 'carrier_id',
 		fieldLabel: 'Carrier',

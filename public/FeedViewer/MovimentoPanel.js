@@ -213,9 +213,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      items: [
                         {fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}},
                         {fieldLabel: 'Destinazione'},
-                        {fieldLabel: 'Sigillo Esp.1'},                        
-                        {fieldLabel: 'Sigillo Esp.2'},
-                        {fieldLabel: 'Sigillo import.'},
+                        {fieldLabel: 'Sigillo Esp.1', disabled: true, bind: {value: '{rec.seal}'}},                        
                         {fieldLabel: 'ID FM'}                        
                      ]
         	     }, {         
@@ -325,7 +323,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						    {
 						        return rowIndex + 1;
 						    }},
-        	       {text: 'Data/ora', width: 160, dataIndex: 'created_at', xtype:  'datecolumn', format: 'd-m-Y H:i:s'},
+        	       {text: 'Data/ora', width: 160, dataIndex: 'datetime_op', xtype:  'datecolumn', format: 'd-m-Y H:i:s'},
         	       {text: 'Op', width: 160, dataIndex: 'handling_item_type', width: 100},        	        
         	       {text: 'E/U', width: 40, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_IO(value, metaData);}},
                    {text: 'P/V', width: 40, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_FE(value, metaData);}},
@@ -333,6 +331,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 				   {text: 'Voy', width: 60, dataIndex: 'voyage'},
 				   {text: 'Vettore', width: 130, dataIndex: 'carrier_id_Name'},                				                      				                      
 				   {text: 'Autista', flex: 1, dataIndex: 'driver'},
+				   {text: 'Sigillo', width: 80, dataIndex: 'seal'},
 				   {text: 'Imb', width: 50, dataIndex: 'imb', xtype: 'checkcolumn'},				                   				                      				                      				   
 				   {text: 'MP', width: 50, dataIndex: 'mp', xtype: 'checkcolumn'},				                   				                      				                      				   
 				   {text: 'IMO', width: 50, dataIndex: 'imo', xtype: 'checkcolumn'}

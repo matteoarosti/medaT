@@ -310,6 +310,14 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 							        });
 							     }							     
 							       
+						        if (rec.get('op') == 'VIEW'){						         
+									new_rec = HandlingHeader.load(rec.get('handling_id'));
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Movimento #123',
+										closable: true			
+							        });
+							     }		
+							     							       
 			                		newPanel.getViewModel().setData({rec: new_rec, 
 			                			is_handling_editable: rec.get('op') == 'CRT' ? true : false,
 			                			is_container_editable: rec.get('is_container_editable')

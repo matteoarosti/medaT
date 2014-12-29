@@ -70,24 +70,83 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 			        	{
 							xtype: 'form', border: true, flex: 1, bodyPadding: 10, margin: '0 5 0 0', buttonAlign : 'center', frame: true,							
 							items: [        	
-			        			{"fieldLabel":"Inserisci il numero container","name":"container_number", "xtype": "textfield", "labelAlign": "top", "anchor": "100%"},
+			        			{"fieldLabel":"Inserisci il numero container/booking","name":"search_number", "xtype": "textfield", "labelAlign": "top", "anchor": "100%",
+									listeners: {
+									    'change': function(){
+											var l_form = this.up('form').getForm();
+						    	            var l_grid = this.up('form').up('form').down('grid');
+								             if (l_form.isValid()) {
+						    					  l_grid.store.proxy.extraParams = {}	            	
+						    			          l_grid.store.proxy.extraParams = l_form.getValues();
+						    			          l_grid.store.load();				             
+								             	}									      
+									    }
+									  }			        			
+			        			},
 			        			
-								, {
-						            xtype: 'radiogroup',
-						            fieldLabel: '',
-						            layout: 'hbox',
-						            items: [{
-						                boxLabel: 'Aperto',
-						                name: 'status',
-						                inputValue: 'OPEN',
-						                checked: true,
-						                width: 150                
-						            }, {
-						                boxLabel: 'Chiuso',
-						                name: 'status',
-						                inputValue: 'CLOSE'
-						            }]
-						        }
+			        			
+								{
+					                xtype: 'fieldcontainer',
+					                fieldLabel: '',
+					                combineErrors: true,
+					                msgTarget : 'side',
+					                layout: 'hbox',
+					                anchor: '100%',
+					                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+					                items: [
+					                
+										{
+								            xtype: 'radiogroup',
+								            fieldLabel: '',
+								            layout: 'hbox',
+								            flex: 1,
+								            items: [{
+								                boxLabel: 'Aperto',
+								                name: 'status',
+								                inputValue: 'OPEN',
+								                checked: true,
+								                width: 90                
+								            }, {
+								                boxLabel: 'Chiuso',
+								                name: 'status',
+								                inputValue: 'CLOSE',
+								                width: 90
+								            }, {
+								                boxLabel: 'Entrambi',
+								                name: 'status',
+								                inputValue: '',
+								                width: 90
+								            }]
+								        },
+								        
+										{
+								            xtype: 'radiogroup',
+								            fieldLabel: '',
+								            layout: 'hbox',
+								            flex: 1,
+								            items: [{
+								                boxLabel: 'Container',
+								                name: 'search_type',
+								                inputValue: 'container',
+								                checked: true,
+								                width: 130                
+								            }, {
+								                boxLabel: 'Booking',
+								                name: 'search_type',
+								                inputValue: 'booking',
+								                width: 130
+								            }]
+								        }								        								       								        
+				                        
+
+									]
+								}			        			
+			        			
+			        			
+			        			
+			        			
+			        			
+			        			 
 						        
 			        		], 
 
@@ -108,7 +167,8 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						]
 			        	}
 			        	
-			        	
+
+/*			        	
 			        	//ricerca per booking
 			        	, {
 							xtype: 'form', border: true, flex: 1, bodyPadding: 10, margin: '0 0 0 5', buttonAlign : 'center', frame: true,
@@ -130,7 +190,11 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 				             	}
 				            }							
 						]			        		
-			        	}			        	
+			        	}	
+*/
+			        	
+			        	
+			        			        	
 			        ]
 			    } 
 	        		

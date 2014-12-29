@@ -231,15 +231,18 @@ Ext.define('FeedViewer.App', {
                         children:
                             [
                                 {
-                                    task:'Inserisci nuovo',
+                                    task:'Ricerca / Inserisci',
                                     leaf:true,
                                     iconCls:'task',
                                     op: 'NEW_HANDLING_HEADER'
-                                }, {
-                                task:'Handling Headers',
-                                url: '/handling_headers/extjs_sc_crt_tab',
-                                leaf:true
-                            }
+                                }
+                                /*
+                                , {
+	                                task:'Handling Headers',
+	                                url: '/handling_headers/extjs_sc_crt_tab',
+	                                leaf:true
+	                            }
+	                            */
                             ]
                     }, {
                         task:'Booking',
@@ -313,7 +316,7 @@ Ext.define('FeedViewer.App', {
             region: 'center',
             minWidth: 300,
             items: [
-            ]            
+            ]          
         });
         return this.feedInfo;
     },

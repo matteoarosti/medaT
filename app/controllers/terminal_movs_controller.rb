@@ -15,14 +15,15 @@ def new_mov_search_handling
  ret = {}
  ret[:items] = []
  
+  params[:container_number] = params[:search_number] if params[:search_type] == 'container'
+  params[:booking_number]   = params[:search_number] if params[:search_type] == 'booking'  
+ 
   hhs = HandlingHeader.where('1 = 1')
   hhs = hhs.where('container_number LIKE ?', "%#{params[:container_number]}%") unless params[:container_number].blank?
   hhs = hhs.where('num_booking LIKE ?', "%#{params[:booking_number]}%") unless params[:booking_number].blank?
-  if params[:status] == 'CLOSE' 
-    hhs = hhs.where('handling_status = ?', 'CLOSE')
-  else
-    hhs = hhs.where('handling_status <> ?', 'CLOSE')
-  end 
+  if !params[:status].blank? 
+    hhs = hhs.where('handling_status = ?', params[:status])
+  end
  
  #hhs = HandlingHeader.container(params[:container_number]).order('id').limit(1000)
  

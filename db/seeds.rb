@@ -9,10 +9,12 @@ user = CreateAdminService.new.call
 puts 'CREATED ADMIN USER: ' << user.email
 
 Shipowner.create(name: 'MAERSK LINE', short_name: 'MSL', email: 'info@maerskline.com', estimate_hourly_cost: 9.0)
+Shipowner.create(name: 'MAERSK LINE', short_name: 'MSK', email: 'info@maerskline.com', estimate_hourly_cost: 9.0)
 Shipowner.create(name: 'CMA', short_name: 'CMA', email: 'info@cma-cgm.com', estimate_hourly_cost: 9.0)
 Shipowner.create(name: 'SAF', short_name: 'SAF', email: 'info@saf.com', estimate_hourly_cost: 9.0)
 Shipowner.create(name: 'HAN', short_name: 'HAN', email: 'info@han.com', estimate_hourly_cost: 9.0)
 Shipowner.create(name: 'SGL', short_name: 'SGL', email: 'info@sgl.com', estimate_hourly_cost: 9.0)
+Shipowner.create(name: 'HLL', short_name: 'HLL', email: 'info@hll.com', estimate_hourly_cost: 9.0)
 
 Ship.create(name: 'BF MELODY', short_name: 'BDY', call_sign: 'VCD6D')
 Ship.create(name: 'KING BYRON', short_name: 'KBYR', call_sign: 'QW5D7')
@@ -25,10 +27,16 @@ Ship.create(name: 'STINA', short_name: 'STNA', call_sign: 'V2BW7')
 
 Equipment.create(equipment_type: '20DV', size: '20', sizetype: '20 FOOT BOX', iso: '2200')
 Equipment.create(equipment_type: '20RF', size: '20', sizetype: '20 FOOT BOX REEFER', iso: '2230')
+Equipment.create(equipment_type: '20DV', size: '20', sizetype: '20 FOOT BOX REEFER', iso: '2273')
 Equipment.create(equipment_type: '40DV', size: '40', sizetype: '40 FOOT BOX', iso: '4200')
 Equipment.create(equipment_type: '40FL', size: '40', sizetype: '40 FOOT FLAT RACK', iso: '4260')
+Equipment.create(equipment_type: '40DV', size: '40', sizetype: '40 FOOT FLAT RACK', iso: '42G1')
+Equipment.create(equipment_type: '40RF', size: '40', sizetype: '40 FOOT FLAT RACK', iso: '42R1')
+Equipment.create(equipment_type: '40OT', size: '40', sizetype: '40 FOOT FLAT RACK', iso: '42U0')
 Equipment.create(equipment_type: '40HC', size: '40', sizetype: '40 BOX HIGH CUBE', iso: '4500')
+Equipment.create(equipment_type: '40HC', size: '40', sizetype: '40 BOX HIGH CUBE', iso: '4501')
 Equipment.create(equipment_type: '40RF', size: '40', sizetype: '40 BOX REEFER', iso: '4532')
+Equipment.create(equipment_type: '40RF', size: '40', sizetype: '40 BOX REEFER', iso: '4536')
 
 Port.create(port_code: 'ITAOI', city: 'ANCONA', country: 'ITALY')
 Port.create(port_code: 'ITRVN', city: 'RAVENNA', country: 'ITALY')

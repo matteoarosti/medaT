@@ -46,16 +46,16 @@ class ImportHeader < ActiveRecord::Base
       row = Hash[[header, spreadsheet.row(i)].transpose]
       row1 = spreadsheet.row(i)
       logger.info row
-      Shipowner.get_id_by_name(row["LINE"])
-      Equipment.get_id_by_iso(row["TYPE"])
+      #Shipowner.get_id_by_name(row["LINE"])
+      #Equipment.get_id_by_iso(row["TYPE"])
       ImportItem.AddRecord(import_header_id,
-                           Shipowner.get_id_by_name(spreadsheet.row(i)[0].to_s),
-                           spreadsheet.row(i)[3].to_s,
-                           'F',
-                           Equipment.get_id_by_iso(spreadsheet.row(i)[1].to_i),
-                           0,
-                           0,
-                           "")
+                           Shipowner.get_id_by_name(spreadsheet.row(i)[3].to_s),  #ShipOwner
+                           spreadsheet.row(i)[0].to_s,                            #Container
+                           spreadsheet.row(i)[2].to_s[0..0],                      #F/E
+                           Equipment.get_id_by_iso(spreadsheet.row(i)[1].to_i),   #Equipment
+                           spreadsheet.row(i)[4]/1000,                            #weight
+                           spreadsheet.row(i)[8].to_f,                            #temperature
+                           spreadsheet.row(i)[7].to_s)                            #ISO
     end
   end
 

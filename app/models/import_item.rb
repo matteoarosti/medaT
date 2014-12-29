@@ -1,7 +1,8 @@
 class ImportItem < ActiveRecord::Base
 
- belongs_to :equipment
-  
+  belongs_to :equipment
+  belongs_to :import_header
+
  def equipment_id_Name
   self.equipment.sizetype if self.equipment
  end  

@@ -10,7 +10,25 @@ class HandlingHeader < ActiveRecord::Base
  scope :booking, ->(booking_number) {where("container_number = ?", container_number)}
 
  def handling_header_status() return self.handling_status end
- 
+
+ #Richiamata per la creazione di un nuovo header da import
+ def self.create_new(rec, params)
+   hh = HandlingHeader.new
+   hh.container_number = rec.container_number
+   hh.handling_type = "TMOV"
+   hh.shipowner_id = rec.shipowner_id
+   hh.equipment_id = rec.equipment_id
+   hh.handling_status = "NEW"
+   hh.save!
+   return hh
+ end
+
+  #Richiamata per la retrieve di un header in fase di imbarco
+  def self.find_exist(rec, params)
+    hh = HandlingHeader.container(rec.container_number).where("handling_status = ?", "OPEN").first
+    return hh
+  end
+
  def self.as_json_prop()
      return {
         :include=>{:shipowner => {:only=>[:name]}, :equipment => {:only=>[:type]}},

@@ -12,6 +12,15 @@ class ImportItemsController < ApplicationController
   
   def set_ok
    rec = ImportItem.find(params[:rec_id])
+
+   #Determina la tipologia del movimento da import_headers
+   import_type = rec.import_header.import_type
+   if import_type == 'L'
+     import_L(rec, params)
+   else
+     import_D(rec, params)
+   end
+
    rec.status = 'OK'
    rec.save!
    ret = {}
@@ -29,5 +38,45 @@ class ImportItemsController < ApplicationController
    ret[:data] = rec.as_json()
    render json: ret
   end
+
+  def import_D(rec, params)
+    hh = HandlingHeader.create_new(rec, params)
+    hi = hh.handling_items.new()
+    hi.datetime_op = Time.now
+    hi.handling_item_type = "I_DISCHARGE"
+    hi.handling_type = "I"
+    hi.container_FE = rec.container_status
+    hi.ship_id = rec.import_header.ship_id
+    hi.voyage = rec.import_header.voyage
+
+    #se supera i vari controlli salvo il dettalio e aggiorno la testata
+    validate_insert_item = hh.validate_insert_item(hi)
+    if validate_insert_item[:is_valid]
+      hi.save!()
+      r = hh.sincro_save_header(hi)
+      ret_status  = r[:success]
+      message     = r[:message]
+    end
+  end
+
+  def import_L(rec, params)
+     hh = HandlingHeader.find_exist(rec, params)
+     hi = hh.handling_items.new()
+     hi.datetime_op = Time.now
+     hi.handling_item_type = "O_LOAD"
+     hi.handling_type = "O"
+     hi.container_FE = rec.container_status
+     hi.ship_id = rec.import_header.ship_id
+     hi.voyage = rec.import_header.voyage
+
+     #se supera i vari controlli salvo il dettalio e aggiorno la testata
+     validate_insert_item = hh.validate_insert_item(hi)
+     if validate_insert_item[:is_valid]
+       hi.save!()
+       r = hh.sincro_save_header(hi)
+       ret_status  = r[:success]
+       message     = r[:message]
+     end
+   end
 
 end

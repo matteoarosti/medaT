@@ -76,6 +76,17 @@ TMOV:
    container_FE_copy: true
    movimento_status: CLOSE
    operation_type: 'MT'
+ I_NOTPOSITIONING:
+  label: In for missing positioning
+  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
+  check:
+   container_in_terminal: false
+   container_FE: E
+  set:
+   container_in_terminal: true
+   container_FE: E
+   container_FE_copy: false
+   opt_type: 'MT'
  REQ_ESTIMATE:
   label: Estimate Request
   icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'

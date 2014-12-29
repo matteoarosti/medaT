@@ -50,7 +50,8 @@ module ApplicationHelper
  
  
  def extjs_std_textfield(name, item, p = {})
-  ret = "{xtype: 'textfield', fieldLabel: #{name.humanize.to_json}, name: #{name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false}}" 
+  input_name = p[:input_name] || p[:input_prefix].to_s + name
+  ret = "{xtype: 'textfield', fieldLabel: #{name.humanize.to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false}}" 
  end
  
  def extjs_std_datefield(name, item) 

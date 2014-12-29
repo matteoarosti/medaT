@@ -246,7 +246,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						    itemdblclick: function(dv, rec, item, index, e) {
 						    
 						    	//Check Digit non valido
-						    	if (parseInt(rec.get('valid_CD')) != 0){
+						    	if (rec.get('op') == 'CRT' && parseInt(rec.get('valid_CD')) != 0){
 									Ext.Msg.confirm({
 				                        title: 'EXCEPTION',
 				                        msg: 'Numero container non valido. Check Digit Error: ' + rec.get('valid_CD') + '<BR/>Proseguire ugualmente?',

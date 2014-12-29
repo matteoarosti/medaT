@@ -44,6 +44,16 @@ def hitems_sc_create
    params[:data][:datetime_op] = generate_datetime(params[:data][:datetime_op_date], params[:data][:datetime_op_time]) 
    params[:data].delete(:datetime_op_date)
    params[:data].delete(:datetime_op_time)
+   
+   #sposto i valori passati per impostare i dati in testata (tutti quelli che iniziano per hh_)
+   hh_filtered_params = params[:data].select{|k,v| k[0..2].to_s == 'hh_'}
+   hh_params = {}
+   for k_hh_p, hh_p in hh_filtered_params
+    params[:data].delete(k_hh_p)
+    hh_params["#{k_hh_p[3..100].to_s}"] = hh_p
+   end
+
+    
 
    #se ho ricevuto "num_booking", lo vado a decodifica in "booking_id"
    if !params[:data][:num_booking].blank?
@@ -58,8 +68,6 @@ def hitems_sc_create
      params[:data].delete(:num_booking)    
     end
    end
-   
-
 
    params[:data].permit!
    hi.assign_attributes(params[:data])
@@ -67,7 +75,8 @@ def hitems_sc_create
    #se supera i vari controlli salvo il dettalio e aggiorno la testata
    validate_insert_item = hh.validate_insert_item(hi)
    if validate_insert_item[:is_valid]
-    hi.save!()
+    hi.save!()   
+    hh.assign_attributes(hh_params) 
     r = hh.sincro_save_header(hi)
     ret_status  = r[:success]
     message     = r[:message]

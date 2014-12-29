@@ -215,18 +215,29 @@ Ext.define('FeedViewer.MovimentoPanel', {
 
 						{
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Container num/status',
+			                fieldLabel: 'Container number',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
 			                anchor: '100%',
 			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
 			                items: [
-		                        {fieldLabel: 'container_number', bind: '{rec.container_number}', disabled: true},
-		                        {fieldLabel: 'container_status', bind: '{rec.container_status}', disabled: true}
-
+		                        {fieldLabel: 'container_number', bind: '{rec.container_number}', disabled: true}
 							]
-						}
+						},
+						
+						{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Container status',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'container_status', bind: '{rec.container_status}', disabled: true}
+							]
+						}						
                         
                      ]
         	     }, 
@@ -268,24 +279,14 @@ Ext.define('FeedViewer.MovimentoPanel', {
 							]
 						}, {
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Temperature',
+			                fieldLabel: 'Temp./Weight',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
 			                anchor: '100%',
 			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
 			                items: [
-		                        {anchor: '100%', disabled: true, bind: {value: '{rec.temperature_imp}'}}
-							]
-						}, {
-			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Weight',
-			                combineErrors: true,
-			                msgTarget : 'side',
-			                layout: 'hbox',
-			                anchor: '100%',
-			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
-			                items: [
+		                        {anchor: '100%', disabled: true, bind: {value: '{rec.temperature_imp}'}},
 		                        {anchor: '100%', disabled: true, bind: {value: '{rec.weight_imp}'}}
 							]
 						}, {
@@ -353,24 +354,14 @@ Ext.define('FeedViewer.MovimentoPanel', {
 							]
 						}, {
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Temperature',
+			                fieldLabel: 'Temp./Weight',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
 			                anchor: '100%',
 			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
 			                items: [
-		                        {anchor: '100%', disabled: true, bind: {value: '{rec.temperature_exp}'}}
-							]
-						}, {
-			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Weight',
-			                combineErrors: true,
-			                msgTarget : 'side',
-			                layout: 'hbox',
-			                anchor: '100%',
-			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
-			                items: [
+		                        {anchor: '100%', disabled: true, bind: {value: '{rec.temperature_exp}'}},
 		                        {anchor: '100%', disabled: true, bind: {value: '{rec.weight_exp}'}}
 							]
 						}, {
@@ -386,7 +377,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 							]
 						}, {
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Booking',
+			                fieldLabel: 'Booking/Dest.',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
@@ -460,7 +451,23 @@ Ext.define('FeedViewer.MovimentoPanel', {
 		    				 }						    
 						    
 						    			    			
-						 }, scope: this }
+						 }, scope: this },
+						 
+						 
+						 
+ 						{ xtype : "button", text : 'Modifica', flex: 1,
+ 							
+						    bind: {
+								visible: '{!is_handling_editable}'
+							},						    
+ 							
+ 							
+ 							handler: function(){
+			                	acs_show_win_std('Modifica handling header', '/handling_headers/edit_header',
+			                		 {rec_id: this.getViewModel().getData().rec.get('id')},
+			                		 null, null, null, null, null, null, {mov_panel: this});
+						    }, scope: this
+						}						 
                                                 
                      ]
         	     }
@@ -476,7 +483,9 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	    tools: [{  
 		                xtype: 'button',
 		                text: 'Aggiungi <i class="fa fa-plus-circle"></i>',
-		                //, iconCls: 'fa fa-plus-circle fa-lg', xxx
+						bind: {
+								visible: '{!is_handling_editable}'
+						},		                
 		                handler: function(){	
 		                	acs_show_win_std('Seleziona tipo dettaglio', '/terminal_movs/add_handling_items_select_type',
 		                		 {rec_id: this.getViewModel().getData().rec.get('id')},

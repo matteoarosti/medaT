@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141113230931) do
+ActiveRecord::Schema.define(version: 20150109161754) do
 
   create_table "bookings", force: true do |t|
     t.string   "num_booking",  limit: 25
@@ -61,16 +61,27 @@ ActiveRecord::Schema.define(version: 20141113230931) do
     t.string   "container_type",        limit: 5
     t.boolean  "container_OH"
     t.string   "handling_status",       limit: 5
-    t.boolean  "container_in_terminal",            default: false
+    t.boolean  "container_in_terminal",                                    default: false
     t.string   "container_status",      limit: 5
     t.string   "container_FE",          limit: 1
     t.integer  "booking_id"
     t.string   "num_booking",           limit: 25
+    t.string   "seal_exp_shipowner",    limit: 15
+    t.string   "seal_exp_others",       limit: 15
+    t.decimal  "temperature_exp",                  precision: 5, scale: 2
+    t.decimal  "weight_exp",                       precision: 5, scale: 2
+    t.string   "imo_exp",               limit: 5
+    t.string   "bill_of_lading",        limit: 25
+    t.string   "seal_imp_shipowner",    limit: 15
+    t.string   "seal_imp_others",       limit: 15
+    t.decimal  "temperature_imp",                  precision: 5, scale: 2
+    t.decimal  "weight_imp",                       precision: 5, scale: 2
+    t.string   "imo_imp",               limit: 5
   end
 
   create_table "handling_items", force: true do |t|
     t.integer  "handling_header_id", limit: 8
-    t.datetime "date"
+    t.datetime "datetime_op"
     t.string   "operation_type",     limit: 2
     t.string   "handling_item_type", limit: 15
     t.string   "handling_type",      limit: 1
@@ -80,6 +91,8 @@ ActiveRecord::Schema.define(version: 20141113230931) do
     t.integer  "carrier_id",         limit: 8
     t.string   "driver",             limit: 50
     t.boolean  "export"
+    t.string   "seal_shipowner",     limit: 15
+    t.string   "seal_others",        limit: 15
     t.boolean  "not_positioning"
     t.boolean  "codeco_sent"
     t.string   "notes"
@@ -108,6 +121,13 @@ ActiveRecord::Schema.define(version: 20141113230931) do
     t.string   "imo",              limit: 4
     t.string   "status",           limit: 5
     t.text     "notes",            limit: 16777215
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "iso_equipments", force: true do |t|
+    t.string   "iso",          limit: 4
+    t.integer  "equipment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

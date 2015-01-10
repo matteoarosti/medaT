@@ -6,6 +6,7 @@ class BookingsController < ApplicationController
 
  def form_new
   @item = Booking.new
+  @item.status = 'OPEN'
   render :partial => 'form', :locals=>{:op => 'CREATE'}
  end
  

@@ -18,7 +18,7 @@ module ApplicationHelper
       displayField: #{p[:displayField].to_json},
       valueField: #{p[:valueField].to_json || p[:displayField].to_json},
       forceSelection: true,
-      allowBlank: false,
+      allowBlank: #{p[:allowBlank] || false},
       triggerAction: 'all',  
       store: #{p[:store]},
       listeners: {#{p[:listeners]}}
@@ -39,7 +39,7 @@ module ApplicationHelper
       displayField: #{model_class.combo_displayField.to_json},
       valueField: 'id',
       forceSelection: true,
-      allowBlank: false,
+      allowBlank: #{p[:allowBlank] || false},
       triggerAction: 'all',  
       store: #{p[:store] || extjs_std_store_model(name)},
       listeners: {#{p[:listeners]}}
@@ -49,13 +49,23 @@ module ApplicationHelper
  end
  
  
- def extjs_std_textfield(name, item, p = {})
-  input_name = p[:input_name] || p[:input_prefix].to_s + name
-  ret = "{xtype: 'textfield', fieldLabel: #{name.humanize.to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false}}" 
+ def extsj_create_attr_str(attrs)
+  return '' if attrs.empty?
+  rets = []
+  attrs.each do |kattr, attr|
+   rets<< "#{kattr}: #{attr.to_json}"
+  end
+  return ", " + rets.join(",")
  end
  
- def extjs_std_datefield(name, item) 
-  ret = "{xtype: 'datefield', fieldLabel: #{name.humanize.to_json}, name: #{name.to_json}, value: #{item.send(name).to_json}, allowBlank: false}" 
+ def extjs_std_textfield(name, item, p = {}, attr = {})
+  input_name = p[:input_name] || p[:input_prefix].to_s + name
+  add_attr = extsj_create_attr_str(attr)
+  ret = "{xtype: 'textfield', fieldLabel: #{name.humanize.to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false} #{add_attr}}" 
+ end
+ 
+ def extjs_std_datefield(name, item, p = {}) 
+  ret = "{xtype: 'datefield', fieldLabel: #{name.humanize.to_json}, name: #{name.to_json}, value: #{item.send(name).to_json}, allowBlank: #{p[:allowBlank] || false}}" 
  end
  
  def extjs_std_timefield(name, item) 

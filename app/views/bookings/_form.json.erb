@@ -31,9 +31,8 @@
 	<%= raw extjs_std_datefield('eta', @item) -%>,
 	<%= raw extjs_std_textfield('quantity', @item) -%>,
 	<%= raw extjs_std_textareafield('notes', @item) -%>,
-    <%= raw extjs_std_combo('status', @item, 
-    	:store => extjs_std_store_data(@item.status_get_data_json)
-    	) -%>			
+    <%= raw extjs_std_combo('status', @item, :store => extjs_std_store_data(@item.status_get_data_json)) -%>,
+    <%= raw extjs_std_datefield('expiration', @item, :allowBlank => true) -%>,				
     		
    ],
    

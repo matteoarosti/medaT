@@ -43,14 +43,17 @@ def new_mov_search_handling
         :handling_id  => hh.id, :num_booking  => hh.num_booking,
         :container_number => hh.container_number, :is_container_editable => false,
         :stato => hh.handling_status, :stato_descr => hh.handling_status, :op => op, :op_descr => op_descr,
-        :descr => "Movimento ##{hh.id.to_s}, #{HandlingHeader::TYPES[hh.handling_type]}"
+        :descr => "##{hh.id.to_s}, #{HandlingHeader::TYPES[hh.handling_type]}",
+        :equipment_id_Name => hh.equipment.send(Equipment.combo_displayField),
+        :shipowner_id_Name => hh.shipowner.send(Shipowner.combo_displayField),
+        :num_booking => hh.num_booking
       }
   end
  
  #se non ci sono movimenti aperti, ne propongo uno nuovo (se cercavo per num container)
  if ret[:items].length > 0 && !handling_EDIT_exists && !params[:container_number].blank?
   ret[:items] << {:container_number => params[:container_number], :is_container_editable => false,
-        :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo movimento per il container richiesto', :op => 'CRT', :op_descr => '[ Crea ]'} 
+        :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo movimento', :op => 'CRT', :op_descr => '[ Crea ]'} 
  end
  
  
@@ -60,7 +63,7 @@ def new_mov_search_handling
   valid_CD = ImportHeader.check_digit(params[:container_number])
   
   ret[:items] << {:container_number => params[:container_number], :is_container_editable => true, :valid_CD => valid_CD,
-        :stato => 'CRT', :stato_descr => '', :descr => 'Crea il nuovo container e il nuovo movimento', :op => 'CRT', :op_descr => '[ Crea ]'}
+        :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo', :op => 'CRT', :op_descr => '[ Crea ]'}
  end
  
  render json: ret

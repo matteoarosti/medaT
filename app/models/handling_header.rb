@@ -11,6 +11,30 @@ class HandlingHeader < ActiveRecord::Base
 
  def handling_header_status() return self.handling_status end
 
+  #valori per combo
+  def handling_type_get_data_json
+   [
+    {:cod=>'TMOV', :descr=>'Movimento terminal'},
+    {:cod=>'FRCON', :descr=>'Allaccio frito'},
+    {:cod=>'INSPE', :descr=>'Visita doganale'}
+   ]
+  end
+  def container_status_get_data_json
+   [
+    
+   ]
+  end
+  def status_get_data_json
+   [
+    {:cod=>'NEW', :descr=>'New'},
+    {:cod=>'OPEN', :descr=>'Open'},
+    {:cod=>'CLOSE', :descr=>'Close'}
+   ] 
+  end 
+
+
+
+
  #Richiamata per la creazione di un nuovo header da import
  def self.create_new(rec, params)
    hh = HandlingHeader.new
@@ -131,6 +155,8 @@ def validate_insert_item(hi, name_function = '')
   #se ha "booking_copy" = true verifico l'esistenza, la validita' e l'ammissibilita' del booking
   op_config_set = op_config['set'] || {}
   if name_function != 'get_operations' && op_config_set['booking_copy'] == true
+   
+   #segnalo errore: booking non presente
    if hi.booking.nil?
     ret[:is_valid] = false
     ret[:message]  = "Booking non presente" 
@@ -138,12 +164,11 @@ def validate_insert_item(hi, name_function = '')
     return ret      
    end
    
+   #segnalo errore: booking non valido (quantity o expiration...)   
    verifica_validazione = hi.booking.valida_insert_item(hi)
-   logger.info verifica_validazione.to_yaml
    if verifica_validazione[:is_valid] == false
     ret[:is_valid] = false
     ret[:message]  = verifica_validazione[:message] 
-    logger.info ret.to_yaml
     return ret   
    end
    

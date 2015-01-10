@@ -90,7 +90,16 @@ end
 
 
 
+# Inserimento dettaglio movimento
+##################################################
+def edit_header  
+##################################################
+ @item = HandlingHeader.find(params['rec_id'])
+end 
+
+##################################################
   def get_booking_combo_data
+##################################################  
     render json: Booking.limit(500)
   end
 

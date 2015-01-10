@@ -1,0 +1,276 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+    {         
+	 flex: 1,
+     xtype: 'fieldset', border: true, collapsible: false,
+     title: 'Dati generali e container',
+     items: [
+				{
+	                xtype: 'fieldcontainer',
+	                fieldLabel: 'Handling id/status',
+	                combineErrors: true,
+	                msgTarget : 'side',
+	                layout: 'hbox',
+	                anchor: '100%',
+	                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+	                items: [
+	                	<%= raw extjs_std_hiddenfield('id', @item) -%>,
+                        <%= raw extjs_std_textfield('id', @item, {}, {:disabled=>true}) -%>,
+                        <%= raw extjs_std_combo('handling_status', @item, :store => extjs_std_store_data(@item.status_get_data_json)) -%>
+					]
+				}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Handling type',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+			                	<%= raw extjs_std_combo('handling_type', @item, :store => extjs_std_store_data(@item.handling_type_get_data_json)) -%>
+			                ]
+			    }, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Shipowner/Equip.',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+			                	<%= raw extjs_std_combo_model('shipowner', @item) -%>,
+			                	<%= raw extjs_std_combo_model('equipment', @item) -%>
+			                ]
+			     }, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Container number',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        <%= raw extjs_std_textfield('container_number', @item, {}, {:disabled=>true}) -%>
+							]
+				}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Container status',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        <%= raw extjs_std_combo('container_status', @item, {:allowBlank=>true, :store => extjs_std_store_data(@item.container_status_get_data_json)}) -%>
+							]
+						}
+     ]}, {
+		   xtype: 'container',
+		   flex: 1,
+			layout: {
+			    type: 'hbox',
+			    align : 'stretch',
+			    pack  : 'start',
+			},
+		   items: [
+		   	 {         
+        	    	 flex: 1,
+                     xtype: 'fieldset', border: true, collapsible: false,
+                     title: 'Import',
+                     defaults: {
+                         hideLabel: false,
+                         labelWidth: 100,
+                     	 xtype: 'textfield',
+                     	 margin: '1 0 0 0'
+                     },
+                     items: [
+                     
+						{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Seal ShipOwn.',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+			                	<%= raw extjs_std_textfield('seal_imp_shipowner', @item, {:allowBlank => true}) -%>
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Seal others',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+								<%= raw extjs_std_textfield('seal_imp_others', @item, {:allowBlank => true}) -%>			                
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Temp./Weight',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+								<%= raw extjs_std_textfield('temperature_imp', @item, {:allowBlank => true}) -%>,
+								<%= raw extjs_std_textfield('weight_imp', @item, {:allowBlank => true}) -%>
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'IMO',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        <%= raw extjs_std_textfield('imo_imp', @item, {:allowBlank => true}) -%>
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Bill of lading',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+			                	<%= raw extjs_std_textfield('bill_of_lading', @item, {:allowBlank => true}) -%>
+							]
+						}                                               
+                     ]
+        	     }, {         
+        	    	 flex: 1,
+                     xtype: 'fieldset', border: true, collapsible: false,
+                     title: 'Export',
+                     defaults: {
+                         hideLabel: false,
+                         labelWidth: 100,
+                     	 xtype: 'textfield',
+                     	 margin: '1 0 0 0'
+                     },
+                     items: [
+                     
+						{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Seal ShipOwn.',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+			                	<%= raw extjs_std_textfield('seal_exp_shipowner', @item, {:allowBlank => true}) -%>
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Seal others',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+								<%= raw extjs_std_textfield('seal_exp_others', @item, {:allowBlank => true}) -%>			                
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Temp./Weight',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+								<%= raw extjs_std_textfield('temperature_exp', @item, {:allowBlank => true}) -%>,
+								<%= raw extjs_std_textfield('weight_exp', @item, {:allowBlank => true}) -%>
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'IMO',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        <%= raw extjs_std_textfield('imo_exp', @item, {:allowBlank => true}) -%>
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Booking id',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+			                	<%= raw extjs_std_textfield('booking_id', @item, {}, {:allowBlank=>true, :disabled=>true}) -%>
+							]
+						}                                               
+                     ]
+        	     }
+        	  ]
+        	}     
+    
+
+   ],
+   
+   
+	buttons:
+        [{
+            text: 'Save',
+            handler: function (btn, evt) {              
+             form = this.up('form').getForm();
+             if (form.isValid()) {
+             	
+             	//TODO: dovrei crearlo come HandlingHeader in update (non in create)
+             	//new_rec = Ext.create('HandlingHeader', {});
+             	//new_rec.data = form.getValues();
+             	//new_rec.save({
+             	
+				Ext.Ajax.request({
+                    url: '<%= url_for(:controller=> 'handling_headers', :action=>'sc_update') -%>',
+                    waitMsg: 'Salvataggio in corso....',
+					method:'POST',                     
+                    jsonData: {data: form.getValues()},
+
+             	
+					success: function(op, opts) {					
+						 //ricarico la testata e i dettagli
+						 rec = this.up('window').open_vars.mov_panel.getViewModel().getData().rec;
+						 var result = Ext.JSON.decode(op.responseText);																		
+						 rec.set(result.data[0]);
+						 this.up('window').open_vars.mov_panel.getViewModel().setData({rec: rec});					 
+						 this.up('window').open_vars.mov_panel.down('grid').store.reload();
+						 
+						 //chiudo										
+						 this.up('window').close();	
+					 							
+					}, scope: this,				 
+		    	});
+             }             
+            }
+        }]   
+  }
+ ]
+}

@@ -37,7 +37,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
         Ext.apply(this, {
             items: this.createView(),
             height: 600,
-    		width: 740
+    		width: 940
         });
         this.callParent(arguments);
     },
@@ -235,8 +235,11 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 							fields: [] //serve
 						}, //store
 						columns: [{header: 'Movimento', dataIndex: 'descr', flex: 1},
-								  {header: 'Container', dataIndex: 'container_number', width: 80},
+								  {header: 'Container', dataIndex: 'container_number', width: 140},
+								  {header: 'Tipo', dataIndex: 'equipment_id_Name', width: 80},
 								  {header: 'Booking', dataIndex: 'num_booking', width: 80},
+								  {header: 'Compagnia', dataIndex: 'shipowner_id_Name', width: 80},
+								  {header: 'Data', dataIndex: 'shipowner_id_Name', width: 80},
 						          {header: 'Stato', dataIndex: 'stato_descr', width: 80},
 								  {header: 'Azione', dataIndex: 'op_descr', width: 100},
 						          ],

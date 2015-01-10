@@ -11,6 +11,7 @@ class CreateBookings < ActiveRecord::Migration
       t.integer     :quantity,              :limit => 6
       t.string      :status,                :limit => 5             #OPEN/CLOSE
       t.text        :notes,                 :limit => 64.kilobytes
+      t.date        :expiration                                     #dat limite di utilizzo del booking (per assegnazione)
       t.timestamps
     end
   end

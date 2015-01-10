@@ -36,10 +36,18 @@ end
 
 
 #valido l'inserimento di un nuovo movimento nel booking
+# - verifico che non abbia superato la data di scadenza del booking (expiration)
 # - verifico che compagnia e equipment siano gli stessi tra handling_header e booking
 # - verifico di non aver superato il numero (quantita') indicato nel booking
 def valida_insert_item(hi)
  ret = {}
+ 
+ #controllo lo stato del booking
+ if !self.expiration.blank? && self.expiration  < Date.today
+   ret[:is_valid] = false
+   ret[:message]  = 'Il booking e\' scaduto'
+   return ret
+ end
  
  #controllo lo stato del booking
  if self.status != 'OPEN'

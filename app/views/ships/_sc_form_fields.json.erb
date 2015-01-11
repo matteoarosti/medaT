@@ -2,7 +2,7 @@
 	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
 	{"fieldLabel":"name222","bind":"{rec.name}","maxLength":50},
 	{"fieldLabel":"short_name","bind":"{rec.short_name}","maxLength":4},
-	{"fieldLabel":"call_sign","bind":"{rec.call_sign}","maxLength":4},
+	{"fieldLabel":"call_sign","bind":"{rec.call_sign}","maxLength":10},
 	{
 		"xtype":"combobox",
 		"fieldLabel":"shipowner_id",
@@ -19,13 +19,14 @@
 			        type: 'ajax',
 			        url: '<%= url_for(:controller=>'shipowners', :action=>'get_combo_data') -%>',
 			        reader: {
-			            type: 'json'
+			            type: 'json',
+			            rootProperty: 'items'
 			        }       
 			    },			    
 			    autoLoad: true
 			}),					
 		"bind":"{rec.shipowner_id}",					  
 		},
-	{"fieldLabel":"created_at","bind":"{rec.created_at}"},
-	{"fieldLabel":"updated_at","bind":"{rec.updated_at}"}
+	{"fieldLabel":"created_at","bind":"{rec.created_at}", disabled: true},
+	{"fieldLabel":"updated_at","bind":"{rec.updated_at}", disabled: true}
 ]

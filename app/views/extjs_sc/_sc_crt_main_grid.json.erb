@@ -1,18 +1,15 @@
 {
   xtype: 'sc_grid',
-  title: 'aaaaa',
+  model_name: <%= raw (sc_model_class).to_json -%>,
+  title: <%= raw (sc_model_class + ' List').to_json -%>,
   closable: true,
   
-  columns: <%= raw(sc_columns.to_json) -%>,
-  //form_fields: <%= raw(sc_form_fields.to_json) -%>,
+  columns: <%= render :partial=>"sc_grid_columns" -%>,
   form_fields: <%= render :partial=>"sc_form_fields" -%>,
-  <% logger.info sc_form_fields.to_json -%>
       
   viewModel: {
-  	data: {mRecord22: 'jsjjjj'},
   	stores:   {customers: <%= raw(sc_store.to_json) -%>}
-  }
-  
+  }  
       
   <% if lookup_context.template_exists?("sc_grid_editView", controller._prefixes, :partial) %>
    , <%= render :partial=>"sc_grid_editView" -%>

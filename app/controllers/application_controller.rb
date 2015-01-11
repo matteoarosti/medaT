@@ -18,7 +18,12 @@ class ApplicationController < ActionController::Base
     model_class = extjs_sc_model.to_s  
     sc_columns = model_class.constantize.extjs_sc_columns        
     sc_form_fields = model_class.constantize.extjs_sc_form_fields
-    render :partial=>"/extjs_sc/sc_crt_tab", :locals=>{:sc_columns => sc_columns, :sc_form_fields => sc_form_fields, :sc_store => sc_crt_store()}  
+    render :partial=>"/extjs_sc/sc_crt_tab", :locals=>{
+        :sc_model_class => model_class,
+        :sc_columns     => sc_columns, 
+        :sc_form_fields => sc_form_fields, 
+        :sc_store       => sc_crt_store()
+    }  
   end
   
   

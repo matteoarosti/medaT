@@ -268,7 +268,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 												    		new_rec.set('container_number', rec.get('container_number'));
 												    		new_rec.set('handling_status', 'CRT');
 													        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
-																title: 'Movimento #123',
+																title: 'Movimento New',
 																closable: true			
 													        });
 													     }		
@@ -299,7 +299,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						    		new_rec.set('container_number', rec.get('container_number'));
 						    		new_rec.set('handling_status', 'CRT');
 							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
-										title: 'Movimento #123',
+										title: 'Movimento New',
 										closable: true			
 							        });
 							     } 
@@ -308,7 +308,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						        if (rec.get('op') == 'EDIT'){						         
 									new_rec = HandlingHeader.load(rec.get('handling_id'));
 							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
-										title: 'Movimento #123',
+										title: 'Movimento #' + rec.get('handling_id'),
 										closable: true			
 							        });
 							     }							     
@@ -316,7 +316,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						        if (rec.get('op') == 'VIEW'){						         
 									new_rec = HandlingHeader.load(rec.get('handling_id'));
 							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
-										title: 'Movimento #123',
+										title: 'Movimento #' + rec.get('handling_id'),
 										closable: true			
 							        });
 							     }		

@@ -74,7 +74,7 @@ Ext.define('FeedViewer.ScGrid', {
             
             listeners : {
                 itemdblclick: function(dv, record, item, index, e) {                	
-                	newPanel = this.createEditView();
+                	newPanel = this.createEditView(record);                	
                 	newPanel.getViewModel().setData({rec: record});
                     myApp.feedInfo.add(newPanel).show();
                 }, scope: this
@@ -139,9 +139,9 @@ Ext.define('FeedViewer.ScGrid', {
         return this.view;
     },
     
-    createEditView: function(){
+    createEditView: function(rec){
     	return Ext.create('Ext.form.Panel', {
-    		title: 'aaa',
+    		title: this.model_name + ' #' + rec.id,
     		layout: 'form',
     		closable: true,
     		defaultType: 'textfield',

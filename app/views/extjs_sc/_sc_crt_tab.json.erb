@@ -1,4 +1,8 @@
 {
   success: true,
-  items: <%= render :partial=>"/extjs_sc/sc_crt_main_grid", :locals=>{:sc_columns=>sc_columns, :sc_form_fields => sc_form_fields, :sc_store => sc_store} -%> 
+  items: <%= render :partial=>"/extjs_sc/sc_crt_main_grid", :locals=>{
+  		:sc_model_class => sc_model_class,
+  		:sc_columns		=> sc_columns, 
+  		:sc_form_fields => sc_form_fields, 
+  		:sc_store 		=> sc_store} -%> 
 }

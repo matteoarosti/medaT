@@ -1,0 +1,37 @@
+it:
+  tables:
+    equipment:
+      equipment_type: "tipo"
+      size: "dimensione"
+      sizetype: "dimensione / tipo"
+      iso: "codice iso"
+    ship_owners:
+      name: "nome"
+      short_name: "nome breve"
+      email: "email"
+      estimate_hourly_cost: "costo orario preventivi"
+    ports:
+      port_code: "codice"
+      city: "città"
+      country: "nazione"
+    ships:
+      name: "nome"
+      short_name: "nome breve"
+      call_sign: "identificativo radio"
+      shipowner: "compagnia"
+    carriers:
+      name: "nome"
+      address: "indirizzo"
+      zip_code: "cap"
+      city: "città"
+      country: "nazione"
+      email: "email"
+    shippers:
+      name: "nome"
+      address: "indirizzo"
+      zip_code: "cap"
+      city: "città"
+      country: "nazione"
+      email: "email"
+      unit_cost: "costo unitario"
+      scartaggio_cost: "costo scartaggio"

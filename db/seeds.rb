@@ -56,9 +56,9 @@ Port.create(port_code: 'EGALY', city: 'ALESSANDRIA', country: 'EGYPT')
 Port.create(port_code: 'GRPIR', city: 'PIRAEUS', country: 'GREECE')
 Port.create(port_code: 'LBBRU', city: 'BEIRUT', country: 'LEBANON')
 
-Carrier.create(name: 'ATS', address: 'VIA MARCONI 10', zip_code: '60020', city: 'POLVERIGI', country: 'ITALY', country: 'info@ats.it')
-Carrier.create(name: 'MAUGERI', address: 'VIA XXIX SETTEMBRE, 9', zip_code: '60031', city: 'ANCONA', country: 'ITALY', country: 'info@maugeri.it')
-Carrier.create(name: 'GAI TRASPORTI', address: 'P.ZZA CAVOUR, 15', zip_code: '60031', city: 'ANCONA', country: 'ITALY', country: 'info@gaitrasporti.it')
+Carrier.create(name: 'ATS', address: 'VIA MARCONI 10', zip_code: '60020', city: 'POLVERIGI', country: 'ITALY', email: 'info@ats.it')
+Carrier.create(name: 'MAUGERI', address: 'VIA XXIX SETTEMBRE, 9', zip_code: '60031', city: 'ANCONA', country: 'ITALY', email: 'info@maugeri.it')
+Carrier.create(name: 'GAI TRASPORTI', address: 'P.ZZA CAVOUR, 15', zip_code: '60031', city: 'ANCONA', country: 'ITALY', email: 'info@gaitrasporti.it')
 
 Booking.create(num_booking: '123456')
 Booking.create(num_booking: '77777777')

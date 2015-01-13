@@ -20,4 +20,39 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  tables:
+    equipment:
+      equipment_type: "type"
+      size: "size"
+      sizetype: "sizetype"
+      iso: "iso code"
+    ship_owners:
+      name: "name"
+      short_name: "short name"
+      email: "email"
+      estimate_hourly_cost: "estimate hourly cost"
+    ports:
+      port_code: "port code"
+      city: "city"
+      country: "country"
+    ships:
+      name: "name"
+      short_name: "short name"
+      call_sign: "call sign"
+      shipowner: "shipowner"
+    carriers:
+      name: "name"
+      address: "address"
+      zip_code: "zip code"
+      city: "city"
+      country: "country"
+      email: "email"
+    shippers:
+      name: "name"
+      address: "address"
+      zip_code: "zip code"
+      city: "city"
+      country: "country"
+      email: "email"
+      unit_cost: "unit_cost"
+      scartaggio_cost: "scartaggio_cost"

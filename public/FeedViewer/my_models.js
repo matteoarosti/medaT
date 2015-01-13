@@ -113,6 +113,32 @@ Ext.define("Equipment", { extend: "Ext.data.Model",
     }    
 });
 
+
+Ext.define("IsoEquipment", { extend: "Ext.data.Model",
+    fields: [],     
+    proxy: {
+        type: 'ajax',
+		api: {
+            read: '/iso_equipment/sc_read',
+            create: '/iso_equipment/sc_create',
+            update: '/iso_equipment/sc_update',
+            destroy: '/iso_equipment/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }        
+    }    
+});
+
+
 Ext.define("Port", { extend: "Ext.data.Model",
     fields: [],     
     proxy: {

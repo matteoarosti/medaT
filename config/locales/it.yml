@@ -5,6 +5,9 @@ it:
       size: "dimensione"
       sizetype: "dimensione / tipo"
       iso: "codice iso"
+    iso_equipment:
+      iso: "iso"
+      equipment_id_Name: "Equipment"      
     ship_owners:
       name: "nome"
       short_name: "nome breve"

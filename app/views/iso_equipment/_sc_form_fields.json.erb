@@ -1,0 +1,28 @@
+[
+	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
+	{"fieldLabel":"iso","bind":"{rec.iso}","maxLength":4},
+	{
+		"xtype":"combobox",
+		"fieldLabel":"equipment_id",
+		"multiselect":false,
+		"displayField":"<%= Equipment.combo_displayField -%>",
+		"valueField":"id",
+		//"queryMode":"local",
+		"forceSelection": true,
+		"triggerAction": "all",  
+		
+			"store": Ext.create('Ext.data.Store', {
+			    model: 'Equipment',
+			    proxy: {
+			        type: 'ajax',
+			        url: '<%= url_for(:controller=>'equipment', :action=>'get_combo_data') -%>',
+			        reader: {
+			            type: 'json',
+			            rootProperty: 'items'
+			        }       
+			    },			    
+			    autoLoad: true
+			}),					
+		"bind":"{rec.equipment_id}",					  
+		},	
+]

@@ -211,6 +211,10 @@ Ext.define('FeedViewer.App', {
                                  url: '/equipment/extjs_sc_crt_tab', 
                                  leaf:true 
                              }, { 
+                                 task:'ISO - Equipment',
+                                 url: '/iso_equipment/extjs_sc_crt_tab', 
+                                 leaf:true 
+                             }, { 
                                  task:'Ports',
                                  url: '/ports/extjs_sc_crt_tab', 
                                  leaf:true 

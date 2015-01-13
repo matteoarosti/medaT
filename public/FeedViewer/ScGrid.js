@@ -141,7 +141,8 @@ Ext.define('FeedViewer.ScGrid', {
     
     createEditView: function(rec){
     	return Ext.create('Ext.form.Panel', {
-    		title: this.model_name + ' #' + rec.id,
+    		//title: this.model_name + ' #' + parseInt(rec.id),
+    		title: this.model_name,
     		layout: 'form',
     		closable: true,
     		defaultType: 'textfield',

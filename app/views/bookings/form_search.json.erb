@@ -20,7 +20,19 @@
 	        		{
 					xtype: 'form', border: false, height: 130, border: true, bodyPadding: 10,
 					items: [        	
-	        			{"fieldLabel":"Inserisci il numero booking","name":"num_booking", "xtype": "textfield", "labelAlign": "top", "anchor": "100%"},
+	        			{"fieldLabel":"Inserisci il numero booking","name":"num_booking", "xtype": "textfield", "labelAlign": "top", "anchor": "100%",
+	        						  listeners: {
+									    'change': function(){
+											var l_form = this.up('form').getForm();
+						    	            var l_grid = this.up('form').up('form').down('grid');
+								             if (l_form.isValid()) {
+						    					  l_grid.store.proxy.extraParams = {}	            	
+						    			          l_grid.store.proxy.extraParams = l_form.getValues();
+						    			          l_grid.store.load();				             
+								             	}									      
+									    }
+									  }
+	        			},
 	        			
 						{
 				            xtype: 'radiogroup',

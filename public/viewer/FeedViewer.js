@@ -288,6 +288,19 @@ Ext.define('FeedViewer.App', {
                                 leaf:true
                             }]
                     }, {
+                        task:'Reportistica',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                task:'Handling Sintetica',
+                                url: '/reports/handlings_sint',
+                                op: 'new_page',
+                                leaf:true
+                            }
+                            ]
+                    }, {
                         task:'Gestione Utenti',
                         iconCls:'task-folder',
                         expanded: true,
@@ -345,6 +358,8 @@ Ext.define('FeedViewer.App', {
 		if (rec.isLeaf() == true){
 			if (rec.get('op') == 'new_win')
 				acs_show_win_std(rec.get('task'), rec.get('url'), rec.get('jsonData'), rec.get('width'), rec.get('height'));			
+			else if (rec.get('op') == 'new_page')
+				window.open(rec.get('url'), "_blank")
 			else				
     			acs_show_panel_std(this, rec.get('url'), {}, 'tttt');
 			

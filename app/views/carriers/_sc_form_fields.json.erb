@@ -1,11 +1,12 @@
 [
 	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
-	{"fieldLabel":"name","bind":"{rec.name}","maxLength":50},
-	{"fieldLabel":"address","bind":"{rec.address}","maxLength":50},
-	{"fieldLabel":"zip_code","bind":"{rec.zip_code}","maxLength":50},
-	{"fieldLabel":"city","bind":"{rec.city}","maxLength":50},
-	{"fieldLabel":"country","bind":"{rec.country}","maxLength":50},
-	{"fieldLabel":"email","bind":"{rec.email}","maxLength":50},
+	{"fieldLabel":"<%= t('tables.carriers.name') -%>","bind":"{rec.name}","maxLength":50},
+	{"fieldLabel":"<%= t('tables.carriers.address') -%>","bind":"{rec.address}","maxLength":50},
+	{"fieldLabel":"<%= t('tables.carriers.zip_code') -%>","bind":"{rec.zip_code}","maxLength":50},
+	{"fieldLabel":"<%= t('tables.carriers.city') -%>","bind":"{rec.city}","maxLength":50},
+	{"fieldLabel":"<%= t('tables.carriers.country') -%>","bind":"{rec.country}","maxLength":50},
+	{"fieldLabel":"<%= t('tables.carriers.email') -%>","bind":"{rec.email}","maxLength":50},
 	{"fieldLabel":"created_at","bind":"{rec.created_at}", disabled: true},
 	{"fieldLabel":"updated_at","bind":"{rec.updated_at}", disabled: true}
+
 ]

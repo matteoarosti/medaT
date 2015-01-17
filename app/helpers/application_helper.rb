@@ -1,6 +1,6 @@
 module ApplicationHelper
 
- def extjs_std_combo(name, item, p = {})
+ def extjs_std_combo(name, item, p = {}, attr = {})
  
   value = item.send(name) || p[:value]
  
@@ -10,6 +10,8 @@ module ApplicationHelper
   else
     p[:valueField] = p[:valueField] || p[:displayField]
   end
+  
+  add_attr = extsj_create_attr_str(attr)
   
   ret = "
     {
@@ -22,16 +24,19 @@ module ApplicationHelper
       triggerAction: 'all',  
       store: #{p[:store]},
       listeners: {#{p[:listeners]}}
+      #{add_attr}
     }
     "
   return ret 
  end
 
 
- def extjs_std_combo_model(name, item, p = {})
+ def extjs_std_combo_model(name, item, p = {}, attr = {})
   field_name = name + '_id'
   model_class = name.camelize.constantize
 
+  add_attr = extsj_create_attr_str(attr)
+  
   ret = "
     {
       xtype: 'combobox', name: #{field_name.to_json}, value: #{item.send(field_name).to_json}, 
@@ -43,6 +48,7 @@ module ApplicationHelper
       triggerAction: 'all',  
       store: #{p[:store] || extjs_std_store_model(name)},
       listeners: {#{p[:listeners]}}
+      #{add_attr}
     }
     "
   return ret 
@@ -65,7 +71,7 @@ module ApplicationHelper
  end
  
  def extjs_std_datefield(name, item, p = {}) 
-  ret = "{xtype: 'datefield', fieldLabel: #{name.humanize.to_json}, name: #{name.to_json}, value: #{item.send(name).to_json}, allowBlank: #{p[:allowBlank] || false}}" 
+  ret = "{xtype: 'datefield', fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json}, name: #{(p[:name] || name).to_json}, value: #{item.send(name).to_json}, allowBlank: #{p[:allowBlank] || false}}" 
  end
  
  def extjs_std_timefield(name, item) 

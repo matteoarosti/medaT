@@ -41,7 +41,7 @@ function acs_show_win_std(titolo, url, jsonData, width, height, listeners, iconC
 	if(typeof(width)==='undefined'  || width==null)  width  = 600;
 	if(typeof(height)==='undefined' || height==null) height = 400;
 	if(typeof(listeners)==='undefined' || listeners==null) listeners = {};	
-	if(typeof(iconCls)==='undefined'  || iconCls==null) iconCls = 'iconSpedizione';	
+	if(typeof(iconCls)==='undefined'  || iconCls==null) iconCls = 'fa fa-th-large';	
 	
 	if (loadBodyMask == 'Y')
 		Ext.getBody().mask('Loading... ', 'loading').show();	
@@ -195,7 +195,7 @@ Ext.define('FeedViewer.App', {
     		            {
     		                task:'Tabelle di base',  
     		                iconCls:'task-folder', 
-    		                expanded: true,
+    		                expanded: false,
     		                children:
     		                [
     		                 { 
@@ -293,12 +293,12 @@ Ext.define('FeedViewer.App', {
                         expanded: true,
                         children:
                             [
-                                {
-                                task:'Handling Sintetica',
-                                url: '/reports/handlings_sint',
-                                op: 'new_page',
+                             {
+                                task:'Movimenti',
+                                url: '/reports/handlings_parameters',
+                                op: 'new_win',
                                 leaf:true
-                            }
+                           	 }
                             ]
                     }, {
                         task:'Gestione Utenti',

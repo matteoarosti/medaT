@@ -38,7 +38,13 @@ def container_FE_get_data_json
  ]
 end 
  
- 
+#valori per combo
+def handling_item_type_get_data_json
+ [
+  {:cod=>'I_DISCHARGE',   :descr=>'Discharge From Ship'},
+  {:cod=>'O_EMPTYING',    :descr=>'Out for Emptying'}
+ ]
+end 
  
  
 end

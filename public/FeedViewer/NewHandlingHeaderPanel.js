@@ -236,12 +236,13 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						}, //store
 						columns: [{header: 'Movimento', dataIndex: 'descr', flex: 1},
 								  {header: 'Container', dataIndex: 'container_number', width: 140},
+								  {header: 'P/V', dataIndex: 'container_FE', width: 40},
 								  {header: 'Tipo', dataIndex: 'equipment_id_Name', width: 80},
-								  {header: 'Booking', dataIndex: 'num_booking', width: 80},
+								  {header: 'Booking', dataIndex: 'num_booking', width: 100},
 								  {header: 'Compagnia', dataIndex: 'shipowner_id_Name', width: 80},
-								  {header: 'Data', dataIndex: 'shipowner_id_Name', width: 80},
-						          {header: 'Stato', dataIndex: 'stato_descr', width: 80},
-								  {header: 'Azione', dataIndex: 'op_descr', width: 100},
+								  {header: 'Ultimo agg.', dataIndex: 'updated_at', width: 90, xtype: 'datecolumn'},
+						          {header: 'Stato', dataIndex: 'stato_descr', width: 60},
+								  {header: 'Azione', dataIndex: 'op_descr', width: 80},
 						          ],
 						
 						
@@ -268,7 +269,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 												    		new_rec.set('container_number', rec.get('container_number'));
 												    		new_rec.set('handling_status', 'CRT');
 													        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
-																title: 'Movimento New',
+																title: 'Mov. ' + rec.get('container_number'),
 																closable: true			
 													        });
 													     }		
@@ -299,7 +300,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						    		new_rec.set('container_number', rec.get('container_number'));
 						    		new_rec.set('handling_status', 'CRT');
 							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
-										title: 'Movimento New',
+										title: 'Mov. ' + rec.get('container_number'),
 										closable: true			
 							        });
 							     } 
@@ -308,7 +309,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						        if (rec.get('op') == 'EDIT'){						         
 									new_rec = HandlingHeader.load(rec.get('handling_id'));
 							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
-										title: 'Movimento #' + rec.get('handling_id'),
+										title: 'Mov. ' + rec.get('container_number'),
 										closable: true			
 							        });
 							     }							     
@@ -316,7 +317,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						        if (rec.get('op') == 'VIEW'){						         
 									new_rec = HandlingHeader.load(rec.get('handling_id'));
 							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
-										title: 'Movimento #' + rec.get('handling_id'),
+										title: 'Mov. ' + rec.get('container_number'),
 										closable: true			
 							        });
 							     }		

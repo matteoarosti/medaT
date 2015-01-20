@@ -46,7 +46,9 @@ def new_mov_search_handling
         :descr => "##{hh.id.to_s}, #{HandlingHeader::TYPES[hh.handling_type]}",
         :equipment_id_Name => hh.equipment.send(Equipment.combo_displayField),
         :shipowner_id_Name => hh.shipowner.send(Shipowner.combo_displayField),
-        :num_booking => hh.num_booking
+        :num_booking => hh.num_booking,
+        :container_FE => hh.container_FE,
+        :updated_at => hh.updated_at
       }
   end
  

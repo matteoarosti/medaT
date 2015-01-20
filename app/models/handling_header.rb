@@ -146,8 +146,6 @@ def validate_insert_item(hi, name_function = '')
   for check_op_name, check_op_value in op_config_check   
     
     if check_op_value.is_a? Hash
-      logger.info 'hashhhh'
-      logger.info check_op_value.to_yaml
       case check_op_value['operator']
       when "IN"
         test_is_valid = check_op_value['value'].split('|').include?(self.send(check_op_name))
@@ -292,6 +290,36 @@ def sincro_set_operation_type(value, hi)
  hi.save!
 end
 
+################################################################
+def sincro_set_start_fridge_connection(value, hi)
+################################################################
+  #verifico che l'equipment sia di tipo freeze e se necessario genero il movimento allaccio frigo
+  if self.equipment.reefer == true
+    if (value == true || (value == 'IF_FULL' && hi.container_FE == 'F') || (value == 'IF_EMPTY' && hi.container_FE == 'E'))
+      logger.info "Creao allaccio frigo"
+      hi_reefer = self.handling_items.new()
+      hi_reefer.datetime_op = hi.datetime_op
+      hi_reefer.operation_type = 'AF'
+      hi_reefer.handling_item_type = 'FRCON'
+      hi_reefer.save!
+    end
+  end 
+end
+
+################################################################
+def sincro_set_end_fridge_connection(value, hi)
+################################################################
+  #se richiesto chiudo l'operazione di allaccio frigo per il container in corso
+    if (value == true)
+      logger.info "Termino allaccio frigo"
+      self.handling_items.each do |hi_reefer|
+        if hi_reefer.handling_item_type == 'FRCON'
+           hi_reefer.datetime_op_end = hi.datetime_op
+           hi_reefer.save!
+        end
+      end
+    end
+end
  
  
  

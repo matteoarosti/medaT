@@ -525,7 +525,12 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	       {text: 'Op', width: 160, dataIndex: 'handling_item_type', width: 100},        	        
         	       {text: 'E/U', width: 40, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_IO(value, metaData);}},
                    {text: 'P/V', width: 40, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_FE(value, metaData);}},
-				   {text: 'Nave', width: 130, dataIndex: 'ship_id_Name'},
+				   {text: 'Nave', width: 130, dataIndex: 'ship_id_Name', renderer: function(value, metaData, rec){
+					   if (rec.get('handling_item_type') == 'FRCON')
+						   return rec.get('datetime_op_end');
+					   else
+					   return value; 
+					}},
 				   {text: 'Voy', width: 60, dataIndex: 'voyage'},
 				   {text: 'Vettore', width: 130, dataIndex: 'carrier_id_Name'},                				                      				                      
 				   {text: 'Autista', flex: 1, dataIndex: 'driver'},

@@ -21,19 +21,23 @@
      },	  
      
    items: [
+   
     <%= raw extjs_std_hiddenfield('id', @item) -%>,
     <%= raw extjs_std_textfield('num_booking', @item) -%>,
-	<%= raw extjs_std_combo_model('shipowner', @item) -%>,
-	<%= raw extjs_std_combo_model('ship', @item) -%>,
-	<%= raw extjs_std_textfield('voyage', @item) -%>,
+    <%= raw extjs_fieldcontainer('', {}, [
+		extjs_std_combo_model('shipowner', @item),
+		extjs_std_combo_model('ship', @item, {}, fcR {})]) -%>,
 	<%= raw extjs_std_combo_model('equipment', @item) -%>, 
 	<%= raw extjs_std_combo_model('port', @item) -%>,
-	<%= raw extjs_std_datefield('eta', @item) -%>,
+	<%= raw extjs_std_datefield('eta', @item, :allowBlank => true) -%>,
 	<%= raw extjs_std_textfield('quantity', @item) -%>,
 	<%= raw extjs_std_textareafield('notes', @item) -%>,
-    <%= raw extjs_std_combo('status', @item, :store => extjs_std_store_data(@item.status_get_data_json)) -%>,
-    <%= raw extjs_std_datefield('expiration', @item, :allowBlank => true) -%>,				
-    		
+        
+    <%= raw extjs_fieldcontainer('', {}, [
+    								extjs_std_combo('status', @item, :store => extjs_std_store_data(@item.status_get_data_json)),
+    								extjs_std_booleanfield('to_check', @item, {}, fcR)]) -%>,
+    
+    <%= raw extjs_std_datefield('expiration', @item, :allowBlank => true) -%>     		
    ],
    
    

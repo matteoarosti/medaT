@@ -262,11 +262,16 @@ Ext.define('FeedViewer.App', {
                                     width: 700,
                                     height: 500
                                 }, {
-                                task:'Ricerca',
-                                url: '/bookings/form_search',
-                                leaf:true,
-                                op: 'new_tab'
-                            }
+	                                task:'Ricerca',
+	                                url: '/bookings/form_search',
+	                                leaf:true,
+	                                op: 'new_tab'
+	                            }, {
+	                                task:'To Check',
+	                                url: '/bookings/to_check',
+	                                leaf:true,
+	                                op: 'new_tab'
+	                            }
                             ]
                     }, {
                         task:'Import',

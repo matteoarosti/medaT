@@ -81,6 +81,13 @@ module ApplicationHelper
  def extjs_std_hiddenfield(name, item) 
   ret = "{xtype: 'hiddenfield', name: #{name.to_json}, value: #{item.send(name).to_json}}" 
  end
+ 
+ def extjs_std_booleanfield(name, item, p = {}, attr = {}) 
+  add_attr = extsj_create_attr_str(attr)
+  ret = "{xtype: 'checkbox', name: #{name.to_json}, value: #{item.send(name).to_json}, fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json}, 
+   inputValue: true,
+   uncheckedValue: false  #{add_attr} }" 
+ end
 
  def extjs_std_textareafield(name, item)
   ret = "{xtype: 'textareafield', name: #{name.to_json}, value: #{item.send(name).to_json}, fieldLabel: #{name.humanize.to_json}, anchor: '100%', grow: true}"
@@ -148,5 +155,37 @@ module ApplicationHelper
   return ret    
  end 
      
+ 
+ def extjs_fieldcontainer(label, p = {}, items = [])
+   ret = "
+      {
+         xtype: 'fieldcontainer',
+         fieldLabel: #{label.to_json},
+         combineErrors: true,
+         msgTarget : 'side',
+         layout: 'hbox',
+         anchor: '100%',
+         defaults: {xtype: 'textfield', flex: 1, hideLabel: #{(p[:hideLabel] || false).to_json}},
+         items: [
+          " + items.join(', ') + "
+         ]
+   }    
+   "
+ end
+ 
+ #aggiungi attributi per un oggetto centrale
+ def fcC(attr = {})
+   attr[:labelAlign] = 'right'
+   attr[:padding] = '0 10 0 0'
+   attr
+ end
+ 
+  #aggiungi attributi per un oggetto finale
+  def fcR(attr = {})
+    attr[:labelAlign] = 'right'
+    attr[:padding] = '0 0 0 0'
+    attr
+  end 
+ 
       
 end

@@ -19,6 +19,9 @@ class BookingsController < ApplicationController
  def form_search
  end
  
+  def to_check
+  end
+ 
  
  #create or save
  def sc_create
@@ -54,6 +57,18 @@ def search_num_booking
    bk = bk.like_num_booking(params[:num_booking])
    bk = bk.where('status = ?', params[:status])  unless params[:status].blank?
    #ret[:items] = Booking.like_num_booking(params[:num_booking]).limit(1000).as_json(Booking.as_json_prop)
+   ret[:items] = bk.limit(1000).as_json(Booking.as_json_prop)
+   ret[:success] = true
+   render json: ret
+end
+
+
+#############################################################
+def to_check_get_data
+#############################################################
+  ret = {}
+   bk = Booking.where('1=1')
+   bk = bk.to_check()
    ret[:items] = bk.limit(1000).as_json(Booking.as_json_prop)
    ret[:success] = true
    render json: ret

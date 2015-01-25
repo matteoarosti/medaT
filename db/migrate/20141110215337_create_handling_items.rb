@@ -17,7 +17,7 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.string      :seal_others,           :limit => 15
       t.boolean     :not_positioning
       t.boolean     :codeco_sent
-      t.string      :notes,                 :limit => 255
+      t.text        :notes,                 :limit => 64.kilobytes
       t.timestamps
 
       #Matteo

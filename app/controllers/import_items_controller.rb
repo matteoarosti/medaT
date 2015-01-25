@@ -22,6 +22,7 @@ class ImportItemsController < ApplicationController
    end
 
    rec.status = 'OK'
+   rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
    rec.save!
    ret = {}
    ret[:success] = true
@@ -30,8 +31,9 @@ class ImportItemsController < ApplicationController
   end
 
   def set_damaged
-   rec = ImportItem.find(params[:rec_id])
+   rec = ImportItem.find(params[:rec_id])     
    rec.status = 'CHECK'
+   rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
    rec.save!
    ret = {}
    ret[:success] = true
@@ -39,10 +41,15 @@ class ImportItemsController < ApplicationController
    render json: ret
   end
 
+  #SBARCO
   def import_D(rec, params)
     hh = HandlingHeader.create_new(rec, params)
     hi = hh.handling_items.new()
     hi.datetime_op = Time.now
+    unless params[:check_form][:datetime_op_date].blank? || params[:check_form][:datetime_op_time].blank?
+      hi.datetime_op = generate_datetime(params[:check_form][:datetime_op_date], params[:check_form][:datetime_op_time])      
+    end
+    hi.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
     hi.handling_item_type = "I_DISCHARGE"
     hi.handling_type = "I"
     hi.container_FE = rec.container_status
@@ -52,6 +59,7 @@ class ImportItemsController < ApplicationController
     #se supera i vari controlli salvo il dettalio e aggiorno la testata
     validate_insert_item = hh.validate_insert_item(hi)
     if validate_insert_item[:is_valid]
+      logger.info hi.to_yaml
       hi.save!()
       r = hh.sincro_save_header(hi)
       ret_status  = r[:success]
@@ -59,10 +67,15 @@ class ImportItemsController < ApplicationController
     end
   end
 
+  #IMBARCO
   def import_L(rec, params)
      hh = HandlingHeader.find_exist(rec, params)
      hi = hh.handling_items.new()
      hi.datetime_op = Time.now
+     unless params[:check_form][:datetime_op_date].blank? || params[:check_form][:datetime_op_time].blank?
+      hi.datetime_op = generate_datetime(params[:check_form][:datetime_op_date], params[:check_form][:datetime_op_time])      
+     end
+     hi.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
      hi.handling_item_type = "O_LOAD"
      hi.handling_type = "O"
      hi.container_FE = rec.container_status

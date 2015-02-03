@@ -16,3 +16,4 @@ class Equipment < ActiveRecord::Base
   end
 
 end
+

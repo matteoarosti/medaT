@@ -15,7 +15,7 @@ class HandlingHeader < ActiveRecord::Base
   def handling_type_get_data_json
    [
     {:cod=>'TMOV', :descr=>'Movimento terminal'},
-    {:cod=>'FRCON', :descr=>'Allaccio frito'},
+    {:cod=>'FRCON', :descr=>'Allaccio frigo'},
     {:cod=>'INSPE', :descr=>'Visita doganale'}
    ]
   end

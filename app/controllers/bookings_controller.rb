@@ -27,7 +27,12 @@ class BookingsController < ApplicationController
  def sc_create
 
   if params[:data][:id].empty?
-   item = Booking.new   
+   item = Booking.new
+   
+   #al numero container aggiunto il codice equipment (es: 40DV)
+   eq = Equipment.find(params[:data][:equipment_id])
+   params[:data][:num_booking]+= eq.equipment_type.to_s
+      
   else
    item = Booking.find(params[:data][:id])   
   end

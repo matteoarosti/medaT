@@ -291,7 +291,7 @@ def sincro_set_operation_type(value, hi)
 end
 
 ################################################################
-def sincro_set_start_fridge_connection(value, hi)
+def sincro_set_start_reefer_connection(value, hi)
 ################################################################
   #verifico che l'equipment sia di tipo freeze e se necessario genero il movimento allaccio frigo
   if self.equipment.reefer == true
@@ -307,7 +307,7 @@ def sincro_set_start_fridge_connection(value, hi)
 end
 
 ################################################################
-def sincro_set_end_fridge_connection(value, hi)
+def sincro_set_end_reefer_connection(value, hi)
 ################################################################
   #se richiesto chiudo l'operazione di allaccio frigo per il container in corso
     if (value == true)

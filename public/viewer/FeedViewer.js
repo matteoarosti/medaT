@@ -120,10 +120,15 @@ function acs_show_win_std(titolo, url, jsonData, width, height, listeners, iconC
 
 
 Ext.define('FeedViewer.App', {
-	requires : [ 'Ext.container.Viewport', 'FeedViewer.MovimentoPanel', 'FeedViewer.ScGrid', 'FeedViewer.MenuPanel', 'FeedViewer.NewHandlingHeaderPanel'],
+	appFolder: '../FeedViewer',
+	requires : [],
     extend: 'Ext.container.Viewport',
+    railsBaseUri: 'aaaaaaaaa',
     
     initComponent: function(){
+	
+		this.railsBaseUri = this.initialConfig.railsBaseUri;
+	
         Ext.define('Feed', {
             extend: 'Ext.data.Model',
             fields: ['title', 'url']
@@ -181,6 +186,7 @@ Ext.define('FeedViewer.App', {
      * @return {FeedViewer.FeedPanel} feedPanel
      */
     createFeedPanel: function(){
+    
         this.feedPanel = Ext.create('widget.menupanel', {
             region: 'west',
             collapsible: true,
@@ -190,135 +196,7 @@ Ext.define('FeedViewer.App', {
             minWidth: 175,
             voci_menu: {
     		    "text":".",
-    		    "children": 
-    		        [
-    		            {
-    		                task:'Tabelle di base',  
-    		                iconCls:'task-folder', 
-    		                expanded: false,
-    		                children:
-    		                [
-    		                 { 
-                                 task:'Ship Owners',
-                                 url: '/shipowners/extjs_sc_crt_tab', 
-                                 leaf:true 
-                             }, { 
-                                 task:'Carriers',
-                                 url: '/carriers/extjs_sc_crt_tab', 
-                                 leaf:true 
-                             }, { 
-                                 task:'Equipment',
-                                 url: '/equipment/extjs_sc_crt_tab', 
-                                 leaf:true 
-                             }, { 
-                                 task:'ISO - Equipment',
-                                 url: '/iso_equipment/extjs_sc_crt_tab', 
-                                 leaf:true 
-                             }, { 
-                                 task:'Ports',
-                                 url: '/ports/extjs_sc_crt_tab', 
-                                 leaf:true 
-                             }, { 
-                                 task:'Shippers',
-                                 url: '/shippers/extjs_sc_crt_tab', 
-                                 leaf:true 
-                             }, { 
-                                 task:'Ships',
-                                 url: '/ships/extjs_sc_crt_tab', 
-                                 leaf:true 
-                             }   		                 
-    		                ]
-                        }, {
-                        task:'Movimenti',
-                        iconCls:'task-folder',
-                        expanded: true,
-                        children:
-                            [
-                                {
-                                    task:'Ricerca / Inserisci',
-                                    leaf:true,
-                                    iconCls:'task',
-                                    op: 'NEW_HANDLING_HEADER'
-                                }
-                                /*
-                                , {
-	                                task:'Handling Headers',
-	                                url: '/handling_headers/extjs_sc_crt_tab',
-	                                leaf:true
-	                            }
-	                            */
-                            ]
-                    }, {
-                        task:'Booking',
-                        iconCls:'task-folder',
-                        expanded: true,
-                        children:
-                            [
-                                {
-                                    task:'Inserisci nuovo',
-                                    leaf:true,
-                                    url: '/bookings/form_new',
-                                    op: 'new_win',
-                                    width: 700,
-                                    height: 500
-                                }, {
-	                                task:'Ricerca',
-	                                url: '/bookings/form_search',
-	                                leaf:true,
-	                                op: 'new_tab'
-	                            }, {
-	                                task:'To Check',
-	                                url: '/bookings/to_check',
-	                                leaf:true,
-	                                op: 'new_tab'
-	                            }
-                            ]
-                    }, {
-                        task:'Import',
-                        iconCls:'task-folder',
-                        expanded: true,
-                        children:
-                            [{
-                                task:'Nuovo import',
-                                url: '/import_headers/new_import',
-                                leaf:true
-                            }, {
-                                task:'Apri import',
-                                url: '/import_headers/find_import',
-                                op: 'new_win',
-                                leaf:true
-                            }, {
-                                task:'Elenco',
-                                url: '/import_headers/extjs_sc_crt_tab',
-                                leaf:true
-                            }]
-                    }, {
-                        task:'Reportistica',
-                        iconCls:'task-folder',
-                        expanded: true,
-                        children:
-                            [
-                             {
-                                task:'Movimenti',
-                                url: '/reports/handlings_parameters',
-                                op: 'new_win',
-                                leaf:true
-                           	 }
-                            ]
-                    }, {
-                        task:'Gestione Utenti',
-                        iconCls:'task-folder',
-                        expanded: true,
-                        children:
-                            [
-                                {
-                                task:'Users',
-                                url: '/user_managers/extjs_sc_crt_tab',
-                                leaf:true
-                            }
-                            ]
-                    }
-    		         ]
+    		    "children": this.initialConfig.voci_menu
             },
             listeners: {
                 scope: this,

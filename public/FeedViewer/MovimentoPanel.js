@@ -176,7 +176,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 										    model: 'Shipowner', autoLoad: true,
 										    proxy: {
 										        type: 'ajax',
-										        url: '/shipowners/get_combo_data',
+										        url: myApp.railsBaseUri + 'shipowners/get_combo_data',
 										        reader: {
 										            type: 'json',
 										            rootProperty: 'items'
@@ -199,7 +199,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 											    autoLoad: true,							    
 											    proxy: {
 											        type: 'ajax',
-											        url: '/equipment/get_combo_data',
+											        url: myApp.railsBaseUri + 'equipment/get_combo_data',
 											        reader: {
 											            type: 'json',
 											            rootProperty: 'items'
@@ -499,7 +499,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	    	fields: [],
         	    	proxy: {
         	            type: 'ajax',
-        	            url: '/handling_headers/hitems_sc_list',
+        	            url: myApp.railsBaseUri + 'handling_headers/hitems_sc_list',
         	            reader: {
         	                type: 'json',
         	                rootProperty: 'items'

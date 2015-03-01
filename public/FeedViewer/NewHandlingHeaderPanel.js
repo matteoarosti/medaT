@@ -215,7 +215,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 							xtype: 'store',
 							autoLoad: false,	
 							proxy: {
-								url: 'terminal_movs/new_mov_search_handling', 
+								url: myApp.railsBaseUri + 'terminal_movs/new_mov_search_handling', 
 								extraParams: {container_number: null},
 								method: 'POST',
 								type: 'ajax',

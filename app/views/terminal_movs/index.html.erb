@@ -1,6 +1,6 @@
+    <%= javascript_include_tag "/viewer/FeedViewer.js" %>
+    <%= javascript_include_tag "/FeedViewer/my_models.js" %>
     
-    <script type="text/javascript" src="/viewer/FeedViewer.js"></script>
-    <script type="text/javascript" src="/FeedViewer/my_models.js"></script>    
     <script type="text/javascript">
     
         function hasOption (name) {
@@ -9,8 +9,10 @@
 
         Ext.Loader.setConfig({
         	enabled: true,
+        	disableCaching : true,  
         	paths  : {
-        		Sc : '/js/Sc'
+        		Sc : '/js/Sc',
+        		FeedViewer: '../FeedViewer'
         	}
         });
         Ext.Loader.setPath('Ext.ux', '../ux');
@@ -27,7 +29,9 @@
             'Ext.ux.ajax.SimManager',
             'Ext.ux.PreviewPlugin',
             'Ext.grid.plugin.BufferedRenderer',
-            'Ext.*'
+            'Ext.*',  'Ext.container.Viewport',
+            'FeedViewer.MovimentoPanel',
+            'FeedViewer.ScGrid', 'FeedViewer.MenuPanel', 'FeedViewer.NewHandlingHeaderPanel'
         ]);
         Ext.onReady(function(){
             if (hasOption('simjax')) {
@@ -44,9 +48,139 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
 });
 
 
+ 		voci_menu = [
+    		            {
+    		                task:'Tabelle di base',  
+    		                iconCls:'task-folder', 
+    		                expanded: false,
+    		                children:
+    		                [
+    		                 { 
+                                 task:'Ship Owners',
+                                 url: '<%= url_for(:controller=>'shipowners', :action=>'extjs_sc_crt_tab') -%>', 
+                                 leaf:true 
+                             }, { 
+                                 task:'Carriers', 
+                                 url: '<%= url_for(:controller=>'carriers', :action=>'extjs_sc_crt_tab') -%>',                                 
+                                 leaf:true 
+                             }, { 
+                                 task:'Equipment',
+                                 url: '<%= url_for(:controller=>'equipment', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 leaf:true 
+                             }, { 
+                                 task:'ISO - Equipment',
+                                 url: '<%= url_for(:controller=>'iso_equipment', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 leaf:true 
+                             }, { 
+                                 task:'Ports',
+                                 url: '<%= url_for(:controller=>'ports', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 leaf:true 
+                             }, { 
+                                 task:'Shippers',
+                                 url: '<%= url_for(:controller=>'shippers', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 leaf:true 
+                             }, { 
+                                 task:'Ships',
+                                 url: '<%= url_for(:controller=>'ships', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 leaf:true 
+                             }   		                 
+    		                ]
+                        }, {
+                        task:'Movimenti',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                    task:'Ricerca / Inserisci',
+                                    leaf:true,
+                                    iconCls:'task',
+                                    op: 'NEW_HANDLING_HEADER'
+                                }
+                                /*
+                                , {
+	                                task:'Handling Headers',
+                                 	url: '<%= url_for(:controller=>'handling_headers', :action=>'extjs_sc_crt_tab') -%>',	                                
+	                                leaf:true
+	                            }
+	                            */
+                            ]
+                    }, {
+                        task:'Booking',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                    task:'Inserisci nuovo',
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'bookings', :action=>'form_new') -%>',                                    
+                                    op: 'new_win',
+                                    width: 700,
+                                    height: 500
+                                }, {
+	                                task:'Ricerca',
+                                 	url: '<%= url_for(:controller=>'bookings', :action=>'form_search') -%>',	                                
+	                                leaf:true,
+	                                op: 'new_tab'
+	                            }, {
+	                                task:'To Check',
+                                 	url: '<%= url_for(:controller=>'bookings', :action=>'to_check') -%>',	                                
+	                                leaf:true,
+	                                op: 'new_tab'
+	                            }
+                            ]
+                    }, {
+                        task:'Import',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [{
+                                task:'Nuovo import',
+                                url: '<%= url_for(:controller=>'import_headers', :action=>'new_import') -%>',                                
+                                leaf:true
+                            }, {
+                                task:'Apri import',
+                                url: '<%= url_for(:controller=>'import_headers', :action=>'find_import') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                            }, {
+                                task:'Elenco',
+                                url: '<%= url_for(:controller=>'import_headers', :action=>'extjs_sc_crt_tab') -%>',                                
+                                leaf:true
+                            }]
+                    }, {
+                        task:'Reportistica',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                             {
+                                task:'Movimenti',
+                                url: '<%= url_for(:controller=>'reports', :action=>'handlings_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }
+                            ]
+                    }, {
+                        task:'Gestione Utenti',
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                task:'Users',
+                                url: '<%= url_for(:controller=>'user_managers', :action=>'extjs_sc_crt_tab') -%>',                                
+                                leaf:true
+                            }
+                            ]
+                    }
+    		    ];
 
             Ext.QuickTips.init();            
-            myApp = new FeedViewer.App();
+            myApp = new FeedViewer.App({
+            	voci_menu: voci_menu,
+            	railsBaseUri: '<%= root_path -%>'
+            	});
         });
-    </script>    
-    
+    </script>

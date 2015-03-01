@@ -12,10 +12,10 @@
         	disableCaching : true,  
         	paths  : {
         		Sc : '/js/Sc',
-        		FeedViewer: '../FeedViewer'
+        		FeedViewer: '<%= root_path -%>FeedViewer'
         	}
         });
-        Ext.Loader.setPath('Ext.ux', '../ux');
+        Ext.Loader.setPath('Ext.ux', '<%= root_path -%>ux');
         Ext.require([
             'Ext.grid.*',
             'Ext.data.*',

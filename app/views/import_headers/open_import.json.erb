@@ -30,7 +30,7 @@
         	    	fields: [],
         	    	proxy: {
         	            type: 'ajax',
-        	            url: '/import_headers/get_import_row',
+        	            url: <%= root_path -%> + 'import_headers/get_import_row',
         	            extraParams: {import_header_id: <%= @ih.id -%>},
         	            reader: {
         	                type: 'json',

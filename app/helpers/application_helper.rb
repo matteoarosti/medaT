@@ -137,7 +137,7 @@ module ApplicationHelper
           autoLoad: true,
           proxy: {
               type: 'ajax',
-              url: #{root_path}#{url.to_json},              
+              url: #{url.to_json},              
               reader: {
                   type: 'json',
                   rootProperty: 'items'

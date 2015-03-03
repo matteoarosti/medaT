@@ -487,7 +487,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 								visible: '{!is_handling_editable}'
 						},		                
 		                handler: function(){	
-		                	acs_show_win_std('Seleziona tipo dettaglio', '/terminal_movs/add_handling_items_select_type',
+		                	acs_show_win_std('Seleziona tipo dettaglio', myApp.railsBaseUri + 'terminal_movs/add_handling_items_select_type',
 		                		 {rec_id: this.getViewModel().getData().rec.get('id')},
 		                		 null, null, null, null, null, null, {mov_panel: this});
 		                }, scope: this

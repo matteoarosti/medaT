@@ -121,7 +121,7 @@ module ApplicationHelper
           autoLoad: true,
           proxy: {
               type: 'ajax',
-              url: '/#{model.pluralize}/get_combo_data',              
+              url: '#{root_path}#{model.pluralize}/get_combo_data',              
               reader: {
                   type: 'json',
                   rootProperty: 'items'                  
@@ -137,7 +137,7 @@ module ApplicationHelper
           autoLoad: true,
           proxy: {
               type: 'ajax',
-              url: #{url.to_json},              
+              url: #{root_path}#{url.to_json},              
               reader: {
                   type: 'json',
                   rootProperty: 'items'

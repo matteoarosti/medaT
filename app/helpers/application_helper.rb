@@ -108,7 +108,7 @@ module ApplicationHelper
                     hideLabel: true
                 },                
                 items: ["  
-  ret += " {xtype: 'datefield', name: #{name_date.to_json}, value: #{item.send(name).to_date.to_json}, allowBlank: false, format: 'Ymd'}"
+  ret += " {xtype: 'datefield', name: #{name_date.to_json}, value: #{item.send(name).to_date.to_json}, allowBlank: false}"
   ret += ",{xtype: 'timefield', name: #{name_time.to_json}, value: #{item.send(name).to_s(:time).to_json}, allowBlank: false}"  
   ret += "]}" 
  end

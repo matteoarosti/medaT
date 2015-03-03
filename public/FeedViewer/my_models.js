@@ -3,10 +3,10 @@ Ext.define("Porto", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/terminal_movs/sc_read',
-            create: '/terminal_movs/sc_create',
-            update: '/terminal_movs/sc_update',
-            destroy: '/terminal_movs/sc_destroy'
+            read: '/medaT/' + '/terminal_movs/sc_read',
+            create: '/medaT/' + '/terminal_movs/sc_create',
+            update: '/medaT/' + '/terminal_movs/sc_update',
+            destroy: '/medaT/' + '/terminal_movs/sc_destroy'
         },
         reader: {
             type: 'json',
@@ -35,10 +35,10 @@ Ext.define("Shipowner", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/shipowners/sc_read',
-            create: '/shipowners/sc_create',
-            update: '/shipowners/sc_update',
-            destroy: '/shipowners/sc_destroy'
+            read: '/medaT/' + '/shipowners/sc_read',
+            create: '/medaT/' + '/shipowners/sc_create',
+            update: '/medaT/' + '/shipowners/sc_update',
+            destroy: '/medaT/' + '/shipowners/sc_destroy'
         },
         reader: {
             type: 'json',
@@ -65,10 +65,10 @@ Ext.define("Carrier", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/carriers/sc_read',
-            create: '/carriers/sc_create',
-            update: '/carriers/sc_update',
-            destroy: '/carriers/sc_destroy'
+            read: '/medaT/' + '/carriers/sc_read',
+            create: '/medaT/' + '/carriers/sc_create',
+            update: '/medaT/' + '/carriers/sc_update',
+            destroy: '/medaT/' + '/carriers/sc_destroy'
         },
         reader: {
             type: 'json',
@@ -94,10 +94,10 @@ Ext.define("Equipment", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/equipment/sc_read',
-            create: '/equipment/sc_create',
-            update: '/equipment/sc_update',
-            destroy: '/equipment/sc_destroy'
+            read: '/medaT/' + '/equipment/sc_read',
+            create: '/medaT/' + '/equipment/sc_create',
+            update: '/medaT/' + '/equipment/sc_update',
+            destroy: '/medaT/' + '/equipment/sc_destroy'
         },
         reader: {
             type: 'json',
@@ -119,10 +119,10 @@ Ext.define("IsoEquipment", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/iso_equipment/sc_read',
-            create: '/iso_equipment/sc_create',
-            update: '/iso_equipment/sc_update',
-            destroy: '/iso_equipment/sc_destroy'
+            read: '/medaT/' + '/iso_equipment/sc_read',
+            create: '/medaT/' + '/iso_equipment/sc_create',
+            update: '/medaT/' + '/iso_equipment/sc_update',
+            destroy: '/medaT/' + '/iso_equipment/sc_destroy'
         },
         reader: {
             type: 'json',
@@ -144,10 +144,10 @@ Ext.define("Port", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/ports/sc_read',
-            create: '/ports/sc_create',
-            update: '/ports/sc_update',
-            destroy: '/ports/sc_destroy'
+            read: '/medaT/' + '/ports/sc_read',
+            create: '/medaT/' + '/ports/sc_create',
+            update: '/medaT/' + '/ports/sc_update',
+            destroy: '/medaT/' + '/ports/sc_destroy'
         },
         reader: {
             type: 'json',
@@ -172,10 +172,10 @@ Ext.define("Ship", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/ships/sc_read',
-            create: '/ships/sc_create',
-            update: '/ships/sc_update',
-            destroy: '/ships/sc_destroy'
+            read: '/medaT/' + '/ships/sc_read',
+            create: '/medaT/' + '/ships/sc_create',
+            update: '/medaT/' + '/ships/sc_update',
+            destroy: '/medaT/' + '/ships/sc_destroy'
         },
         reader: {
             type: 'json',
@@ -196,10 +196,10 @@ Ext.define("Shipper", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/shippers/sc_read',
-            create: '/shippers/sc_create',
-            update: '/shippers/sc_update',
-            destroy: '/shippers/sc_destroy'
+            read: '/medaT/' + '/shippers/sc_read',
+            create: '/medaT/' + '/shippers/sc_create',
+            update: '/medaT/' + '/shippers/sc_update',
+            destroy: '/medaT/' + '/shippers/sc_destroy'
         },
         reader: {
             type: 'json',
@@ -220,10 +220,10 @@ Ext.define("HandlingHeader", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/handling_headers/sc_read',
-            create: '/handling_headers/sc_create',
-            update: '/handling_headers/sc_update',
-            destroy: '/handling_headers/sc_destroy'
+            read: '/medaT/' + '/handling_headers/sc_read',
+            create: '/medaT/' + '/handling_headers/sc_create',
+            update: '/medaT/' + '/handling_headers/sc_update',
+            destroy: '/medaT/' + '/handling_headers/sc_destroy'
         },
         reader: {
             type: 'json',
@@ -244,10 +244,10 @@ Ext.define("HandlingItem", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
 		api: {
-            read: '/handling_headers/hitems_sc_read',
-            create: '/handling_headers/hitems_sc_create',
-            update: '/handling_headers/hitems_sc_update',
-            destroy: '/handling_headers/hitems_sc_destroy'
+            read: '/medaT/' + '/handling_headers/hitems_sc_read',
+            create: '/medaT/' + '/handling_headers/hitems_sc_create',
+            update: '/medaT/' + '/handling_headers/hitems_sc_update',
+            destroy: '/medaT/' + '/handling_headers/hitems_sc_destroy'
         },
         reader: {
             type: 'json',
@@ -267,10 +267,10 @@ Ext.define("User", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
         api: {
-            read: '/user_managers/hitems_sc_read',
-            create: '/user_managers/hitems_sc_create',
-            update: '/user_managers/hitems_sc_update',
-            destroy: '/user_managers/hitems_sc_destroy'
+            read: '/medaT/' + '/user_managers/hitems_sc_read',
+            create: '/medaT/' + '/user_managers/hitems_sc_create',
+            update: '/medaT/' + '/user_managers/hitems_sc_update',
+            destroy: '/medaT/' + '/user_managers/hitems_sc_destroy'
         },
         reader: {
             type: 'json',
@@ -290,10 +290,10 @@ Ext.define("ImportHeader", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
         api: {
-            read: '/import_header/hitems_sc_read',
-            create: '/import_header/hitems_sc_create',
-            update: '/import_header/hitems_sc_update',
-            destroy: '/import_header/hitems_sc_destroy'
+            read: '/medaT/' + '/import_header/hitems_sc_read',
+            create: '/medaT/' + '/import_header/hitems_sc_create',
+            update: '/medaT/' + '/import_header/hitems_sc_update',
+            destroy: '/medaT/' + '/import_header/hitems_sc_destroy'
         },
         reader: {
             type: 'json',
@@ -313,10 +313,10 @@ Ext.define("Booking", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
         api: {
-            read: '/bookings/sc_read',
-            create: '/bookings/sc_create',
-            update: '/bookings/sc_update',
-            destroy: '/bookings/sc_destroy'
+            read: '/medaT/' + '/bookings/sc_read',
+            create: '/medaT/' + '/bookings/sc_create',
+            update: '/medaT/' + '/bookings/sc_update',
+            destroy: '/medaT/' + '/bookings/sc_destroy'
         },
         reader: {
             type: 'json',

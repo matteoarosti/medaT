@@ -2,79 +2,175 @@
  "success": true,
  "items": [
   {
-   xtype: 'form',
-      
-   <% if op=='UPDATE' %>
-   	<%= raw("title:  'Modifica booking',".as_json)  -%>
-   	<%= raw("closable: true,".as_json) -%>
-   <% end %>	
-   
+   xtype: 'panel',
+   title: 'Edit booking', closable: true,
    flex: 1,
 	layout: {
-	    type: 'vbox',
+	    type: 'hbox',
 	    align : 'stretch',
 	    pack  : 'start',
 	}, 
      defaults: {
      	 xtype: 'textfield',
      	 margin: '10 10 0 10',
-     },	  
-     
-   items: [
-   
-    <%= raw extjs_std_hiddenfield('id', @item) -%>,
-    <%= raw extjs_std_textfield('num_booking', @item) -%>,
-    <%= raw extjs_fieldcontainer('', {}, [
-		extjs_std_combo_model('shipowner', @item),
-		extjs_std_combo_model('ship', @item, {}, fcR {})]) -%>,
-	<%= raw extjs_std_combo_model('equipment', @item) -%>, 
-	<%= raw extjs_std_combo_model('port', @item) -%>,
-	<%= raw extjs_std_datefield('eta', @item, :allowBlank => true) -%>,
-	<%= raw extjs_std_textfield('quantity', @item) -%>,
-	<%= raw extjs_std_textareafield('notes', @item) -%>,
-        
-    <%= raw extjs_fieldcontainer('', {}, [
-    								extjs_std_combo('status', @item, :store => extjs_std_store_data(@item.status_get_data_json)),
-    								extjs_std_booleanfield('to_check', @item, {}, fcR)]) -%>,
-    
-    <%= raw extjs_std_datefield('expiration', @item, :allowBlank => true) -%>     		
-   ],
-   
-   
-	buttons:
-        [{
-            text: 'Salva',
-            handler: function (btn, evt) {              
-             form = this.up('form').getForm();
-             if (form.isValid()) {
-             	new_rec = Ext.create('Booking', {});
-             	new_rec.data = form.getValues();
-             	new_rec.save({
-					success: function(rec, op) {
-					
-   <% if op=='CREATE' %>					 										
-					 this.up('window').close();
-   <% end %>				 	
-   
-   <% if op=='UPDATE' %>					 										
-					 this.up('form').close();
-   <% end %>					 							
-					}, scope: this,				
-					
-					failure: function(rec, op) {
-						var result = Ext.JSON.decode(op.getResponse().responseText);
-						Ext.MessageBox.show({
-	                        title: 'EXCEPTION',
-	                        msg: result.message,
-	                        icon: Ext.MessageBox.ERROR,
-	                        buttons: Ext.Msg.OK
-                    	})					
-					}, scope: this,					
-					 
-		    	});
-             }             
-            }
-        }]   
-  }
+     },	
+
+
+		viewModel: {
+    			data: {
+    				rec: null,
+    				in_create: <%= op == 'CREATE' ? 'true' : 'false' -%>
+    			}    			
+    	},    
+
+ 
+	 "items": [
+	  {
+	   xtype: 'form',
+	   flex: 1,
+	      
+	   title: 'Testata',	
+	   
+	   flex: 1,
+		layout: {
+		    type: 'vbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		}, 
+	     defaults: {
+	     	 xtype: 'textfield',
+	     	 margin: '10 10 0 10',
+	     },	  
+	     
+	   items: [
+	   
+	    <%= raw extjs_std_hiddenfield('id', @item) -%>,
+	    {xtype: 'textfield', fieldLabel: '#id', name: 'id_out', value: <%= @item.id.to_json -%>, disabled: true},
+	    <%= raw extjs_std_textfield('num_booking', @item) -%>,
+	    <%= raw extjs_fieldcontainer('', {}, [
+			extjs_std_combo_model('shipowner', @item),
+			extjs_std_combo_model('ship', @item, {}, fcR {})]) -%>,
+
+	    <%= raw extjs_fieldcontainer('', {}, [	 
+			extjs_std_combo_model('port', @item),
+			extjs_std_datefield('eta', @item, {:allowBlank => true}, fcR {})]) -%>,
+		
+		<%= raw extjs_std_textareafield('notes', @item) -%>,
+	        
+	    <%= raw extjs_fieldcontainer('', {}, [
+	    								extjs_std_combo('status', @item, :store => extjs_std_store_data(@item.status_get_data_json)),
+	    								extjs_std_datefield('expiration', @item, {:allowBlank => true}, fcR {}),
+	    								extjs_std_booleanfield('to_check', @item, {}, fcR)]) -%>
+	   ],
+	   
+	   
+	   	// raw extjs_std_combo_model('equipment', @item)
+	   	// raw extjs_std_textfield('quantity', @item)
+	   
+		buttons:
+	        [{
+	            text: 'Salva',
+	            handler: function (btn, evt) {              
+	             form = this.up('form').getForm();
+	             if (form.isValid()) {
+	             	new_rec = Ext.create('Booking', {});
+	             	new_rec.data = form.getValues();
+	             	new_rec.save({
+						success: function(rec, op) {
+							var result = Ext.JSON.decode(op.getResponse().responseText);
+							this.up('form').getForm().findField('id').setValue(result.data[0].id);						
+							this.up('form').getForm().findField('id_out').setValue(result.data[0].id);				 										
+						 	this.up('form').up('panel').getViewModel().setData({in_create: false});
+						 	
+						 	//refresh grid dettagli
+						 	this.up('form').up('panel').down('grid').store.proxy.extraParams.booking_id = result.data[0].id;
+						 	this.up('form').up('panel').down('grid').store.load();
+						}, scope: this,				
+						
+						failure: function(rec, op) {
+							var result = Ext.JSON.decode(op.getResponse().responseText);
+							Ext.MessageBox.show({
+		                        title: 'EXCEPTION',
+		                        msg: result.message,
+		                        icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})					
+						}, scope: this,					
+						 
+			    	});
+	             }             
+	            }
+	        }]   
+	  }, 
+	
+	
+	
+		        	//GRID con movimenti per container	        		
+						, {
+							xtype: 'grid',
+							loadMask: true,
+							flex: 0.6,
+							title: 'Dettaglio Equipment',
+							layout: 'fit',
+							
+							
+			        	    tools: [{  
+					                xtype: 'button',
+					                text: 'Aggiungi <i class="fa fa-plus-circle"></i>',
+									bind: {
+											visible: '{!in_create}'
+									},		                
+					                handler: function(){
+					                
+					                	my_listeners = {
+					                		afterSave: function(fromWindow){
+					                			fromWindow.close();
+					                			this.up('grid').store.load();
+					                		}, scope: this
+					                	}
+					                	
+							     	 	new_win = acs_show_win_std('Dettaglio Booking', <%= raw url_for(:controller=>'bookings', :action=>'bitems_form_new').to_json -%>,
+							     	 		{booking_id: this.up('panel').up('panel').down('form').getForm().findField('id').getValue()},
+							     	 		400, 300, my_listeners);										
+					                }
+					            }
+			                ],
+                																	
+							store: {
+								xtype: 'store',
+								autoLoad: true,	
+								proxy: {
+									url: <%= raw url_for(:controller=>'bookings', :action=>'bitems_sc_list').to_json -%>, 
+									extraParams: {booking_id: <%= @item.id.to_json -%>},
+									method: 'POST',
+									type: 'ajax',
+						
+									//Add these two properties
+									actionMethods: {
+										read: 'POST'
+									},
+						
+									reader: {
+										type: 'json',
+										method: 'POST',
+										rootProperty: 'items'
+									}
+								},
+									
+								fields: [] //serve
+							}, //store
+							columns: [{header: 'Equipment', dataIndex: 'equipment_id_Name', flex: 1},
+							          {header: 'Quantity', dataIndex: 'quantity', width: 100, align: 'right'},
+							          {header: 'In uso', dataIndex: 'in_uso', width: 100, align: 'right'},
+							          {header: 'Stato', dataIndex: 'status', width: 100}
+							          ]
+							
+						 
+						}	        		
+	        		
+	       ] 		
+	        		
+	}
+
  ]
 }

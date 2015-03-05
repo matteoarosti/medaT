@@ -63,9 +63,9 @@ Ext.define('FeedViewer.MenuPanel', {
             rootVisible : false,
             columns: [{
                 xtype: 'treecolumn',
-                //text: 'Task',
+                text: '',
                 width: 200,
-                sortable: true,
+                sortable: false,
                 dataIndex: 'task'
             }],
 	        listeners: {

@@ -11,25 +11,15 @@
      %>
 	<%= stylesheet_link_tag 'application_extjs', media: 'all', 'data-turbolinks-track' => true %>     
     
-    <!-- ExtJS -->
-	 <link rel="stylesheet" type="text/css" href="<%= root_path -%>ext-5.0.1_only/ext-theme-crisp-all.css">
-	 	 
-	 <%= javascript_include_tag "/ext-5.0.1_only/ext-all-debug.js" %>
+   <!-- ExtJS -->
+	 <link rel="stylesheet" type="text/css" href="<%= root_path -%>ext-5.0.1_only/ext-theme-crisp-all.css">	 	 
+	 <%= javascript_include_tag "/ext-5.0.1_only/ext-all.js" %>
 	 <%= javascript_include_tag "/ext-5.0.1_only/ext-theme-crisp.js" %>
-	 <%= javascript_include_tag "/ext-5.0.1_only/ext-locale-it.js" %>
-	  
-     <!-- //ExtJS -->
-     
-  <!--   
-	<link rel="stylesheet" type="text/css" href="/ext-5.0.1/packages/ext-theme-crisp/build/resources/ext-theme-crisp-all.css">
-    <script type="text/javascript" src="/ext-5.0.1/build/ext-all-debug.js"></script> 
-    <script type="text/javascript" src="/ext-5.0.1/build/packages/ext-theme-crisp/build/ext-theme-crisp-debug.js"></script>
-    <script type="text/javascript" src="/ext-5.0.1/packages/ext-locale/build/ext-locale-it.js"></script>
-  -->     
+	 <%= javascript_include_tag "/ext-5.0.1_only/ext-locale-it.js" %>	  
+   <!-- //ExtJS -->
      
          
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-
     
     <%= csrf_meta_tags %> 
     

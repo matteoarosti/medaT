@@ -1,0 +1,59 @@
+{
+ "success": true,
+	 "items": [
+	  {
+	   xtype: 'form',
+	   flex: 1,	      	
+	   
+	   flex: 1,
+		layout: {
+		    type: 'vbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		}, 
+	     defaults: {
+	     	 xtype: 'textfield',
+	     	 margin: '10 10 0 10',
+	     },	  
+	     
+	   items: [
+	   
+	    <%= raw extjs_std_hiddenfield('id', @item) -%>,
+	    <%= raw extjs_std_hiddenfield('booking_id', @item) -%>,	    
+	   	<%= raw extjs_std_combo_model('equipment', @item) -%>,
+	   	<%= raw extjs_std_textfield('quantity', @item) -%>
+	    
+	   ],
+	   
+	   
+	   
+		buttons:
+	        [{
+	            text: 'Salva',
+	            handler: function (btn, evt) {              
+	             form = this.up('form').getForm();
+	             if (form.isValid()) {
+	             	new_rec = Ext.create('BookingItem', {});
+	             	new_rec.data = form.getValues();
+	             	new_rec.save({
+						success: function(rec, op) {
+							this.up('window').fireEvent('afterSave', this.up('window'));
+						}, scope: this,				
+						
+						failure: function(rec, op) {
+							var result = Ext.JSON.decode(op.getResponse().responseText);
+							Ext.MessageBox.show({
+		                        title: 'EXCEPTION',
+		                        msg: result.message,
+		                        icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})					
+						}, scope: this,					
+						 
+			    	});
+	             }             
+	            }
+	        }]   
+	  } 
+	]
+}

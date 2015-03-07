@@ -29,6 +29,38 @@
 	   
 		buttons:
 	        [{
+	            text: 'Elimina',  cls: 'btn-del',
+	            handler: function (btn, evt) {              
+	             form = this.up('form').getForm();
+	             if (form.isValid()) {
+	             
+	             	new_rec = Ext.create('BookingItem', {});
+					Ext.Ajax.request({
+	                    url: new_rec.proxy.api.destroy,
+	                    waitMsg: 'Salvataggio in corso....',
+						method:'POST',                     
+	                    jsonData: {data: form.getValues()},
+	
+	             	
+						success: function(op, opts) {					
+							this.up('window').fireEvent('afterSave', this.up('window'));						 							
+						}, scope: this,
+						
+						failure: function(rec, op) {
+							var result = Ext.JSON.decode(op.getResponse().responseText);
+							Ext.MessageBox.show({
+		                        title: 'EXCEPTION',
+		                        msg: result.message,
+		                        icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})					
+						}, scope: this,						
+										 
+			    	});	             
+	             
+	             }             
+	            }
+	        }, '->', {
 	            text: 'Salva',
 	            handler: function (btn, evt) {              
 	             form = this.up('form').getForm();
@@ -53,7 +85,9 @@
 			    	});
 	             }             
 	            }
-	        }]   
+	        }
+	         
+	        ]   
 	  } 
 	]
 }

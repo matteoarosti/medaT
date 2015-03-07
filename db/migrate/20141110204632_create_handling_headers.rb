@@ -20,8 +20,12 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.boolean    :container_in_terminal,     :default => false
       t.string     :container_status,          :limit => 5
       t.string     :container_FE,              :limit => 1
-      t.integer    :booking_id
+      
+      #abbinamento con booking
+      t.belongs_to :booking
+      t.belongs_to :booking_item
       t.string     :num_booking,               :limit => 25
+      
       t.string     :seal_exp_shipowner,        :limit => 15
       t.string     :seal_exp_others,           :limit => 15
       t.decimal    :temperature_exp,           :precision => 5, :scale => 2

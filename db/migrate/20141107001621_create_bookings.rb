@@ -15,6 +15,7 @@ class CreateBookings < ActiveRecord::Migration
       t.timestamps
     end
     
+    #Booking item (per equipment)
     create_table :booking_items do |t|
       t.belongs_to  :booking            
       t.belongs_to  :equipment

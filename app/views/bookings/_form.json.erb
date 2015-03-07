@@ -160,9 +160,47 @@
 								fields: [] //serve
 							}, //store
 							columns: [{header: 'Equipment', dataIndex: 'equipment_id_Name', flex: 1},
-							          {header: 'Quantity', dataIndex: 'quantity', width: 100, align: 'right'},
-							          {header: 'In uso', dataIndex: 'in_uso', width: 100, align: 'right'},
-							          {header: 'Stato', dataIndex: 'status', width: 100}
+							          {header: 'Quantity', dataIndex: 'quantity', width: 90, align: 'right'},
+							          {header: 'In uso', dataIndex: 'in_uso', width: 60, align: 'right'},
+							          {header: 'Stato', dataIndex: 'status', width: 70},
+							          
+							          
+										{
+										        text: 'Ok', width: 50, hidden: false, sortable: false,
+										        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+										        	var loc_grid = this;
+
+										            var id = Ext.id();
+										            setTimeout(function() {
+										                var buttonOK = Ext.create('Ext.button.Button', {
+															text: '<i class="fa fa-edit fa-1x"></i>',
+									                		//scale: 'medium',			                    
+										                    handler: function(button, b, c, d, e) {										                    	
+
+											                	my_listeners = {
+											                		afterSave: function(fromWindow){
+											                			fromWindow.close();
+											                			loc_grid.store.load();
+											                		}, scope: this
+											                	}
+											                	
+													     	 	new_win = acs_show_win_std('Dettaglio Booking', <%= raw url_for(:controller=>'bookings', :action=>'bitems_form_edit').to_json -%>,
+													     	 		{id: rec.get('id')},
+													     	 		400, 300, my_listeners);
+																						
+															}
+										                });
+										                
+										                if (Ext.get(id)) {
+										                    buttonOK.render(Ext.get(id));
+										                }
+										            }, 1);
+										            return '<div id="' + id + '"></div>';
+										        }
+										     }							          
+														          
+														          
+							          
 							          ]
 							
 						 

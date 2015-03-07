@@ -133,5 +133,18 @@ def bitems_form_new
  render :partial => 'bitems_form', :locals=>{:op => 'CREATE'}
 end
 
+#TODO: verificare quantita' ammesse
+def bitems_form_edit
+ @item = BookingItem.find(params[:id])
+ render :partial => 'bitems_form', :locals=>{:op => 'EDIT'}
+end
+
+#TODO: prima di eliminazione verificare che non sia utilizzato
+def bitems_sc_destroy
+ @item = BookingItem.find(params[:data][:id])
+ @item.delete
+  render json: {:success => true}
+end
+
 
 end

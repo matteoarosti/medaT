@@ -20,8 +20,9 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.text        :notes,                 :limit => 64.kilobytes
       t.timestamps
 
-      #Matteo
-      t.integer     :booking_id
+      #abbinamento con booking
+      t.belongs_to  :booking
+      t.belongs_to  :booking_item  
     end
   end
 end

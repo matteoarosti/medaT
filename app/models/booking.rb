@@ -27,6 +27,8 @@ class Booking < ActiveRecord::Base
   Booking.where('num_booking = ?', num).first
  end
  
+ 
+ 
 #valori per combo
 def status_get_data_json
  [
@@ -42,7 +44,7 @@ end
 # - verifico di non aver superato il numero (quantita') indicato nel booking
 def valida_insert_item(hi)
  ret = {}
- 
+     
  #controllo lo stato del booking
  if !self.expiration.blank? && self.expiration  < Date.today
    ret[:is_valid] = false
@@ -64,16 +66,17 @@ def valida_insert_item(hi)
    return ret
  end 
  
+## NON CONTROLLO PIU', PERCHE' L'ABBINAMENTO VIENE FATTO DIRETTAMENTE CON BookingItem (quindi se non combacia non lo trova)
  #controllo equipment
- if hi.handling_header.equipment_id != self.equipment_id
-   ret[:is_valid] = false
-   ret[:message]  = 'Il tipo di container (equipment) impostato nel booking e nella testata del movimento non coincidono'
-   return ret
- end 
+# if hi.handling_header.equipment_id != self.equipment_id
+#   ret[:is_valid] = false
+#   ret[:message]  = 'Il tipo di container (equipment) impostato nel booking e nella testata del movimento non coincidono'
+#   return ret
+# end 
  
  #controllo su quantita' booking (escludendo la testata in corso nel caso di salvataggi)
- num_impegni_booking = self.get_num_impegni(hi.handling_header.id)
- if self.quantity <= num_impegni_booking
+ num_impegni_booking = self.get_num_impegni(hi.booking_item.id, hi.handling_header.id)
+ if hi.booking_item.quantity <= num_impegni_booking
    ret[:is_valid] = false
    ret[:message]  = "Booking pieno, impossibile assegnare altro movimento (q: #{self.quantity}, imp: #{num_impegni_booking})"
    return ret 
@@ -86,20 +89,22 @@ end
 
 
 #num_impegni su booking (escludendo eventualmente un header_handling)
-def get_num_impegni(escludi_header_id = 0)
- hh_count = HandlingHeader.where('1 = 1').where('booking_id = ?', self.id)
+def get_num_impegni(booking_item_id, escludi_header_id = 0)
+ hh_count = HandlingHeader.where('1 = 1').where('booking_item_id = ?', self.id)
  hh_count = hh_count.where('id <> ?', escludi_header_id) if (escludi_header_id != 0)
  return hh_count.count  
 end
 
+
+
 #gestisto lo status (OPEN/CLOSE) in base al numero di movimenti abbinagi
-def refresh_status()
+def refresh_status(bi)
  message = nil
- self.quantity > self.get_num_impegni() ? new_status = 'OPEN' : new_status = 'CLOSE'
- if self.status != new_status
-  self.status = new_status
-  self.save!
-  message = "Lo stato del booking e' stato modificato in #{new_status}"
+ bi.quantity > self.get_num_impegni(bi) ? new_status = 'OPEN' : new_status = 'CLOSE'
+ if bi.status != new_status
+  bi.status = new_status
+  bi.save!
+  message = "Lo stato del booking/equipment e' stato modificato in #{new_status}"
  end
  
  return {:message => message}

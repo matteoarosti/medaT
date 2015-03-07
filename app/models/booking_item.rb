@@ -16,5 +16,12 @@ class BookingItem < ActiveRecord::Base
        }
   end
 
+  
+  
+  def self.get_by_num_eq(num, equipment)
+   BookingItem.joins(:booking).where('bookings.num_booking = ? AND equipment_id = ?', num, equipment).first
+  end
+
+  
  
 end

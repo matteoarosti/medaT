@@ -55,16 +55,17 @@ def hitems_sc_create
 
     
 
-   #se ho ricevuto "num_booking", lo vado a decodifica in "booking_id"
+   #se ho ricevuto "num_booking", lo vado a decodificare in BookingItem
    if !params[:data][:num_booking].blank?
-    b = Booking.get_by_num(params[:data][:num_booking])
-    if b.nil?
-     logger.info 'Booking non trovato'
+    bi = BookingItem.get_by_num_eq(params[:data][:num_booking], hh.equipment_id)
+    if bi.nil?
+     logger.info 'Booking non trovato per numero/equipment'
      render json: {:success => false, :message => 'Booking non trovato'}
      return
     else
      logger.info 'Booking trovato'
-     params[:data][:booking_id] = b.id
+     params[:data][:booking_id] = bi.booking.id
+     params[:data][:booking_item_id] = bi.id
      params[:data].delete(:num_booking)    
     end
    end

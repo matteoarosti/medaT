@@ -220,7 +220,7 @@ def sincro_save_header(hi)
  
  #se e' un handling_item che gestisce il bookin, aggiorno lo stato del booking
  ret_booking = {} 
- ret_booking = hi.handling_header.booking.refresh_status if op_config_set['booking_copy'] == true
+ ret_booking = hi.handling_header.booking.refresh_status(hi.booking_item) if op_config_set['booking_copy'] == true
  message << ret_booking[:message] unless ret_booking[:message].blank?  
  
  return {:success => true, :message => message}
@@ -256,6 +256,7 @@ def sincro_set_booking_copy(value, hi)
 ################################################################
  b = Booking.find(hi.booking_id)
  self.booking_id  = hi.booking_id
+ self.booking_item_id  = hi.booking_item_id
  self.num_booking = b.num_booking
 end
 

@@ -101,14 +101,12 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                     leaf:true,
                                     iconCls:'task',
                                     op: 'NEW_HANDLING_HEADER'
+                                }, {
+                                    task:'Da ispezionare',
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'lock_INSPECT') -%>',                                    
+                                    op: 'new_tab',                                
                                 }
-                                /*
-                                , {
-	                                task:'Handling Headers',
-                                 	url: '<%= url_for(:controller=>'handling_headers', :action=>'extjs_sc_crt_tab') -%>',	                                
-	                                leaf:true
-	                            }
-	                            */
                             ]
                     }, {
                         task:'Booking',

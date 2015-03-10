@@ -120,7 +120,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
 			                items: [
 		                        {fieldLabel: 'id', bind: '{rec.id}', disabled: true, width: 80},
-		                        {fieldLabel: 'handling_status', bind: '{rec.handling_status}', disabled: true, anchor: '100%'}
+		                        {fieldLabel: 'handling_status', bind: '{rec.handling_status} {rec.lock_type}', disabled: true, anchor: '100%'}
 							]
 						},                        
                         

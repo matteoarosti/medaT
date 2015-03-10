@@ -20,6 +20,8 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.boolean    :container_in_terminal,     :default => false
       t.string     :container_status,          :limit => 5
       t.string     :container_FE,              :limit => 1
+      t.boolean    :lock_fl
+      t.string     :lock_type,                 :limit => 10    #da ispezionare, in riparazione, ...
       
       #abbinamento con booking
       t.belongs_to :booking

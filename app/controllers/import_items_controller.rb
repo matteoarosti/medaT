@@ -10,7 +10,10 @@ class ImportItemsController < ApplicationController
     redirect_to root_url, notice: "Items imported."
   end
   
+  
+ #################################################  
   def set_ok
+ #################################################    
    rec = ImportItem.find(params[:rec_id])
 
    #Determina la tipologia del movimento da import_headers
@@ -30,7 +33,9 @@ class ImportItemsController < ApplicationController
    render json: ret
   end
 
+ #################################################  
   def set_damaged
+ #################################################    
    rec = ImportItem.find(params[:rec_id])     
    rec.status = 'CHECK'
    rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
@@ -41,8 +46,9 @@ class ImportItemsController < ApplicationController
    render json: ret
   end
 
-  #SBARCO
+ #SBARCO ####################################
   def import_D(rec, params)
+ #################################################    
     hh = HandlingHeader.create_new(rec, params)
     hi = hh.handling_items.new()
     hi.datetime_op = Time.now
@@ -59,7 +65,6 @@ class ImportItemsController < ApplicationController
     #se supera i vari controlli salvo il dettalio e aggiorno la testata
     validate_insert_item = hh.validate_insert_item(hi)
     if validate_insert_item[:is_valid]
-      logger.info hi.to_yaml
       hi.save!()
       r = hh.sincro_save_header(hi)
       ret_status  = r[:success]
@@ -67,8 +72,9 @@ class ImportItemsController < ApplicationController
     end
   end
 
-  #IMBARCO
+ #IMBARCO ###############################
   def import_L(rec, params)
+ #################################################   
      hh = HandlingHeader.find_exist(rec, params)
      hi = hh.handling_items.new()
      hi.datetime_op = Time.now

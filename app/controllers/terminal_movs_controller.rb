@@ -43,6 +43,7 @@ def new_mov_search_handling
         :handling_id  => hh.id, :num_booking  => hh.num_booking,
         :container_number => hh.container_number, :is_container_editable => false,
         :stato => hh.handling_status, :stato_descr => hh.handling_status, :op => op, :op_descr => op_descr,
+        :lock_fl => hh.lock_fl, :lock_type =>hh.lock_type,
         :descr => "##{hh.id.to_s}, #{HandlingHeader::TYPES[hh.handling_type]}",
         :equipment_id_Name => hh.equipment.send(Equipment.combo_displayField),
         :shipowner_id_Name => hh.shipowner.send(Shipowner.combo_displayField),

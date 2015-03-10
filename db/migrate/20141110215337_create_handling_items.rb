@@ -22,7 +22,11 @@ class CreateHandlingItems < ActiveRecord::Migration
 
       #abbinamento con booking
       t.belongs_to  :booking
-      t.belongs_to  :booking_item  
+      t.belongs_to  :booking_item 
+      
+      #gestione campi lock
+      t.boolean    :lock_fl
+      t.string     :lock_type,                 :limit => 10    #da ispezionare, in riparazione, ...       
     end
   end
 end

@@ -321,6 +321,21 @@ def sincro_set_end_reefer_connection(value, hi)
       end
     end
 end
+
+
+################################################################
+def sincro_set_lock_INSPECT(value, hi)
+################################################################
+    if (value == true || (value == 'IF_FULL' && hi.container_FE == 'F') || (value == 'IF_EMPTY' && hi.container_FE == 'E'))
+      logger.info "Setto lock INSPECT (da ispezionare)"
+      hi.lock_fl = true
+      hi.lock_type = 'INSPECT'
+      hi.save!
+      
+      self.lock_fl    = hi.lock_fl
+      self.lock_type  = hi.lock_type 
+    end 
+end
  
  
  

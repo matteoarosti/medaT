@@ -13,17 +13,26 @@
 
 ActiveRecord::Schema.define(version: 20150109161754) do
 
+  create_table "booking_items", force: true do |t|
+    t.integer  "booking_id"
+    t.integer  "equipment_id"
+    t.integer  "quantity",     limit: 8
+    t.string   "status",       limit: 5
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "bookings", force: true do |t|
     t.string   "num_booking",  limit: 25
     t.integer  "shipowner_id", limit: 8
-    t.integer  "equipment_id", limit: 8
     t.integer  "ship_id",      limit: 8
     t.string   "voyage",       limit: 15
     t.integer  "port_id",      limit: 8
     t.date     "eta"
-    t.integer  "quantity",     limit: 8
     t.string   "status",       limit: 5
     t.text     "notes",        limit: 16777215
+    t.date     "expiration"
+    t.boolean  "to_check",                      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -44,6 +53,7 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.integer  "size",           limit: 2
     t.string   "sizetype",       limit: 50
     t.string   "iso",            limit: 4
+    t.boolean  "reefer",                    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -64,7 +74,10 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.boolean  "container_in_terminal",                                    default: false
     t.string   "container_status",      limit: 5
     t.string   "container_FE",          limit: 1
+    t.boolean  "lock_fl"
+    t.string   "lock_type",             limit: 5
     t.integer  "booking_id"
+    t.integer  "booking_item_id"
     t.string   "num_booking",           limit: 25
     t.string   "seal_exp_shipowner",    limit: 15
     t.string   "seal_exp_others",       limit: 15
@@ -82,6 +95,7 @@ ActiveRecord::Schema.define(version: 20150109161754) do
   create_table "handling_items", force: true do |t|
     t.integer  "handling_header_id", limit: 8
     t.datetime "datetime_op"
+    t.datetime "datetime_op_end"
     t.string   "operation_type",     limit: 2
     t.string   "handling_item_type", limit: 15
     t.string   "handling_type",      limit: 1
@@ -95,10 +109,13 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.string   "seal_others",        limit: 15
     t.boolean  "not_positioning"
     t.boolean  "codeco_sent"
-    t.string   "notes"
+    t.text     "notes",              limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "booking_id"
+    t.integer  "booking_item_id"
+    t.boolean  "lock_fl"
+    t.string   "lock_type",          limit: 5
   end
 
   create_table "import_headers", force: true do |t|

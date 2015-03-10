@@ -23,6 +23,13 @@ class Booking < ActiveRecord::Base
  end
  
  
+def status_get_data_json
+ [
+  {:cod=>'OPEN', :descr=>'Open'},
+  {:cod=>'CLOSE', :descr=>'Close'}
+ ] 
+end  
+ 
  def self.get_by_num(num)
   Booking.where('num_booking = ?', num).first
  end
@@ -53,7 +60,7 @@ def valida_insert_item(hi)
  end
  
  #controllo lo stato del booking
- if self.status != 'OPEN'
+ if self.status != 'OPEN' || hi.booking_item.status != 'OPEN'
    ret[:is_valid] = false
    ret[:message]  = 'Il booking non e\' in stato OPEN'
    return ret
@@ -90,7 +97,7 @@ end
 
 #num_impegni su booking (escludendo eventualmente un header_handling)
 def get_num_impegni(booking_item_id, escludi_header_id = 0)
- hh_count = HandlingHeader.where('1 = 1').where('booking_item_id = ?', self.id)
+ hh_count = HandlingHeader.where('1 = 1').where('booking_item_id = ?', booking_item_id)
  hh_count = hh_count.where('id <> ?', escludi_header_id) if (escludi_header_id != 0)
  return hh_count.count  
 end

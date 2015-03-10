@@ -107,21 +107,18 @@ def bitems_sc_create
   item = BookingItem.find(params[:data][:id])   
  end
 
+  #verifico validita' quantity 
+  if item.booking.get_num_impegni(item.id) > params[:data][:quantity].to_i
+   render json: {:success => false, :message=>"La quantità indicata è inferiore al numero dei movimenti attualmnete abbinati al booking"}
+   return
+  end 
+ 
  to_save_params = params[:data].select{|k,v| BookingItem.column_names.include?(k) && k != 'id'}  
  to_save_params.permit!
  item.update(to_save_params)
-     
- #TODO
- #verifico validita' quantity
- # ora e' in bookin_items
- ##if item.get_num_impegni() > item.quantity
- ## render json: {:success => false, :message=>"La quantità indicata è inferiore al numero dei movimenti attualmnete abbinati al booking"}
- ## return
- ##end
  
  item.save!()  
- render json: {:success => true, :data=>[item.as_json(BookingItem.as_json_prop)]}  
- 
+ render json: {:success => true, :data=>[item.as_json(BookingItem.as_json_prop)]}
 end
 
 

@@ -161,12 +161,12 @@
 							}, //store
 							columns: [{header: 'Equipment', dataIndex: 'equipment_id_Name', flex: 1},
 							          {header: 'Quantity', dataIndex: 'quantity', width: 90, align: 'right'},
-							          {header: 'In uso', dataIndex: 'in_uso', width: 60, align: 'right'},
+							          {header: 'In uso', dataIndex: 'quantity_used', width: 60, align: 'right'},
 							          {header: 'Stato', dataIndex: 'status', width: 70},
 							          
 							          
 										{
-										        text: 'Ok', width: 50, hidden: false, sortable: false,
+										        text: '', width: 50, hidden: false, sortable: false,
 										        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 										        	var loc_grid = this;
 

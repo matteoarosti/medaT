@@ -30,7 +30,7 @@
         	    	fields: [],
         	    	proxy: {
         	            type: 'ajax',
-        	            url: <%= root_path -%> + 'import_headers/get_import_row',
+        	            url: <%= raw  (root_path + 'import_headers/get_import_row').to_json -%>,
         	            extraParams: {import_header_id: <%= @ih.id -%>},
         	            reader: {
         	                type: 'json',
@@ -127,8 +127,19 @@
 			        	if (Ext.isEmpty(rec.get('status')) == false) return '';
 			            var id = Ext.id();
 			            setTimeout(function() {
+			            
+			                	ok_img = 'fa-check-circle';
+			                	
+			                	//solo per SBARCO, se container vuoto andra' ispezionato
+			                	<% if @ih.import_type == 'D' %>
+			                	 if (rec.get('container_status') == 'E')
+			                	  ok_img = 'fa-user-md';
+			                	<% end %>
+			            
+			            
 			                var buttonOK = Ext.create('Ext.button.Button', {
-								text: '<i class="fa fa-check-circle fa-3x"></i>',
+			                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
 		                		scale: 'large',			                    
 			                        handler: function(button, b, c, d, e) {
 			                        

@@ -8,6 +8,8 @@ class HandlingHeader < ActiveRecord::Base
  scope :extjs_default_scope, -> { eager_load(:shipowner, :equipment) }
  scope :container, ->(container_number) {where("container_number = ?", container_number)}
  scope :booking, ->(booking_number) {where("container_number = ?", container_number)}
+ scope :locked, -> {where("lock_fl=?", true)}
+ scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
 
  def handling_header_status() return self.handling_status end
 
@@ -143,6 +145,17 @@ def validate_insert_item(hi, name_function = '')
   op_config = h_type_config[hi.handling_item_type]
   op_config_check = op_config['check'] || {}
 
+  #verifica che non sia in 'lock', a meno che non abbia impostato 'lock_type'
+  if op_config_check['lock_type'].nil?
+    if self.lock_fl == true
+      ret[:is_valid] = false
+      ret[:message]  = "check non superato ( lock )" 
+      logger.info ret.to_yaml
+      return ret      
+    end
+  end
+      
+    
   for check_op_name, check_op_value in op_config_check   
     
     if check_op_value.is_a? Hash
@@ -335,6 +348,21 @@ def sincro_set_lock_INSPECT(value, hi)
       self.lock_fl    = hi.lock_fl
       self.lock_type  = hi.lock_type 
     end 
+end
+
+
+################################################################
+def sincro_set_clear_lock(value, hi)
+################################################################
+  self.lock_fl = false
+  self.lock_type = nil  
+end
+
+################################################################
+def get_lock_INSPECT_date
+################################################################
+  hi_INSPECT = HandlingItem.handlingHeader(self.id).locked_INSPECT.last
+  hi_INSPECT.datetime_op if (hi_INSPECT)    
 end
  
  

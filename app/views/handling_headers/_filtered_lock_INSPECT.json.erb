@@ -1,0 +1,299 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  title: 'Import',
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+	
+  	
+
+  items: [
+       
+   // grid con righe import
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Righe import', flex: 50,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            type: 'ajax',
+        	            url: <%= raw  (root_path + 'handling_headers/get_row_by_filtered_type').to_json -%>,
+        	            extraParams: {filtered_type: <%= raw filtered_type.to_json -%>},
+        	            reader: {
+        	                type: 'json',
+        	                rootProperty: 'items'
+        	            }
+        	        }
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	   dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
+        	    items: [{
+				    xtype: 'form',	
+				    height: 50,
+				    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+				    padding: '10 10 10 10',
+				    items: [
+				    	{
+				    		flex: 1,
+				            xtype: 'fieldcontainer',
+				            fieldLabel: 'Data/Ora', labelAlign: 'right',
+				            layout: 'hbox',
+				            items: [
+				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
+				            	{xtype: 'timefield', name: 'datetime_op_time', width:  70},
+				            ]
+				      }, {	
+								flex: 1, padding: '0 0 0 10',
+								xtype: 'checkboxfield',
+				                boxLabel: 'Disabilita richiesta conferma',
+				                name: 'hide_check',
+				                inputValue: '1'
+				      }    
+				     
+				    ]
+				 }, '->',  {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
+				 						console.log(this.up('grid'));
+				 						this.up('grid').getStore().load();}}
+				 ]
+			  }
+			],
+        	           	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: 'Seq',
+			        width: 50,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Container',
+			        width: 220,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h1>' + rec.get('container_number') + '</h1>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Dettagli',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';
+			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';
+			         ret += '<tr><th>Stato</th><td>' + rec.get('container_status') + '</td></tr>';			         			         
+			         ret += '</table>';
+			         return ret;
+			         
+			        }			        	        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Data',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';			         
+					 ret += '<tr><th>Da ispezionare dal</th><td>' + Ext.util.Format.date(rec.get('get_lock_INSPECT_date'), 'd-m-Y H:i:s') + '</td></tr>';			         
+			         ret += '</table>';
+			         return ret;
+			         
+			        }			        	        
+			    }, {
+			        text: 'Ok', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        	var loc_grid = this;
+			        	if (Ext.isEmpty(rec.get('status')) == false) return '';
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            
+			                ok_img = 'fa-check-circle';
+			                				            
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+		                		scale: 'large',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+			                           //costruisco una form
+			                           //se ho spuntato 'hide_check' committo subito
+			                           //altrimenti mostro la form per la conferma
+			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+			                           header_form_values = header_form.getValues();
+			                           
+			                           loc_form = Ext.create('Ext.form.Panel', {
+										    title: '',
+										    bodyPadding: 10,
+										    defaultType: 'textfield',
+										    	layout: {
+												    type: 'vbox',
+												    align : 'stretch',
+												    pack  : 'start',
+												},
+										    items: [
+										    {
+										            xtype: 'fieldcontainer',
+										            fieldLabel: 'Data/Ora',
+										            layout: 'hbox',
+										            items: [
+										                {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},										                 
+										            	{xtype: 'datefield', name: 'datetime_op_date', width: 120, value: header_form_values.datetime_op_date},
+										            	{xtype: 'timefield', name: 'datetime_op_time', width:  70, value: header_form_values.datetime_op_time},
+										            ]
+										      }, 
+										      {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes'}										    										    										    
+										    ]
+										    , 	buttons:
+											        [{
+											            text: 'Conferma',
+											            handler: function (btn, evt) {              
+											             form = this.up('form').getForm();
+											             tmp_win  = this.up('window');
+											             if (form.isValid()) {
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
+															   jsonData: {
+															   	data: {handling_header_id: rec.get('id'), handling_item_type: 'INSPECT'}
+															   },
+															   success: function(response, opts) {
+															      store.remove(rec);
+															      tmp_win.close();
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+															   }
+															});	
+														  return false;												             
+											             }
+											            }
+											          }
+											         ]
+  
+										});
+										
+										//submit con hide_check
+										if (header_form.findField('hide_check').getValue() == true){
+										 
+										 //TODO: ottimizzazione:
+										 // eseguire evento sul bottone salva
+										 
+											Ext.Ajax.request({
+											   method: 'POST',
+											   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
+											   jsonData: {
+											   	data: {handling_header_id: rec.get('id'), handling_item_type: 'INSPECT'}
+											   },
+											   success: function(response, opts) {
+											      store.remove(rec);
+											   },
+											   failure: function(response, opts) {
+											      console.log('server-side failure with status code ' + response.status);
+											   }
+											});
+										  		
+										  return false;										
+										}
+										
+										
+										
+			                           loc_win = Ext.create('Ext.window.Window',{
+										    layout: 'fit',
+										    items: loc_form,
+										    title: 'Conferma import',
+										    width: 500,
+										    height: 300,
+										    id: 'myWindow'
+										}).show();
+													                           			                           
+			                           return false;
+
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }, {
+			        text: 'Danneggiato', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        	if (Ext.isEmpty(rec.get('status')) == false) return '';			        
+			            var id = Ext.id();
+			            setTimeout(function() {
+
+			                var buttonRotto = Ext.create('Ext.button.Button', {
+								text: '<i class="fa fa-warning fa-3x"></i>',
+		                		scale: 'large',			                    
+			                        handler: function(grid, rowIndex, colIndex, a, b) {
+										Ext.Ajax.request({
+										   method: 'POST',
+										   url: '<%= url_for(:controller=>'import_items', :action=>'set_damaged') -%>',
+										   params: {rec_id: rec.get('id')},
+										   success: function(response, opts) {
+										      store.remove(rec);
+										   },
+										   failure: function(response, opts) {
+										      console.log('server-side failure with status code ' + response.status);
+										   }
+										});
+
+			                        }, scope: rec
+
+			                });			                
+			                if (Ext.get(id)) {
+			                    buttonRotto.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }   
+        
+        ],
+			    
+			    
+
+			    
+			    listeners2: {
+					    cellclick: function(gridView,htmlElement,columnIndex,dataRecord){
+					        console.log(gridView);
+					        console.log(htmlElement);
+					        console.log(columnIndex);
+					        console.log(dataRecord);
+					    }
+					}
+				    
+
+                        	    
+        	}    
+   
+   
+   
+  ]
+ }
+ ]
+}

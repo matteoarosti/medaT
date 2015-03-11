@@ -6,7 +6,10 @@ class HandlingItem < ActiveRecord::Base
  belongs_to :booking_item
  
  scope :extjs_default_scope, -> {}
- scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)}
+ scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)} 
+ scope :locked, -> {where("lock_fl=?", true)}
+ scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
+
  
  before_create :set_by_item_type
  

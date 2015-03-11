@@ -40,10 +40,14 @@ def hitems_sc_create
    hh = HandlingHeader.find(params[:data][:handling_header_id])
    hi = hh.handling_items.new()
    
-   #datetime_op (data e ora) lo trasformo in datetime
-   params[:data][:datetime_op] = generate_datetime(params[:data][:datetime_op_date], params[:data][:datetime_op_time]) 
-   params[:data].delete(:datetime_op_date)
-   params[:data].delete(:datetime_op_time)
+   if !params[:data][:datetime_op_date].to_s.empty? && !params[:data][:datetime_op_time].to_s.empty?
+     #datetime_op (data e ora) lo trasformo in datetime
+     params[:data][:datetime_op] = generate_datetime(params[:data][:datetime_op_date], params[:data][:datetime_op_time]) 
+     params[:data].delete(:datetime_op_date)
+     params[:data].delete(:datetime_op_time)
+   else
+     params[:data][:datetime_op] = Time.zone.now
+   end
    
    #sposto i valori passati per impostare i dati in testata (tutti quelli che iniziano per hh_)
    hh_filtered_params = params[:data].select{|k,v| k[0..2].to_s == 'hh_'}
@@ -103,5 +107,28 @@ end
 ##################################################  
     render json: Booking.limit(500)
   end
+  
+ 
+#VISTE PERSONALIZZATE  
+   
+##################################################
+ def list_by_filtered_type
+##################################################  
+   render :partial=>"filtered_#{params[:filtered_type]}", :locals => {:filtered_type => params[:filtered_type] }
+ end
+
+##################################################
+ def get_row_by_filtered_type
+##################################################     
+   case params[:filtered_type]
+    when 'lock_INSPECT'   
+      
+     #per ogni hh aggiungo altre informazioni 
+     hh_as_json_prop = HandlingHeader.as_json_prop
+     hh_as_json_prop[:methods] << :get_lock_INSPECT_date         
+     render json: HandlingHeader.where('1=1').locked_INSPECT.limit(1000).as_json(hh_as_json_prop)
+   end 
+ end
+   
 
 end

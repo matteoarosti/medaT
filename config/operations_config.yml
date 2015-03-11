@@ -14,6 +14,8 @@ TMOV:
    container_FE_copy: true
    operation_type: 'MT'
    seal_imp_copy: true
+   start_reefer_connection: true
+   lock_INSPECT: IF_EMPTY
  O_EMPTYING:
   label: Out for Emptying
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
@@ -24,6 +26,7 @@ TMOV:
   set:  
    container_in_terminal: false
    operation_type: 'MT'
+   end_reefer_connection: true
  I_EMPTYING:
   label: In after Emptying
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -74,7 +77,7 @@ TMOV:
   set:
    container_in_terminal: false
    container_FE_copy: true
-   movimento_status: CLOSE
+   handling_header_status: CLOSE
    operation_type: 'MT'
  I_NOTPOSITIONING:
   label: In for missing positioning
@@ -102,6 +105,19 @@ TMOV:
    container_in_terminal: true
   set:
    operation_type: 'CI'
+ LOCK:
+  label: Lock handling
+  icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
+  set:
+   handling_header_status: LOCK
+ UNLOCK:
+  label: Unlock handling
+  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
+  check:
+   handling_header_status: OPEN
+  set:
+   handling_header_status: OPEN
+
 
 ########################################################################
 #HANDLING_ONLY_FRIDGE_CONNECTION:

@@ -17,13 +17,35 @@ class ImportHeadersController < ApplicationController
       return
     end
 
+    #Esegue un check sui dati prima di seguire l'importazione
+    if params[:ld]=='D'
+      retval = ImportHeader.check_file_d(params[:file])
+    else
+      retval = ImportHeader.check_file_l(params[:file])
+    end
+
+    if retval != ""
+      ret = {}
+      ret[:success] = false
+      ret[:import_id] = 0
+      ret[:num_rows] = 0
+      ret[:message] = retval
+      render json: ret
+      return
+    end
+
+    if params[:ld]=='D'
+      ImportHeader.import_d(import_header_id, params[:file])
+    else
+      ImportHeader.import_l(import_header_id, params[:file])
+    end
+
+    #SE TUTTO OK VIENE CREATO IL RECORD NELLA TABELLA IMPORT_HEADERS
+    #ToDo Gestire la cancellazione dei record se qualcosa non va a buon fine
     #Crea il record nella tabella Import_Headers
     import_header_id = ImportHeader.add_record(ship_id, params[:voyage], params[:ld])
 
-    #Lettura del file excel
-    ImportHeader.import(import_header_id, params[:file])
-    
-    
+
     #redirect_to root_url, notice: "Items imported."
     
     #restituisco il numero di id dell'import e il numero di righe

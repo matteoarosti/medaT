@@ -18,7 +18,6 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.boolean     :not_positioning
       t.boolean     :codeco_sent
       t.text        :notes,                 :limit => 64.kilobytes
-      t.timestamps
 
       #abbinamento con booking
       t.belongs_to  :booking
@@ -26,7 +25,11 @@ class CreateHandlingItems < ActiveRecord::Migration
       
       #gestione campi lock
       t.boolean    :lock_fl
-      t.string     :lock_type,                 :limit => 10    #da ispezionare, in riparazione, ...       
+      t.string     :lock_type,                 :limit => 10    #da ispezionare, in riparazione, ...
+      
+      t.timestamps
+      t.integer :created_user_id
+      t.integer :updated_user_id                   
     end
   end
 end

@@ -4,12 +4,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   #forza l'autenticazione (devise) - rimanda sempre alla pagina di login
-  before_action :authenticate_user!
+  before_action :authenticate_user!, :set_current_user
   
     
   require "#{Rails.root}/lib/extjs_sc_utility.rb"
-  
-  
+ 
   
   ###################################################################
   # EXTJS SCAFFOLD
@@ -141,10 +140,12 @@ class ApplicationController < ActionController::Base
   
   
  def generate_datetime(data, time)
-  logger.info "data::::: #{data}"
-   logger.info "time::::: #{time}"
   Time.zone.parse(data + ' ' + time)
  end
+ 
+  def set_current_user
+    User.current = current_user
+  end
   
     
 end

@@ -83,9 +83,10 @@ module ApplicationHelper
   ret = "{xtype: 'hiddenfield', name: #{name.to_json}, value: #{item.send(name).to_json}}" 
  end
  
- def extjs_std_booleanfield(name, item, p = {}, attr = {}) 
+ def extjs_std_booleanfield(name, item, p = {}, attr = {})
+  input_name = p[:input_name] || p[:input_prefix].to_s + name    
   add_attr = extsj_create_attr_str(attr)
-  ret = "{xtype: 'checkbox', name: #{name.to_json}, value: #{item.send(name).to_json}, fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json}, 
+  ret = "{xtype: 'checkbox', name: #{input_name.to_json}, value: #{item.send(name).to_json}, fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json}, 
    inputValue: true,
    uncheckedValue: false  #{add_attr} }" 
  end
@@ -173,6 +174,45 @@ module ApplicationHelper
    }    
    "
  end
+ 
+ 
+ def extjs_posizionamento(label, hh, hi) 
+ 
+  #TODO: come gestire default
+  hh.da_posizionare = true  
+   
+ #posizionamento
+   ret = "
+   {
+         xtype: 'fieldset',
+         title: 'Posizionamento',
+         layout: 'anchor',
+         items: [
+         
+     {
+               xtype: 'fieldcontainer',
+               combineErrors: true,
+               msgTarget : 'side',
+               layout: 'hbox',
+               anchor: '100%',
+               defaults: {xtype: 'textfield', flex: 1, hideLabel: false, labelWidth: 100, labelAlign: 'right'},
+               items: [                 
+                    #{extjs_std_booleanfield('da_posizionare', hh, :allowBlank => true, :input_prefix => 'hh_')},
+                    #{extjs_std_textfield('fila', hh, :allowBlank => true, :input_prefix => 'hh_')},
+                    #{extjs_std_textfield('blocco', hh, :allowBlank => true, :input_prefix => 'hh_')},
+                    #{extjs_std_textfield('tiro', hh, :allowBlank => true, :input_prefix => 'hh_')}   
+           ]
+       }
+     ]
+   }           
+  "
+end
+ 
+ 
+ 
+ 
+ 
+ 
  
  #aggiungi attributi per un oggetto centrale
  def fcC(attr = {})

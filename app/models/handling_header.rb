@@ -10,6 +10,7 @@ class HandlingHeader < ActiveRecord::Base
  scope :booking, ->(booking_number) {where("container_number = ?", container_number)}
  scope :locked, -> {where("lock_fl=?", true)}
  scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
+ scope :da_posizionare, -> {where("da_posizionare = ?", true)}
 
  def handling_header_status() return self.handling_status end
 
@@ -292,7 +293,7 @@ def sincro_set_with_booking(value, hi)
 end
 
 ################################################################
-def sincro_set_movimento_status(value, hi)
+def sincro_set_handling_header_status(value, hi)
 ################################################################
  self.handling_status = value
 end

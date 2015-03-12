@@ -15,7 +15,6 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.boolean     :export
       t.string      :seal_shipowner,        :limit => 15
       t.string      :seal_others,           :limit => 15
-      t.boolean     :not_positioning
       t.boolean     :codeco_sent
       t.text        :notes,                 :limit => 64.kilobytes
 

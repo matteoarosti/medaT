@@ -121,12 +121,17 @@ end
  def get_row_by_filtered_type
 ##################################################     
    case params[:filtered_type]
-    when 'lock_INSPECT'   
-      
+
+    when 'lock_INSPECT'         
      #per ogni hh aggiungo altre informazioni 
      hh_as_json_prop = HandlingHeader.as_json_prop
      hh_as_json_prop[:methods] << :get_lock_INSPECT_date         
      render json: HandlingHeader.where('1=1').locked_INSPECT.limit(1000).as_json(hh_as_json_prop)
+     
+    when 'da_posizionare'          
+     #per ogni hh aggiungo altre informazioni 
+     hh_as_json_prop = HandlingHeader.as_json_prop         
+     render json: HandlingHeader.where('1=1').da_posizionare.limit(1000).as_json(hh_as_json_prop)     
    end 
  end
    

@@ -15,6 +15,30 @@
      },	  
      
    items: [
+
+		{
+            xtype: 'radiogroup',
+            fieldLabel: 'Import Type',
+            layout: 'hbox',
+            items: [{
+                boxLabel: 'Load',
+                name: 'import_type',
+                inputValue: 'L',
+                checked: true,
+                width: 150                
+            }, {
+                boxLabel: 'Discharge',
+                name: 'import_type',
+                inputValue: 'D'
+            }],
+            
+			listeners: {
+			        change: function(field, newValue, oldValue) {
+			          this.up('form').refresh_voyage_combo();
+			        }
+			    }            
+        },
+
    
 		{
             xtype: 'radiogroup',

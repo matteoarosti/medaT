@@ -38,6 +38,13 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.decimal    :temperature_imp,           :precision => 5, :scale => 2
       t.decimal    :weight_imp,                :precision => 5, :scale => 2
       t.string     :imo_imp,                   :limit => 5
+      
+      #posizionamento
+      t.boolean    :da_posizionare
+      t.string     :fila,                      :limit => 5
+      t.integer    :blocco
+      t.integer    :tiro
+      
 
       t.timestamps
       t.integer :created_user_id

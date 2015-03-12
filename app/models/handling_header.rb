@@ -10,6 +10,7 @@ class HandlingHeader < ActiveRecord::Base
  scope :booking, ->(booking_number) {where("container_number = ?", container_number)}
  scope :locked, -> {where("lock_fl=?", true)}
  scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
+ scope :da_posizionare, -> {where("da_posizionare = ?", true)}
 
  def handling_header_status() return self.handling_status end
 

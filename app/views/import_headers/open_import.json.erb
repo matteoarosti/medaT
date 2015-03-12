@@ -129,18 +129,21 @@
 			            setTimeout(function() {
 			            
 			                	ok_img = 'fa-check-circle';
+			                	btn_class = '';
 			                	
 			                	//solo per SBARCO, se container vuoto andra' ispezionato
 			                	<% if @ih.import_type == 'D' %>
-			                	 if (rec.get('container_status') == 'E')
+			                	 if (rec.get('container_status') == 'E'){
 			                	  ok_img = 'fa-search';
+			                	  btn_class = 'btn-del';
+			                	  }
 			                	<% end %>
 			            
 			            
 			                var buttonOK = Ext.create('Ext.button.Button', {
 			                	
 								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
-								cls: 'btn-add',
+								cls: btn_class,
 		                		scale: 'large',			                    
 			                        handler: function(button, b, c, d, e) {
 			                        

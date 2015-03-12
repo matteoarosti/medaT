@@ -70,6 +70,7 @@
 
 	
 	<%= raw extjs_std_combo('id', @item,
+			:valueField => 'id',
 			:displayField => 'voyage',
 			:store => extjs_std_store_url(root_path + 'import_headers/get_voyage_by_ship')) -%>,
 		 		

@@ -292,7 +292,7 @@ def sincro_set_with_booking(value, hi)
 end
 
 ################################################################
-def sincro_set_movimento_status(value, hi)
+def sincro_set_handling_header_status(value, hi)
 ################################################################
  self.handling_status = value
 end

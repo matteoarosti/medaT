@@ -79,7 +79,7 @@ end
 # Verifico l'esistenza di un import (dato nave e viaggio)
 def search_import
  ret = {}
- ih = ImportHeader.find_by :ship_id => params[:ship_id], :voyage => params[:voyage]
+ ih = ImportHeader.find_by :ship_id => params[:ship_id], :id => params[:id]
  if ih.nil?
    ret[:success] = false
  else

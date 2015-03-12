@@ -69,7 +69,7 @@
 			    }") -%>,   
 
 	
-	<%= raw extjs_std_combo('voyage', @item,
+	<%= raw extjs_std_combo('id', @item,
 			:displayField => 'voyage',
 			:store => extjs_std_store_url(root_path + 'import_headers/get_voyage_by_ship')) -%>,
 		 		
@@ -103,7 +103,7 @@
         }],
         
     refresh_voyage_combo: function(){
-		      field_voyage = this.getForm().findField('voyage');
+		      field_voyage = this.getForm().findField('id');
 		      field_voyage.getStore().proxy.extraParams =  this.getForm().getValues();
 		      field_voyage.getStore().load();
     }    

@@ -129,13 +129,13 @@
 			            setTimeout(function() {
 			            
 			                	ok_img = 'fa-check-circle';
-			                	btn_class = '';
+			                	btn_class = 'btn-confirm';
 			                	
 			                	//solo per SBARCO, se container vuoto andra' ispezionato
 			                	<% if @ih.import_type == 'D' %>
 			                	 if (rec.get('container_status') == 'E'){
 			                	  ok_img = 'fa-search';
-			                	  btn_class = 'btn-del';
+			                	  btn_class = 'btn-warning';
 			                	  }
 			                	<% end %>
 			            
@@ -255,6 +255,7 @@
 
 			                var buttonRotto = Ext.create('Ext.button.Button', {
 								text: '<i class="fa fa-warning fa-3x"></i>',
+								cls: 'btn-del',
 		                		scale: 'large',			                    
 			                        handler: function(grid, rowIndex, colIndex, a, b) {
 										Ext.Ajax.request({

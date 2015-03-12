@@ -1,17 +1,21 @@
-.x-btn.btn-confirm
-{
-background-color: #48D1CC !important;
+.x-btn.btn-confirm {
+	background-color: #48D1CC !important;
 }
-.x-btn.btn-add
-{
-background-color: #87CEEB !important;
-text-align:left;
+
+.x-btn.btn-add {
+	background-color: #87CEEB !important;
+	text-align:left;
 }
-.x-btn.btn-del
-{
-background-color: #EF2B2D !important; color: white !important;
+
+.x-btn.btn-del {
+	background-color: #EF2B2D !important; color: white !important;
 }
 .x-btn.btn-del .x-btn-inner{color: white;}
+
+.x-btn.btn-warning {
+	background-color: #FF8200 !important;
+}
+
 
 .x-grid-row.row-alt .x-grid-cell{background-color: #fafafa;}
 

@@ -34,7 +34,7 @@ class ImportHeadersController < ApplicationController
       return
     end
 
-    #SE TUTTO OK VIENE CREATO IL RECORD NELLA TABELLA IMPORT_HEADERS
+    #SE TUTTO OK VIENE CREATO IL RECORD NELLA TABELLA IMPORT_HEADERS \
     #ToDo Gestire la cancellazione dei record se qualcosa non va a buon fine
     #Crea il record nella tabella Import_Headers
     import_header_id = ImportHeader.add_record(ship_id, params[:voyage], params[:ld])

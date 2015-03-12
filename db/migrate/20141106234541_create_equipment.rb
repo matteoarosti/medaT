@@ -6,7 +6,10 @@ class CreateEquipment < ActiveRecord::Migration
       t.string      :sizetype,              :limit => 50
       t.string      :iso,                   :limit => 4
       t.boolean     :reefer,   :default => false
+      
       t.timestamps
+      t.integer :created_user_id
+      t.integer :updated_user_id      
     end
   end
 end

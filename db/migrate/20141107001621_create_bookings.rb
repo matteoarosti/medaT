@@ -12,7 +12,10 @@ class CreateBookings < ActiveRecord::Migration
       t.text        :notes,                 :limit => 64.kilobytes
       t.date        :expiration                                     #dat limite di utilizzo del booking (per assegnazione)
       t.boolean     :to_check,              :default => true
+      
       t.timestamps
+      t.integer :created_user_id
+      t.integer :updated_user_id      
     end
     
     #Booking item (per equipment)
@@ -21,7 +24,10 @@ class CreateBookings < ActiveRecord::Migration
       t.belongs_to  :equipment
       t.integer     :quantity,              :limit => 6
       t.string      :status,                :limit => 5             #OPEN/CLOSE
+      
       t.timestamps
+      t.integer :created_user_id
+      t.integer :updated_user_id      
     end    
     
   end

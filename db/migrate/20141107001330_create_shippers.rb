@@ -9,7 +9,10 @@ class CreateShippers < ActiveRecord::Migration
       t.string      :email,                 :limit => 50
       t.decimal     :unit_cost,             :precision => 5, :scale => 2
       t.decimal     :scartaggio_cost,       :precision => 5, :scale => 2
+      
       t.timestamps
+      t.integer :created_user_id
+      t.integer :updated_user_id      
     end
   end
 end

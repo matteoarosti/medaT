@@ -12,4 +12,15 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+         
+
+  #per current_user nei models
+  def self.current=(user)
+    Thread.current[:current_user] = user
+  end
+
+  def self.current
+    Thread.current[:current_user]
+  end         
+         
 end

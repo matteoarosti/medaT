@@ -8,7 +8,6 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.boolean     :over_hight
       t.boolean     :transhipment
       t.string      :notes,                  :limit => 255
-      t.timestamps
 
       #Matteo
       t.string     :handling_type,             :limit => 5	   #TMOV, ...
@@ -40,6 +39,9 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.decimal    :weight_imp,                :precision => 5, :scale => 2
       t.string     :imo_imp,                   :limit => 5
 
+      t.timestamps
+      t.integer :created_user_id
+      t.integer :updated_user_id            
     end
   end
 end

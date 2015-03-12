@@ -5,6 +5,7 @@ it:
       size: "dimensione"
       sizetype: "dimensione / tipo"
       iso: "codice iso"
+      reefer: Frigo
     iso_equipment:
       iso: "iso"
       equipment_id_Name: "Equipment"      

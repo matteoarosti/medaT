@@ -39,31 +39,174 @@ class ImportHeader < ActiveRecord::Base
     end
   end
 
-  def self.import(import_header_id, file)
+
+  #*********************************************************************************
+  # ESEGUE I CONTROLLI SUL FILE DI LOAD PRIMA DI PROCEDERE PER L'IMPORTAZIONE      *
+  #*********************************************************************************
+  def self.check_file_l(file)
+    spreadsheet = open_spreadsheet(file)
+    header = spreadsheet.row(1)
+    ret_string = ""
+    (2..spreadsheet.last_row).each do |i|
+      row = Hash[[header, spreadsheet.row(i)].transpose]
+      #row1 = spreadsheet.row(i)
+      logger.info row
+      #Shipowner.get_id_by_name(row["LINE"])
+      #Equipment.get_id_by_iso(row["TYPE"])
+
+      #Esegue il check sul numero di container
+
+      retval = ImportHeader.check_digit(spreadsheet.row(i)[0].to_s.sub(" ", ""))
+      if retval == -501
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Numero container non valido." + "<br>"
+      end
+
+      #Esegue il test per verificare se il peso e' un numerico
+      if spreadsheet.row(i)[1] != spreadsheet.row(i)[1].to_f
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Peso " + spreadsheet.row(i)[1].to_s + " non valido." + "<br>"
+      end
+
+      #Esegue il test per verificare Full o Empty
+      if (spreadsheet.row(i)[2].to_s[0..0] != "F") and (spreadsheet.row(i)[2].to_s[0..0] != "E")
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Specificare se il container è FULL o EMPTY." + "<br>"
+      end
+
+      #Esegue il test per verificare la compagnia
+      if Shipowner.get_id_by_name(spreadsheet.row(i)[3].to_s) == 0
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Compagnia " + spreadsheet.row(i)[3].to_s + " non valida." + "<br>"
+      end
+
+      #Esegue il test per verificare se esiste l'iso
+      if is_number(spreadsheet.row(i)[4])
+        val = spreadsheet.row(i)[4].to_i.to_s
+      else
+        val = spreadsheet.row(i)[4]
+      end
+      retval = IsoEquipment.get_id_by_iso(val)
+      if retval == ""
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Iso " + spreadsheet.row(i)[4].to_s + " non valido" + "<br>"
+      end
+
+    end
+
+    return ret_string
+  end
+
+
+  #*********************************************************************************
+  # ESEGUE I CONTROLLI SUL FILE DI DISCHARGE PRIMA DI PROCEDERE PER L'IMPORTAZIONE *
+  #*********************************************************************************
+  def self.check_file_d(file)
+    spreadsheet = open_spreadsheet(file)
+    header = spreadsheet.row(1)
+    ret_string = ""
+    (2..spreadsheet.last_row).each do |i|
+      row = Hash[[header, spreadsheet.row(i)].transpose]
+      #row1 = spreadsheet.row(i)
+      logger.info row
+      #Shipowner.get_id_by_name(row["LINE"])
+      #Equipment.get_id_by_iso(row["TYPE"])
+
+      #Esegue il check sul numero di container
+
+      retval = ImportHeader.check_digit(spreadsheet.row(i)[0].to_s.sub(" ", ""))
+      if retval == -501
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Numero container non valido." + "<br>"
+      end
+
+      #Esegue il test per verificare se esiste l'iso
+      if is_number(spreadsheet.row(i)[1])
+        val = spreadsheet.row(i)[1].to_i.to_s
+      else
+        val = spreadsheet.row(i)[1]
+      end
+      retval = IsoEquipment.get_id_by_iso(val)
+      if retval == ""
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Iso " + spreadsheet.row(i)[1].to_s + " non valido" + "<br>"
+      end
+
+      #Esegue il test per verificare Full o Empty
+      if (spreadsheet.row(i)[2].to_s[0..0] != "F") and (spreadsheet.row(i)[2].to_s[0..0] != "E")
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Specificare se il container è FULL o EMPTY." + "<br>"
+      end
+
+      #Esegue il test per verificare la compagnia
+      if Shipowner.get_id_by_name(spreadsheet.row(i)[3].to_s) == 0
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Compagnia " + spreadsheet.row(i)[3].to_s + " non valida." + "<br>"
+      end
+
+      #Esegue il test per verificare se il peso e' un numerico
+      if spreadsheet.row(i)[4] != spreadsheet.row(i)[4].to_f
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Peso " + spreadsheet.row(i)[4].to_s + " non valido." + "<br>"
+      end
+
+      #Esegue il test per verificare se la temperatura e' un numerico
+      if spreadsheet.row(i)[8] != spreadsheet.row(i)[8].to_f and spreadsheet.row(i)[8].to_s != ""
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Temperatura " + spreadsheet.row(i)[8].to_s + " non valida." + "<br>"
+      end
+
+      #Esegue il test per verificare l'imo
+      if ImportHeader.check_imo(spreadsheet.row(i)[7].to_s) == -1 and spreadsheet.row(i)[7].to_s != ""
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Imo " + spreadsheet.row(i)[7].to_s + " non valido." + "<br>"
+      end
+
+    end
+
+    return ret_string
+  end
+
+
+
+  def self.is_number(object)
+    true if Float(object) rescue false
+  end
+
+
+
+  def self.import_d(import_header_id, file)
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
-      row1 = spreadsheet.row(i)
+      #row1 = spreadsheet.row(i)
       logger.info row
       #Shipowner.get_id_by_name(row["LINE"])
       #Equipment.get_id_by_iso(row["TYPE"])
       ImportItem.AddRecord(import_header_id,
                            Shipowner.get_id_by_name(spreadsheet.row(i)[3].to_s),  #ShipOwner
-                           spreadsheet.row(i)[0].to_s,                            #Container
+                           spreadsheet.row(i)[0].to_s.sub(" ", ""),               #Container
                            spreadsheet.row(i)[2].to_s[0..0],                      #F/E
-                           #Equipment.get_id_by_iso(spreadsheet.row(i)[1].to_i),   #Equipment
                            IsoEquipment.get_id_by_iso(spreadsheet.row(i)[1].to_i), #Equipment
                            spreadsheet.row(i)[4]/1000,                            #weight
                            spreadsheet.row(i)[8].to_f,                            #temperature
-                           spreadsheet.row(i)[7].to_s)                            #ISO
+                           spreadsheet.row(i)[7].to_s)                            #IMO
+    end
+  end
+
+  def self.import_l(import_header_id, file)
+    spreadsheet = open_spreadsheet(file)
+    header = spreadsheet.row(1)
+    (2..spreadsheet.last_row).each do |i|
+      row = Hash[[header, spreadsheet.row(i)].transpose]
+      #row1 = spreadsheet.row(i)
+      logger.info row
+      #Shipowner.get_id_by_name(row["LINE"])
+      #Equipment.get_id_by_iso(row["TYPE"])
+      ImportItem.AddRecord(import_header_id,
+                           Shipowner.get_id_by_name(spreadsheet.row(i)[3].to_s),  #ShipOwner
+                           spreadsheet.row(i)[0].to_s.sub(" ", ""),               #Container
+                           spreadsheet.row(i)[2].to_s[0..0],                      #F/E
+                           IsoEquipment.get_id_by_iso(spreadsheet.row(i)[4].to_i), #Equipment
+                           spreadsheet.row(i)[1]/1000,                            #weight
+                           0,                            #temperature
+                           "")                            #IMO
     end
   end
 
   def self.open_spreadsheet(file)
     case File.extname(file.original_filename)
       when ".csv" then Csv.new(file.path, nil, :ignore)
-      #when ".xls" then Excel.new(file.path, nil, :ignore)
+      #when ".xls" then Excel.new(file.path)
       when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
       else raise "Unknown file type: #{file.original_filename}"
     end
@@ -107,6 +250,14 @@ class ImportHeader < ActiveRecord::Base
       return -502
     end
 
+  end
+
+  def self.check_imo(imo)
+    if test_regexp(imo, "^([0-9][.][0-9]|[0-9])$") == ""
+      return -1
+    else
+      return 0
+    end
   end
 
   def self.test_regexp(str1, str_regex)

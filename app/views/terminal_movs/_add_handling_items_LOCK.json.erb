@@ -1,0 +1,77 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+    {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
+    {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},  
+    {xtype: 'hiddenfield', name: 'handling_type', value: 'O'},
+    {xtype: 'hiddenfield', name: 'container_FE', value: '<%= @hh.container_FE.to_s -%>'},
+   // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},   
+    
+	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
+   ],
+   
+   
+	buttons:
+        [{
+            text: 'Save',
+            handler: function (btn, evt) {              
+             form = this.up('form').getForm();
+             if (form.isValid()) {
+             	new_rec = Ext.create('HandlingItem', {});
+             	new_rec.data = form.getValues();
+             	new_rec.save({
+					success: function(rec, op) {
+						var result = Ext.JSON.decode(op.getResponse().responseText);
+
+						//se e' stato ritornato un messaggio (es: booking CLOSE)
+						if (result.message.length > 0)
+							Ext.MessageBox.show({
+		                        title: 'Notifica',
+		                        msg: result.message,
+		                        //icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})						
+						
+						
+						 //ricarico la testata e i dettagli
+						 rec = this.up('window').open_vars.mov_panel.getViewModel().getData().rec;
+						 var result = Ext.JSON.decode(op.getResponse().responseText);																		
+						 rec.set(result.hh[0]);
+						 this.up('window').open_vars.mov_panel.getViewModel().setData({rec: rec});					 
+						 this.up('window').open_vars.mov_panel.down('grid').store.reload();
+						 
+						 //chiudo										
+						 this.up('window').close();
+					 								
+					}, scope: this,
+					
+					failure: function(rec, op) {
+						var result = Ext.JSON.decode(op.getResponse().responseText);
+						Ext.MessageBox.show({
+	                        title: 'EXCEPTION',
+	                        msg: result.message,
+	                        icon: Ext.MessageBox.ERROR,
+	                        buttons: Ext.Msg.OK
+                    	})
+					} 				 
+		    	});
+             }             
+            }
+        }]   
+  }
+ ]
+}

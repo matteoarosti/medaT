@@ -6,8 +6,12 @@ class Shipowner < ActiveRecord::Base
  scope :extjs_default_scope, -> { }
 
  def self.get_id_by_name(short_name)
-   puts short_name
-   Shipowner.where(:short_name => short_name).first.id
+   if Shipowner.where(:short_name => short_name).any?
+     Shipowner.where(:short_name => short_name).first.id
+   else
+     return 0
+   end
+
  end
 
   def self.combo_displayField

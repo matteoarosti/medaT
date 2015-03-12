@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.string   "container_status",      limit: 5
     t.string   "container_FE",          limit: 1
     t.boolean  "lock_fl"
-    t.string   "lock_type",             limit: 5
+    t.string   "lock_type",             limit: 10
     t.integer  "booking_id"
     t.integer  "booking_item_id"
     t.string   "num_booking",           limit: 25
@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.integer  "booking_id"
     t.integer  "booking_item_id"
     t.boolean  "lock_fl"
-    t.string   "lock_type",          limit: 5
+    t.string   "lock_type",          limit: 10
   end
 
   create_table "import_headers", force: true do |t|

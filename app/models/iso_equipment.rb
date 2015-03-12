@@ -15,6 +15,10 @@ class IsoEquipment < ActiveRecord::Base
   end   
     
   def self.get_id_by_iso(iso)
-    IsoEquipment.where(:iso => iso).first.equipment_id
+    if IsoEquipment.where(:iso => iso).any?
+      IsoEquipment.where(:iso => iso).first.equipment_id
+    else
+      return ''
+    end
   end
 end

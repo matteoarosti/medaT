@@ -26,6 +26,12 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.boolean    :lock_fl
       t.string     :lock_type,                 :limit => 10    #da ispezionare, in riparazione, ...
       
+      #da movimentare - coda di lavoro per mulettista (da posizionare, da portare al carico, ....)
+      t.boolean    :to_be_moved
+      t.integer    :moved_by_user_id
+      t.datetime   :moved_at      
+      
+      
       t.timestamps
       t.integer :created_user_id
       t.integer :updated_user_id                   

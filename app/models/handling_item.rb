@@ -8,7 +8,8 @@ class HandlingItem < ActiveRecord::Base
  scope :extjs_default_scope, -> {}
  scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)} 
  scope :locked, -> {where("lock_fl=?", true)}
- scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
+ scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')}
+ scope :to_be_moved, -> {where("to_be_moved=?", true)}
 
  
  before_create :set_by_item_type

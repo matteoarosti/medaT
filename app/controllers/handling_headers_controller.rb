@@ -95,6 +95,19 @@ end
 
 
 
+ #azzero il flag to_be_moved (eseguito dal mulettista dopo aver movimentato il container)
+ ##################################################
+ def hitems_close_to_be_moved
+ ##################################################
+   hi = HandlingItem.find(params[:data][:handling_item_id])
+   hi.to_be_moved = false
+   hi.moved_by_user_id = current_user.id
+   hi.moved_at = Time.zone.now
+   hi.save!
+   render json: {:success => true, :message => nil}      
+ end
+
+
 # Inserimento dettaglio movimento
 ##################################################
 def edit_header  
@@ -128,10 +141,12 @@ end
      hh_as_json_prop[:methods] << :get_lock_INSPECT_date         
      render json: HandlingHeader.where('1=1').locked_INSPECT.limit(1000).as_json(hh_as_json_prop)
      
-    when 'da_posizionare'          
+    when 'to_be_moved'          
      #per ogni hh aggiungo altre informazioni 
-     hh_as_json_prop = HandlingHeader.as_json_prop         
-     render json: HandlingHeader.where('1=1').da_posizionare.limit(1000).as_json(hh_as_json_prop)     
+     hh_as_json_prop = HandlingItem.as_json_prop
+     hh_as_json_prop[:include] = hh_as_json_prop[:include] || [] 
+     hh_as_json_prop[:include] << {:handling_header => {:include=>[:equipment]}}              
+     render json: HandlingItem.where('1=1').to_be_moved.limit(1000).as_json(hh_as_json_prop)     
    end 
  end
    

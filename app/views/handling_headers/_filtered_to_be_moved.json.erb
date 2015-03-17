@@ -4,7 +4,7 @@
  {
   xtype: 'container',
   closable: true,
-  title: 'Da posizionare',
+  title: 'Da movimentare',
     layout: {
 	    type: 'vbox',
 	    pack: 'start',
@@ -18,7 +18,7 @@
 		 {
 				flex: 1,
 				layout: 'fit',
-        	    title: 'Lista container da posizionare', flex: 50,
+        	    title: 'Lista container da movimentare', flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
@@ -43,12 +43,43 @@
         	   dockedItems: [
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
-        	    items: ['->',  {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
+        	    items: [{
+				    xtype: 'form',	
+				    hidden: true,
+				    height: 50,
+				    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+				    padding: '10 10 10 10',
+				    items: [
+				    	{
+				    		flex: 1,
+				            xtype: 'fieldcontainer',
+				            fieldLabel: 'Data/Ora', labelAlign: 'right',
+				            layout: 'hbox',
+				            items: [
+				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
+				            	{xtype: 'timefield', name: 'datetime_op_time', width:  70},
+				            ]
+				      }, {	
+								flex: 1, padding: '0 0 0 10',
+								xtype: 'checkboxfield',
+				                boxLabel: 'Disabilita richiesta conferma',
+				                name: 'hide_check',
+				                inputValue: '1',
+				                value: 1
+				      }    
+				     
+				    ]
+				 }, '->',  {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
 				 						console.log(this.up('grid'));
 				 						this.up('grid').getStore().load();}}
 				 ]
 			  }
 			],
+
         	           	    
         	    
 			    columns: [{
@@ -63,7 +94,7 @@
 			        text: 'Container',
 			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         return '<h1>' + rec.get('container_number') + '</h1>';
+			         return '<h1>' + rec.get('handling_header').container_number + '</h1>';
 			        }			        
 			    }, {
 			        dataIndex: 'container_number',
@@ -72,34 +103,42 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';
-			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';
-			         ret += '<tr><th>Stato</th><td>' + rec.get('container_status') + '</td></tr>';			         			         
+			         ret += '<tr><th>Equipment</th><td>' + rec.get('handling_header').equipment.equipment_type + '</td></tr>';
+			         ret += '<tr><th>Stato</th><td>' + rec.get('handling_header').container_status + '</td></tr>';	
+			         ret += '<tr><th>Vettore/Autista</th><td>' + rec.get('carrier_id_Name') + '/' + rec.get('driver') + '</td></tr>';
 			         ret += '</table>';
 			         return ret;
 			         
 			        }			        	        
-			    }, {
+			    }
+			    
+			    
+        	     , {text: 'E/U', width: 60, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_IO(value, metaData);}}
+                 , {text: 'P/V', width: 60, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_FE(value, metaData);}}        	     			    
+			    
+			   , {
 			        dataIndex: 'container_number',
 			        text: 'Posizionamento',
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';			         
-					 ret += '<tr><th>Fila</th><td>' + rec.get('fila') + '</td></tr>';			         
-					 ret += '<tr><th>Blocco</th><td>' + rec.get('blocco') + '</td></tr>';
-					 ret += '<tr><th>Tiro</th><td>' + rec.get('tiro') + '</td></tr>';
+					 ret += '<tr><th>Fila</th><td>' + rec.get('handling_header').fila + '</td></tr>';			         
+					 ret += '<tr><th>Blocco</th><td>' + rec.get('handling_header').blocco + '</td></tr>';
+					 ret += '<tr><th>Tiro</th><td>' + rec.get('handling_header').tiro + '</td></tr>';
 			         ret += '</table>';
 			         return ret;
 			         
 			        }			        	        
 			    }, {
 			        text: 'Ok', width: 100, hidden: false, sortable: false,
-			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        
+			        
 			        	var loc_grid = this;
 			        	if (Ext.isEmpty(rec.get('status')) == false) return '';
 			            var id = Ext.id();
 			            setTimeout(function() {
-			            
+			            			          
 			                ok_img = 'fa-check-circle';
 			                				            
 			            
@@ -146,9 +185,9 @@
 											             if (form.isValid()) {
 															Ext.Ajax.request({
 															   method: 'POST',
-															   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
+															   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_close_to_be_moved') -%>',
 															   jsonData: {
-															   	data: {handling_header_id: rec.get('id'), handling_item_type: 'INSPECT'}
+															   	data: {handling_item_id: rec.get('id')}
 															   },
 															   success: function(response, opts) {
 															      store.remove(rec);
@@ -174,9 +213,9 @@
 										 
 											Ext.Ajax.request({
 											   method: 'POST',
-											   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
+											   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_close_to_be_moved') -%>',
 											   jsonData: {
-											   	data: {handling_header_id: rec.get('id'), handling_item_type: 'INSPECT'}
+											   	data: {handling_item_id: rec.get('id')}
 											   },
 											   success: function(response, opts) {
 											      store.remove(rec);
@@ -218,6 +257,24 @@
 			     
         
         ],
+        
+        
+        
+        	//TODO: DRY
+				get_image_IO: function(val, metaData){
+					if (val == 'I') metaData.tdAttr = 'data-qtip="Entrata"';
+					if (val == 'O') metaData.tdAttr = 'data-qtip="Uscita"';					
+					
+	 				if (val == 'I') return '<i class="fa fa-download fa-3x" style="color:green;"></i>';
+	 				if (val == 'O') return '<i class="fa fa-upload fa-3x" style="color:red;"></i>';
+				},
+				get_image_FE: function(val, metaData){
+					if (val == 'F') metaData.tdAttr = 'data-qtip="Pieno"';
+					if (val == 'E') metaData.tdAttr = 'data-qtip="Vuoto"';					
+					
+					if (val == 'F') return '<i class="fa fa-square fa-3x" style="color:brown;"></i>';
+					if (val == 'E') return '<i class="fa fa-square-o fa-3x" style="color:brown;"></i>';
+				},        
 			    
 			    
 

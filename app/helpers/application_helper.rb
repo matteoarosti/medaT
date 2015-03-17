@@ -177,10 +177,7 @@ module ApplicationHelper
  
  
  def extjs_posizionamento(label, hh, hi) 
- 
-  #TODO: come gestire default
-  hh.da_posizionare = true  
-   
+    
  #posizionamento
    ret = "
    {
@@ -197,7 +194,6 @@ module ApplicationHelper
                anchor: '100%',
                defaults: {xtype: 'textfield', flex: 1, hideLabel: false, labelWidth: 100, labelAlign: 'right'},
                items: [                 
-                    #{extjs_std_booleanfield('da_posizionare', hh, :allowBlank => true, :input_prefix => 'hh_')},
                     #{extjs_std_textfield('fila', hh, :allowBlank => true, :input_prefix => 'hh_')},
                     #{extjs_std_textfield('blocco', hh, :allowBlank => true, :input_prefix => 'hh_')},
                     #{extjs_std_textfield('tiro', hh, :allowBlank => true, :input_prefix => 'hh_')}   
@@ -208,6 +204,35 @@ module ApplicationHelper
   "
 end
  
+
+  def extjs_to_be_moved(label, hh, hi) 
+  
+   #TODO: serve gestire un default o lo imposto sempre a true?
+   hi.to_be_moved = true  
+    
+    ret = "
+    {
+          xtype: 'fieldset',
+          title: 'Da movimentare (segnala al mulettista)',
+          layout: 'anchor',
+          items: [
+          
+      {
+                xtype: 'fieldcontainer',
+                combineErrors: true,
+                msgTarget : 'side',
+                layout: 'hbox',
+                anchor: '100%',
+                defaults: {xtype: 'textfield', flex: 1, hideLabel: false, labelWidth: 100, labelAlign: 'right'},
+                items: [                 
+                     #{extjs_std_booleanfield('to_be_moved', hi, :allowBlank => true)},
+            ]
+        }
+      ]
+    }           
+   "
+ end
+
  
  
  

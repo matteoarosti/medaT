@@ -176,8 +176,12 @@ module ApplicationHelper
  end
  
  
- def extjs_posizionamento(label, hh, hi) 
-    
+ def extjs_posizionamento(label, hh, hi)     
+  #TODO: serve gestirlo meglio?   
+  hh.fila   = nil
+  hh.blocco = nil
+  hh.tiro   = nil 
+   
  #posizionamento
    ret = "
    {
@@ -205,8 +209,7 @@ module ApplicationHelper
 end
  
 
-  def extjs_to_be_moved(label, hh, hi) 
-  
+  def extjs_to_be_moved(label, hh, hi)   
    #TODO: serve gestire un default o lo imposto sempre a true?
    hi.to_be_moved = true  
     

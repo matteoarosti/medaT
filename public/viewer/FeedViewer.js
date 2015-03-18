@@ -227,12 +227,14 @@ Ext.define('FeedViewer.App', {
     onVoceMenuSelect: function(menu, s, rec){
 		//aggiungo al tab il nuovo panel
     	if (rec.get('op') == 'NEW_HANDLING_HEADER'){
-    		//this.createNewTab();
-			//this.feedInfo.add(this.newTab);
-			//this.feedInfo.setActiveTab(this.newTab);
+			
+			//2015-03-18 -> trasformaton in panel e non più in window			
+			this.m_panel_NewHandlingHeader = Ext.create('FeedViewer.NewHandlingHeaderPanel');
+			this.feedInfo.add(this.m_panel_NewHandlingHeader);
+			this.feedInfo.setActiveTab(this.m_panel_NewHandlingHeader);
 			
 			//Mostro la win per inserire il codice container	        
-	        Ext.create('FeedViewer.NewHandlingHeaderPanel').show();
+	        //Ext.create('FeedViewer.NewHandlingHeaderPanel').show();
 			
 			return;
     	}

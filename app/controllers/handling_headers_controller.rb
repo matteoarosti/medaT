@@ -56,16 +56,21 @@ def hitems_sc_create
     params[:data].delete(k_hh_p)
     hh_params["#{k_hh_p[3..100].to_s}"] = hh_p
    end
-
     
 
    #se ho ricevuto "num_booking", lo vado a decodificare in BookingItem
    if !params[:data][:num_booking].blank?
+    bh = Booking.get_by_num(params[:data][:num_booking])
     bi = BookingItem.get_by_num_eq(params[:data][:num_booking], hh.equipment_id)
-    if bi.nil?
-     logger.info 'Booking non trovato per numero/equipment'
-     render json: {:success => false, :message => 'Booking non trovato'}
-     return
+    if bh.nil? || bi.nil?
+      if (bh.nil?)
+        logger.info 'Booking non trovatot'
+        render json: {:success => false, :message => "Booking inesistente"}
+      else
+        logger.info 'Booking non trovato per numero/equipment'
+        render json: {:success => false, :message => "Il booking indicato non comprende l'equipment selezionato ( #{hh.equipment.equipment_type} )"}        
+      end
+      return
     else
      logger.info 'Booking trovato'
      params[:data][:booking_id] = bi.booking.id

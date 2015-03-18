@@ -10,14 +10,16 @@
  */
 
 Ext.define('FeedViewer.NewHandlingHeaderPanel', {
-    extend: 'Ext.window.Window',
+    //extend: 'Ext.window.Window',
+    extend: 'Ext.panel.Panel',
 
     alias: 'widget.newhandlingheaderpanel',
 
     animCollapse: true,
     layout: 'fit',
-    title: 'Inserimento nuovo movimento',
+    title: 'Ricerca/Inserisci',
     modal: true,
+    closable: true,
 
     /**
      * @event feedremove Fired when a feed is removed
@@ -289,7 +291,9 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 								                    	myApp.feedInfo.add(newPanel).show();
 														//mostro il tab appena aggiunto (l'ultimo)
 											            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);			                    	
-								                    	this.close();						         													     
+								                    	
+											            //2015-03-18: ricerca da window a panel. Non lo chiudo piu' dopo aver selezionato un movimento
+											            //this.close();						         													     
 																		     
 													 return false;    
 													     								                       
@@ -335,8 +339,12 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 			                		});
 			                    	myApp.feedInfo.add(newPanel).show();
 									//mostro il tab appena aggiunto (l'ultimo)
-						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);			                    	
-			                    	this.close();						         
+						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);
+						            
+						            
+						            //2015-03-18: ricerca da window a panel. Non lo chiudo piu' dopo aver selezionato un movimento
+						            //this.close();						         													     
+						         
 						        
 						    }, scope: this
 						}						 

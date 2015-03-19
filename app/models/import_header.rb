@@ -99,7 +99,7 @@ class ImportHeader < ActiveRecord::Base
   def self.check_file_d(file)
     spreadsheet = open_spreadsheet(file)
     if spreadsheet[0..3] == 'tipo'
-      return "Errore nel tipo di file."
+      return "Errore nel tipo di file da importare."
     end
     header = spreadsheet.row(1)
     ret_string = ""

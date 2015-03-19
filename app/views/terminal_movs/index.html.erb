@@ -107,6 +107,11 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                  	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'lock_INSPECT') -%>',                                    
                                     op: 'new_tab',                                
                                 }, {
+                                    task:'Danneggiati',
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'lock_DAMAGED') -%>',                                    
+                                    op: 'new_tab',                                
+                                }, {
                                     task:'Da movimentare',
                                     leaf: true,
                                  	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'to_be_moved') -%>',                                    

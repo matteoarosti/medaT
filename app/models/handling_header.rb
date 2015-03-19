@@ -10,6 +10,7 @@ class HandlingHeader < ActiveRecord::Base
  scope :booking, ->(booking_number) {where("container_number = ?", container_number)}
  scope :locked, -> {where("lock_fl=?", true)}
  scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
+ scope :locked_DAMAGED, -> {locked.where("lock_type = ?", 'DAMAGED')}
  scope :da_posizionare, -> {where("da_posizionare = ?", true)}
 
  def handling_header_status() return self.handling_status end
@@ -229,6 +230,12 @@ def sincro_save_header(hi)
    self.send("sincro_set_#{set_op_name}", set_op_value, hi)
   end
  
+  #se presente riporto lo stato di lock
+  unless (hi.lock_fl.nil?)
+    self.lock_fl    = hi.lock_fl
+    self.lock_type  = hi.lock_type
+  end
+  
  #salvo handling_header
  self.save!
  
@@ -341,13 +348,17 @@ end
 def sincro_set_lock_INSPECT(value, hi)
 ################################################################
     if (value == true || (value == 'IF_FULL' && hi.container_FE == 'F') || (value == 'IF_EMPTY' && hi.container_FE == 'E'))
-      logger.info "Setto lock INSPECT (da ispezionare)"
-      hi.lock_fl = true
-      hi.lock_type = 'INSPECT'
-      hi.save!
       
-      self.lock_fl    = hi.lock_fl
-      self.lock_type  = hi.lock_type 
+      #solo se gia' non e' in lock
+      if (hi.lock_fl.nil?)
+        logger.info "Setto lock INSPECT (da ispezionare)"
+        hi.set_lock('INSPECT')
+        hi.save!
+      end
+      
+      #viene sempre eseguito in sincro_save_header
+      #self.lock_fl    = hi.lock_fl
+      #self.lock_type  = hi.lock_type 
     end 
 end
 
@@ -366,6 +377,12 @@ def get_lock_INSPECT_date
   hi_INSPECT.datetime_op if (hi_INSPECT)    
 end
  
+################################################################
+def get_lock_DAMAGED_date
+################################################################
+  hi_DAMAGED = HandlingItem.handlingHeader(self.id).locked_DAMAGED.last
+  hi_DAMAGED.datetime_op if (hi_DAMAGED)    
+end
  
  
 ################################################################

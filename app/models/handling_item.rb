@@ -9,12 +9,21 @@ class HandlingItem < ActiveRecord::Base
  scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)} 
  scope :locked, -> {where("lock_fl=?", true)}
  scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')}
+ scope :locked_DAMAGED, -> {locked.where("lock_type = ?", 'DAMAGED')}
  scope :to_be_moved, -> {where("to_be_moved=?", true)}
 
  
  before_create :set_by_item_type
  
  def set_by_item_type()    
+ end
+ 
+ 
+ #########################################
+ def set_lock(lock_type)
+ #########################################   
+   self.lock_fl   = true
+   self.lock_type = lock_type
  end
  
  

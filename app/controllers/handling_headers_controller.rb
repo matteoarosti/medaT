@@ -82,6 +82,10 @@ def hitems_sc_create
    params[:data].permit!
    hi.assign_attributes(params[:data])
 
+   unless params[:set_lock_type].nil?
+     hi.set_lock(params[:set_lock_type])
+   end  
+     
    #se supera i vari controlli salvo il dettalio e aggiorno la testata
    validate_insert_item = hh.validate_insert_item(hi)
    if validate_insert_item[:is_valid]
@@ -146,7 +150,13 @@ end
      hh_as_json_prop[:methods] << :get_lock_INSPECT_date         
      render json: HandlingHeader.where('1=1').locked_INSPECT.limit(1000).as_json(hh_as_json_prop)
      
-    when 'to_be_moved'          
+     when 'lock_DAMAGED'         
+      #per ogni hh aggiungo altre informazioni 
+      hh_as_json_prop = HandlingHeader.as_json_prop
+      hh_as_json_prop[:methods] << :get_lock_DAMAGED_date         
+      render json: HandlingHeader.where('1=1').locked_DAMAGED.limit(1000).as_json(hh_as_json_prop)
+
+   when 'to_be_moved'          
      #per ogni hh aggiungo altre informazioni 
      hh_as_json_prop = HandlingItem.as_json_prop
      hh_as_json_prop[:include] = hh_as_json_prop[:include] || [] 

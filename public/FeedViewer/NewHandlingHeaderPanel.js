@@ -13,9 +13,11 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
     //extend: 'Ext.window.Window',
     extend: 'Ext.panel.Panel',
 
+    id: 'main_panel_handling_search',
     alias: 'widget.newhandlingheaderpanel',
 
     animCollapse: true,
+
     layout: 'fit',
     title: 'Ricerca/Inserisci',
     modal: true,
@@ -58,7 +60,6 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
         	    type: 'vbox', align : 'stretch', pack: 'start'
         	},
         	items: [
-
 				
 				{
 					xtype: 'container',
@@ -72,7 +73,8 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 			        	{
 							xtype: 'form', border: true, flex: 1, bodyPadding: 10, margin: '0 5 0 0', buttonAlign : 'center', frame: true,							
 							items: [        	
-			        			{"fieldLabel":"Inserisci il numero container/booking","name":"search_number", "xtype": "textfield", "labelAlign": "top", "anchor": "100%",
+			        			{"fieldLabel":"Inserisci il numero container/booking", hasfocus:true,
+			        				"name":"search_number", "xtype": "textfield", "labelAlign": "top", "anchor": "100%",
 									listeners: {
 									    'change': function(){
 											var l_form = this.up('form').getForm();
@@ -82,7 +84,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						    			          l_grid.store.proxy.extraParams = l_form.getValues();
 						    			          l_grid.store.load();				             
 								             	}									      
-									    }
+									    }								    									    
 									  }			        			
 			        			},
 			        			
@@ -361,7 +363,20 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 					  html: '<i class="fa fa-info-circle"></i>Verrà ricercato il movimento aperto relativo al numero container inserito<br/> o verrà generato un nuovo movimento'
 					}
         		
-        	]
+        	],
+        	
+
+        	listeners: {
+			    render: function(panel){
+			    	console.log('aactivateeeeeeee');
+			    }
+			  }
+        	
+        	
+        	
+        	
+        	
+        	
         	});
         return this.view;
     },
@@ -369,6 +384,18 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
     onViewReady: function(){
     },
 
+   
+    onActivate: function(){    	
+    },
+    
+    onShow: function(){
+    	this.callParent(arguments);    	
+    	
+    	//focus sul campo di ricerca
+    	//console.log(this);
+    	this.down('form').getForm().findField('search_number').focus(true, 200);    	    	
+    },
+    
 
     // Inherit docs
     onDestroy: function(){

@@ -98,6 +98,9 @@ class ImportHeader < ActiveRecord::Base
   #*********************************************************************************
   def self.check_file_d(file)
     spreadsheet = open_spreadsheet(file)
+    if spreadsheet[0..3] == 'tipo'
+      return "Errore nel tipo di file da importare."
+    end
     header = spreadsheet.row(1)
     ret_string = ""
     (2..spreadsheet.last_row).each do |i|
@@ -208,7 +211,7 @@ class ImportHeader < ActiveRecord::Base
       when ".csv" then Csv.new(file.path, nil, :ignore)
       #when ".xls" then Excel.new(file.path)
       when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
-      else raise "Unknown file type: #{file.original_filename}"
+      else return "tipo di file sconosciuto: #{file.original_filename}"
     end
   end
 

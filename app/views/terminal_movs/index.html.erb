@@ -3,8 +3,10 @@
      root_path = '<%= root_path -%>';
     </script>
     
+    <%= javascript_include_tag "/FeedViewer/std_function.js" %>
     <%= javascript_include_tag "/viewer/FeedViewer.js" %>
     <%= javascript_include_tag "/FeedViewer/my_models.js" %>
+    
     
     <script type="text/javascript">
     
@@ -194,6 +196,6 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
             myApp = new FeedViewer.App({
             	voci_menu: voci_menu,
             	railsBaseUri: '<%= root_path -%>'
-            	});
+            });
         });
     </script>

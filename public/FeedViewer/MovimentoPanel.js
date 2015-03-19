@@ -523,8 +523,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						    }},
         	       {text: 'Data/ora', width: 160, dataIndex: 'datetime_op', xtype:  'datecolumn', format: 'd-m-Y H:i:s'},
         	       {text: 'Op', width: 160, dataIndex: 'handling_item_type', width: 100},        	        
-        	       {text: 'E/U', width: 40, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_IO(value, metaData);}},
-                   {text: 'P/V', width: 40, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_FE(value, metaData);}},
+        	       {text: 'E/U', width: 40, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: pb_get_image_IO},
+                   {text: 'P/V', width: 40, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: pb_get_image_FE},
 				   {text: 'Nave', width: 130, dataIndex: 'ship_id_Name', renderer: function(value, metaData, rec){
 					   if (rec.get('handling_item_type') == 'FRCON')
 						   return rec.get('datetime_op_end');
@@ -535,26 +535,9 @@ Ext.define('FeedViewer.MovimentoPanel', {
 				   {text: 'Vettore', width: 130, dataIndex: 'carrier_id_Name'},                				                      				                      
 				   {text: 'Autista', flex: 1, dataIndex: 'driver'},
 				   {text: 'Sigillo', width: 80, dataIndex: 'seal'},
-				   {text: 'Imb', width: 50, dataIndex: 'imb', xtype: 'checkcolumn'},				                   				                      				                      				   
-				   {text: 'MP', width: 50, dataIndex: 'mp', xtype: 'checkcolumn'},				                   				                      				                      				   
-				   {text: 'IMO', width: 50, dataIndex: 'imo', xtype: 'checkcolumn'}
-        	       ],
-        	       
-				get_image_IO: function(val, metaData){
-					if (val == 'I') metaData.tdAttr = 'data-qtip="Entrata"';
-					if (val == 'O') metaData.tdAttr = 'data-qtip="Uscita"';					
-					
-	 				if (val == 'I') return '<i class="fa fa-download fa-2x" style="color:green;"></i>';
-	 				if (val == 'O') return '<i class="fa fa-upload fa-2x" style="color:red;"></i>';
-				},
-				get_image_FE: function(val, metaData){
-					if (val == 'F') metaData.tdAttr = 'data-qtip="Pieno"';
-					if (val == 'E') metaData.tdAttr = 'data-qtip="Vuoto"';					
-					
-					if (val == 'F') return '<i class="fa fa-square fa-2x" style="color:brown;"></i>';
-					if (val == 'E') return '<i class="fa fa-square-o fa-2x" style="color:brown;"></i>';
-				},
-        	       
+				   {text: 'IMO', width: 50, dataIndex: 'imo', xtype: 'checkcolumn'},
+				   {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock}				   
+        	       ]
                         	    
         	}        	
         	

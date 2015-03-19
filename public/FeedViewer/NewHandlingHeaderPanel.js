@@ -240,19 +240,13 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						}, //store
 						columns: [{header: 'Movimento', dataIndex: 'descr', flex: 1},
 								  {header: 'Container', dataIndex: 'container_number', width: 140},
-								  {header: 'P/V', dataIndex: 'container_FE', width: 40},
+								  {header: 'P/V', dataIndex: 'container_FE', width: 40, renderer: pb_get_image_FE},
 								  {header: 'Tipo', dataIndex: 'equipment_id_Name', width: 60},
 								  {header: 'Booking', dataIndex: 'num_booking', width: 100},
 								  {header: 'Compagnia', dataIndex: 'shipowner_id_Name', width: 80},
 								  {header: 'Ultimo agg.', dataIndex: 'updated_at', width: 90, xtype: 'datecolumn'},
-						          {header: 'Stato', dataIndex: 'stato_descr', width: 80, 
-						        	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-						        		v = value;
-						        		if (rec.get('lock_fl') == true)
-						        			v = v + '<br>' + rec.get('lock_type');
-						        		return v;
-						        	}
-						          },
+						          {header: 'Stato', dataIndex: 'stato_descr', width: 50, renderer: pb_get_image_status},
+						          {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock},
 								  {header: 'Azione', dataIndex: 'op_descr', width: 80},
 						          ],
 						

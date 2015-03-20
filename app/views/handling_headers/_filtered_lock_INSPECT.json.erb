@@ -178,13 +178,31 @@
 															   jsonData: {
 															   	data: {handling_header_id: rec.get('id'), handling_item_type: 'INSPECT'}
 															   },
-															   success: function(response, opts) {
-															      store.remove(rec);
-															      tmp_win.close();
+															   success: function(result, request) {
+															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  
+															   	  } else {
+																      store.remove(rec);
+																      tmp_win.close();															   	  
+															   	  }															   	 
 															   },
 															   failure: function(response, opts) {
 															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  															      
 															   }
+
 															});	
 														  return false;												             
 											             }
@@ -206,12 +224,30 @@
 											   jsonData: {
 											   	data: {handling_header_id: rec.get('id'), handling_item_type: 'INSPECT'}
 											   },
-											   success: function(response, opts) {
-											      store.remove(rec);
-											   },
-											   failure: function(response, opts) {
-											      console.log('server-side failure with status code ' + response.status);
-											   }
+															   success: function(result, request) {
+															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  
+															   	  } else {
+																      store.remove(rec);															   	  
+															   	  }															   	 
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  															      
+															   }
+
 											});
 										  		
 										  return false;										

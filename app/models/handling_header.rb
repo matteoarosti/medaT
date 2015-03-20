@@ -41,6 +41,11 @@ class HandlingHeader < ActiveRecord::Base
 
  #Richiamata per la creazione di un nuovo header da import
  def self.create_new(rec, params)
+   
+   #verifico che non ci sia gia' un movimento aperto (non in CLOSE)
+   hh_count = HandlingHeader.container(rec.container_number).where("handling_status <> ?", "CLOSE").count
+   return false if hh_count > 0
+   
    hh = HandlingHeader.new
    hh.container_number = rec.container_number
    hh.handling_type = "TMOV"
@@ -54,6 +59,7 @@ class HandlingHeader < ActiveRecord::Base
   #Richiamata per la retrieve di un header in fase di imbarco
   def self.find_exist(rec, params)
     hh = HandlingHeader.container(rec.container_number).where("handling_status = ?", "OPEN").first
+    return false if hh.nil?
     return hh
   end
 

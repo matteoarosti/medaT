@@ -72,8 +72,62 @@
 				      }    
 				     
 				    ]
-				 }, '->',  {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
-				 						console.log(this.up('grid'));
+				 }, '->',
+					{iconCls: 'fa fa-check-circle', text: 'Importa tutti', cls: 'btn-ok',
+						handler: function(event, toolEl, panel){
+											form = this.up('panel').down('form').getForm();
+											grid = this.up('grid');
+											
+											
+									Ext.Msg.confirm({
+				                        title: 'Confirm',
+				                        msg: 'Confermi l\'importazione di tutti i movimenti?',
+				                        icon: Ext.MessageBox.ERROR,
+				                        buttons: Ext.Msg.YESNO,
+										fn: function(btn){                    
+										         if (btn == "no"){ //NO, esco
+										           return false;              
+										        }
+										        if (btn == "yes"){ //YES, proseguo
+											
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'import_items', :action=>'set_ok_all') -%>',
+															   jsonData: {import_header_id: <%= @ih.id -%>, check_form: form.getValues()},
+															   success: function(result, request) {
+															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})		
+											                   		grid.getStore().load();													   	  
+															   	  } else {
+																      grid.getStore().load();															   	  
+															   	  }															   	 
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})						
+											                    	grid.getStore().load();									   	  															      
+															   }
+															});	
+												}			
+											}
+										})
+
+				 		}
+				 	},
+				 
+				    {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
 				 						this.up('grid').getStore().load();}}
 				 ]
 			  }
@@ -186,12 +240,29 @@
 															   method: 'POST',
 															   url: '<%= url_for(:controller=>'import_items', :action=>'set_ok') -%>',
 															   jsonData: {rec_id: rec.get('id'), check_form: form.getValues()},
-															   success: function(response, opts) {
-															      store.remove(rec);
-															      tmp_win.close();
+															   success: function(result, request) {
+															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  
+															   	  } else {
+																      store.remove(rec);
+																      tmp_win.close();															   	  
+															   	  }															   	 
 															   },
 															   failure: function(response, opts) {
 															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  															      
 															   }
 															});	
 														  return false;												             
@@ -212,12 +283,30 @@
 											   method: 'POST',
 											   url: '<%= url_for(:controller=>'import_items', :action=>'set_ok') -%>',
 											   jsonData: {rec_id: rec.get('id'), check_form: loc_form.getValues()},
-											   success: function(response, opts) {
-											      store.remove(rec);
-											   },
-											   failure: function(response, opts) {
-											      console.log('server-side failure with status code ' + response.status);
-											   }
+															   success: function(result, request) {
+															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  
+															   	  } else {
+																      store.remove(rec);															   	  
+															   	  }															   	 
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  															      
+															   }
+
 											});
 										  		
 										  return false;										
@@ -299,13 +388,31 @@
 															   method: 'POST',
 															   url: '<%= url_for(:controller=>'import_items', :action=>'set_damaged') -%>',
 															   jsonData: {rec_id: rec.get('id'), check_form: form.getValues()},
-															   success: function(response, opts) {
-															      store.remove(rec);
-															      tmp_win.close();
+															   success: function(result, request) {
+															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  
+															   	  } else {
+																      store.remove(rec);
+																      tmp_win.close();															   	  
+															   	  }															   	 
 															   },
 															   failure: function(response, opts) {
 															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  															      
 															   }
+
 															});	
 														  return false;												             
 											             }

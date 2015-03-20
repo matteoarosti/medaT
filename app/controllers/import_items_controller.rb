@@ -11,6 +11,42 @@ class ImportItemsController < ApplicationController
   end
   
   
+  #################################################  
+  def set_ok_all
+  #################################################
+    ih = ImportHeader.find(params[:import_header_id])
+      
+    #recupero tutti gli import_item ancora da importare
+    iis = ih.import_items.where('status IS NULL').order(:container_number)
+
+    #Determina la tipologia del movimento da import_headers
+    import_type = ih.import_type
+    
+    message_error = []    
+         
+    #per oguno eseguo l'import
+    iis.each do |ii|
+      if import_type == 'L'
+        ret = import_L(ii, params)
+      else
+        ret = import_D(ii, params)
+      end      
+      
+      if ret[:success] == false
+        message_error << "#{ii.container_number}: #{ret[:message]}"
+      end
+      
+      ii.status = ret[:success]==true ? 'OK' : nil
+      ii.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
+      ii.save!      
+      
+    end
+
+    global_success = message_error.empty? ? true : false
+    render json: {:success => global_success, :message => message_error.join('<br/>')}
+  end 
+   
+  
  #################################################  
   def set_ok
  #################################################    
@@ -19,16 +55,14 @@ class ImportItemsController < ApplicationController
    #Determina la tipologia del movimento da import_headers
    import_type = rec.import_header.import_type
    if import_type == 'L'
-     import_L(rec, params)
+     ret = import_L(rec, params)
    else
-     import_D(rec, params)
+     ret = import_D(rec, params)
    end
 
-   rec.status = 'OK'
+   rec.status = ret[:success]==true ? 'OK' : nil
    rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
    rec.save!
-   ret = {}
-   ret[:success] = true
    ret[:data] = rec.as_json()
    render json: ret
   end
@@ -41,24 +75,28 @@ class ImportItemsController < ApplicationController
     #Determina la tipologia del movimento da import_headers
     import_type = rec.import_header.import_type
     if import_type == 'L'
-      import_L(rec, params, 'DAMAGED')
+      ret = import_L(rec, params, 'DAMAGED')
     else
-      import_D(rec, params, 'DAMAGED')
+      ret = import_D(rec, params, 'DAMAGED')
     end
  
-    rec.status = 'DAMAGED'
+    rec.status = ret[:success]==true ? 'DAMAGED' : nil
     rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
     rec.save!
-    ret = {}
-    ret[:success] = true
     ret[:data] = rec.as_json()
     render json: ret
   end
 
- #SBARCO ####################################
+ #SBARCO #########################################
   def import_D(rec, params, lock_type = nil)
  #################################################    
     hh = HandlingHeader.create_new(rec, params)
+    if hh == false
+      ret_status  = false
+      message     = "Esiste gia' un movimento aperto per questo container"
+      return {:success => ret_status, :message => message}
+    end 
+    
     hi = hh.handling_items.new()
     hi.datetime_op = Time.now
     unless params[:check_form][:datetime_op_date].blank? || params[:check_form][:datetime_op_time].blank?
@@ -80,13 +118,23 @@ class ImportItemsController < ApplicationController
             
       ret_status  = r[:success]
       message     = r[:message]
+    else
+      ret_status  = validate_insert_item[:is_valid]
+      message     = validate_insert_item[:message]
     end
+   return {:success => ret_status, :message => message}
   end
 
  #IMBARCO ###############################
   def import_L(rec, params, lock_type = nil)
  #################################################   
      hh = HandlingHeader.find_exist(rec, params)
+     if hh == false
+        ret_status  = false
+        message     = "Non trovato un movimento aperto per questo container"
+        return {:success => ret_status, :message => message}
+     end 
+     
      hi = hh.handling_items.new()
      hi.datetime_op = Time.now
      unless params[:check_form][:datetime_op_date].blank? || params[:check_form][:datetime_op_time].blank?
@@ -108,7 +156,11 @@ class ImportItemsController < ApplicationController
                                      
        ret_status  = r[:success]
        message     = r[:message]
+     else
+         ret_status  = validate_insert_item[:is_valid]
+         message     = validate_insert_item[:message]         
      end
+    return {:success => ret_status, :message => message}
    end
 
 end

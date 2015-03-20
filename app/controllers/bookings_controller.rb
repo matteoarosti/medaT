@@ -27,13 +27,7 @@ class BookingsController < ApplicationController
  def sc_create
 
   if params[:data][:id].empty?
-   item = Booking.new
-   
-   #al numero container aggiunto il codice equipment (es: 40DV)
-   # ora e' gestito in booking_items
-   ##eq = Equipment.find(params[:data][:equipment_id])
-   ##params[:data][:num_booking]+= eq.equipment_type.to_s
-      
+   item = Booking.new         
   else
    item = Booking.find(params[:data][:id])   
   end
@@ -41,14 +35,7 @@ class BookingsController < ApplicationController
   to_save_params = params[:data].select{|k,v| Booking.column_names.include?(k) && k != 'id'}  
   to_save_params.permit!
   item.update(to_save_params)
-      
-  #verifico validita' quantity
-  # ora e' in bookin_items
-  ##if item.get_num_impegni() > item.quantity
-  ## render json: {:success => false, :message=>"La quantità indicata è inferiore al numero dei movimenti attualmnete abbinati al booking"}
-  ## return
-  ##end
-  
+
   item.save!()  
   render json: {:success => true, :data=>[item.as_json(Booking.as_json_prop)]}  
   
@@ -103,6 +90,14 @@ def bitems_sc_create
  if params[:data][:id].empty?
   item = BookingItem.new
   item.status = 'OPEN'       
+  
+   #verifico che l'equipment non sia gia' presente nel booking
+   is_present = BookingItem.get_by_booking_eq(params[:data][:booking_id], params[:data][:equipment_id])
+   if is_present
+    render json: {:success => false, :message => "Equipment gia' presente"}
+    return
+   end
+  
  else
   item = BookingItem.find(params[:data][:id])
     

@@ -1,0 +1,146 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  title: 'Danneggiati',
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+	
+  	
+
+  items: [
+       
+   // grid con righe import
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Dettaglio container danneggiati', flex: 50,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            type: 'ajax',
+        	            url: <%= raw  (root_path + 'handling_headers/get_row_by_filtered_type').to_json -%>,
+        	            extraParams: {filtered_type: <%= raw filtered_type.to_json -%>},
+        	            reader: {
+        	                type: 'json',
+        	                rootProperty: 'items'
+        	            }
+        	        }
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	   dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
+        	    items: [{
+				    xtype: 'form',	
+				    height: 50,
+				    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+				    padding: '10 10 10 10',
+				    items: [
+				    	{
+				    		flex: 1,
+				            xtype: 'fieldcontainer',
+				            fieldLabel: 'Data/Ora', labelAlign: 'right',
+				            layout: 'hbox',
+				            items: [
+				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
+				            	{xtype: 'timefield', name: 'datetime_op_time', width:  70},
+				            ]
+				      }, {	
+								flex: 1, padding: '0 0 0 10',
+								xtype: 'checkboxfield',
+				                boxLabel: 'Disabilita richiesta conferma',
+				                name: 'hide_check',
+				                inputValue: '1'
+				      }    
+				     
+				    ]
+				 }, '->',  {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
+				 						console.log(this.up('grid'));
+				 						this.up('grid').getStore().load();}}
+				 ]
+			  }
+			],
+        	           	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: 'Seq',
+			        width: 50,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Container',
+			        width: 220,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h1>' + rec.get('container_number') + '</h1>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Dettagli',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';
+			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';
+			         ret += '<tr><th>Stato</th><td>' + rec.get('container_status') + '</td></tr>';			         			         
+			         ret += '</table>';
+			         return ret;
+			         
+			        }			        	        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Data',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';			         
+					 ret += '<tr><th>Segnalato il</th><td>' + Ext.util.Format.date(rec.get('get_lock_DAMAGED_date'), 'd-m-Y H:i:s') + '</td></tr>';			         
+			         ret += '</table>';
+			         return ret;
+			         
+			        }			        	        
+			    }        
+        ],
+			    
+			    
+
+			    
+			    listeners2: {
+					    cellclick: function(gridView,htmlElement,columnIndex,dataRecord){
+					        console.log(gridView);
+					        console.log(htmlElement);
+					        console.log(columnIndex);
+					        console.log(dataRecord);
+					    }
+					}
+				    
+
+                        	    
+        	}    
+   
+   
+   
+  ]
+ }
+ ]
+}

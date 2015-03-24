@@ -18,6 +18,7 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.text        :notes,                 :limit => 64.kilobytes      
       t.belongs_to  :carrier
       t.belongs_to  :terminal
+      t.belongs_to  :shipper
 
       #abbinamento con booking
       t.belongs_to  :booking

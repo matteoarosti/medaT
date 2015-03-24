@@ -138,8 +138,8 @@ FRCON:
 #HANDLING_ONLY_CUSTOMS_INSPECTION:
 INSPE:
 ########################################################################
- initial_handling: CUSTOMS_INPSECTION
- CUSTOMS_INPSECTION:
+ initial_handling: CUST_INPSECTION
+ CUST_INPSECTION:
   set:
    handling_status: CLOSE
   

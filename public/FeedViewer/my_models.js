@@ -354,3 +354,26 @@ Ext.define("BookingItem", { extend: "Ext.data.Model",
         }
     }
 });
+Ext.define("Terminal", { extend: "Ext.data.Model",
+    fields: [],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: root_path + 'terminals/sc_read',
+            create: root_path + 'terminals/sc_create',
+            update: root_path + 'terminals/sc_update',
+            destroy: root_path + 'terminals/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});

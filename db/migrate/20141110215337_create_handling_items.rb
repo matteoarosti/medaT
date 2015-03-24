@@ -10,13 +10,14 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.string      :container_FE,          :limit => 1 #FULL or EMPTY
       t.integer     :ship_id,               :limit => 8
       t.string      :voyage,                :limit => 15
-      t.integer     :carrier_id,            :limit => 8
       t.string      :driver,                :limit => 50
       t.boolean     :export
       t.string      :seal_shipowner,        :limit => 15
       t.string      :seal_others,           :limit => 15
       t.boolean     :codeco_sent
-      t.text        :notes,                 :limit => 64.kilobytes
+      t.text        :notes,                 :limit => 64.kilobytes      
+      t.belongs_to  :carrier
+      t.belongs_to  :terminal
 
       #abbinamento con booking
       t.belongs_to  :booking

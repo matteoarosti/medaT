@@ -39,3 +39,6 @@ it:
       email: "email"
       unit_cost: "costo unitario"
       scartaggio_cost: "costo scartaggio"
+    terminals:
+      code: "Codice Terminal"
+      name: "Denominazione"

@@ -26,6 +26,7 @@ en:
       size: "size"
       sizetype: "sizetype"
       iso: "iso code"
+      reefer: "reefer"
     ship_owners:
       name: "name"
       short_name: "short name"

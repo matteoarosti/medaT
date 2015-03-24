@@ -138,9 +138,12 @@ FRCON:
 #HANDLING_ONLY_CUSTOMS_INSPECTION:
 INSPE:
 ########################################################################
- initial_handling: CUST_INPSECTION
- CUST_INPSECTION:
+ initial_handling: CUST_INSPECTION
+ 
+ CUST_INSPECTION:
+  icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 
+  label: Custom Inspections 
   set:
-   handling_status: CLOSE
+   handling_header_status: CLOSE
   
   

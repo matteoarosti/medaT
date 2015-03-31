@@ -34,6 +34,7 @@
             
 			listeners: {
 			        change: function(field, newValue, oldValue) {
+			          this.up('form').refresh_ship_combo();			        
 			          this.up('form').refresh_voyage_combo();
 			        }
 			    }            
@@ -58,12 +59,14 @@
             
 			listeners: {
 			        change: function(field, newValue, oldValue) {
+			          this.up('form').refresh_ship_combo();
 			          this.up('form').refresh_voyage_combo();
 			        }
 			    }            
         },
    
 	<%= raw extjs_std_combo_model('ship', @item,
+			:store => extjs_std_store_url(root_path + 'import_headers/get_ship_in_find'),
 			:listeners => "change: function(combo, record, index) {
 				  this.up('form').refresh_voyage_combo();			  
 			    }") -%>,    
@@ -72,7 +75,7 @@
 	<%= raw extjs_std_combo('id', @item,
 			:valueField => 'id',
 			:displayField => 'voyage',
-			:store => extjs_std_store_url(root_path + 'import_headers/get_voyage_by_ship')) -%>,
+			:store => extjs_std_store_url(root_path + 'import_headers/get_voyage_by_ship')) -%>
 		 		
 		       
    ],
@@ -102,7 +105,15 @@
              }             
             }
         }],
-        
+     
+     
+    refresh_ship_combo: function(){
+		      field_ship = this.getForm().findField('ship_id');
+		      field_ship.getStore().proxy.extraParams =  this.getForm().getValues();
+		      field_ship.getStore().load();
+    },     
+     
+                  
     refresh_voyage_combo: function(){
 		      field_voyage = this.getForm().findField('id');
 		      field_voyage.getStore().proxy.extraParams =  this.getForm().getValues();

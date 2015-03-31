@@ -535,7 +535,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 				   {text: 'Vettore', width: 130, dataIndex: 'carrier_id_Name'},                				                      				                      
 				   {text: 'Autista', flex: 1, dataIndex: 'driver'},
 				   {text: 'Sigillo', width: 80, dataIndex: 'seal'},
-				   {text: 'IMO', width: 50, dataIndex: 'imo', xtype: 'checkcolumn'},
+				   {text: 'Spediz.', width: 90, dataIndex: 'shipper_id_Name'},
+				   {text: 'Terminal.', width: 90, dataIndex: 'terminal_id_Code'},
 				   {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock}				   
         	       ]
                         	    

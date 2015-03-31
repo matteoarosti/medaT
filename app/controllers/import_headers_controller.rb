@@ -102,6 +102,16 @@ def get_import_row
    render json: ret 
 end
 
+#per combo ship in find_import
+def get_ship_in_find
+ params[:import_type]   = params[:import_type] || 'L'
+ params[:import_status] = params[:import_status] || 'OPEN'
+ ret = {}
+ ret[:success] = true
+ ret[:items] = ImportHeader.select('ships.id, ships.name').joins(:ship).where("import_type = ?", params[:import_type]).where("import_status = ?", params[:import_status])
+ render json: ret
+end
+
 
 def get_voyage_by_ship
  ret = {}

@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
     ret = {}
     model_class = extjs_sc_model.to_s
     ret[:success] = true
-    ret[:items] = model_class.constantize.limit(500)
+    ret[:items] = model_class.constantize.order(model_class.constantize.combo_displayField()).limit(500)
     render json: ret
   end
   

@@ -4,6 +4,8 @@ class HandlingItem < ActiveRecord::Base
  belongs_to :carrier
  belongs_to :booking
  belongs_to :booking_item
+ belongs_to :shipper
+ belongs_to :terminal
  
  scope :extjs_default_scope, -> {}
  scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)} 
@@ -36,10 +38,16 @@ class HandlingItem < ActiveRecord::Base
  def carrier_id_Name
   self.carrier.name if self.carrier
  end 
+ def shipper_id_Name
+   self.shipper.name if self.shipper
+ end
+ def terminal_id_Code
+   self.terminal.code if self.terminal
+ end
  
  def self.as_json_prop()
      return {
-        :methods => [:ship_id_Name, :carrier_id_Name]
+        :methods => [:ship_id_Name, :carrier_id_Name, :shipper_id_Name, :terminal_id_Code]
       }
  end 
  

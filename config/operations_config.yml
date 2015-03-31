@@ -123,23 +123,28 @@ TMOV:
 #HANDLING_ONLY_FRIDGE_CONNECTION:
 FRCON:
 ########################################################################
- initial_handling: IN_FRO_FRIDGE_CONNECTION
- IN_FRO_FRIDGE_CONNECTION:
-  set:
-   container_in_terminal: true
- OUT_FRO_FRIDGE_CONNECTION:
+ initial_handling: START_RFCON
+ START_RFCON:
+  icon: '<i class="fa fa-bolt fa-2x" style="color:white;"></i>'
+  label: Connect Frigo
   check:
-   is_container_frigo: true
-   container_in_terminal: false
+#   is_container_frigo: true
+   handling_header_status: NEW
   set:
-   handling_status: CLOSE
+   start_reefer_connection: true
+   container_in_terminal: true
+ END_RFCON:
+  icon: '<i class="fa fa-bolt fa-2x" style="color:white;"></i>'
+  label: Disconnect Frigo
+  set:
+   end_reefer_connection: true
+   handling_header_status: CLOSE
 
 ########################################################################
 #HANDLING_ONLY_CUSTOMS_INSPECTION:
 INSPE:
 ########################################################################
  initial_handling: CUST_INSPECTION
- 
  CUST_INSPECTION:
   icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 
   label: Custom Inspections 

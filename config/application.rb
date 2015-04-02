@@ -7,7 +7,7 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 require 'csv'
-require 'iconv'
+######require 'iconv'
 
 module MedaT
   class Application < Rails::Application

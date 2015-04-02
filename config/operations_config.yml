@@ -117,6 +117,13 @@ TMOV:
    handling_header_status: OPEN
   set:
    handling_header_status: OPEN
+ INSPECT:
+  label: Inspect
+  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
+  check:
+   lock_type: INSPECT
+  set:
+   clear_lock: true   
 
 
 ########################################################################

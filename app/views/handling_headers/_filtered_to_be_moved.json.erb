@@ -18,7 +18,7 @@
 		 {
 				flex: 1,
 				layout: 'fit',
-        	    title: 'Lista container da movimentare', flex: 50,
+        	    title: <%= raw t('forms.to_be_handled.list').to_json -%>, flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
@@ -57,7 +57,7 @@
 				    	{
 				    		flex: 1,
 				            xtype: 'fieldcontainer',
-				            fieldLabel: 'Data/Ora', labelAlign: 'right',
+				            fieldLabel: <%= raw t('forms.to_be_handled.date_time').to_json -%>, labelAlign: 'right',
 				            layout: 'hbox',
 				            items: [
 				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
@@ -66,7 +66,7 @@
 				      }, {	
 								flex: 1, padding: '0 0 0 10',
 								xtype: 'checkboxfield',
-				                boxLabel: 'Disabilita richiesta conferma',
+				                boxLabel: <%= raw t('forms.to_be_handled.disable_request').to_json -%>,
 				                name: 'hide_check',
 				                inputValue: '1',
 				                value: 1
@@ -84,21 +84,21 @@
         	    
 			    columns: [{
 			        dataIndex: 'container_number',
-			        text: 'Seq',
+			        text: <%= raw t('forms.to_be_handled.sequence').to_json -%>,
 			        width: 50,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         return '<h5>' + (rowIndex + 1) + '</h5>';
 			        }			        
 			    }, {
 			        dataIndex: 'container_number',
-			        text: 'Container',
+			        text: <%= raw t('forms.to_be_handled.container').to_json -%>,
 			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         return '<h1>' + rec.get('handling_header').container_number + '</h1>';
 			        }			        
 			    }, {
 			        dataIndex: 'container_number',
-			        text: 'Dettagli',
+			        text: <%= raw t('forms.to_be_handled.details').to_json -%>,
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
@@ -113,12 +113,12 @@
 			    }
 			    
 			    
-        	     , {text: 'E/U', width: 60, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_IO(value, metaData);}}
-                 , {text: 'P/V', width: 60, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_FE(value, metaData);}}        	     			    
+        	     , {text: <%= raw t('forms.to_be_handled.io').to_json -%>, width: 60, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_IO(value, metaData);}}
+                 , {text: <%= raw t('forms.to_be_handled.fe').to_json -%>, width: 60, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: function(value, metaData){return this.get_image_FE(value, metaData);}}
 			    
 			   , {
 			        dataIndex: 'container_number',
-			        text: 'Posizionamento',
+			        text: <%= raw t('forms.to_be_handled.positioning').to_json -%>,
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
@@ -131,7 +131,7 @@
 			         
 			        }			        	        
 			    }, {
-			        text: 'Ok', width: 100, hidden: false, sortable: false,
+			        text: <%= raw t('forms.to_be_handled.ok').to_json -%>, width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        
 			        
 			        	var loc_grid = this;
@@ -166,7 +166,7 @@
 										    items: [
 										    {
 										            xtype: 'fieldcontainer',
-										            fieldLabel: 'Data/Ora',
+										            fieldLabel: <%= raw t('forms.to_be_handled.date_time').to_json -%>,
 										            layout: 'hbox',
 										            items: [
 										                {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},										                 
@@ -178,7 +178,7 @@
 										    ]
 										    , 	buttons:
 											        [{
-											            text: 'Conferma',
+											            text: <%= raw t('forms.to_be_handled.confirm').to_json -%>,
 											            handler: function (btn, evt) {              
 											             form = this.up('form').getForm();
 											             tmp_win  = this.up('window');
@@ -233,7 +233,7 @@
 			                           loc_win = Ext.create('Ext.window.Window',{
 										    layout: 'fit',
 										    items: loc_form,
-										    title: 'Conferma import',
+										    title: <%= raw t('forms.to_be_handled.import_confirm').to_json -%>,
 										    width: 500,
 										    height: 300,
 										    id: 'myWindow'

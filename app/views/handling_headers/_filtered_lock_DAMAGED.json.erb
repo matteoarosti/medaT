@@ -19,7 +19,7 @@
 		 {
 				flex: 1,
 				layout: 'fit',
-        	    title: 'Dettaglio container danneggiati', flex: 50,
+        	    title: <%= raw t('forms.damageds.details_label').to_json -%>, flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
@@ -57,7 +57,7 @@
 				    	{
 				    		flex: 1,
 				            xtype: 'fieldcontainer',
-				            fieldLabel: 'Data/Ora', labelAlign: 'right',
+				            fieldLabel: <%= raw t('forms.damageds.date_time').to_json -%>, labelAlign: 'right',
 				            layout: 'hbox',
 				            items: [
 				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
@@ -66,7 +66,7 @@
 				      }, {	
 								flex: 1, padding: '0 0 0 10',
 								xtype: 'checkboxfield',
-				                boxLabel: 'Disabilita richiesta conferma',
+				                boxLabel: <%= raw t('forms.damageds.disable_request').to_json -%>,
 				                name: 'hide_check',
 				                inputValue: '1'
 				      }    
@@ -82,21 +82,21 @@
         	    
 			    columns: [{
 			        dataIndex: 'container_number',
-			        text: 'Seq',
+			        text: <%= raw t('forms.damageds.sequence').to_json -%>,
 			        width: 50,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         return '<h5>' + (rowIndex + 1) + '</h5>';
 			        }			        
 			    }, {
 			        dataIndex: 'container_number',
-			        text: 'Container',
+			        text: <%= raw t('forms.damageds.container').to_json -%>,
 			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         return '<h1>' + rec.get('container_number') + '</h1>';
 			        }			        
 			    }, {
 			        dataIndex: 'container_number',
-			        text: 'Dettagli',
+			        text: <%= raw t('forms.damageds.details').to_json -%>,
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
@@ -109,7 +109,7 @@
 			        }			        	        
 			    }, {
 			        dataIndex: 'container_number',
-			        text: 'Data',
+			        text: <%= raw t('forms.damageds.date').to_json -%>,
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';

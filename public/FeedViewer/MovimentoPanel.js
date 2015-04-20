@@ -36,7 +36,43 @@ Ext.define('FeedViewer.MovimentoPanel', {
     		        	return false;
     		            //return (get.rec.get('container_status') == 'ANEW') ? true : false;
     		        }
-    		       }
+    		       },
+
+
+    		       
+       		    //TODO: DRY
+   		        icon_handling_status:{
+     		          bind: {bindTo: '{rec}', deep: true},
+     		          get: function (rec) {
+     		        	if (rec){
+     		        		if (rec.get('handling_status') == 'OPEN') 	return '<i class="fa fa-circle-o fa-2x" style="color:green;"></i>';
+     		        		if (rec.get('handling_status') == 'CLOSE')	return '<i class="fa fa-times fa-2x" style="color:gray;"></i>';
+     		        		if (rec.get('handling_status') == 'NEW') 	return '<i class="fa fa-plus fa-2x" style="color:blue;"></i>';
+     		        		if (rec.get('handling_status') == 'CRT') 	return '<i class="fa fa-plus fa-2x" style="color:red;"></i>';
+     		        		return rec.get('handling_status');
+     		          	}
+     		        	return '';
+     		            //return (get.rec.get('container_status') == 'ANEW') ? true : false;
+     		        }
+     		       },
+    		       
+    		       
+    		       
+	    		    //TODO: DRY
+			        icon_lock_type:{
+	     		      bind: {bindTo: '{rec}', deep: true},
+	  		          get: function (rec) {
+	  		        	if (rec){
+	  		        		if (rec.get('lock_type') == 'INSPECT') return '<i class="fa fa-search fa-2x" style="color:red;"></i>';
+	  		        		if (rec.get('lock_type') == 'DAMAGED') return '<i class="fa fa-warning fa-2x" style="color:red;"></i>';
+	  		        		return '<i class="fa fa-warning fa-2x" style="color:transparent;"></i>';
+	  		        	}
+	  		        	return '';
+	  		            //return (get.rec.get('container_status') == 'ANEW') ? true : false;
+	  		        }
+	  		       },
+    		       
+    		       
     			
     		    }    			
     		},    
@@ -112,44 +148,33 @@ Ext.define('FeedViewer.MovimentoPanel', {
                         
 						{
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Handling id/status',
+			                fieldLabel: 'Handling id / Type',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
 			                anchor: '100%',
-			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                defaults: {xtype: 'textfield', hideLabel: true},
 			                items: [
-		                        {fieldLabel: 'id', bind: '{rec.id}', disabled: true, width: 80},
-		                        {fieldLabel: 'handling_status', bind: '{rec.handling_status} {rec.lock_type}', disabled: true, anchor: '100%'}
+		                        {fieldLabel: 'id', bind: '{rec.id}', disabled: true, width: 70},
+		                        {fieldLabel: 'handling_type', xtype: 'combo', flex: 1,
+		                        	bind: {value: '{rec.handling_type}', disabled: '{!is_handling_editable}'},
+		                        	displayField: 'descr', valueField: 'cod', 
+		                        	anchor: '100%',                       	
+		                        	store: {
+		                        	  fields: ['cod', 'descr'],
+		                        	  data: [ 
+		                        	         {cod: 'TMOV', descr: 'Movimento terminal'},
+		                        	         {cod: 'FRCON', descr: 'Allaccio frito'},
+		                        	         {cod: 'INSPE', descr: 'Visita doganale'}
+		                        	  ]
+		                        	}
+		                        }		                        
+		                        
 							]
-						},                        
+						},                         
                         
                         
                         
-						{
-			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Handling type',
-			                combineErrors: true,
-			                msgTarget : 'side',
-			                layout: 'hbox',
-			                anchor: '100%',
-			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
-			                items: [
-			                        {fieldLabel: 'handling_type', xtype: 'combo',
-			                        	bind: {value: '{rec.handling_type}', disabled: '{!is_handling_editable}'},
-			                        	displayField: 'descr', valueField: 'cod', 
-			                        	anchor: '100%',                       	
-			                        	store: {
-			                        	  fields: ['cod', 'descr'],
-			                        	  data: [ 
-			                        	         {cod: 'TMOV', descr: 'Movimento terminal'},
-			                        	         {cod: 'FRCON', descr: 'Allaccio frito'},
-			                        	         {cod: 'INSPE', descr: 'Visita doganale'}
-			                        	  ]
-			                        	}
-			                        }			                
-			                ]
-			            },
 			            
 			            
 			            
@@ -239,6 +264,23 @@ Ext.define('FeedViewer.MovimentoPanel', {
 							]
 						}						
                         
+						
+						
+						, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Stato <br/>/ Lock',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+			                        {xtype: "panel", bind: '{icon_handling_status} {rec.handling_status}'},
+			                        {xtype: "panel", bind: '{icon_lock_type} {rec.lock_type}'}			                        			                
+			                ]
+			            }
+										
+						
                      ]
         	     }, 
         	     
@@ -432,6 +474,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 									success: function(rec, op) {										
 									//TODO: aggiorno il recordset con il record ritornato dal server (per id, updated_at...)
 									//this.getViewModel().getData().rec.set('handling_status', 'NEW');
+										
+										console.log(this.getViewModel());
 									this.getViewModel().setData({is_handling_editable: false});
 									this.getViewModel().setData({is_container_editable: false});
 									
@@ -439,6 +483,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 									
 									rec.set(result.data[0]);
 									this.getViewModel().setData({rec: rec});
+									//this.getViewModel().applyFormulas(['abcde.aaa']);
 												
 									//imposto handling_id anche sulla grid di dettaglio
 									this.down('gridpanel').store.proxy.extraParams.handling_id = rec.id

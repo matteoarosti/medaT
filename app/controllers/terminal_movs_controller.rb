@@ -140,7 +140,25 @@ end
       render json: ret
     end
     
+
+  ####
+  def tab_dashboard_shipowner_get_data
+    ret = {}
+    ret[:items] = []
     
+    #raggruppo i movimenti aperti in base al lock
+     gcs = HandlingHeader.select('shipowner_id, count(*) as t_cont').where('handling_status=?', 'OPEN').group('shipowner_id')
+     gcs.each do |gc|
+       n = gc.shipowner_id_Name
+       ret[:items] << {:os => n + " (#{gc.t_cont.to_i.to_s})", :data1 => gc.t_cont}
+     end   
+      
+    #ret[:items] << {:os => 'open', :data1 => 30}
+
+    render json: ret
+  end
+    
+        
       
   
 end #class

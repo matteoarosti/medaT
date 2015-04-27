@@ -25,7 +25,7 @@ def new_mov_search_handling
     hhs = hhs.where('handling_status = ?', params[:status])
   end
  
- #hhs = HandlingHeader.container(params[:container_number]).order('id').limit(1000)
+  hhs = hhs.limit(100)
  
  handling_EDIT_exists = false
  
@@ -97,6 +97,50 @@ def add_handling_items
  render :partial => "add_handling_items_" + @op
 end  
   
+
+  #tab dashboard
+    def tab_dashboard
+      render :partial => "tab_dashboard"
+    end
+    
+    ####
+    def tab_dashboard_open_movs_get_data
+      ret = {}
+      ret[:items] = []
+      
+      #raggruppo i movimenti aperti in base al lock
+       gcs = HandlingHeader.select('lock_type, count(*) as t_cont').where('handling_status=?', 'OPEN').group('lock_type')
+       gcs.each do |gc|
+         n = gc.lock_type || 'ATTIVI'
+         ret[:items] << {:os => n + " (#{gc.t_cont.to_i.to_s})", :data1 => gc.t_cont}
+       end   
+        
+      #ret[:items] << {:os => 'open', :data1 => 30}
+
+      render json: ret
+    end
+
+
+    
+    ####
+    def tab_dashboard_in_out_get_data
+      ret = {}
+      ret[:items] = []
+      
+      #raggruppo i movimenti aperti in base al lock
+       gcs = HandlingHeader.select('container_in_terminal, container_FE, count(*) as t_cont').where('handling_status=?', 'OPEN').group('container_in_terminal, container_FE')
+       gcs.each do |gc|
+         n = gc.container_in_terminal == true ? '[In]' : '[Out]'
+         n += gc.container_FE == 'F' ? ' Pieno' : ' Vuoto'
+         ret[:items] << {:os => n + " (#{gc.t_cont.to_i.to_s})", :data1 => gc.t_cont}
+       end   
+        
+      #ret[:items] << {:os => 'open', :data1 => 30}
   
+      render json: ret
+    end
+    
+    
+      
   
 end #class

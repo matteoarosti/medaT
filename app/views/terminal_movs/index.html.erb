@@ -201,5 +201,10 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
             	voci_menu: voci_menu,
             	railsBaseUri: '<%= root_path -%>'
             });
+            
+            
+            //creo il tab con le statistiche
+            acs_show_panel_std(myApp, '<%= url_for(:controller=>'terminal_movs', :action=>'tab_dashboard') -%>', {}, 'tttt');
+            
         });
     </script>

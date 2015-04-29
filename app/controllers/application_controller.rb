@@ -10,6 +10,17 @@ class ApplicationController < ActionController::Base
   require "#{Rails.root}/lib/extjs_sc_utility.rb"
  
   
+  
+  #devise: path after login
+  #costruisco 
+  def DDDDDDDDDafter_sign_in_path_for(resource)
+    ####es: user_path(current_user) (pagina show per user)
+    
+    #in base all'utente (role) costruisco la pagina da visualizzare    
+    url_for('/terminal_movs/index')    
+  end  
+  
+  
   ###################################################################
   # EXTJS SCAFFOLD
   ###################################################################

@@ -5,6 +5,12 @@ class TerminalMovsController < ApplicationController
 
 #ingresso (apertura viewport Extjs)
   def index
+    logger.info User.current.to_yaml
+    if !User.current.admin? && 1==2
+      redirect_to :controller => 'terminal_movs', :action => 'ddddd'
+      return
+    end
+    #redirect_to :controller => 'terminal_movs', :action => 'sss'
   end
 
 

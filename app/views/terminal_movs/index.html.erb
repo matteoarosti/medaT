@@ -187,11 +187,23 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                         expanded: true,
                         children:
                             [
+                             /*
                                 {
-                                task:'Users',
-                                url: '<%= url_for(:controller=>'user_managers', :action=>'extjs_sc_crt_tab') -%>',                                
-                                leaf:true
-                            }
+                                	task:'Users',
+                                	url: '<%= url_for(:controller=>'user_managers', :action=>'extjs_sc_crt_tab') -%>',                                
+                                	leaf:true
+                            	},
+                             */ 
+                            	
+                            	{
+                                	task:'Users',
+                                	op: 'USERS',                                
+                                	leaf:true
+                            	}, {
+                                	task:'Logout',
+                                	op: 'LOGOUT',                                
+                                	leaf:true
+                            	}                            	
                             ]
                     }
     		    ];

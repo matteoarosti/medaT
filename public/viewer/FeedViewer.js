@@ -105,6 +105,27 @@ Ext.define('FeedViewer.App', {
 	
     onVoceMenuSelect: function(menu, s, rec){
 		//aggiungo al tab il nuovo panel
+
+		if (rec.get('op') == 'USERS'){
+		 window.location = myApp.railsBaseUri + 'users';
+		 return;
+		}	
+
+		
+		if (rec.get('op') == 'LOGOUT'){
+			Ext.Ajax.request({
+				url: myApp.railsBaseUri + 'users/sign_out', //LOGOUT URL
+				method: 'delete',
+				success : function() {
+					window.location = myApp.railsBaseUri + 'users/sign_in'; //the location you want your browser to be  redirected.
+				},
+				params: {}
+			});
+		 return;
+		}	
+		
+		
+		
     	if (rec.get('op') == 'NEW_HANDLING_HEADER'){
 						
 			//se gia' esiste eseguo la show del tab						

@@ -146,5 +146,49 @@ it:
       ship: "nave"
       voyage: "viaggio"
       open: "apri"
-
-
+  operations:
+    I_DISCHARGE:
+      long: "Discharge da Nave"
+      short: "Disch. Nave"
+    O_EMPTYING:
+      long: "Uscita per svuotamento"
+      short: "Out Empting"
+    I_EMPTYING:
+      long: "Ingresso da Svuotamento"
+      short: "In Empting"
+    O_FILLING:
+      long: "Uscita per Carico"
+      short: "Out Filling"
+    I_FILLING:
+      long: "Ingresso da Carico"
+      short: "In Filling"
+    I_TRANSFER:
+      long: "Ingresso per trasferimento da altro Terminal"
+      short: "Trans. Term"
+    O_LOAD:
+      long: "Load su Nave"
+      short: "Out For Load"
+    I_NOTPOSITIONING:
+      long: "Ingresso per mancato posizionamento"
+      short: "Miss Posit."
+    REQ_ESTIMATE:
+      long: "Richiesta Preventivo"
+      short: "Estim. Req."
+    CUST_INSPECTION:
+      long: "Visita Doganale"
+      short: "Custom Insp"
+    LOCK:
+      long: "Blocco del Movimento"
+      short: "Lock Handl."
+    UNLOCK:
+      long: "Sblocco del Movimento"
+      short: "Unlock Han."
+    START_RFCON:
+      long: "Allaccio Frigo"
+      short: "Conn. RF"
+    END_RFCON:
+      long: "Disallacio Frigo"
+      short: "Disconn. RF"
+    CUST_INSPE:
+      long: "Visita Doganale"
+      short: "Custom Insp"

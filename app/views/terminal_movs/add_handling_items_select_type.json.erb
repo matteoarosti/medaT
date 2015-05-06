@@ -27,7 +27,7 @@
    items: [
    
    <% @operations.each do |op| %>
-		{xtype : "button", op:'<%= op[:cod] -%>', text : '<%= raw(op[:icon]) -%><span style="margin-left: 20px;"><%= op[:label] -%></span>', height: 60},     
+		{xtype : "button", op:'<%= op[:cod] -%>', text : '<%= raw(op[:icon]) -%><span style="margin-left: 20px;"><%= t("operations.#{op[:cod]}.long") -%></span>', height: 60},
    <% end %>
        
    ]

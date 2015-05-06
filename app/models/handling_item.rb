@@ -41,13 +41,16 @@ class HandlingItem < ActiveRecord::Base
  def shipper_id_Name
    self.shipper.name if self.shipper
  end
- def terminal_id_Code
-   self.terminal.code if self.terminal
- end
- 
+  def terminal_id_Code
+    self.terminal.code if self.terminal
+  end
+  def handling_item_type_short
+    I18n.t("operations.#{self.handling_item_type}.short") if !self.handling_item_type.empty?
+  end
+
  def self.as_json_prop()
      return {
-        :methods => [:ship_id_Name, :carrier_id_Name, :shipper_id_Name, :terminal_id_Code]
+        :methods => [:ship_id_Name, :carrier_id_Name, :shipper_id_Name, :terminal_id_Code, :handling_item_type_short]
       }
  end 
  

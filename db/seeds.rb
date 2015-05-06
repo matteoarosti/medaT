@@ -29,7 +29,7 @@ Equipment.create(equipment_type: '20DV', size: '20', sizetype: '20 FOOT BOX', is
 Equipment.create(equipment_type: '20RF', size: '20', sizetype: '20 FOOT BOX REEFER', iso: '')
 Equipment.create(equipment_type: '40DV', size: '40', sizetype: '40 FOOT BOX', iso: '')
 Equipment.create(equipment_type: '40FL', size: '40', sizetype: '40 FOOT FLAT RACK', iso: '')
-Equipment.create(equipment_type: '40RF', size: '40', sizetype: '40 FOOT FLAT RACK', iso: '')
+Equipment.create(equipment_type: '40RF', size: '40', sizetype: '40 FOOT REEFER', iso: '')
 Equipment.create(equipment_type: '40OT', size: '40', sizetype: '40 FOOT FLAT RACK', iso: '')
 Equipment.create(equipment_type: '40HC', size: '40', sizetype: '40 BOX HIGH CUBE', iso: '')
 

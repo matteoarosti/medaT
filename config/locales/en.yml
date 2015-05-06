@@ -165,8 +165,49 @@ en:
       voyage: "voyage"
       open: "open"
     header_list:
-
-
-
-
-
+  operations:
+    I_DISCHARGE:
+      long: "Discharge From Ship"
+      short: "Ship Disch."
+    O_EMPTYING:
+      long: "Out for Emptying"
+      short: "Out Empting"
+    I_EMPTYING:
+      long: "In after Emptying"
+      short: "In Empting"
+    O_FILLING:
+      long: "Out for Filling"
+      short: "Out Filling"
+    I_FILLING:
+      long: "In From Filling"
+      short: "In Filling"
+    I_TRANSFER:
+      long: "In By Transfer From Other Terminal"
+      short: "Trans. Term"
+    O_LOAD:
+      long: "Out For Load"
+      short: "Out For Load"
+    I_NOTPOSITIONING:
+      long: "In for missed positioning"
+      short: "Miss Posit."
+    REQ_ESTIMATE:
+      long: "Estimate Request"
+      short: "Estim. Req."
+    CUST_INSPECTION:
+      long: "Custom Inspection"
+      short: "Custom Insp"
+    LOCK:
+      long: "Lock handling"
+      short: "Lock Handl."
+    UNLOCK:
+      long: "Unlock handling"
+      short: "Unlock Han."
+    START_RFCON:
+      long: "Connect Frigo"
+      short: "Conn. RF"
+    END_RFCON:
+      long: "Disconnect Frigo"
+      short: "Disconn. RF"
+    CUST_INSPE:
+      long: "Custom Inspections"
+      short: "Custom Insp"

@@ -268,7 +268,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						
 						, {
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Stato <br/>/ Lock',
+			                fieldLabel: 'Stato / Lock',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
@@ -567,7 +567,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						        return rowIndex + 1;
 						    }},
         	       {text: 'Data/ora', width: 160, dataIndex: 'datetime_op', xtype:  'datecolumn', format: 'd-m-Y H:i:s'},
-        	       {text: 'Op', width: 160, dataIndex: 'handling_item_type', width: 100},        	        
+        	       {text: 'Op', width: 160, dataIndex: 'handling_item_type_short', width: 100},
         	       {text: 'E/U', width: 40, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: pb_get_image_IO},
                    {text: 'P/V', width: 40, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: pb_get_image_FE},
 				   {text: 'Nave', width: 130, dataIndex: 'ship_id_Name', renderer: function(value, metaData, rec){

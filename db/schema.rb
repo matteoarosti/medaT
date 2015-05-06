@@ -11,51 +11,59 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150109161754) do
+ActiveRecord::Schema.define(version: 20150324143541) do
 
   create_table "booking_items", force: true do |t|
     t.integer  "booking_id"
     t.integer  "equipment_id"
-    t.integer  "quantity",     limit: 8
-    t.string   "status",       limit: 5
+    t.integer  "quantity",        limit: 8
+    t.string   "status",          limit: 5
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "bookings", force: true do |t|
-    t.string   "num_booking",  limit: 25
-    t.integer  "shipowner_id", limit: 8
-    t.integer  "ship_id",      limit: 8
-    t.string   "voyage",       limit: 15
-    t.integer  "port_id",      limit: 8
+    t.string   "num_booking",     limit: 25
+    t.integer  "shipowner_id",    limit: 8
+    t.integer  "ship_id",         limit: 8
+    t.string   "voyage",          limit: 15
+    t.integer  "port_id",         limit: 8
     t.date     "eta"
-    t.string   "status",       limit: 5
-    t.text     "notes",        limit: 16777215
+    t.string   "status",          limit: 5
+    t.text     "notes",           limit: 16777215
     t.date     "expiration"
-    t.boolean  "to_check",                      default: true
+    t.boolean  "to_check",                         default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "carriers", force: true do |t|
-    t.string   "name",       limit: 50
-    t.string   "address",    limit: 50
-    t.string   "zip_code",   limit: 50
-    t.string   "city",       limit: 50
-    t.string   "country",    limit: 50
-    t.string   "email",      limit: 50
+    t.string   "name",            limit: 50
+    t.string   "address",         limit: 50
+    t.string   "zip_code",        limit: 50
+    t.string   "city",            limit: 50
+    t.string   "country",         limit: 50
+    t.string   "email",           limit: 50
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "equipment", force: true do |t|
-    t.string   "equipment_type", limit: 4
-    t.integer  "size",           limit: 2
-    t.string   "sizetype",       limit: 50
-    t.string   "iso",            limit: 4
-    t.boolean  "reefer",                    default: false
+    t.string   "equipment_type",  limit: 4
+    t.integer  "size",            limit: 2
+    t.string   "sizetype",        limit: 50
+    t.string   "iso",             limit: 4
+    t.boolean  "reefer",                     default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "handling_headers", force: true do |t|
@@ -65,8 +73,6 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.boolean  "over_hight"
     t.boolean  "transhipment"
     t.string   "notes"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.string   "handling_type",         limit: 5
     t.string   "container_type",        limit: 5
     t.boolean  "container_OH"
@@ -90,6 +96,13 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.decimal  "temperature_imp",                  precision: 5, scale: 2
     t.decimal  "weight_imp",                       precision: 5, scale: 2
     t.string   "imo_imp",               limit: 5
+    t.string   "fila",                  limit: 5
+    t.integer  "blocco"
+    t.integer  "tiro"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "handling_items", force: true do |t|
@@ -102,29 +115,37 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.string   "container_FE",       limit: 1
     t.integer  "ship_id",            limit: 8
     t.string   "voyage",             limit: 15
-    t.integer  "carrier_id",         limit: 8
     t.string   "driver",             limit: 50
     t.boolean  "export"
     t.string   "seal_shipowner",     limit: 15
     t.string   "seal_others",        limit: 15
-    t.boolean  "not_positioning"
     t.boolean  "codeco_sent"
     t.text     "notes",              limit: 16777215
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "carrier_id"
+    t.integer  "terminal_id"
+    t.integer  "shipper_id"
     t.integer  "booking_id"
     t.integer  "booking_item_id"
     t.boolean  "lock_fl"
     t.string   "lock_type",          limit: 10
+    t.boolean  "to_be_moved"
+    t.integer  "moved_by_user_id"
+    t.datetime "moved_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "import_headers", force: true do |t|
-    t.integer  "ship_id",       limit: 8
-    t.string   "voyage",        limit: 15
-    t.string   "import_type",   limit: 1
-    t.string   "import_status", limit: 5
+    t.integer  "ship_id",         limit: 8
+    t.string   "voyage",          limit: 15
+    t.string   "import_type",     limit: 1
+    t.string   "import_status",   limit: 5
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "import_items", force: true do |t|
@@ -136,25 +157,31 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.decimal  "weight",                            precision: 5, scale: 2
     t.decimal  "temperature",                       precision: 5, scale: 2
     t.string   "imo",              limit: 4
-    t.string   "status",           limit: 5
+    t.string   "status",           limit: 10
     t.text     "notes",            limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "iso_equipments", force: true do |t|
-    t.string   "iso",          limit: 4
+    t.string   "iso",             limit: 4
     t.integer  "equipment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "ports", force: true do |t|
-    t.string   "port_code",  limit: 5
-    t.string   "city",       limit: 50
-    t.string   "country",    limit: 50
+    t.string   "port_code",       limit: 5
+    t.string   "city",            limit: 50
+    t.string   "country",         limit: 50
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "shipowners", force: true do |t|
@@ -164,6 +191,8 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.decimal  "estimate_hourly_cost",            precision: 5, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "shippers", force: true do |t|
@@ -177,15 +206,28 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.decimal  "scartaggio_cost",            precision: 5, scale: 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "ships", force: true do |t|
-    t.string   "name",         limit: 50
-    t.string   "short_name",   limit: 10
-    t.string   "call_sign",    limit: 10
+    t.string   "name",            limit: 50
+    t.string   "short_name",      limit: 10
+    t.string   "call_sign",       limit: 10
     t.integer  "shipowner_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
+  end
+
+  create_table "terminals", force: true do |t|
+    t.string   "code",            limit: 5
+    t.string   "name",            limit: 50
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
   create_table "users", force: true do |t|
@@ -201,6 +243,8 @@ ActiveRecord::Schema.define(version: 20150109161754) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
     t.string   "name"
     t.integer  "role"
   end

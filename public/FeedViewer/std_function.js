@@ -42,13 +42,19 @@
 // ----------------------------------------
 function acs_show_panel_std(app, url, jsonData, tab_id, listeners, loadBodyMask){
 	
+	
 	if(typeof(listeners)==='undefined' || listeners==null) listeners = {};		
 	
 	if (loadBodyMask == 'Y')
 		Ext.getBody().mask('Loading... ', 'loading').show();	
 	
 
-	mp = app.feedInfo;
+	if (app.xtype == 'tabpanel')
+		mp = app;
+	else
+		mp = app.feedInfo;
+	
+	
 	mp_tab = Ext.getCmp(tab_id);
 
 	if (mp_tab){

@@ -1,16 +1,23 @@
 class TerminalMovsController < ApplicationController
 
-  layout "application_extjs", only: [:index]
+  layout "application_extjs", only: [:index, :index_mulettista]
   
 
 #ingresso (apertura viewport Extjs)
   def index
-    logger.info User.current.to_yaml
-    if !User.current.admin? && 1==2
-      redirect_to :controller => 'terminal_movs', :action => 'ddddd'
+    if User.current.admin?
+      ##redirect_to :controller => 'terminal_movs', :action => 'ddddd'
+      #pagina standard (show)
       return
     end
-    #redirect_to :controller => 'terminal_movs', :action => 'sss'
+    
+    if User.current.mulettista?
+      render "index_mulettista"
+      return
+    end    
+    
+    #se sono qui: role non definito
+    redirect_to :controller => 'terminal_movs', :action => 'sss'
   end
 
 

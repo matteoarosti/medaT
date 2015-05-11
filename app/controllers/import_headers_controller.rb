@@ -76,6 +76,14 @@ def find_import
  @item = ImportHeader.new
 end
 
+# Form per find import (in base a nave e viaggio, mulettista)
+def find_import_simple
+ @item = ImportHeader.new
+ @import_type = params[:import_type]
+end
+
+
+
 # Verifico l'esistenza di un import (dato nave e viaggio)
 def search_import
  ret = {}

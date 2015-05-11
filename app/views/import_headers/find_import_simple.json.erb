@@ -1,0 +1,125 @@
+{
+ success: true,
+ items: [
+  {
+   xtype: 'panel',
+   closable: true,
+   title: 'Open',
+	layout: {
+	    type: 'hbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+   
+   
+   //grid navi
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Ricerca nave',
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            type: 'ajax',
+        	            url: <%= raw  (root_path + 'import_headers/get_ship_in_find').to_json -%>,
+        	            extraParams: {import_type: <%= raw @import_type.to_json -%>, import_status: 'OPEN'},
+        	            reader: {
+        	                type: 'json',
+        	                rootProperty: 'items'
+        	            }
+        	        }
+        	    }), 
+        	    
+        	    
+			    columns: [{
+			        dataIndex: 'name',
+			        text: 'Nome nave',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h2>' + value + '</h2>';
+			        }			        
+			    }],
+		
+			listeners: {
+			  itemclick: function(dv, record, item, index, e) {
+			  		field_voyage = this.up('panel').getComponent('gridVoyage');			  		
+		      		field_voyage.getStore().proxy.extraParams['ship_id'] =  record.get('id');
+		      		field_voyage.getStore().load();
+				}
+			}
+				    
+		}	    
+        	      
+
+
+
+
+   //grid vojage
+		 , {
+				flex: 0.6,
+				layout: 'fit',
+        	    title: 'Ricerca viaggio',
+        	    itemId: 'gridVoyage',
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            type: 'ajax',
+        	            url: <%= raw  (root_path + 'import_headers/get_voyage_by_ship').to_json -%>,
+        	            extraParams: {import_type: <%= raw @import_type.to_json -%>, import_status: 'OPEN'},
+        	            reader: {
+        	                type: 'json',
+        	                rootProperty: 'items'
+        	            }
+        	        }
+        	    }), 
+        	    
+        	    
+			    columns: [{
+			        dataIndex: 'voyage',
+			        text: 'Viaggio',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h3>' + value + '</h3>';
+			        }			        
+			    }],
+			    
+			    
+			listeners: {
+			  itemclick: function(dv, record, item, index, e) {
+			  		mp = Ext.getCmp('main-panel');
+			  		console.log(mp);
+			  		acs_show_panel_std(mp, '<%= url_for(:action=>'open_import') -%>', {import_header_id: record.get('id')}, 'Import');
+				}
+			}
+			    
+		}	    
+   
+   
+   
+   
+   
+   
+
+   ]
+                  
+  }
+ ]
+}

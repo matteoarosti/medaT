@@ -52,8 +52,8 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
 
 
 s = Ext.create('Ext.container.Viewport',{
-        height:590,
-        width:590,
+//        height:590,
+//        width:590,
         padding:'25px',
         layout:'vbox',
         defaults:{
@@ -62,7 +62,10 @@ s = Ext.create('Ext.container.Viewport',{
         items:[
 			{
 			   xtype: 'tabpanel',
+			   id: 'main-panel',
 			   region: 'center',
+			   autoScroll: true,
+			   flex: 1,
             	
 				items:[
 
@@ -79,11 +82,28 @@ s = Ext.create('Ext.container.Viewport',{
 						    pack  : 'start',
 						},             	
 						margin: '10 10 0 10',
+						
+						defaults: {
+							margin: '10 20 10 20'
+						},
+						
 					    items: [
 					      {xtype : "button", 
 					    	text : '<i class="fa fa-download fa-2x" style="color:green;"></i><span style="margin-left: 20px;">Da movimentare</span>', 
 					    	height: 60,
 					    	 handler: function(){acs_show_panel_std(s.down('panel'), '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'to_be_moved') -%>', {}, 'tttt');}
+					      }, {xtype : "button", 
+					    	text : '<i class="fa fa-check fa-2x" style="color:green;"></i><span style="margin-left: 20px;">Da ispezionare</span>', 
+					    	height: 60,
+					    	 handler: function(){acs_show_panel_std(s.down('panel'), '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'lock_INSPECT') -%>', {}, 'tttt');}
+					      }, {xtype : "button", 
+					    	text : '<i class="fa fa-check fa-2x" style="color:green;"></i><span style="margin-left: 20px;">Apri import - SBARCO</span>', 
+					    	height: 60,
+					    	 handler: function(){acs_show_panel_std(s.down('panel'), '<%= url_for(:controller=>'import_headers', :action=>'find_import_simple', :import_type => 'D') -%>', {}, 'tttt');}
+					      }, {xtype : "button", 
+					    	text : '<i class="fa fa-check fa-2x" style="color:green;"></i><span style="margin-left: 20px;">Apri import - IMBARCO</span>', 
+					    	height: 60,
+					    	 handler: function(){acs_show_panel_std(s.down('panel'), '<%= url_for(:controller=>'import_headers', :action=>'find_import_simple', :import_type => 'L') -%>', {}, 'tttt');}
 					      }
 					    ]
 					}

@@ -208,13 +208,8 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						xtype: 'grid',
 						loadMask: true,
 						flex: 1,
-						margin: '30 5 5 5',
-						
-						layout: {
-                			type: 'vbox',
-                			align: 'stretch'
-     					},
-									
+						margin: '30 5 5 5', 
+															
 						store: {
 							xtype: 'store',
 							autoLoad: false,	

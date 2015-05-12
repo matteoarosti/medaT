@@ -17,7 +17,7 @@ class TerminalMovsController < ApplicationController
     end    
     
     #se sono qui: role non definito
-    redirect_to :controller => 'terminal_movs', :action => 'sss'
+    render "index_not_defined"
   end
 
 

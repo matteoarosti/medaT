@@ -57,132 +57,132 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
 
  		voci_menu = [
     		            {
-    		                task:'Tabelle di base',  
+    		                task:<%= raw t("menu.tables.tables").to_json %>,
     		                iconCls:'task-folder', 
     		                expanded: false,
     		                children:
     		                [
     		                 { 
-                                 task:'Ship Owners',
+                                 task:<%= raw t("menu.tables.ship_owners").to_json %>,
                                  url: '<%= url_for(:controller=>'shipowners', :action=>'extjs_sc_crt_tab') -%>', 
                                  leaf:true 
                              }, { 
-                                 task:'Carriers', 
+                                 task:<%= raw t("menu.tables.carriers").to_json %>,
                                  url: '<%= url_for(:controller=>'carriers', :action=>'extjs_sc_crt_tab') -%>',                                 
                                  leaf:true 
                              }, { 
-                                 task:'Equipment',
+                                 task:<%= raw t("menu.tables.equipment").to_json %>,
                                  url: '<%= url_for(:controller=>'equipment', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
                              }, { 
-                                 task:'ISO - Equipment',
+                                 task:<%= raw t("menu.tables.iso_equipment").to_json %>,
                                  url: '<%= url_for(:controller=>'iso_equipment', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
                              }, { 
-                                 task:'Ports',
+                                 task:<%= raw t("menu.tables.ports").to_json %>,
                                  url: '<%= url_for(:controller=>'ports', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
                              }, { 
-                                 task:'Shippers',
+                                 task:<%= raw t("menu.tables.shippers").to_json %>,
                                  url: '<%= url_for(:controller=>'shippers', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
                              }, { 
-                                 task:'Ships',
+                                 task:<%= raw t("menu.tables.ships").to_json %>,
                                  url: '<%= url_for(:controller=>'ships', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
                              }, { 
-                                 task:'Terminals',
+                                 task:<%= raw t("menu.tables.terminals").to_json %>,
                                  url: '<%= url_for(:controller=>'terminals', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
                              }   		                 
     		                ]
                         }, {
-                        task:'Movimenti',
+                        task:<%= raw t("menu.movements.movements").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,
                         children:
                             [
                                 {
-                                    task:'Ricerca / Inserisci',
+                                    task:<%= raw t("menu.movements.search_insert").to_json %>,
                                     leaf:true,
                                     iconCls:'task',
                                     op: 'NEW_HANDLING_HEADER'
                                 }, {
-                                    task:'Da ispezionare',
+                                    task:<%= raw t("menu.movements.to_inspect").to_json %>,
                                     leaf: true,
                                  	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'lock_INSPECT') -%>',                                    
                                     op: 'new_tab',                                
                                 }, {
-                                    task:'Danneggiati',
+                                    task:<%= raw t("menu.movements.damaged").to_json %>,
                                     leaf: true,
                                  	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'lock_DAMAGED') -%>',                                    
                                     op: 'new_tab',                                
                                 }, {
-                                    task:'Da movimentare',
+                                    task: <%= raw t("menu.movements.to_handle").to_json %>,
                                     leaf: true,
                                  	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'to_be_moved') -%>',                                    
                                     op: 'new_tab',                                
                                 }
                             ]
                     }, {
-                        task:'Booking',
+                        task:<%= raw t("menu.bookings.bookings").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,
                         children:
                             [
                                 {
-                                    task:'Inserisci nuovo',
+                                    task:<%= raw t("menu.bookings.new_booking").to_json %>,
                                     leaf:true,
                                  	url: '<%= url_for(:controller=>'bookings', :action=>'form_new') -%>',                                    
                                     op: 'new_tab',
                                     width: 700,
                                     height: 500
                                 }, {
-	                                task:'Ricerca',
+	                                task:<%= raw t("menu.bookings.search").to_json %>,
                                  	url: '<%= url_for(:controller=>'bookings', :action=>'form_search') -%>',	                                
 	                                leaf:true,
 	                                op: 'new_tab'
 	                            }, {
-	                                task:'To Check',
+	                                task:<%= raw t("menu.bookings.to_check").to_json %>,
                                  	url: '<%= url_for(:controller=>'bookings', :action=>'to_check') -%>',	                                
 	                                leaf:true,
 	                                op: 'new_tab'
 	                            }
                             ]
                     }, {
-                        task:'Import',
+                        task:<%= raw t("menu.import.import").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,
                         children:
                             [{
-                                task:'Nuovo import',
+                                task:<%= raw t("menu.import.new_import").to_json %>,
                                 url: '<%= url_for(:controller=>'import_headers', :action=>'new_import') -%>',                                
                                 leaf:true
                             }, {
-                                task:'Apri import',
+                                task:<%= raw t("menu.import.open_import").to_json %>,
                                 url: '<%= url_for(:controller=>'import_headers', :action=>'find_import') -%>',                                
                                 op: 'new_win',
                                 leaf:true
                             }, {
-                                task:'Elenco',
+                                task:<%= raw t("menu.import.list").to_json %>,
                                 url: '<%= url_for(:controller=>'import_headers', :action=>'extjs_sc_crt_tab') -%>',                                
                                 leaf:true
                             }]
                     }, {
-                        task:'Reportistica',
+                        task:<%= raw t("menu.report.reports").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,
                         children:
                             [
                              {
-                                task:'Movimenti',
+                                task:<%= raw t("menu.report.movements").to_json %>,
                                 url: '<%= url_for(:controller=>'reports', :action=>'handlings_parameters') -%>',                                
                                 op: 'new_win',
                                 leaf:true
                            	 }
                             ]
                     }, {
-                        task:'Gestione Utenti',
+                        task:<%= raw t("menu.user_manager.users").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,
                         children:
@@ -196,11 +196,11 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                              */ 
                             	
                             	{
-                                	task:'Users',
+                                	task:<%= raw t("menu.user_manager.users").to_json %>,
                                 	op: 'USERS',                                
                                 	leaf:true
                             	}, {
-                                	task:'Logout',
+                                	task:<%= raw t("menu.user_manager.logout").to_json %>,
                                 	op: 'LOGOUT',                                
                                 	leaf:true
                             	}                            	

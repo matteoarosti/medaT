@@ -22,26 +22,35 @@
 en:
   tables:
     equipment:
+      equipment: "equipment"
       equipment_type: "type"
       size: "size"
       sizetype: "sizetype"
       iso: "iso code"
       reefer: "reefer"
+    iso_equipment:
+      iso_equipment: "iso-equipment"
+      iso: "iso"
+      equipment_id_Name: "Equipment"
     ship_owners:
+      ship_owners: "Ship Owners"
       name: "name"
       short_name: "short name"
       email: "email"
       estimate_hourly_cost: "estimate hourly cost"
     ports:
+      ports: "Ports"
       port_code: "port code"
       city: "city"
       country: "country"
     ships:
+      ships: "Ships"
       name: "name"
       short_name: "short name"
       call_sign: "call sign"
       shipowner: "shipowner"
     carriers:
+      carriers: "Carriers"
       name: "name"
       address: "address"
       zip_code: "zip code"
@@ -49,6 +58,7 @@ en:
       country: "country"
       email: "email"
     shippers:
+      shippers: "Shippers"
       name: "name"
       address: "address"
       zip_code: "zip code"
@@ -58,6 +68,7 @@ en:
       unit_cost: "unit_cost"
       scartaggio_cost: "scartaggio_cost"
     terminals:
+      terminals: "Terminals"
       code: "terminal code"
       name: "denomination"
   forms:
@@ -211,3 +222,37 @@ en:
     CUST_INSPE:
       long: "Custom Inspections"
       short: "Custom Insp"
+  menu:
+    tables:
+      tables: "Tables"
+      ship_owners: "Ship Owners"
+      carriers: "Carriers"
+      equipment: "Equipment"
+      iso_equipment: "ISO - Equipment"
+      ports: "Ports"
+      shippers: "Ships"
+      ships: "Sh"
+      terminals: "Terminals"
+    movements:
+      movements: "Movements"
+      search_insert: "Search / Insert"
+      to_inspect: "To inspect"
+      damaged: "Damaged"
+      to_handle: "To handle"
+    bookings:
+      bookings: "Bookings"
+      new_booking: "New booking"
+      search: "Search"
+      to_check: "To check"
+    import:
+      import: "Imports"
+      new_import: "New import"
+      open_import: "Open import"
+      list: "List"
+    report:
+      reports: "reports"
+      movements: "Movements"
+    user_manager:
+      user_manager: "User manager"
+      users: "Users"
+      logout: "Logout"

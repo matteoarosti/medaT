@@ -1,29 +1,35 @@
 it:
   tables:
     equipment:
+      equipment: "tipi container"
       equipment_type: "tipo"
       size: "dimensione"
       sizetype: "dimensione / tipo"
       iso: "codice iso"
       reefer: Frigo
     iso_equipment:
+      iso_equipment: "iso-equipment"
       iso: "iso"
       equipment_id_Name: "Equipment"      
     ship_owners:
+      ship_owners: "Linee"
       name: "nome"
       short_name: "nome breve"
       email: "email"
       estimate_hourly_cost: "costo orario preventivi"
     ports:
+      ports: "Porti"
       port_code: "codice"
       city: "città"
       country: "nazione"
     ships:
+      ships: "Navi"
       name: "nome"
       short_name: "nome breve"
       call_sign: "identificativo radio"
       shipowner: "compagnia"
     carriers:
+      carriers: "Vettori"
       name: "nome"
       address: "indirizzo"
       zip_code: "cap"
@@ -31,6 +37,7 @@ it:
       country: "nazione"
       email: "email"
     shippers:
+      shippers: "Spedizionieri"
       name: "nome"
       address: "indirizzo"
       zip_code: "cap"
@@ -40,6 +47,7 @@ it:
       unit_cost: "costo unitario"
       scartaggio_cost: "costo scartaggio"
     terminals:
+      terminals: "terminal"
       code: "codice terminal"
       name: "denominazione"
   forms:
@@ -192,3 +200,37 @@ it:
     CUST_INSPE:
       long: "Visita Doganale"
       short: "Custom Insp"
+  menu:
+    tables:
+      tables: "Tabelle di base"
+      ship_owners: "Armatori"
+      carriers: "Vettori"
+      equipment: "Tipologie"
+      iso_equipment: "ISO - Tipologie"
+      ports: "Porti"
+      shippers: "Spedizionieri"
+      ships: "navi"
+      terminals: "Terminal"
+    movements:
+      movements: "Movimenti"
+      search_insert: "Ricerca / Inserisci"
+      to_inspect: "Da ispezionare"
+      damaged: "Danneggiati"
+      to_handle: "Da movimentare"
+    bookings:
+      bookings: "Booking"
+      new_booking: "Nuovo booking"
+      search: "Ricerca"
+      to_check: "Da verificare"
+    import:
+      import: "Importazioni"
+      new_import: "Nuova importazione"
+      open_import: "Apri importazione"
+      list: "Elenco"
+    report:
+      reports: "Report"
+      movements: "Movimenti"
+    user_manager:
+      user_manager: "Gesione utenti"
+      users: "Utenti"
+      logout: "Logout"

@@ -51,7 +51,7 @@
 			extjs_std_combo_model('shipowner', @item),
 			extjs_std_combo_model('ship', @item, {}, fcR {})]) -%>,
 
-		<%= raw extjs_std_textfield('voyage', @item) -%>,
+		<%= raw extjs_std_textfield('voyage', @item, {:allowBlank => true}) -%>,
 
 	    <%= raw extjs_fieldcontainer('', {}, [	 
 			extjs_std_combo_model('port', @item),

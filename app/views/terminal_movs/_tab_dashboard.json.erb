@@ -9,9 +9,25 @@
 	    align : 'stretch',
 	    pack  : 'start',
 	}, 
+	
+  listeners: {
+   afterrender: function(comp){
+   	var task = {
+	    run: function(){
+	        //aggiorno periodicamente i grafici
+	        Ext.Array.each(comp.query('polar, chart'), function(grafico){
+	        	grafico.store.load();
+	        });
+	        
+	    },
+	    interval: 3*60*1000 //3 minuti (in millisecondi)
+	}
+	 
+	Ext.TaskManager.start(task);
+   }
+  },
+	
   items: [
-
-
 
 		{
             xtype: 'polar',

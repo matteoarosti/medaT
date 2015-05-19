@@ -51,6 +51,8 @@
 			extjs_std_combo_model('shipowner', @item),
 			extjs_std_combo_model('ship', @item, {}, fcR {})]) -%>,
 
+		<%= raw extjs_std_textfield('voyage', @item) -%>,
+
 	    <%= raw extjs_fieldcontainer('', {}, [	 
 			extjs_std_combo_model('port', @item),
 			extjs_std_datefield('eta', @item, {:allowBlank => true}, fcR {})]) -%>,
@@ -79,12 +81,42 @@
 						success: function(rec, op) {
 							var result = Ext.JSON.decode(op.getResponse().responseText);
 							this.up('form').getForm().findField('id').setValue(result.data[0].id);						
-							this.up('form').getForm().findField('id_out').setValue(result.data[0].id);				 										
+							this.up('form').getForm().findField('id_out').setValue(result.data[0].id);
+							
+							view_model = this.up('form').up('panel').getViewModel().getData();
+							
+							//se ero in modifica, dopo 'Salva' chiudo
+							if (view_model.in_create == false){
+								this.up('form').up('panel').close();
+								return;
+							}							
+							
+							//altrimenti apro gia' l'inserimento per il dettaglio											 										
 						 	this.up('form').up('panel').getViewModel().setData({in_create: false});
 						 	
 						 	//refresh grid dettagli
 						 	this.up('form').up('panel').down('grid').store.proxy.extraParams.booking_id = result.data[0].id;
-						 	this.up('form').up('panel').down('grid').store.load();
+						 	this.up('form').up('panel').down('grid').store.load();						 	
+						 	
+			 				my_listeners = {
+		                		afterSave: function(fromWindow){
+		                			fromWindow.close();
+		                			this.up('form').up('panel').down('grid').store.load();
+		                		}, scope: this
+		                		
+								, afterSaveClose: function(fromWindow){
+		                			fromWindow.close();
+		                			this.up('form').up('panel').close();
+		                		}, scope: this		                		
+		                		
+		                	}
+		                	
+				     	 	new_win = acs_show_win_std('Dettaglio Booking', <%= raw url_for(:controller=>'bookings', :action=>'bitems_form_new').to_json -%>,
+				     	 		{booking_id: result.data[0].id},
+				     	 		400, 300, my_listeners);										
+						 	
+						 	
+						 							 	
 						}, scope: this,				
 						
 						failure: function(rec, op) {
@@ -127,6 +159,12 @@
 					                			fromWindow.close();
 					                			this.up('grid').store.load();
 					                		}, scope: this
+					                		
+					                		, afterSaveClose: function(fromWindow){
+					                			fromWindow.close();
+					                			this.up('grid').up('panel').close();
+					                		}, scope: this
+					                		
 					                	}
 					                	
 							     	 	new_win = acs_show_win_std('Dettaglio Booking', <%= raw url_for(:controller=>'bookings', :action=>'bitems_form_new').to_json -%>,
@@ -181,6 +219,11 @@
 											                		afterSave: function(fromWindow){
 											                			fromWindow.close();
 											                			loc_grid.store.load();
+											                		}, scope: this
+											                		
+											                		, afterSaveClose: function(fromWindow){
+											                			fromWindow.close();
+											                			loc_grid.up('panel').close();
 											                		}, scope: this
 											                	}
 											                	

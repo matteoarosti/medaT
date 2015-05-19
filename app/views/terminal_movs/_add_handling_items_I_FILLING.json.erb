@@ -27,34 +27,9 @@
     <%= raw extjs_to_be_moved('to_be_moved', @hh, @new_rec) -%>,
     <%= raw extjs_posizionamento('da_posizionare', @hh, @new_rec) -%>
    ],
-   
-   
-	buttons:
-        [{
-            text: 'Save',
-            handler: function (btn, evt) {              
-             form = this.up('form').getForm();
-             if (form.isValid()) {
-             	new_rec = Ext.create('HandlingItem', {});
-             	new_rec.data = form.getValues();
-             	new_rec.save({
-					success: function(rec, op) {
-
-					 //ricarico la testata e i dettagli
-					 rec = this.up('window').open_vars.mov_panel.getViewModel().getData().rec;
-					 var result = Ext.JSON.decode(op.getResponse().responseText);																		
-					 rec.set(result.hh[0]);
-					 this.up('window').open_vars.mov_panel.getViewModel().setData({rec: rec});					 
-					 this.up('window').open_vars.mov_panel.down('grid').store.reload();
-					 
-					 //chiudo										
-					 this.up('window').close();
-					 								
-					}, scope: this,				 
-		    	});
-             }             
-            }
-        }]   
+      
+	buttons:[<%= render :partial=>'add_handling_items_buttons' -%>]
+	   
   }
  ]
 }

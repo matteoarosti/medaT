@@ -4,6 +4,28 @@ class BookingsController < ApplicationController
   'Booking'
  end  
 
+ ###################################################
+ #ELIMINAZIONE
+ ###################################################
+ def extjs_sc_destroy
+   success = false
+   #verifico che non sia usato in nessun movimento
+   @item = Booking.find(params[:data][:id]) 
+   num_impegni_tot_booking = @item.get_num_impegni_tot()
+   if num_impegni_tot_booking > 0
+    success = false
+    message = 'Attenzione! Ci sono movimenti abbinati'
+   else
+    #info: delete non esegue il destroy in cascata dei booking_items
+    @item.destroy      
+    success = true
+    message = ''
+   end
+   
+    render json: {:success => success, :message=>message}     
+ end
+ 
+ 
  def form_new
   @item = Booking.new
   @item.status = 'OPEN'

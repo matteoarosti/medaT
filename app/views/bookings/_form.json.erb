@@ -71,6 +71,63 @@
 	   
 		buttons:
 	        [{
+	            text: 'Elimina',  cls: 'btn-del',
+	            handler: function (btn, evt) {              
+	             form = this.up('form').getForm();
+	             
+	             	  panel = this.up('panel');
+					  Ext.MessageBox.confirm('Richieta conferma', 'Eliminare il booking corrente?', function(btn){
+					   if(btn === 'yes'){
+					   
+			             	new_rec = Ext.create('Booking', {});
+			             	//devo inizializzare anche uno store altrimenti (se il model non e' mai stato usato) non ha le info sul proxy
+			             	new Ext.data.Store({
+							    autoLoad: false,
+							    model: 'Booking'
+							});
+							
+							Ext.Ajax.request({
+			                    url: new_rec.proxy.api.destroy,
+			                    waitMsg: 'Salvataggio in corso....',
+								method:'POST',                     
+			                    jsonData: {data: form.getValues()},	
+			             	
+								success: function(result, request) {
+										var returnData = Ext.JSON.decode(result.responseText);
+										if (returnData.success == false){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: returnData.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})
+					                      return false;										
+										}								
+								
+								
+									panel.up('panel').destroy();						 							
+								}, scope: this,
+								
+								failure: function(rec, op) {
+									var result = Ext.JSON.decode(op.getResponse().responseText);
+									Ext.MessageBox.show({
+				                        title: 'EXCEPTION',
+				                        msg: result.message,
+				                        icon: Ext.MessageBox.ERROR,
+				                        buttons: Ext.Msg.OK
+			                    	})					
+								}, scope: this,						
+												 
+					    	});	             
+
+					   }
+					   else{
+					      //some code
+					   }
+					 }); //yes
+             
+	            }
+	        }, '->', {
 	            text: 'Salva',
 	            handler: function (btn, evt) {              
 	             form = this.up('form').getForm();

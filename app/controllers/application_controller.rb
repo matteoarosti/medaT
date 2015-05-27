@@ -95,11 +95,11 @@ class ApplicationController < ActionController::Base
   ########################################## 
    if !params[:data].kind_of?(Array)
     item = extjs_sc_model.constantize.find(params[:data][:id])
-    item.delete()
+    item.destroy() #delete non elimina has_many in cascata
    else
     params[:data].each do |rec|
       item = extjs_sc_model.constantize.find(rec[:id])
-      item.delete()    
+      item.destroy() #delete non elimina has_many in cascata    
     end
    end 
     render json: {:success => true}

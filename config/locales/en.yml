@@ -198,7 +198,7 @@ en:
     O_LOAD:
       long: "Out For Load"
       short: "Out For Load"
-    I_NOTPOSITIONING:
+    I_NOT_POSIT:
       long: "In for missed positioning"
       short: "Miss Posit."
     REQ_ESTIMATE:
@@ -222,6 +222,9 @@ en:
     CUST_INSPE:
       long: "Custom Inspections"
       short: "Custom Insp"
+    INSPECT:
+      long: "Inspect"
+      short: "Inspect"      
   menu:
     tables:
       tables: "Tables"

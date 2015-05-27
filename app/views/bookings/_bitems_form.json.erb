@@ -64,7 +64,7 @@
 	            handler: function (btn, evt) {              
 	             form = this.up('form').getForm();
 	             if (form.isValid()) {
-	             	new_rec = Ext.create('BookingItem', {});
+	             	new_rec = Ext.create('BookingItem', {});	             	
 	             	new_rec.data = form.getValues();
 	             	new_rec.save({
 						success: function(rec, op) {

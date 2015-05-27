@@ -58,6 +58,7 @@ TMOV:
   set:
    container_in_terminal: true
    container_FE_copy: true
+   seal_exp_copy: true   
    operation_type: 'MT'
  I_TRANSFER:
   label: 'In By Transfer From Other Terminal'
@@ -79,7 +80,7 @@ TMOV:
    container_FE_copy: true
    handling_header_status: CLOSE
    operation_type: 'MT'
- I_NOTPOSITIONING:
+ I_NOT_POSIT:
   label: In for missing positioning
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
   check:
@@ -87,9 +88,8 @@ TMOV:
    container_FE: E
   set:
    container_in_terminal: true
-   container_FE: E
    container_FE_copy: false
-   opt_type: 'MT'
+   operation_type: 'MT'
  REQ_ESTIMATE:
   label: Estimate Request
   icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'

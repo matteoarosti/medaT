@@ -176,7 +176,7 @@ it:
     O_LOAD:
       long: "Load su Nave"
       short: "Out For Load"
-    I_NOTPOSITIONING:
+    I_NOT_POSIT:
       long: "Ingresso per mancato posizionamento"
       short: "Miss Posit."
     REQ_ESTIMATE:
@@ -200,6 +200,9 @@ it:
     CUST_INSPE:
       long: "Visita Doganale"
       short: "Custom Insp"
+    INSPECT:
+      long: "Ispezionato"
+      short: "Ispezionato"      
   menu:
     tables:
       tables: "Tabelle di base"

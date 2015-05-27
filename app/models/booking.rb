@@ -3,6 +3,8 @@ class Booking < ActiveRecord::Base
  belongs_to :handling_header
  belongs_to :shipowner
  belongs_to :equipment
+ 
+ has_many :booking_items, :dependent => :destroy
 
  scope :like_num_booking, ->(num_booking) {where("num_booking LIKE ?", "%#{num_booking}%")}
  scope :to_check, ->() {where("to_check = true")}
@@ -92,6 +94,13 @@ def valida_insert_item(hi)
  ret[:is_valid] = true
  ret[:message]  = ''
  return ret 
+end
+
+
+
+#num_impegni per booking
+def get_num_impegni_tot()
+ return HandlingHeader.where('1 = 1').where('booking_id = ?', self.id).count  
 end
 
 

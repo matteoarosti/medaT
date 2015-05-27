@@ -445,9 +445,9 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      //combineErrors: true,
                      //msgTarget : 'side',
                  	layout: {
-                	    type: 'hbox',
+                	    type: 'vbox',
                 	    //align : 'stretch',
-                	    pack  : 'start',
+                	    //pack  : 'start',
                 	},
                      defaults: {
                          //flex: 1,
@@ -458,7 +458,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      },
                      items: [
 
- 						{ xtype : "button", text : 'Salva', flex: 1,
+ 						{ xtype : "button", text : 'Salva', width: '100%',
  							
 						    bind: {
 								visible: '{is_handling_editable}'
@@ -500,7 +500,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						 
 						 
 						 
- 						{ xtype : "button", text : 'Modifica', flex: 1,
+ 						{ xtype : "button", text : 'Modifica', width: '100%',
  							
 						    bind: {
 								visible: '{!is_handling_editable}'
@@ -512,7 +512,70 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			                		 {rec_id: this.getViewModel().getData().rec.get('id')},
 			                		 700, 500, null, null, null, null, {mov_panel: this});
 						    }, scope: this
-						}						 
+						}
+						 
+						 ,
+						 
+						 
+						 {		xtype: 'button',
+					            text: 'Elimina',  cls: 'btn-del',  width: '100%',
+					            handler: function (btn, evt) {              					             
+					             
+					            	  m_view = this;
+					             	  panel = this;
+									  Ext.MessageBox.confirm('Richieta conferma', 'Eliminare il movimento corrente e i suoi dettagli?', function(btn){
+									   if(btn === 'yes'){
+									   
+							             	new_rec = Ext.create('HandlingHeader', {});
+							             	//devo inizializzare anche uno store altrimenti (se il model non e' mai stato usato) non ha le info sul proxy
+							             	new Ext.data.Store({
+											    autoLoad: false,
+											    model: 'HandlingHeader'
+											});
+											
+											Ext.Ajax.request({
+							                    url: new_rec.proxy.api.destroy,
+							                    waitMsg: 'Salvataggio in corso....',
+												method:'POST',                     
+							                    jsonData: {data: m_view.getViewModel().getData().rec.data},	
+							             	
+												success: function(result, request) {
+														var returnData = Ext.JSON.decode(result.responseText);
+														if (returnData.success == false){
+															Ext.MessageBox.show({
+										                        title: 'EXCEPTION',
+										                        msg: returnData.message,
+										                        icon: Ext.MessageBox.ERROR,
+										                        buttons: Ext.Msg.OK
+									                    	})
+									                      return false;										
+														}								
+												
+												
+													panel.destroy();						 							
+												},
+												
+												failure: function(rec, op) {
+													var result = Ext.JSON.decode(op.getResponse().responseText);
+													Ext.MessageBox.show({
+								                        title: 'EXCEPTION',
+								                        msg: result.message,
+								                        icon: Ext.MessageBox.ERROR,
+								                        buttons: Ext.Msg.OK
+							                    	})					
+												}, scope: this,						
+																 
+									    	});	             
+
+									   } 
+									   else{
+									      //some code
+									   }
+									 }); //yes
+				             
+					            }, scope: this
+					        }						 
+						 
                                                 
                      ]
         	     }

@@ -3,11 +3,10 @@ class HandlingHeader < ActiveRecord::Base
  belongs_to :shipowner
  belongs_to :equipment
  belongs_to :booking
- has_many :handling_items
+ has_many :handling_items, :dependent => :destroy
    
  scope :extjs_default_scope, -> { eager_load(:shipowner, :equipment) }
  scope :container, ->(container_number) {where("container_number = ?", container_number)}
- scope :booking, ->(booking_number) {where("container_number = ?", container_number)}
  scope :locked, -> {where("lock_fl=?", true)}
  scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
  scope :locked_DAMAGED, -> {locked.where("lock_type = ?", 'DAMAGED')}

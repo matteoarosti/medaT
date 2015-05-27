@@ -223,7 +223,7 @@ Ext.define("HandlingHeader", { extend: "Ext.data.Model",
             read: root_path + 'handling_headers/sc_read',
             create: root_path + 'handling_headers/sc_create',
             update: root_path + 'handling_headers/sc_update',
-            destroy: root_path + 'handling_headers/sc_destroy'
+            destroy: root_path + 'handling_headers/extjs_sc_destroy'
         },
         reader: {
             type: 'json',
@@ -316,7 +316,7 @@ Ext.define("Booking", { extend: "Ext.data.Model",
             read: root_path + 'bookings/sc_read',
             create: root_path + 'bookings/sc_create',
             update: root_path + 'bookings/sc_update',
-            destroy: root_path + 'bookings/sc_destroy'
+            destroy: root_path + 'bookings/extjs_sc_destroy'
         },
         reader: {
             type: 'json',

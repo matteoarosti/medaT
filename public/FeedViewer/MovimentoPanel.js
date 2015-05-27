@@ -508,7 +508,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
  							
  							
  							handler: function(){
-			                	acs_show_win_std('Modifica handling header', '/handling_headers/edit_header',
+			                	acs_show_win_std('Modifica handling header', myApp.railsBaseUri + 'handling_headers/edit_header',
 			                		 {rec_id: this.getViewModel().getData().rec.get('id')},
 			                		 700, 500, null, null, null, null, {mov_panel: this});
 						    }, scope: this

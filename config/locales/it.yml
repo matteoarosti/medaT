@@ -154,6 +154,16 @@ it:
       ship: "nave"
       voyage: "viaggio"
       open: "apri"
+  handling_type:
+    TMOV:
+      long: "Movimentazione terminal"
+      short: "Mov. Terminal"
+    FRCON:
+      long: "Allaccio frigo"
+      short: "Allaccio frigo"
+    INSPE:
+      long: "Visita doganale"
+      short: "Visita doganale"                        
   operations:
     I_DISCHARGE:
       long: "Discharge da Nave"

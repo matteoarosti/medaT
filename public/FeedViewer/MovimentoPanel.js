@@ -164,7 +164,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 		                        	  fields: ['cod', 'descr'],
 		                        	  data: [ 
 		                        	         {cod: 'TMOV', descr: 'Movimento terminal'},
-		                        	         {cod: 'FRCON', descr: 'Allaccio frito'},
+		                        	         {cod: 'FRCON', descr: 'Allaccio frigo'},
 		                        	         {cod: 'INSPE', descr: 'Visita doganale'}
 		                        	  ]
 		                        	}

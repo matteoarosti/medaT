@@ -71,7 +71,7 @@ class HandlingHeader < ActiveRecord::Base
  end     
  
 
-#COSTANTI
+#COSTANTI (DA NON USARE PIU')
  TYPES = {
   "TMOV" => 'Movimentazione Terminal'
  }

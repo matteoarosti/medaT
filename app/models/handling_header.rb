@@ -11,6 +11,7 @@ class HandlingHeader < ActiveRecord::Base
  scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
  scope :locked_DAMAGED, -> {locked.where("lock_type = ?", 'DAMAGED')}
  scope :da_posizionare, -> {where("da_posizionare = ?", true)}
+ scope :by_type, ->(handling_type) {where("handling_type = ?", handling_type)}
 
  def handling_header_status() return self.handling_status end
 

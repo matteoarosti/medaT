@@ -122,10 +122,10 @@ end
       ret[:items] = []
       
       #raggruppo i movimenti aperti in base al lock
-       gcs = HandlingHeader.select('lock_type, count(*) as t_cont').where('handling_status=?', 'OPEN').group('lock_type')
+       gcs = HandlingHeader.select('handling_type, lock_type, count(*) as t_cont').where('handling_status=?', 'OPEN').group('handling_type, lock_type')
        gcs.each do |gc|
          n = gc.lock_type || 'ATTIVI'
-         ret[:items] << {:os => n + " (#{gc.t_cont.to_i.to_s})", :data1 => gc.t_cont}
+         ret[:items] << {:os => [gc.handling_type, n].join(', ') + " (#{gc.t_cont.to_i.to_s})", :data1 => gc.t_cont}
        end   
         
       #ret[:items] << {:os => 'open', :data1 => 30}
@@ -141,7 +141,7 @@ end
       ret[:items] = []
       
       #raggruppo i movimenti aperti in base al lock
-       gcs = HandlingHeader.select('container_in_terminal, container_FE, count(*) as t_cont').where('handling_status=?', 'OPEN').group('container_in_terminal, container_FE')
+       gcs = HandlingHeader.select('container_in_terminal, container_FE, count(*) as t_cont').where('handling_status=?', 'OPEN').by_type('TMOV').group('container_in_terminal, container_FE')
        gcs.each do |gc|
          n = gc.container_in_terminal == true ? '[In]' : '[Out]'
          n += gc.container_FE == 'F' ? ' Pieno' : ' Vuoto'

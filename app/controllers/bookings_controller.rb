@@ -41,8 +41,8 @@ class BookingsController < ApplicationController
  def form_search
  end
  
-  def to_check
-  end
+ def to_check
+ end
  
  
  #create or save
@@ -58,7 +58,16 @@ class BookingsController < ApplicationController
   to_save_params.permit!
   item.update(to_save_params)
 
-  item.save!()  
+  item.save!()
+  
+  #se e' cambiato il num_booking lo aggiorno anche negli handling_headers abbinati
+  item.handling_headers.each do |hi|
+    if (hi.num_booking != item.num_booking)
+      hi.num_booking = item.num_booking
+      hi.save!
+    end
+  end
+    
   render json: {:success => true, :data=>[item.as_json(Booking.as_json_prop)]}  
   
  end

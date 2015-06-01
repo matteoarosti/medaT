@@ -236,6 +236,7 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 						columns: [{header: 'Movimento', dataIndex: 'descr', flex: 1},
 								  {header: 'Container', dataIndex: 'container_number', width: 140},
 								  {header: 'P/V', dataIndex: 'container_FE', width: 40, renderer: pb_get_image_FE},
+								  {header: 'E/U', dataIndex: 'container_in_terminal', width: 40, renderer: pb_get_image_in_terminal},
 								  {header: 'Tipo', dataIndex: 'equipment_id_Name', width: 60},
 								  {header: 'Booking', dataIndex: 'num_booking', width: 100},
 								  {header: 'Compagnia', dataIndex: 'shipowner_id_Name', width: 80},

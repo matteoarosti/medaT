@@ -6,6 +6,15 @@
 		if (val == 'I') return '<i class="fa fa-download fa-2x" style="color:green;"></i>';
 		if (val == 'O') return '<i class="fa fa-upload fa-2x" style="color:red;"></i>';
 	}
+ 	
+ 	
+ 	pb_get_image_in_terminal = function(val, metaData){
+		if (val == true) return '<i class="fa fa-download fa-2x" style="color:green;"></i>';
+		if (val == false) return '<i class="fa fa-upload fa-2x" style="color:red;"></i>';
+	}
+ 	 	
+ 	 	
+ 	
 	
 	pb_get_image_FE = function(val, metaData){
 		if (val == 'F') metaData.tdAttr = 'data-qtip="Pieno"';

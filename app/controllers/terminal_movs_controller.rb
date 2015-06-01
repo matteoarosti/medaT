@@ -63,6 +63,7 @@ def new_mov_search_handling
         :shipowner_id_Name => hh.shipowner.send(Shipowner.combo_displayField),
         :num_booking => hh.num_booking,
         :container_FE => hh.container_FE,
+        :container_in_terminal => hh.container_in_terminal,
         :updated_at => hh.updated_at
       }
   end

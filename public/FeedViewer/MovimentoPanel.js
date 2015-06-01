@@ -56,7 +56,34 @@ Ext.define('FeedViewer.MovimentoPanel', {
      		        }
      		       },
     		       
-    		       
+
+          		    //TODO: DRY
+      		        icon_container_FE:{
+        		          bind: {bindTo: '{rec}', deep: true},
+        		          get: function (rec) {
+        		        	if (rec){
+        						if (rec.get('container_FE') == 'F') return '<i class="fa fa-square fa-2x" style="color:brown;"></i>';
+        						if (rec.get('container_FE') == 'E') return '<i class="fa fa-square-o fa-2x" style="color:brown;"></i>';					
+        		          	}
+        		        	return '<i class="fa fa-square-o fa-2x" style="color:transparent;"></i>';
+        		        }
+        		       },
+     		       
+
+        		       
+             		    //TODO: DRY
+         		        icon_container_in_terminal:{
+           		          bind: {bindTo: '{rec}', deep: true},
+           		          get: function (rec) {
+           		        	if (rec){
+           						if (rec.get('container_in_terminal') == true) return '<i class="fa fa-download fa-2x" style="color:green;"></i>';
+           						if (rec.get('container_in_terminal') == false) return '<i class="fa fa-upload fa-2x" style="color:red;"></i>';
+           		          	}
+           		        	return '';
+           		        }
+           		       },
+        		       
+        		       
     		       
 	    		    //TODO: DRY
 			        icon_lock_type:{
@@ -249,9 +276,11 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			                items: [
 		                        {fieldLabel: 'container_number', bind: '{rec.container_number}', disabled: true}
 							]
-						},
+						}
 						
-						{
+						
+/*						
+						, {
 			                xtype: 'fieldcontainer',
 			                fieldLabel: 'Container status',
 			                combineErrors: true,
@@ -262,13 +291,15 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			                items: [
 		                        {fieldLabel: 'container_status', bind: '{rec.container_status}', disabled: true}
 							]
-						}						
+						}
+*/
                         
 						
 						
 						, {
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Stato / Lock',
+			                frame: false,
+			                //fieldLabel: 'Stato / Lock',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
@@ -276,6 +307,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
 			                items: [
 			                        {xtype: "panel", bind: '{icon_handling_status} {rec.handling_status}'},
+			                        {xtype: "panel", bind: '{icon_container_FE}'},
+			                        {xtype: "panel", bind: '{icon_container_in_terminal}'},
 			                        {xtype: "panel", bind: '{icon_lock_type} {rec.lock_type}'}			                        			                
 			                ]
 			            }

@@ -20,6 +20,8 @@
 # Learn more: http://github.com/javan/whenever
 
 
+set :environment, "development"
+
 every 1.minute do
  runner "SendEmailHiCarrier.new.call"  
 end

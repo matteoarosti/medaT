@@ -33,6 +33,9 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.integer    :moved_by_user_id
       t.datetime   :moved_at      
       
+      #flag vari
+      t.boolean    :fl_send_email_carrier,      :default => nil #true=inviato, false=errore
+      
       
       t.timestamps
       t.integer :created_user_id

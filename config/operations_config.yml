@@ -2,7 +2,7 @@
 #MOVIMENTO_STANDARD_TERMINAL:
 TMOV:
 ########################################################################
- initial_handling: I_DISCHARGE,I_TRANSFER
+ initial_handling: I_DISCHARGE,I_TRANSFER,I_EMPTYING
  I_DISCHARGE:
   label: Discharge From Ship
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -79,6 +79,7 @@ TMOV:
    container_in_terminal: false
    container_FE_copy: true
    handling_header_status: CLOSE
+   booking_copy: true
    operation_type: 'MT'
  I_NOT_POSIT:
   label: In for missing positioning

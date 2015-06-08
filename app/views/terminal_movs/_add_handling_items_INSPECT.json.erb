@@ -19,13 +19,7 @@
     {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},  
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},
 
-	   <%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,
-       <%= raw extjs_std_combo_model('ship', @new_rec) -%>,
-       <%= raw extjs_std_textfield('voyage', @new_rec) -%>,
-       <%= raw extjs_std_combo_model('carrier', @new_rec) -%>,
-       <%= raw extjs_std_textfield('driver', @new_rec) -%>,
-       <%= raw extjs_std_textfield('seal_shipowner', @new_rec, :allowBlank => true) -%>,
-       <%= raw extjs_std_textfield('seal_others', @new_rec, :allowBlank => true) -%>
+	   <%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>
 
    ],
       

@@ -90,6 +90,7 @@ TMOV:
    container_in_terminal: true
    container_FE_copy: false
    operation_type: 'MT'
+   booking_reset: true
  REQ_ESTIMATE:
   label: Estimate Request
   icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'

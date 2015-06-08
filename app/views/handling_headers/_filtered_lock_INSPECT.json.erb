@@ -101,6 +101,7 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';
+			         ret += '<tr><th>Compagnia</th><td>' + rec.data.shipowner.name + '</td></tr>';
 			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';
 			         ret += '<tr><th>Stato</th><td>' + rec.get('container_status') + '</td></tr>';			         			         
 			         ret += '</table>';

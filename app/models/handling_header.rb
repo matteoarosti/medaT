@@ -228,6 +228,10 @@ def sincro_save_header(hi)
    self.handling_status = 'OPEN' 
   end
   
+  #memorizzo eventualmente il vecchio booking abbinato
+  m_booking_id      = self.booking_id
+  m_booking_item_id = self.booking_item_id
+  
   #Elaboro le operazioni dichiarate in "set"
   op_config = h_type_config[hi.handling_item_type]
   op_config_set = op_config['set'] || {}
@@ -245,9 +249,22 @@ def sincro_save_header(hi)
  #salvo handling_header
  self.save!
  
- #se e' un handling_item che gestisce il bookin, aggiorno lo stato del booking
+ #se e' un handling_item che gestisce il booking, aggiorno lo stato del booking
  ret_booking = {} 
- ret_booking = hi.handling_header.booking.refresh_status(hi.booking_item) if op_config_set['booking_copy'] == true
+ 
+  if op_config_set['booking_copy'] == true  
+   ret_booking = hi.handling_header.booking.refresh_status(hi.booking_item)
+  end
+  if op_config_set['booking_reset'] == true
+   if !m_booking_id.nil? && !m_booking_item_id.nil?
+    b = Booking.find(m_booking_id)
+    bi = BookingItem.find(m_booking_item_id)  
+    ret_booking = b.refresh_status(bi)
+   end
+  end
+ 
+ 
+ 
  message << ret_booking[:message] unless ret_booking[:message].blank?  
  
  return {:success => true, :message => message}
@@ -286,6 +303,17 @@ def sincro_set_booking_copy(value, hi)
  self.booking_item_id  = hi.booking_item_id
  self.num_booking = b.num_booking
 end
+
+################################################################
+def sincro_set_booking_reset(value, hi)
+################################################################
+ if value == true
+   self.booking_id  = nil
+   self.booking_item_id  =  nil
+   self.num_booking = nil
+ end
+end
+
 
 ################################################################
 def sincro_set_seal_imp_copy(value, hi)

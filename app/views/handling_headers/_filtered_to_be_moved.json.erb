@@ -103,8 +103,8 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';
-			         ret += '<tr><th>Equipment</th><td>' + rec.get('handling_header').equipment.equipment_type + '</td></tr>';
-			         ret += '<tr><th>Stato</th><td>' + rec.get('handling_header').container_status + '</td></tr>';	
+			         ret += '<tr><th>Compagnia</th><td>' + rec.data.handling_header.shipowner.name + '</td></tr>';
+			         ret += '<tr><th>Equipment</th><td>' + rec.get('handling_header').equipment.equipment_type + '</td></tr>';	
 			         ret += '<tr><th>Vettore/Autista</th><td>' + rec.get('carrier_id_Name') + '/' + rec.get('driver') + '</td></tr>';
 			         ret += '</table>';
 			         return ret;

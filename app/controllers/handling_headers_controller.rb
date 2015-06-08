@@ -160,7 +160,7 @@ end
      #per ogni hh aggiungo altre informazioni 
      hh_as_json_prop = HandlingItem.as_json_prop
      hh_as_json_prop[:include] = hh_as_json_prop[:include] || [] 
-     hh_as_json_prop[:include] << {:handling_header => {:include=>[:equipment]}}              
+     hh_as_json_prop[:include] << {:handling_header => {:include=>[:equipment, :shipowner]}}              
      render json: HandlingItem.where('1=1').to_be_moved.limit(1000).as_json(hh_as_json_prop)     
    end 
  end

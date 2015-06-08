@@ -238,7 +238,37 @@ end
 
  
  
+
+  def extjs_info_booking(hh, hi)     
+    
+  #posizionamento
+    ret = "
+    {
+          xtype: 'fieldset',
+          title: 'Info Booking',
+          layout: 'anchor',
+          items: [
+          
+      {
+                xtype: 'fieldcontainer',
+                combineErrors: true,
+                msgTarget : 'side',
+                layout: 'hbox',
+                anchor: '100%',
+                defaults: {xtype: 'textfield', disabled: true, flex: 1, hideLabel: false, labelWidth: 100},
+                items: [                     
+                     {fieldLabel: 'Numero', value: #{hh.num_booking.to_json},     labelWidth: 70},
+                     {fieldLabel: 'Nave', value: #{(!hh.booking.nil? ? hh.booking.ship.name : '').to_json}, labelWidth: 70, labelAlign: 'right'},
+                     {fieldLabel: 'Viaggio', value: #{(!hh.booking.nil? ? hh.booking.voyage : '').to_json}, labelWidth: 70, labelAlign: 'right'},
+            ]
+        }
+      ]
+    }           
+   "
+ end
+
  
+  
  
  
  

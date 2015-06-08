@@ -50,7 +50,8 @@
     
     
     <%= raw extjs_to_be_moved('to_be_moved', @hh, @new_rec) -%>,
-    <%= raw extjs_posizionamento('da_posizionare', @hh, @new_rec) -%>
+    <%= raw extjs_posizionamento('da_posizionare', @hh, @new_rec) -%>,
+    <%= raw extjs_info_booking(@hh, @new_rec) -%>
    ],
       
 	buttons:[<%= render :partial=>'add_handling_items_buttons' -%>]

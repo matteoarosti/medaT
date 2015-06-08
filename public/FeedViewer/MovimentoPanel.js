@@ -159,10 +159,11 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	    	 flex: 1,
                      xtype: 'fieldset', border: true, collapsible: false,
                      title: 'Dati generali e container', 
-                 	//layout: {                 		
-                	//    type: 'vbox',
-                	    //pack  : 'start',
-                	//},
+                 	 /*layout: {                 		
+                	    type: 'hbox',
+                	    align : 'stretch',
+                	    pack  : 'start',
+                	 },*/
                      defaults: {
                          //flex: 1,
                          hideLabel: false,
@@ -173,7 +174,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
                      items: [
                         
                         
-						{
+						{	
 			                xtype: 'fieldcontainer',
 			                fieldLabel: 'Handling id / Type',
 			                combineErrors: true,
@@ -294,7 +295,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						}
 */
                         
-						
+						, {xtype: 'tbfill', height: 20}
 						
 						, {
 			                xtype: 'fieldcontainer',
@@ -452,15 +453,26 @@ Ext.define('FeedViewer.MovimentoPanel', {
 							]
 						}, {
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Booking/Dest.',
+			                fieldLabel: 'Booking',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
 			                anchor: '100%',
 			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
 			                items: [
-		                        {fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}},
-		                        {fieldLabel: 'Destinazione', disabled: true}
+		                        {fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}}
+							]
+						}, {
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Nave / Viaggio',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [
+		                        {fieldLabel: 'Nave', disabled: true, bind: {value: '{rec.booking.ship.name}'}},
+		                        {fieldLabel: 'Viaggio', disabled: true, bind: {value: '{rec.booking.voyage}'}}
 							]
 						}
                                                                         

@@ -65,7 +65,11 @@ class HandlingHeader < ActiveRecord::Base
 
  def self.as_json_prop()
      return {
-        :include=>{:shipowner => {:only=>[:name]}, :equipment => {:only=>[:type]}},
+        :include=>{
+            :shipowner  => {:only=>[:name]}, 
+            :equipment  => {:only=>[:type]},
+            :booking    => {:only=>[:voyage], :include => {:ship => {:only=>[:name]}}}
+        },
         :methods => [:shipowner_id_Name, :equipment_id_Name, :booking_id_Name]
       }
  end     

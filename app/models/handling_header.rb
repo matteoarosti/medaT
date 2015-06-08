@@ -168,29 +168,31 @@ def validate_insert_item(hi, name_function = '')
   end
       
     
-  for check_op_name, check_op_value in op_config_check   
-    
-    if check_op_value.is_a? Hash
-      case check_op_value['operator']
-      when "IN"
-        test_is_valid = check_op_value['value'].split('|').include?(self.send(check_op_name))
-      when "NOT IN"
-        test_is_valid = !check_op_value['value'].split('|').include?(self.send(check_op_name))          
-      else
-        test_is_valid = false
-      end
-    else
-      test_is_valid = (self.send(check_op_name) == check_op_value)
-    end
+   if self.handling_status != 'NEW' #se sono in NEW non eseguo i controlli di check, ma solo l'eventuale validita del booking  
+    for check_op_name, check_op_value in op_config_check   
       
-   #if self.send(check_op_name) != check_op_value
-   if !test_is_valid
-    ret[:is_valid] = false
-    ret[:message]  = "check non superato ( #{check_op_name} , #{check_op_value} )" 
-    logger.info ret.to_yaml
-    return ret   
-   end
-  end
+      if check_op_value.is_a? Hash
+        case check_op_value['operator']
+        when "IN"
+          test_is_valid = check_op_value['value'].split('|').include?(self.send(check_op_name))
+        when "NOT IN"
+          test_is_valid = !check_op_value['value'].split('|').include?(self.send(check_op_name))          
+        else
+          test_is_valid = false
+        end
+      else
+        test_is_valid = (self.send(check_op_name) == check_op_value)
+      end
+        
+     #if self.send(check_op_name) != check_op_value
+     if !test_is_valid
+      ret[:is_valid] = false
+      ret[:message]  = "check non superato ( #{check_op_name} , #{check_op_value} )" 
+      logger.info ret.to_yaml
+      return ret   
+     end
+    end
+   end 
  
   #se ha "booking_copy" = true verifico l'esistenza, la validita' e l'ammissibilita' del booking
   op_config_set = op_config['set'] || {}

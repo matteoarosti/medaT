@@ -47,13 +47,22 @@ class BookingsController < ApplicationController
  
  #create or save
  def sc_create
-
+   
   if params[:data][:id].empty?
    item = Booking.new         
   else
    item = Booking.find(params[:data][:id])   
   end
  
+  #se cambio il num_booking verifico che non sia gia' un valore presente
+  if item.num_booking != params[:data][:num_booking]
+    b = Booking.get_by_num(params[:data][:num_booking])
+    if !b.nil?
+      render json: {:success => false, :message => "Numero Booking gia' presente."}
+      return
+    end
+  end
+  
   to_save_params = params[:data].select{|k,v| Booking.column_names.include?(k) && k != 'id'}  
   to_save_params.permit!
   item.update(to_save_params)

@@ -5,7 +5,7 @@
   xtype: 'panel',
   title: 'Dashboard', closable: true,
   	layout: {
-	    type: 'hbox',
+	    type: 'vbox',
 	    align : 'stretch',
 	    pack  : 'start',
 	}, 
@@ -15,7 +15,7 @@
    	var task = {
 	    run: function(){
 	        //aggiorno periodicamente i grafici
-	        Ext.Array.each(comp.query('polar, chart'), function(grafico){
+	        Ext.Array.each(comp.query('polar, chart', 'cartesian'), function(grafico){
 	        	grafico.store.load();
 	        });
 	        
@@ -28,6 +28,117 @@
   },
 	
   items: [
+  
+	 {
+	  xtype: 'panel',
+	  flex: 0.4,
+	  	layout: {
+		    type: 'hbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		}, 
+
+	   items: [
+	   
+		//andamenvo movimentazioni
+		{
+            xtype: 'cartesian',
+            border: true,        
+			flex: 1,	
+			legend: {
+    			docked: 'right'
+			},			
+			store: {
+				xtype: 'store',
+				autoLoad: true,	
+				proxy: {
+					url: '<%= url_for(:controller=>'terminal_movs', :action=>'tab_dashboard_movs_by_date') -%>', 
+					method: 'POST',
+					type: 'ajax',
+		
+					//Add these two properties
+					actionMethods: {
+						read: 'POST'
+					},
+		
+					reader: {
+						type: 'json',
+						method: 'POST',
+						rootProperty: 'items'
+					}
+				},
+					
+				fields: [] //serve
+			}, //store					   
+	   
+	   
+	   
+			axes: [{
+                type: 'numeric',
+                position: 'left',
+                adjustByMajorUnit: true,
+                grid: true,
+                fields: ['I'],
+                minimum: 0,
+                label: {
+                	fontSize: 10
+                }
+            }, {
+                type: 'category',
+                position: 'bottom',
+                grid: true,
+                fields: ['op'],
+                renderer: function(v){ return Ext.util.Format.date(v, 'd/m'); },
+                label: {
+                	fontSize: 10,
+                    rotate: {
+                        degrees: -45
+                    }
+                }
+            }],
+            
+            
+            
+			series: [{
+                type: 'bar',
+                axis: 'left',
+                title: [ 'Mv Entrata', 'Mv Uscita' ],
+                xField: 'op',
+                yField: [ 'I', 'O'],
+                stacked: true,
+                style: {
+                    opacity: 0.80
+                },
+                highlight: {
+                    fillStyle: 'yellow'
+                },
+            }]            
+            	   
+		  }	   
+	   
+	   
+	   ]
+	  },
+	   
+  
+
+
+
+  
+  
+  
+
+	 {
+	  xtype: 'panel',
+	  flex: 1,
+	  	layout: {
+		    type: 'hbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		}, 
+
+	   items: [
+
 
 		{
             xtype: 'polar',
@@ -234,7 +345,8 @@
             }]
         }
 
-
+	] 
+   }
 
 
   ]

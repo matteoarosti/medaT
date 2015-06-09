@@ -173,7 +173,42 @@ end
     render json: ret
   end
     
-        
+
+  
+  
+  ####
+  def tab_dashboard_movs_by_date
+    ret = {}
+    ret[:items] = []
+    r = {'I' => {}, 'O' => {}}
+    
+    #raggruppo i movimenti aperti in base al lock
+     gcs = HandlingItem.select('DATE(datetime_op) as date_op, handling_type, count(*) as t_cont').where('operation_type=?', 'MT').group('DATE(datetime_op), handling_type')
+     gcs.each do |gc|
+       r["#{gc.handling_type}"]["#{gc.date_op}"] = gc.t_cont;
+       #ret[:items] << {:os => gc.datetime_op + " (#{gc.t_cont.to_i.to_s})", :data1 => gc.t_cont}
+     end   
+     logger.info r.to_yaml 
+    #ret[:items] << {:os => 'open', :data1 => 30}
+     
+    #scorro gli ultimi 30 giorni
+     sd = Time.now - 30.days
+     ed = Time.now
+     
+     tmp  = sd
+     begin
+       s = {}
+       s[:op] = tmp.to_date
+       s[:I] = r["I"]["#{tmp.to_date}"] || 0
+       s[:O] = r["O"]["#{tmp.to_date}"] || 0
+       ret[:items] << s
+       tmp += 1.day
+     end while tmp <= ed 
+  
+    render json: ret
+  end
+  
+          
       
   
 end #class

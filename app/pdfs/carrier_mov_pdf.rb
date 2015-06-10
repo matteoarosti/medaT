@@ -26,9 +26,9 @@ class CarrierMovPdf < Prawn::Document
 
     text_FE = '??'
     if (hi.container_FE == 'F')        
-      text_IO = 'FULL'
+      text_FE = 'FULL'
     elsif (hi.container_FE == 'E')
-      text_IO = 'EMPTY'
+      text_FE = 'EMPTY'
     end
             
     

@@ -206,6 +206,9 @@ class CarrierMovPdf < Prawn::Document
   
   
   def nota_compagnia(shipowner)
+    
+    if shipowner.name == 'CMA'
+    
     return "
     Al momento dell’ingresso in deposito del containers venivano constatati danni apparenti alla struttura / corpo dello stesso.\n
     Ad ogni effetto di legge si elevano pertanto, anche a scopo cautelativo, le più ampie riserve sullo stato del containers che vi è stato consegnato per il trasporto in buono stato e privo di alcun danneggiamento o qualsivoglia anomalia.\n
@@ -215,7 +218,9 @@ class CarrierMovPdf < Prawn::Document
     La presente vale ad ogni effetto di legge e deve intendersi come riserva formale del danno.\n\n                                                                                                 
                            Firma del trasportatore ( Leggibile )
                            "
-    
+    else
+      return ""
+    end
     
     
     

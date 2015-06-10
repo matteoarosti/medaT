@@ -86,16 +86,20 @@ class CarrierMovPdf < Prawn::Document
       #nave e viaggio, se non presenti, vengon presi dal booking (se presente)
       out_voyage = hi.voyage || ''
       out_ship_name =  !hi.ship.nil? ? hi.ship.name : ''
-      if !hi.booking.nil?
-        out_voyage = hi.booking.voyage if out_voyage.empty?
-        out_ship_name = hi.booking.ship.name if out_ship_name.empty?
-      end
+
+        #il booking lo ricerco nei dettagli precedenti (per data/ora) al dettaglio in linea
+        hi_search_booking = hi.search_booking()
+      
+        if !hi_search_booking.nil?
+          out_voyage = hi_search_booking.voyage if out_voyage.empty?
+          out_ship_name = hi_search_booking.ship.name if out_ship_name.empty?
+        end
       
     riga_from = riga_to + 1
     riga_to   = riga_from
     grid([riga_from,0], [riga_to,5]).bounding_box do write_cell('Vessel', out_ship_name) end
     grid([riga_from,6], [riga_to,7]).bounding_box do write_cell('Voyager n.', out_voyage) end
-    grid([riga_from,8], [riga_to,10]).bounding_box do write_cell('Booking ref.', !hi.booking.nil? ? hi.booking.num_booking : '') end
+    grid([riga_from,8], [riga_to,10]).bounding_box do write_cell('Booking ref.', !hi_search_booking.nil? ? hi_search_booking.num_booking : '') end
 
     #riga 4
     riga_from = riga_to + 1

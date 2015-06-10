@@ -54,7 +54,17 @@ class HandlingItem < ActiveRecord::Base
       }
  end 
  
+ 
+ #a ritroso (nell'handling) verifico se ho un dettaglio con il booking 
+ def search_booking()
+   #todo: se trovo un mancato posizionamento non devo considerare il booking assegnato?
+   self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc").each do |hii|
+     return hii.booking if !hii.booking.nil? 
+   end
+   return nil
+ end 
 
+ 
 #valori per combo
 def container_FE_get_data_json
  [

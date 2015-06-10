@@ -17,6 +17,7 @@ class HandlingMailer < ActionMailer::Base
     pdf = CarrierMovPdf.new()
     pdf.m_draw(hi)
     pdf.render_file(tmp_file_name)
+    print "\nGenerato"
     
     #allego il file e
     attachments["ICOP_movimento_#{hi.id.to_s}.pdf"] = File.read(tmp_file_name)

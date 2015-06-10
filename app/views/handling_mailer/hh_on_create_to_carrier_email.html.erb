@@ -1,16 +1,34 @@
+<%
+
+    text_IO = '??'
+    if (@hi.handling_type == 'O')        
+      text_IO = 'OUT'
+    elsif (@hi.handling_type == 'I')
+      text_IO = 'IN'
+    end
+
+
+    text_FE = '??'
+    if (@hi.container_FE == 'F')        
+      text_IO = 'FULL'
+    elsif (@hi.container_FE == 'E')
+      text_IO = 'EMPTY'
+    end
+ 
+%>
 <!DOCTYPE html>
 <html>
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h1>Welcome to example.com</h1>
-    <p>
-      You have successfully signed up to example.com,      
-    </p>
-    <p>
-      To login to the site, just follow this link: <%= @url %>.
-    </p>
-    <p>Thanks for joining and have a great day!</p>
+    <h3>EQUIPMENT INTERCHANGE RECEIPT N. <%= "#{@hi.id}" -%></h3>
+
+	<BR/>
+	<H1>
+	Container: #{@hi.handling_header.container_number}, #{text_IO}, #{text_FE}", :size => 14
+	</H1>
+	
+	<P>I.CO.P. srl</p>
   </body>
 </html>

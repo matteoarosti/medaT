@@ -22,6 +22,6 @@
 
 set :environment, "development"
 
-every 1.minute do
+every 3.minute do
  runner "SendEmailHiCarrier.new.call"  
 end

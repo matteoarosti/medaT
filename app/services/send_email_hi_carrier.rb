@@ -1,7 +1,7 @@
 class SendEmailHiCarrier
   def call
     #recupero tutti gli hi di cui ancora devo inviare la email (se necessario)
-    HandlingItem.where('fl_send_email_carrier IS NULL').where('carrier_id IS NOT NULL').limit(1).each do |hi|
+    HandlingItem.where('fl_send_email_carrier IS NULL').where('carrier_id IS NOT NULL').limit(30).each do |hi|
       print "Inizio ciclo hi ##{hi.id}\n"
       begin
         mm = HandlingMailer.hh_on_create_to_carrier_email(hi).deliver!

@@ -139,7 +139,8 @@ class CarrierMovPdf < Prawn::Document
     
       #delivered, received
       ar_icop = ['I.CO.P. s.rl.', 'Via L.go Mare Vanvitelli, 68', '60121 - Ancona', 'Italia']
-      ar_carrier = [hi.carrier.name, hi.carrier.address, [hi.carrier.zip_code, hi.carrier.city].join(', '), hi.carrier.country]
+      ar_carrier = []  
+      ar_carrier = [hi.carrier.name, hi.carrier.address, [hi.carrier.zip_code, hi.carrier.city].join(', '), hi.carrier.country] unless hi.carrier.nil?
     
     if (hi.handling_type == 'I')
        ar_delivered_by = ar_carrier

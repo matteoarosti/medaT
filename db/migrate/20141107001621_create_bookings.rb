@@ -27,7 +27,7 @@ class CreateBookings < ActiveRecord::Migration
       
       #Per frigo
       t.decimal     :temperature
-      t.decimal     :ventilation
+      t.text        :ventilation,           :limit => 7
       t.decimal     :humidity
       
       t.timestamps

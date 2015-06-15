@@ -33,4 +33,13 @@ class BookingItem < ActiveRecord::Base
 
   
  
+def ventilation_get_data_json
+ [
+  {:cod=>nil,       :descr=>'- Non specificato -'},
+  {:cod=>'NORMAL',  :descr=>'Normale'},
+  {:cod=>'AUTO',    :descr=>'Automatico'}
+ ] 
+end  
+  
+
 end

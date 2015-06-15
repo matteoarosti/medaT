@@ -25,6 +25,11 @@ class CreateBookings < ActiveRecord::Migration
       t.integer     :quantity,              :limit => 6
       t.string      :status,                :limit => 5             #OPEN/CLOSE
       
+      #Per frigo
+      t.decimal     :temperature
+      t.decimal     :ventilation
+      t.decimal     :humidity
+      
       t.timestamps
       t.integer :created_user_id
       t.integer :updated_user_id      

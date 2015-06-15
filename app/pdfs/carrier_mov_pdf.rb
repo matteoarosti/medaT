@@ -74,21 +74,33 @@ class CarrierMovPdf < Prawn::Document
     grid([riga_from,6], [riga_to,7]).bounding_box do write_cell('Date/Data', hi.datetime_op.strftime("%d/%m/%Y")) end
     grid([riga_from,8], [riga_to,8]).bounding_box do write_cell('Time/Ora', hi.datetime_op.strftime("%H:%M")) end
     grid([riga_from,9], [riga_to,10]).bounding_box do write_cell('Seal/Sigillo', hi.seal_shipowner) end
-    
+
+      
+  
+    #il booking lo ricerco nei dettagli precedenti (per data/ora) al dettaglio in linea
+    hi_search_booking_item = hi.search_booking_item()
+    hi_search_booking      = hi_search_booking_item.booking
+      
+      
+          
     #riga 2
     riga_from = riga_to + 1
     riga_to   = riga_from
     grid([riga_from,0], [riga_to,5]).bounding_box do write_cell('Equipment description', hi.handling_header.equipment.equipment_type) end
-    grid([riga_from,6], [riga_to,10]).bounding_box do write_cell('Frigo Temp.', '') end
+    grid([riga_from,6], [riga_to,7]).bounding_box do write_cell('Frigo Temp.', !hi_search_booking_item.nil? ? hi_search_booking_item.temperature.to_s : '') end
+    grid([riga_from,8], [riga_to,8]).bounding_box do write_cell('Frigo Humid.', !hi_search_booking_item.nil? ? hi_search_booking_item.humidity.to_s : '') end      
+    grid([riga_from,9], [riga_to,10]).bounding_box do write_cell('Frigo Vent.', !hi_search_booking_item.nil? ? hi_search_booking_item.ventilation.to_s : '') end
 
+
+      
+            
+      
     #riga 3
      
       #nave e viaggio, se non presenti, vengon presi dal booking (se presente)
       out_voyage = hi.voyage || ''
       out_ship_name =  !hi.ship.nil? ? hi.ship.name : ''
 
-        #il booking lo ricerco nei dettagli precedenti (per data/ora) al dettaglio in linea
-        hi_search_booking = hi.search_booking()
       
         if !hi_search_booking.nil?
           out_voyage = hi_search_booking.voyage if out_voyage.empty?
@@ -101,12 +113,21 @@ class CarrierMovPdf < Prawn::Document
     grid([riga_from,6], [riga_to,7]).bounding_box do write_cell('Voyager n.', out_voyage) end
     grid([riga_from,8], [riga_to,10]).bounding_box do write_cell('Booking ref.', !hi_search_booking.nil? ? hi_search_booking.num_booking : '') end
 
+      
+      
+    mv_import_export = hi.is_import_export  
+    if mv_import_export == 'E'
+      out_weight = hi.handling_header.weight_exp
+    else
+      out_weight = hi.handling_header.weight_imp
+    end 
+      
     #riga 4
     riga_from = riga_to + 1
     riga_to   = riga_from
     grid([riga_from,0], [riga_to,3]).bounding_box do write_cell('Carrier', !hi.carrier.nil? ? hi.carrier.name : '') end
     grid([riga_from,4], [riga_to,5]).bounding_box do write_cell('Autista', hi.driver) end
-    grid([riga_from,6], [riga_to,7]).bounding_box do write_cell('Goods weight', '') end #ToDo (Imp o Exp?)      
+    grid([riga_from,6], [riga_to,7]).bounding_box do write_cell('Goods weight', out_weight.to_s) end #ToDo (Imp o Exp?)      
     grid([riga_from,8], [riga_to,10]).bounding_box do write_cell('Goods description', '') end #???
 
     #riga 5

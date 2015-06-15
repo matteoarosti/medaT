@@ -64,6 +64,27 @@ class HandlingItem < ActiveRecord::Base
    return nil
  end 
 
+#a ritroso (nell'handling) verifico se ho un dettaglio con il booking_item 
+def search_booking_item()
+  #todo: se trovo un mancato posizionamento non devo considerare il booking assegnato?
+  self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc").each do |hii|
+    return hii.booking_item if !hii.booking_item.nil? 
+  end
+  return nil
+end 
+ 
+
+#is_export: se' ha (a ritroso) il booking abbinato, e' un movimento legato alla fase di export. Altrimenti alla fase di import
+def is_import_export()
+  b = self.search_booking
+  if b.nil?
+    return 'I'
+  else
+    return 'E'
+  end
+end
+
+ 
  
 #valori per combo
 def container_FE_get_data_json

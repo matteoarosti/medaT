@@ -69,7 +69,14 @@ module ApplicationHelper
   add_attr = extsj_create_attr_str(attr)
   ret = "{xtype: 'textfield', fieldLabel: #{name.humanize.to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false} #{add_attr}}" 
  end
+
+  def extjs_std_numberfield(name, item, p = {}, attr = {})
+   input_name = p[:input_name] || p[:input_prefix].to_s + name
+   add_attr = extsj_create_attr_str(attr)
+   ret = "{xtype: 'numberfield', fieldLabel: #{name.humanize.to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false} #{add_attr}}" 
+  end
  
+  
  def extjs_std_datefield(name, item, p = {}, attr = {})
   add_attr = extsj_create_attr_str(attr) 
   ret = "{xtype: 'datefield', fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json}, name: #{(p[:name] || name).to_json}, value: #{item.send(name).to_json}, allowBlank: #{p[:allowBlank] || false} #{add_attr}}" 

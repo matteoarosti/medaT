@@ -22,6 +22,21 @@
 	    <%= raw extjs_std_hiddenfield('booking_id', @item) -%>,	    
 	   	<%= raw extjs_std_combo_model('equipment', @item) -%>,
 	   	<%= raw extjs_std_textfield('quantity', @item) -%>,
+	   	
+	   	
+	   	{xtype: 'fieldset',
+         title: 'Frigo',
+         layout: 'anchor',
+         items: [
+	   	
+		   		<%= raw [
+		   			extjs_std_numberfield('temperature', @item, {:allowBlank => true}), 
+		   			extjs_std_numberfield('humidity', @item, {:allowBlank => true}), 
+		   			extjs_std_combo('ventilation', @item, :allowBlank => true, :store => extjs_std_store_data(@item.ventilation_get_data_json))
+		   			].join(',') -%>
+		 ]
+		},
+	   	
 	    <%= raw extjs_std_combo('status', @item, :store => extjs_std_store_data(@item.booking.status_get_data_json)) -%>
 	   ],
 	   

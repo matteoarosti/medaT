@@ -189,6 +189,9 @@ it:
     I_NOT_POSIT:
       long: "Ingresso per mancato posizionamento"
       short: "Miss Posit."
+    I_REUSE:
+      long: "Ingresso per riutilizzo"
+      short: "Reuse"
     REQ_ESTIMATE:
       long: "Richiesta Preventivo"
       short: "Estim. Req."

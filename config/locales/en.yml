@@ -211,6 +211,9 @@ en:
     I_NOT_POSIT:
       long: "In for missed positioning"
       short: "Miss Posit."
+    I_REUSE:
+      long: "In reusing container"
+      short: "Reuse"
     REQ_ESTIMATE:
       long: "Estimate Request"
       short: "Estim. Req."

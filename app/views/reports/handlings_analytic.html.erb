@@ -5,6 +5,8 @@
 
 formValues = JSON.parse params['formValues']
 
+
+#gestione campi data/ora
 if !formValues['datetime_op_from'].blank?
 	datetime_from = Time.zone.parse(formValues['datetime_op_from'] + ' ' + (formValues['datetime_op_from_time'] || '00:00') + ':00')
 end

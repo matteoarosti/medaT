@@ -5,13 +5,20 @@
 
 formValues = JSON.parse params['formValues']
 
-d_to = Time.zone.now
+#gestione campi data/ora
+if !formValues['datetime_op_from'].blank?
+	datetime_from = Time.zone.parse(formValues['datetime_op_from'] + ' ' + (formValues['datetime_op_from_time'] || '00:00') + ':00')
+end
+
+if !formValues['datetime_op_to'].blank?
+	datetime_to = Time.zone.parse(formValues['datetime_op_from'] + ' ' + (formValues['datetime_op_to_time'] || '23:59') + ':59')
+end
 
 items = HandlingItem.where('1=1')
 items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']} }) unless formValues['shipowner_id'].blank?
 items = items.where({handling_item_type: formValues['handling_item_type']}) unless formValues['handling_item_type'].blank?
-items = items.where(["datetime_op >= ?", formValues['datetime_op_from'].to_date]) unless formValues['datetime_op_from'].blank?
-items = items.where(["datetime_op <= ?", d_to) unless formValues['datetime_op_to'].blank?
+items = items.where("datetime_op >= ?", datetime_from) unless formValues['datetime_op_from'].blank?
+items = items.where("datetime_op <= ?", datetime_to) unless formValues['datetime_op_to'].blank?
 items = items.where("operation_type = ?", 'MT') if formValues['only_MT'] == true
 
 
@@ -19,7 +26,6 @@ items = items.select('shipowner_id, handling_item_type, equipment_id, count(*) a
 group_shipowner = items.group_by { |d| d.shipowner_id }
 %>
 
-<h1>aaaa<%= d_from -%></h1>
 
 <%
  ######################################################
@@ -40,7 +46,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
  	<% group_op = so_val.group_by { |d| d.handling_item_type } %>
 	<% group_op.each do |op_id, op_val| %>
 
- 		<p class="bg-success" style="padding: 5px 10px"><%= op_id -%></p>
+ 		<p class="bg-success" style="padding: 5px 10px"><%= t("operations.#{op_id}.long") -%></p>
 
 		<%
  		######################################################

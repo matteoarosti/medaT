@@ -5,11 +5,13 @@
 
 formValues = JSON.parse params['formValues']
 
+d_to = Time.zone.now
+
 items = HandlingItem.where('1=1')
 items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']} }) unless formValues['shipowner_id'].blank?
 items = items.where({handling_item_type: formValues['handling_item_type']}) unless formValues['handling_item_type'].blank?
 items = items.where(["datetime_op >= ?", formValues['datetime_op_from'].to_date]) unless formValues['datetime_op_from'].blank?
-items = items.where(["datetime_op <= ?", formValues['datetime_op_to'].to_date]) unless formValues['datetime_op_to'].blank?
+items = items.where(["datetime_op <= ?", d_to) unless formValues['datetime_op_to'].blank?
 items = items.where("operation_type = ?", 'MT') if formValues['only_MT'] == true
 
 
@@ -17,6 +19,7 @@ items = items.select('shipowner_id, handling_item_type, equipment_id, count(*) a
 group_shipowner = items.group_by { |d| d.shipowner_id }
 %>
 
+<h1>aaaa<%= d_from -%></h1>
 
 <%
  ######################################################

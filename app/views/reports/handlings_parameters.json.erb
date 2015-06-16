@@ -26,7 +26,7 @@
     	
    		{
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Data (da, a)',
+			                fieldLabel: 'Da data/ora)',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
@@ -35,10 +35,27 @@
 			                items: [ 	
     	
      		<%= raw extjs_std_datefield('datetime_op', @hi, {:allowBlank=>true, :fieldLabel => 'Da data', :name => 'datetime_op_from'}) -%>,
-     		<%= raw extjs_std_datefield('datetime_op', @hi, {:allowBlank=>true, :fieldLabel => 'A data', :name => 'datetime_op_to'}) -%>
+     		{xtype: 'timefield', name: 'datetime_op_from_time', width:  70},
      		
      		]
      	},
+
+   		{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'A data/ora)',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [ 	
+    	
+     		<%= raw extjs_std_datefield('datetime_op', @hi, {:allowBlank=>true, :fieldLabel => 'Da data', :name => 'datetime_op_to'}) -%>,
+     		{xtype: 'timefield', name: 'datetime_op_from_time', width:  70},
+     		
+     		]
+     	},
+
      	
      	
    {xtype: 'checkbox', value: true, name: 'only_MT', fieldLabel: 'Solo op. di movimentazione', inputValue: true, uncheckedValue: false}     	

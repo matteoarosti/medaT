@@ -10,6 +10,7 @@ items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']
 items = items.where({handling_item_type: formValues['handling_item_type']}) unless formValues['handling_item_type'].blank?
 items = items.where(["datetime_op >= ?", formValues['datetime_op_from'].to_date]) unless formValues['datetime_op_from'].blank?
 items = items.where(["datetime_op <= ?", formValues['datetime_op_to'].to_date]) unless formValues['datetime_op_to'].blank?
+items = items.where("operation_type = ?", 'MT') if formValues['only_MT'] == true
 
 
 items = items.select('*').joins(:handling_header)
@@ -36,7 +37,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
  	<% group_op = so_val.group_by { |d| d.handling_item_type } %>
 	<% group_op.each do |op_id, op_val| %>
 
- 		<p class="bg-success" style="padding: 5px 10px"><%= op_id -%></p>
+ 		<p class="bg-success" style="padding: 5px 10px"><%= t("operations.#{op_id}.long") -%></p>
 
 		<%
  		######################################################
@@ -45,19 +46,25 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		%>
 		<table class="table table-striped table-bordered table-condensed">
 		 <tr>
-		  <th width=200>Dimensione</th>
-		  <th width=200>Tipo</th>
+		  <th width=70>Data/ora</th>
+		  <th width=100>Dimensione</th>
+		  <th width=100>Tipo</th>
 		  <th width=80>Container</th>
-		  <th>Nave</th>
+		  <th width=80>Nave</th>
+		  <th width=80>Viaggio</th>
+		  <th width=80>Vettore</th>		  
 		 </tr>
  		<% ###group_eq = op_val.group_by { |d| d.equipment_id } %>
 		<% op_val.each do |row| %>
 			<% eq = Equipment.find(row.equipment_id) %>
  			<tr>
+ 				<td><%= row.datetime_op.strftime("%d/%m/%y %H:%M") -%></td>
 				<td><%= eq.sizetype -%></td>
 				<td><%= eq.equipment_type -%></td>				
 				<td><%= row.container_number.to_s -%></td>
 				<td><%= row.ship.name.to_s unless row.ship.blank? -%></td>
+				<td><%= row.voyage.to_s -%></td>
+				<td><%= row.carrier.name.to_s unless row.carrier.blank? -%></td>
 			</tr>
 		<% end %>
 		</table>

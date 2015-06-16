@@ -36,8 +36,14 @@
     	
      		<%= raw extjs_std_datefield('datetime_op', @hi, {:allowBlank=>true, :fieldLabel => 'Da data', :name => 'datetime_op_from'}) -%>,
      		<%= raw extjs_std_datefield('datetime_op', @hi, {:allowBlank=>true, :fieldLabel => 'A data', :name => 'datetime_op_to'}) -%>
+     		
      		]
-     	}
+     	},
+     	
+     	
+   {xtype: 'checkbox', value: true, name: 'only_MT', fieldLabel: 'Solo op. di movimentazione', inputValue: true, uncheckedValue: false}     	
+     	
+     	
     ],
     
    buttons: [

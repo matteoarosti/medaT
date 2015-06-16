@@ -7,6 +7,7 @@ class CreateCarriers < ActiveRecord::Migration
       t.string      :city,                  :limit => 50
       t.string      :country,               :limit => 50
       t.string      :email,                 :limit => 50
+      t.string      :email_notify,          :limit => 200  #valori separati da ","
       
       t.timestamps
       t.integer :created_user_id

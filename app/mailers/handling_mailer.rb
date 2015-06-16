@@ -33,10 +33,21 @@ class HandlingMailer < ActionMailer::Base
     pdf.m_draw(hi)
     pdf.render_file(tmp_file_name)
     print "\nGenerato"
+
     
-    #allego il file e
+    email_error_notify = 'matteo.arosti@gmail.com'
+        
+    #destinatario
+    if @hi.carrier.nil? || @hi.carrier.email_notify.to_s.empty?
+      send_email_to = email_error_notify
+    else
+      send_email_to = @hi.carrier.email_notify
+    end
+    
+    print "\nInvio email a #{send_email_to}\n"
+    #allego il file e invio
     attachments["ICOP_movimento_#{hi.id.to_s}.pdf"] = File.read(tmp_file_name)
-    mail(:to => "matteo.arosti@gmail.com", 
+    mail(:to => send_email_to, 
           :subject => "Notifica movimento #{hi.id.to_s}, container #{@hi.handling_header.container_number}, #{text_IO}, #{text_FE}"
         )
   end

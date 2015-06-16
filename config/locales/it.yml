@@ -36,6 +36,7 @@ it:
       city: "città"
       country: "nazione"
       email: "email"
+      email_notify: "email per notifica (separate da ',')"
     shippers:
       shippers: "Spedizionieri"
       name: "nome"

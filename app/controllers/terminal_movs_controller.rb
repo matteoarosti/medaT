@@ -188,7 +188,7 @@ end
        r["#{gc.handling_type}"]["#{gc.date_op}"] = gc.t_cont;
        #ret[:items] << {:os => gc.datetime_op + " (#{gc.t_cont.to_i.to_s})", :data1 => gc.t_cont}
      end   
-     logger.info r.to_yaml 
+ 
     #ret[:items] << {:os => 'open', :data1 => 30}
      
     #scorro gli ultimi 30 giorni

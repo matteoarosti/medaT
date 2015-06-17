@@ -8,7 +8,7 @@ formValues = JSON.parse params['formValues']
 
 items = HandlingHeader.is_in_terminal().not_closed()
 items = items.where(shipowner_id: formValues['shipowner_id']) unless formValues['shipowner_id'].blank?
-items = items.where(container_FE: formValues['fl_FE']) unless formValues['fl_FE']=='E'
+items = items.where(container_FE: formValues['fl_FE']) unless formValues['fl_FE'].to_s.empty?
 
 items = items.select('shipowner_id, container_FE, equipment_id, count(*) as C_ROW').group("shipowner_id, container_FE, equipment_id")
 group_shipowner = items.group_by { |d| d.shipowner_id }

@@ -7,7 +7,7 @@ formValues = JSON.parse params['formValues']
 
 items = HandlingHeader.is_in_terminal().not_closed()
 items = items.where(shipowner_id: formValues['shipowner_id']) unless formValues['shipowner_id'].blank?
-items = items.where(container_FE: formValues['fl_FE']) unless formValues['fl_FE']=='E'
+items = items.where(container_FE: formValues['fl_FE']) unless formValues['fl_FE'].to_s.empty?
 
 
 items = items.select('*')
@@ -46,6 +46,8 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		  <th width=100>Tipo</th>
 		  <th width=80>Container</th>
 		  <th width=80>Booking</th>
+		  <th width=80>Nave</th>
+		  <th width=80>Viaggio</th>
 		 </tr>
 
 		<% op_val.sort{|a,b| a.equipment.equipment_type <=> b.equipment.equipment_type}.each do |row| %>
@@ -54,6 +56,8 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 				<td><%= eq.equipment_type -%></td>				
 				<td><%= row.container_number.to_s -%></td>
 				<td><%= row.num_booking.to_s -%></td>
+				<td><%= !row.booking.nil? ? row.booking.ship.name : '' -%></td>
+				<td><%= !row.booking.nil? ? row.booking.voyage : '' -%></td>
 			</tr>
 		<% end %>
 		</table>

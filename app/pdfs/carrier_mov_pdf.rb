@@ -79,8 +79,7 @@ class CarrierMovPdf < Prawn::Document
   
     #il booking lo ricerco nei dettagli precedenti (per data/ora) al dettaglio in linea
     hi_search_booking_item = hi.search_booking_item()
-    hi_search_booking      = hi_search_booking_item.booking
-      
+    hi_search_booking      = !hi_search_booking_item.nil? ? hi_search_booking_item.booking : nil
       
           
     #riga 2

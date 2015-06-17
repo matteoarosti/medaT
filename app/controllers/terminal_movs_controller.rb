@@ -145,7 +145,6 @@ end
       #raggruppo i movimenti aperti
        gcs = HandlingHeader.select('container_in_terminal, container_FE, IF(ISNULL(booking_id), 0, 1) as with_b, count(*) as t_cont').where('handling_status=?', 'OPEN').by_type('TMOV').group('container_in_terminal, container_FE, IF(ISNULL(booking_id), TRUE, FALSE)')
        gcs.each do |gc|
-         logger.info gc.to_yaml
          n = gc.container_in_terminal == true ? '[In]' : '[Out]'
          n += gc.container_FE == 'F' ? ' Pieno' : ' Vuoto'
          n += gc.with_b == 1 ? ' [b]' : ' '

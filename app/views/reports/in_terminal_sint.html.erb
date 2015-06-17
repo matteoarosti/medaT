@@ -1,0 +1,84 @@
+<h1>Handling Sintetica</h1>
+
+<%
+#Recupero elenco movimenti in base ai parametri
+
+formValues = JSON.parse params['formValues']
+
+#gestione campi data/ora
+if !formValues['datetime_op_from'].blank?
+	datetime_from = Time.zone.parse(formValues['datetime_op_from'] + ' ' + (formValues['datetime_op_from_time'] || '00:00') + ':00')
+end
+
+if !formValues['datetime_op_to'].blank?
+	datetime_to = Time.zone.parse(formValues['datetime_op_from'] + ' ' + (formValues['datetime_op_to_time'] || '23:59') + ':59')
+end
+
+items = HandlingItem.where('1=1')
+items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']} }) unless formValues['shipowner_id'].blank?
+items = items.where({handling_item_type: formValues['handling_item_type']}) unless formValues['handling_item_type'].blank?
+items = items.where("datetime_op >= ?", datetime_from) unless formValues['datetime_op_from'].blank?
+items = items.where("datetime_op <= ?", datetime_to) unless formValues['datetime_op_to'].blank?
+items = items.where("operation_type = ?", 'MT') if formValues['only_MT'] == true
+
+
+items = items.select('shipowner_id, handling_item_type, equipment_id, count(*) as C_ROW').joins(:handling_header).group("shipowner_id, handling_item_type, equipment_id")
+group_shipowner = items.group_by { |d| d.shipowner_id }
+%>
+
+
+<%
+ ######################################################
+ #ShipOwner
+ ###################################################### 
+%>
+<% group_shipowner.each do |so_id, so_val| %>
+ <% so = Shipowner.find(so_id) %>
+
+    <p class="bg-primary" style="padding: 10px"><%= so.name -%></p>
+ 
+
+	<%
+ 	######################################################
+ 	#Tipo operazioni
+ 	###################################################### 
+	%>
+ 	<% group_op = so_val.group_by { |d| d.handling_item_type } %>
+	<% group_op.each do |op_id, op_val| %>
+
+ 		<p class="bg-success" style="padding: 5px 10px"><%= t("operations.#{op_id}.long") -%></p>
+
+		<%
+ 		######################################################
+ 		#Tipo operazioni
+ 		###################################################### 
+		%>
+		<table class="table table-striped table-bordered table-condensed">
+		 <tr>
+		  <th width=200>Dimensione</th>
+		  <th>Tipo</th>
+		  <th width=80>Quantit&agrave;</th>
+		 </tr>
+ 		<% ###group_eq = op_val.group_by { |d| d.equipment_id } %>
+		<% op_val.each do |row| %>
+			<% eq = Equipment.find(row.equipment_id) %>
+ 			<tr>
+				<td><%= eq.sizetype -%></td>
+				<td><%= eq.equipment_type -%></td>				
+				<td align=right><%= row.C_ROW -%></td>
+			</tr>
+		<% end %>
+		</table>
+
+
+	<% end %>
+
+
+
+
+
+
+
+
+ 
+<% end %>

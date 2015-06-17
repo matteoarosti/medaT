@@ -247,6 +247,7 @@ it:
     report:
       reports: "Report"
       movements: "Movimenti"
+      in_terminal: "In terminal"
     user_manager:
       user_manager: "Gesione utenti"
       users: "Utenti"

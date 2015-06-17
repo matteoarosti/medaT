@@ -85,6 +85,16 @@ class HandlingHeader < ActiveRecord::Base
  end     
  
 
+ def last_IN
+  hh = self.handling_items.where("handling_type = ?", "I").order('datetime_op desc').first
+ end 
+
+ def last_OUT
+  hh = self.handling_items.where("handling_type = ?", "O").order('datetime_op desc').first
+ end 
+ 
+ 
+
 #COSTANTI (DA NON USARE PIU')
  TYPES = {
   "TMOV" => 'Movimentazione Terminal'

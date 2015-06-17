@@ -48,9 +48,18 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		  <th width=80>Booking</th>
 		  <th width=80>Nave</th>
 		  <th width=80>Viaggio</th>
+		  <th width=80>Entrato il</th>
 		 </tr>
 
-		<% op_val.sort{|a,b| a.equipment.equipment_type <=> b.equipment.equipment_type}.each do |row| %>
+		<% op_val.sort{|a,b| 
+		
+			if formValues['seq_ord'] == 'date_tipo'
+				[a.last_IN, a.equipment.equipment_type] <=> [b.last_IN, b.equipment.equipment_type]
+			else
+				[a.equipment.equipment_type, a.last_IN] <=> [b.equipment.equipment_type, b.last_IN]
+			end
+		
+			}.each do |row| %>
 			<% eq = Equipment.find(row.equipment_id) %>
  			<tr>
 				<td><%= eq.equipment_type -%></td>				
@@ -58,6 +67,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 				<td><%= row.num_booking.to_s -%></td>
 				<td><%= !row.booking.nil? ? row.booking.ship.name : '' -%></td>
 				<td><%= !row.booking.nil? ? row.booking.voyage : '' -%></td>
+				<td><%= row.last_IN().datetime_op.strftime("%d/%m/%y %H:%M") -%></td>
 			</tr>
 		<% end %>
 		</table>

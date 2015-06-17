@@ -42,7 +42,28 @@
 								                inputValue: '',
 								                width: 90
 								            }]
-								        }    ],
+								        }
+								        
+								        
+								        , {
+								            xtype: 'radiogroup',
+								            fieldLabel: 'Ordina per',
+								            layout: 'hbox',
+								            items: [{
+								                boxLabel: 'Tipo / Entrata',
+								                name: 'seq_ord',
+								                inputValue: 'tipo_date',
+								                checked: true,
+								                width: 180               
+								            }, {
+								                boxLabel: 'Entrata / Tipo',
+								                name: 'seq_ord',
+								                inputValue: 'date_tipo',
+								                width: 180
+								            }]
+								        }
+								           
+							 ],
     
    buttons: [
 	{

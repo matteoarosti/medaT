@@ -37,6 +37,14 @@ class HandlingHeader < ActiveRecord::Base
   end 
 
 
+  
+  #Richiamata per la creazione di un nuovo header da import
+  def self.verify_can_create_new(container_number)
+    #verifico che non ci sia gia' un movimento aperto (non in CLOSE)
+    hh_count = HandlingHeader.container(container_number).where("handling_status <> ?", "CLOSE").count
+    return false if hh_count > 0
+  end
+  
 
 
  #Richiamata per la creazione di un nuovo header da import

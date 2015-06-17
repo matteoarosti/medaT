@@ -520,7 +520,6 @@ Ext.define('FeedViewer.MovimentoPanel', {
 									//TODO: aggiorno il recordset con il record ritornato dal server (per id, updated_at...)
 									//this.getViewModel().getData().rec.set('handling_status', 'NEW');
 										
-										console.log(this.getViewModel());
 									this.getViewModel().setData({is_handling_editable: false});
 									this.getViewModel().setData({is_container_editable: false});
 									
@@ -536,6 +535,20 @@ Ext.define('FeedViewer.MovimentoPanel', {
 																		
 									this.doLayout();									
 									}, scope: this,
+									
+									
+									
+									failure: function(rec, op) {
+										var result = Ext.JSON.decode(op.getResponse().responseText);
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: result.message,
+					                        icon: Ext.MessageBox.ERROR,
+					                        buttons: Ext.Msg.OK
+				                    	})					
+
+									}, scope: this
+									
 		    					 
 		    					 });
 		    				 }						    

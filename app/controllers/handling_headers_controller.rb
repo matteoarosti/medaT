@@ -8,6 +8,14 @@ class HandlingHeadersController < ApplicationController
 ##################################################
 def sc_create  #OVERRIDE DEL METODO STANDARD
 ##################################################
+  
+    #verifico che non ci sia gia un handling aperto (non CLOSE)
+    verify_can_create_new = extjs_sc_model.constantize.verify_can_create_new(params[:data][:container_number])
+    if verify_can_create_new == false
+      render json: {:success => false, :message=>"Esiste gia' un movimento aperto per questo container"}
+      return false
+    end
+  
     item = extjs_sc_model.constantize.new()    
     params[:data].permit!
     #filtro solo gli attributi presenti nel model e salvo

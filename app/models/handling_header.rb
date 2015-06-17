@@ -8,6 +8,7 @@ class HandlingHeader < ActiveRecord::Base
  scope :extjs_default_scope, -> { eager_load(:shipowner, :equipment) }
  scope :container, ->(container_number) {where("container_number = ?", container_number)}
  scope :is_in_terminal, -> {where("container_in_terminal=?", true)}
+ scope :not_closed, -> {where("handling_status <> ?", 'CLOSE')}
  scope :locked, -> {where("lock_fl=?", true)}
  scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
  scope :locked_DAMAGED, -> {locked.where("lock_type = ?", 'DAMAGED')}

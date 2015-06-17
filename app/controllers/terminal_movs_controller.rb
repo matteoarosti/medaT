@@ -148,7 +148,7 @@ end
          logger.info gc.to_yaml
          n = gc.container_in_terminal == true ? '[In]' : '[Out]'
          n += gc.container_FE == 'F' ? ' Pieno' : ' Vuoto'
-         n += gc.with_b == 1 ? ' (con booking)' : ' '
+         n += gc.with_b == 1 ? ' [b]' : ' '
          ret[:items] << {:os => n + " (#{gc.t_cont.to_i.to_s})", :data1 => gc.t_cont}
        end   
         

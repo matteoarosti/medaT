@@ -45,6 +45,19 @@ end
 ##################################################
 def hitems_sc_create  
 ##################################################
+  
+  
+  #per evitare anomalia carrier_id = 0 oppure ship_id = 0
+  if (
+      (!params[:data][:carrier_id].to_s.strip.empty? && params[:data][:carrier_id].to_i == 0) ||
+      (!params[:data][:ship_id].to_s.strip.empty? && params[:data][:ship_id].to_i == 0)
+      )
+    render json: {:success => false, :message => "Attenzione: verificare correttamente i dati inseriti nei campi select"}
+    return
+  end
+  
+  
+  
    hh = HandlingHeader.find(params[:data][:handling_header_id])
    hi = hh.handling_items.new()
    

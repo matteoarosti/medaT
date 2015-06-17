@@ -55,9 +55,9 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		<% op_val.sort_by{|a| 
 		
 			if formValues['seq_ord'] == 'date_tipo'
-				[a.last_IN, a.equipment.equipment_type]
+				[a.last_IN.datetime_op, a.equipment.equipment_type]
 			else
-				[a.equipment.equipment_type, a.last_IN]
+				[a.equipment.equipment_type, a.last_IN.datetime_op]
 			end
 		
 		

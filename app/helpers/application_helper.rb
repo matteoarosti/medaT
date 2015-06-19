@@ -21,7 +21,10 @@ module ApplicationHelper
       valueField: #{p[:valueField].to_json || p[:displayField].to_json},
       forceSelection: true,
       allowBlank: #{p[:allowBlank] || false},
-      triggerAction: 'all',  
+      triggerAction: 'all',
+      typeAhead: true,
+      queryMode: 'local',
+      lastQuery: '',  
       store: #{p[:store]},
       listeners: {#{p[:listeners]}}
       #{add_attr}
@@ -45,7 +48,10 @@ module ApplicationHelper
       valueField: 'id',
       forceSelection: true,
       allowBlank: #{p[:allowBlank] || false},
-      triggerAction: 'all',  
+      triggerAction: 'all',
+      typeAhead: true,
+      queryMode: 'local',
+      lastQuery: '',  
       store: #{p[:store] || extjs_std_store_model(name)},
       listeners: {#{p[:listeners]}}
       #{add_attr}

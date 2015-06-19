@@ -75,7 +75,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 			 
 			 #nave/viaggio lo trovo in linea o eventualmente lo recupero dal booking
 			 if !row.ship.nil? || !row.voyage.to_s.empty?
-			  out_ship 		= row.ship.name.to_s
+			  out_ship 		= row.ship.name.to_s unless row.ship.nil?
 			  out_voyage 	= row.voyage.to_s 
 			 else
 			  bk = row.search_booking

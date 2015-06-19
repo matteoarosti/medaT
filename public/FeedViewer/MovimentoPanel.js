@@ -645,6 +645,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	
         	
         	, {
+        	    xtype: 'gridpanel',        		
         	    title: 'Distinta movimenti', flex: 50,
         	    tools: [{  
 		                xtype: 'button',
@@ -659,7 +660,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 		                }, scope: this
 		            }
                 ],
-        	    xtype: 'gridpanel',
+
         	    store: new Ext.data.Store({
         	    	autoLoad: false,
         	    	fields: [],
@@ -705,7 +706,26 @@ Ext.define('FeedViewer.MovimentoPanel', {
 				   {text: 'Terminal.', width: 90, dataIndex: 'terminal_id_Code'},
 				   {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock}				   
         	       ]
-                        	    
+                 
+        	
+	        	, listeners: {
+	                	itemcontextmenu : function(item, record, index, e, eOpts){
+	                		eOpts.stopEvent();
+                            var xy = eOpts.getXY();                         
+                            new Ext.menu.Menu({
+                                        items : [{
+                                                    text : '<i class="fa fa-edit fa-1x"> Modifica',                                                                                                        
+                                                    handler: function(){
+                                                    	
+                                                    	acs_show_win_std('Modifica dettaglio', myApp.railsBaseUri + 'handling_headers/hitems_edit_simple',
+                           			                		 {rec_id: record.get('id')},
+                           			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
+                                                    }
+                                        }]
+                            }).showAt(xy); 	                	
+	                }, scope: this
+	            }        	
+        	
         	}        	
         	
         	

@@ -136,8 +136,40 @@ end
    hi.save!
    render json: {:success => true, :message => nil}      
  end
+ 
+ 
+ #modifico i dati di un dettaglio (ship/voyage...)
+ def hitems_edit_simple
+   @item = HandlingItem.find(params['rec_id'])
+ end
+
+ def hitems_edit_simple_save
+   item = HandlingItem.find(params[:data][:id])
+     
+   if !params[:data][:datetime_op_date].to_s.empty? && !params[:data][:datetime_op_time].to_s.empty?
+     #datetime_op (data e ora) lo trasformo in datetime
+     params[:data][:datetime_op] = generate_datetime(params[:data][:datetime_op_date], params[:data][:datetime_op_time]) 
+     params[:data].delete(:datetime_op_date)
+     params[:data].delete(:datetime_op_time)
+   else
+     params[:data][:datetime_op] = Time.zone.now
+   end
+     
+   params[:data][:fl_send_email_carrier] = nil if params[:data][:fl_send_email_carrier] == false
+             
+   params[:data].permit!
+   #filtro solo gli attributi presenti nel model e salvo
+   item.update(params[:data])
+   item.save!()
+   hh = item.handling_header 
+   render json: {:success => true, :message => '', :hh=>[hh.as_json(HandlingHeader.as_json_prop)]}    
+ end
 
 
+ 
+ 
+ 
+ 
 # Inserimento dettaglio movimento
 ##################################################
 def edit_header  

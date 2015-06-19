@@ -1,0 +1,96 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+    {xtype: 'hiddenfield', name: 'id', value: '<%= @item.id -%>'}   
+    
+	, <%= raw extjs_std_datetimefield('datetime_op', @item) -%>    
+    , <%= raw extjs_std_combo_model('carrier', @item, :allowBlank => true) -%>
+    , <%= raw extjs_std_textfield('driver', @item, :allowBlank => true) -%>
+    , <%= raw extjs_std_combo_model('ship', @item, :allowBlank => true) -%>
+    , <%= raw extjs_std_textfield('voyage', @item, :allowBlank => true) -%>    
+    , <%= raw extjs_std_booleanfield('fl_send_email_carrier', @item) -%>    
+   ]
+   
+   , buttons: [	
+   		{
+            text: 'Salva',
+            handler: function (btn, evt) {              
+             form = this.up('form').getForm();
+             if (form.isValid()) {
+                          
+             	Ext.Ajax.request({
+             	
+             	    url: '<%= url_for(:controller=> 'handling_headers', :action=>'hitems_edit_simple_save') -%>',
+                    waitMsg: 'Salvataggio in corso....',
+					method:'POST',                     
+                    jsonData: {data: form.getValues()},
+             	             	
+					success: function(result, request) {
+						var jsonData = Ext.JSON.decode(result.responseText);
+						
+						if (jsonData.success == false){
+							Ext.MessageBox.show({
+		                        title: 'EXCEPTION',
+		                        msg: jsonData.message,
+		                        icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	});
+						 return false;						
+						}
+
+
+						//se e' stato ritornato un messaggio (es: booking CLOSE)
+						if (jsonData.message.length > 0)
+							Ext.MessageBox.show({
+		                        title: 'Notifica',
+		                        msg: jsonData.message,
+		                        //icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})						
+						
+						
+						 //ricarico la testata e i dettagli
+						 console.log(this.up('window').open_vars.mov_panel);
+						 rec = this.up('window').open_vars.mov_panel.getViewModel().getData().rec;
+						 																		
+						 rec.set(jsonData.hh[0]);
+						 this.up('window').open_vars.mov_panel.getViewModel().setData({rec: rec});					 
+						 this.up('window').open_vars.mov_panel.down('grid').store.reload();
+						 
+						 //chiudo										
+						 this.up('window').close();
+					 								
+					}, scope: this,
+					
+					failure: function(op, opts) {
+						var result = Ext.JSON.decode(op.getResponse().responseText);
+						Ext.MessageBox.show({
+	                        title: 'EXCEPTION',
+	                        msg: result.message,
+	                        icon: Ext.MessageBox.ERROR,
+	                        buttons: Ext.Msg.OK
+                    	})
+					} 				 
+		    	});
+             }             
+            }
+        }
+      ]
+      
+  }
+ ]
+}

@@ -68,13 +68,31 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
  		<% ###group_eq = op_val.group_by { |d| d.equipment_id } %>
 		<% op_val.each do |row| %>
 			<% eq = Equipment.find(row.equipment_id) %>
+			
+			<%
+			 out_ship 	= ""
+			 out_voyage	= ""
+			 
+			 #nave/viaggio lo trovo in linea o eventualmente lo recupero dal booking
+			 if !row.ship.nil? || !row.voyage.to_s.empty?
+			  out_ship 		= row.ship.name.to_s
+			  out_voyage 	= row.voyage.to_s 
+			 else
+			  bk = row.search_booking
+			  if !bk.nil?
+			   out_ship 	= "[#{bk.ship.name.to_s}]"
+			   out_voyage	= "[#{bk.voyage.to_s}]"
+			  end
+			 end 
+			%>
+						
  			<tr>
  				<td><%= row.datetime_op.strftime("%d/%m/%y %H:%M") -%></td>
 				<td><%= eq.sizetype -%></td>
 				<td><%= eq.equipment_type -%></td>				
 				<td><%= row.container_number.to_s -%></td>
-				<td><%= row.ship.name.to_s unless row.ship.blank? -%></td>
-				<td><%= row.voyage.to_s -%></td>
+				<td><%= out_ship -%></td>
+				<td><%= out_voyage -%></td>
 				<td><%= row.carrier.name.to_s unless row.carrier.blank? -%></td>
 			</tr>
 		<% end %>

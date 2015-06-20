@@ -181,14 +181,19 @@ end
   def tab_dashboard_movs_by_date
     ret = {}
     ret[:items] = []
-    r = {'I' => {}, 'O' => {}}
+    r = {'I' => {}, 'O' => {}, 'L' => {}, 'D' => {}}
     
     #raggruppo i movimenti aperti in base al lock
-     gcs = HandlingItem.select('DATE(datetime_op) as date_op, handling_type, count(*) as t_cont').where('operation_type=?', 'MT').group('DATE(datetime_op), handling_type')
-     gcs.each do |gc|
-       r["#{gc.handling_type}"]["#{gc.date_op}"] = gc.t_cont;
-       #ret[:items] << {:os => gc.datetime_op + " (#{gc.t_cont.to_i.to_s})", :data1 => gc.t_cont}
-     end   
+     gcs = HandlingItem.select('DATE(datetime_op) as date_op, handling_type, handling_item_type, count(*) as t_cont').where('operation_type=?', 'MT').group('DATE(datetime_op), handling_type, handling_item_type')
+     gcs.each do |gc|       
+       if gc.handling_item_type == 'O_LOAD'
+         r["L"]["#{gc.date_op}"] = r["L"]["#{gc.date_op}"].to_i + gc.t_cont;
+       elsif gc.handling_item_type == 'I_DISCHARGE'
+         r["D"]["#{gc.date_op}"] = r["D"]["#{gc.date_op}"].to_i + gc.t_cont;
+       else
+        r["#{gc.handling_type}"]["#{gc.date_op}"] = r["#{gc.handling_type}"]["#{gc.date_op}"].to_i + gc.t_cont;
+       end
+     end
  
     #ret[:items] << {:os => 'open', :data1 => 30}
      
@@ -202,6 +207,8 @@ end
        s[:op] = tmp.to_date
        s[:I] = r["I"]["#{tmp.to_date}"] || 0
        s[:O] = r["O"]["#{tmp.to_date}"] || 0
+       s[:L] = r["L"]["#{tmp.to_date}"] || 0
+       s[:D] = r["D"]["#{tmp.to_date}"] || 0
        ret[:items] << s
        tmp += 1.day
      end while tmp <= ed 

@@ -78,7 +78,6 @@
 											form = this.up('panel').down('form').getForm();
 											grid = this.up('grid');
 											
-											
 									Ext.Msg.confirm({
 				                        title: 'Confirm',
 				                        msg: 'Confermi l\'importazione di tutti i movimenti?',
@@ -89,6 +88,8 @@
 										           return false;              
 										        }
 										        if (btn == "yes"){ //YES, proseguo
+
+														Ext.getBody().mask("Loading...");
 											
 															Ext.Ajax.request({
 															   method: 'POST',
@@ -96,6 +97,8 @@
 															   jsonData: {import_header_id: <%= @ih.id -%>, check_form: form.getValues()},
 															   success: function(result, request) {
 															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	 	Ext.getBody().unmask();
 															   	  
 															   	  if (jsonData.success == false){
 																	Ext.MessageBox.show({
@@ -110,6 +113,7 @@
 															   	  }															   	 
 															   },
 															   failure: function(response, opts) {
+															  		Ext.getBody().unmask();
 															      console.log('server-side failure with status code ' + response.status);
 																	Ext.MessageBox.show({
 												                        title: 'EXCEPTION',

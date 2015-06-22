@@ -80,7 +80,7 @@ def hitems_sc_create
     
 
    #se ho ricevuto "num_booking", lo vado a decodificare in BookingItem
-   if !params[:data][:num_booking].blank?
+   if !params[:data][:num_booking].blank? && !params[:data][:num_booking].to_s.strip.empty?  
     bh = Booking.get_by_num(params[:data][:num_booking])
     bi = BookingItem.get_by_num_eq(params[:data][:num_booking], hh.equipment_id)
     if bh.nil? || bi.nil?
@@ -100,6 +100,10 @@ def hitems_sc_create
     end
    end
 
+   #in ogni caso rimuovo "num_booking" (ad esempio in O_LOAD puo' essere passato blank...
+   params[:data].delete(:num_booking)
+     
+   
    params[:data].permit!
    hi.assign_attributes(params[:data])
 

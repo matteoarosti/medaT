@@ -217,22 +217,30 @@ def validate_insert_item(hi, name_function = '')
   #se ha "booking_copy" = true verifico l'esistenza, la validita' e l'ammissibilita' del booking
   op_config_set = op_config['set'] || {}
   if name_function != 'get_operations' && op_config_set['booking_copy'] == true
-   
+    
    #segnalo errore: booking non presente
-   if hi.booking.nil?
+   if hi.booking.nil? && !self.with_booking
     ret[:is_valid] = false
     ret[:message]  = "Booking non presente" 
     logger.info ret.to_yaml
     return ret      
    end
    
-   #segnalo errore: booking non valido (quantity o expiration...)   
-   verifica_validazione = hi.booking.valida_insert_item(hi)
-   if verifica_validazione[:is_valid] == false
-    ret[:is_valid] = false
-    ret[:message]  = verifica_validazione[:message] 
-    return ret   
+   if !hi.booking.nil? && !self.with_booking 
+     #segnalo errore: booking non valido (quantity o expiration...)   
+     verifica_validazione = hi.booking.valida_insert_item(hi)
+     if verifica_validazione[:is_valid] == false
+      ret[:is_valid] = false
+      ret[:message]  = verifica_validazione[:message] 
+      return ret   
+     end
    end
+   
+   if !hi.booking.nil? && self.with_booking
+     ret[:is_valid] = false
+     ret[:message]  = "Il movimento ha gia' un booking assegnato. Impossibile assegnarne un altro" 
+     return ret     
+   end      
    
   end 
   
@@ -278,7 +286,7 @@ def sincro_save_header(hi)
  #se e' un handling_item che gestisce il booking, aggiorno lo stato del booking
  ret_booking = {} 
  
-  if op_config_set['booking_copy'] == true  
+  if op_config_set['booking_copy'] == true && !hi.booking.nil?  
    ret_booking = hi.handling_header.booking.refresh_status(hi.booking_item)
   end
   if op_config_set['booking_reset'] == true
@@ -324,6 +332,7 @@ end
 ################################################################
 def sincro_set_booking_copy(value, hi)
 ################################################################
+ return if hi.booking.nil?
  b = Booking.find(hi.booking_id)
  self.booking_id  = hi.booking_id
  self.booking_item_id  = hi.booking_item_id

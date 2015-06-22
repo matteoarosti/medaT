@@ -23,8 +23,10 @@
     
 	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
 	<%= raw extjs_std_combo_model('ship', @new_rec) -%>,
-    <%= raw extjs_std_textfield('voyage', @new_rec) -%>,
-    {xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: false},
+    <%= raw extjs_std_textfield('voyage', @new_rec) -%>
+    <% if !@new_rec.handling_header.with_booking %>
+    , {xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: true}
+    <% end %>
 
    ],
       

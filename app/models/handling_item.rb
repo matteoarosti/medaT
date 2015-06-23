@@ -59,7 +59,9 @@ class HandlingItem < ActiveRecord::Base
  def search_booking()
    #todo: se trovo un mancato posizionamento non devo considerare il booking assegnato?
    self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc").each do |hii|
-     return hii.booking if !hii.booking.nil? 
+     if hii.datetime_op < self.datetime_op || (hii.datetime_op == self.datetime_op && hii.id <= self.id)
+             return hii.booking if !hii.booking.nil?
+     end 
    end
    return nil
  end 
@@ -67,7 +69,7 @@ class HandlingItem < ActiveRecord::Base
 #a ritroso (nell'handling) verifico se ho un dettaglio con il booking_item 
 def search_booking_item()
   #todo: se trovo un mancato posizionamento non devo considerare il booking assegnato?
-  self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc").each do |hii|
+  self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc, id desc").each do |hii|
     return hii.booking_item if !hii.booking_item.nil? 
   end
   return nil

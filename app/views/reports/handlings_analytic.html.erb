@@ -24,8 +24,8 @@ items = items.where("datetime_op <= ?", datetime_to) unless formValues['datetime
 items = items.where("operation_type = ?", 'MT') if formValues['only_MT'] == true
 
 
-items = items.select('*').joins(:handling_header)
-group_shipowner = items.group_by { |d| d.shipowner_id }
+items = items.joins(:handling_header)
+group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 %>
 
 
@@ -58,7 +58,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		<table class="table table-striped table-bordered table-condensed">
 		 <tr>
 		  <th width=70>Data/ora</th>
-		  <th width=100>Tipo</th>
+		  <th width=40>Tipo</th>
 		  <th width=80>Container</th>
 		  <th width=80>Booking</th>
 		  <th width=80>Nave</th>
@@ -66,9 +66,9 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		  <th width=80>Vettore</th>
 		  <th width=80>Autista</th>
 		 </tr>
- 		<% ###group_eq = op_val.group_by { |d| d.equipment_id } %>
+
 		<% op_val.each do |row| %>
-			<% eq = Equipment.find(row.equipment_id) %>
+			<% eq = Equipment.find(row.handling_header.equipment_id) %>
 			
 			<%
 			 out_ship 		= ""
@@ -101,7 +101,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
  			<tr>
  				<td><%= row.datetime_op.strftime("%d/%m/%y %H:%M") -%></td>
 				<td><%= eq.equipment_type -%></td>				
-				<td><%= row.container_number.to_s -%></td>
+				<td><%= row.handling_header.container_number.to_s -%></td>
 				<td><%= out_booking -%></td>
 				<td><%= out_ship -%></td>
 				<td><%= out_voyage -%></td>

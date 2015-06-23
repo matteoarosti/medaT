@@ -173,13 +173,13 @@ it:
       long: "Uscita PIENO per svuotamento"
       short: "Out Empting"
     I_EMPTYING:
-      long: "Ingresso PIENO da Svuotamento"
+      long: "Ingresso VUOTO da Svuotamento"
       short: "In Empting"
     O_FILLING:
       long: "Uscita VUOTO per Carico"
       short: "Out Filling"
     I_FILLING:
-      long: "Ingresso PIENO da Carico"
+      long: "Ingresso VUOTO da Carico"
       short: "In Filling"
     I_TRANSFER:
       long: "Ingresso per trasferimento da altro Terminal"

@@ -65,6 +65,8 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 		  <th width=80>Viaggio</th>
 		  <th width=80>Vettore</th>
 		  <th width=80>Autista</th>
+		  <th width=80>Sigillo</th>		  
+		  <th width=80>Peso</th>		  
 		 </tr>
 
 		<% op_val.each do |row| %>
@@ -94,6 +96,17 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 			 	out_booking = "[#{bk.num_booking.to_s}]" if !bk.nil?
 			 end
 			  
+			 
+			 case row.is_import_export()
+			 	when "I"
+			 		out_seal = row.handling_header.seal_imp_shipowner
+			 		out_weight	= row.handling_header.weight_imp
+			 	when "E"
+			 		out_seal = row.handling_header.seal_exp_shipowner
+			 		out_weight	= row.handling_header.weight_exp			 	
+			 end  
+			  
+			  
 			%>
 			
 			
@@ -107,6 +120,8 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 				<td><%= out_voyage -%></td>
 				<td><%= row.carrier.name.to_s unless row.carrier.blank? -%></td>
 				<td><%= row.driver.to_s -%></td>
+				<td><%= out_seal -%></td>
+				<td><%= out_weight -%></td>
 			</tr>
 		<% end %>
 		</table>

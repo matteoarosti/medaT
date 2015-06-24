@@ -99,10 +99,12 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 			 
 			 case row.is_import_export()
 			 	when "I"
-			 		out_seal = row.handling_header.seal_imp_shipowner
+			 		out_seal_ar = [row.handling_header.seal_imp_shipowner.to_s,row.handling_header.seal_imp_others.to_s] 
+			 		out_seal 	= out_seal_ar.join('/')
 			 		out_weight	= row.handling_header.weight_imp
 			 	when "E"
-			 		out_seal = row.handling_header.seal_exp_shipowner
+			 		out_seal_ar = [row.handling_header.seal_exp_shipowner.to_s,row.handling_header.seal_exp_others.to_s] 
+			 		out_seal 	= out_seal_ar.join('/')
 			 		out_weight	= row.handling_header.weight_exp			 	
 			 end  
 			  

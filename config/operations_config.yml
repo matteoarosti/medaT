@@ -37,6 +37,7 @@ TMOV:
    container_in_terminal: true
    container_FE_copy: false
    operation_type: 'MT'
+   lock_INSPECT: IF_EMPTY
  O_FILLING:
   label: Out for Filling
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
@@ -60,6 +61,7 @@ TMOV:
    container_FE_copy: true
    seal_exp_copy: true   
    operation_type: 'MT'
+   lock_INSPECT: IF_EMPTY
  I_TRANSFER:
   label: 'In By Transfer From Other Terminal'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
@@ -70,6 +72,7 @@ TMOV:
    container_in_terminal: true
    container_FE_copy: true
    operation_type: 'MT'
+   lock_INSPECT: IF_EMPTY   
  O_LOAD:
   label: Out For Load
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
@@ -92,6 +95,7 @@ TMOV:
    container_FE_copy: false
    operation_type: 'MT'
    booking_reset: true
+   lock_INSPECT: IF_EMPTY   
  I_REUSE:
   label: In for reuse
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -103,6 +107,7 @@ TMOV:
    container_in_terminal: true
    booking_copy: true
    operation_type: 'MT'
+   lock_INSPECT: IF_EMPTY   
  REQ_ESTIMATE:
   label: Estimate Request
   icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'

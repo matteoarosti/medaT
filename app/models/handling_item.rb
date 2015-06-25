@@ -54,7 +54,19 @@ class HandlingItem < ActiveRecord::Base
       }
  end 
  
+
+#a ritroso (nell'handling) verifico se ho un dettaglio di un certo tipo operazione 
+def search_hi_by_item_type(item_type)
+  self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc").each do |hii|
+    if hii.datetime_op < self.datetime_op || (hii.datetime_op == self.datetime_op && hii.id <= self.id)
+            return hii if hii.handling_item_type == item_type
+    end 
+  end
+  return nil
+end 
  
+ 
+  
  #a ritroso (nell'handling) verifico se ho un dettaglio con il booking 
  def search_booking()
    #todo: se trovo un mancato posizionamento non devo considerare il booking assegnato?

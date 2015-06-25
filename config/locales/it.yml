@@ -216,7 +216,10 @@ it:
       short: "Custom Insp"
     INSPECT:
       long: "Ispezionato"
-      short: "Ispezionato"      
+      short: "Ispezionato"
+    FRCON:
+      long: "Allaccio frigo"
+      short: "Allaccio frigo"      
   menu:
     tables:
       tables: "Tabelle di base"

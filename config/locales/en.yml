@@ -237,7 +237,10 @@ en:
       short: "Custom Insp"
     INSPECT:
       long: "Inspect"
-      short: "Inspect"      
+      short: "Inspect"
+    FRCON:
+      long: "Allaccio frigo"
+      short: "Allaccio frigo"      
   menu:
     tables:
       tables: "Tables"

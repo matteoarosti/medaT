@@ -62,7 +62,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		  <th width=80>Quantit&agrave;</th>
 		 </tr>
  		
-		<% op_val.group_by{|a| a.equipment}.each do |row| %>		
+		<% op_val.group_by{|a| a.equipment}.sort{|a,b| a.sizetype <=> b.sizetype}.each do |row| %>		
 			<% eq = row[0] %>
  			<tr>
 				<td><%= eq.sizetype -%></td>

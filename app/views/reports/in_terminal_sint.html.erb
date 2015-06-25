@@ -62,12 +62,12 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		  <th width=80>Quantit&agrave;</th>
 		 </tr>
  		
-		<% op_val.group_by{|a| a.equipment_id}.each do |row| %>		
-			<% eq = Equipment.find(row[0]) %>
+		<% op_val.group_by{|a| a.equipment}.each do |row| %>		
+			<% eq = row[0] %>
  			<tr>
 				<td><%= eq.sizetype -%></td>
 				<td><%= eq.equipment_type -%></td>				
-				<td align=right><%= op_val.count -%></td>
+				<td align=right><%= row.count -%></td>
 			</tr>
 		<% end %>
 		</table>

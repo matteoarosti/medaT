@@ -147,6 +147,12 @@ end
    @item = HandlingItem.find(params['rec_id'])
  end
 
+ #modifica ora allaccio/disallaccio
+ def hitems_edit_rfcon
+   @item = HandlingItem.find(params['rec_id'])
+ end
+
+ 
  def hitems_edit_simple_save
    item = HandlingItem.find(params[:data][:id])
      
@@ -158,7 +164,16 @@ end
    else
      params[:data][:datetime_op] = Time.zone.now
    end
-     
+
+   if !params[:data][:datetime_op_end_date].to_s.empty? && !params[:data][:datetime_op_end_time].to_s.empty?
+     #datetime_op (data e ora) lo trasformo in datetime
+     params[:data][:datetime_op_end] = generate_datetime(params[:data][:datetime_op_end_date], params[:data][:datetime_op_end_time]) 
+     params[:data].delete(:datetime_op_end_date)
+     params[:data].delete(:datetime_op_end_time)
+   end
+   
+   
+        
    params[:data][:fl_send_email_carrier] = nil if params[:data][:fl_send_email_carrier] == false
              
    params[:data].permit!

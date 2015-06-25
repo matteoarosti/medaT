@@ -1,0 +1,133 @@
+{
+ "success": true,
+ items: [
+ {
+ 	xtype: 'panel',
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+ 	
+ 
+	items: [
+	  {
+	   xtype: 'form',
+  
+	   flex: 1.4,
+		layout: {
+		    type: 'vbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		}, 
+	     defaults: {
+	     	 xtype: 'textfield',
+	     	 margin: '10 10 0 10',
+	     },	  
+	     
+	   items: [
+	   
+	    <%= raw extjs_std_hiddenfield('id', @item.booking) -%>,
+	    <%= raw extjs_std_textfield('num_booking', @item.booking) -%>,
+	    <%= raw extjs_fieldcontainer('', {}, [
+			extjs_std_combo_model('shipowner', @item.booking),
+			extjs_std_combo_model('ship', @item.booking, {}, fcR {})]) -%>,
+
+		<%= raw extjs_std_textfield('voyage', @item.booking, {:allowBlank => true}) -%>,
+
+	    <%= raw extjs_fieldcontainer('', {}, [	 
+			extjs_std_combo_model('port', @item.booking),
+			extjs_std_datefield('eta', @item.booking, {:allowBlank => true}, fcR {})]) -%>,
+		
+		<%= raw extjs_std_textareafield('notes', @item.booking) -%>,
+	        
+	    <%= raw extjs_fieldcontainer('', {}, [
+	    								extjs_std_combo('status', @item.booking, :store => extjs_std_store_data(@item.booking.status_get_data_json)),
+	    								extjs_std_datefield('expiration', @item.booking, {:allowBlank => true}, fcR {}),
+	    								extjs_std_booleanfield('to_check', @item.booking, {}, fcR)]) -%>
+	   ],
+	  }	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	, {
+	   xtype: 'form',
+	   flex: 1,	      	
+	   title: 'Dettaglio booking',
+	   flex: 1,
+		layout: {
+		    type: 'vbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		}, 
+	     defaults: {
+	     	 xtype: 'textfield',
+	     	 labelAlign: 'right',
+	     	 margin: '10 10 0 10',
+	     },	  
+	     
+	   items: [
+	   
+	    <%= raw extjs_std_hiddenfield('id', @item) -%>,
+	    <%= raw extjs_std_hiddenfield('booking_id', @item) -%>,	    
+	    <%= raw extjs_fieldcontainer('', {}, [
+	   		extjs_std_combo_model('equipment', @item, {}, fcR {}),
+	   		extjs_std_textfield('quantity', @item, {}, fcR {}),
+	   		extjs_std_combo('status', @item, {:store => extjs_std_store_data(@item.booking.status_get_data_json)}, fcR {} )
+	   		]) -%>,
+	   	
+	   	
+	   	{xtype: 'fieldset',
+         title: 'Frigo',
+         padding: '10 10 10 10',
+			layout: {
+			    type: 'hbox',
+			    align : 'stretch',
+			    pack  : 'start',
+			}, 
+
+	     defaults: {
+	     	 flex: 1,
+	     	 labelAlign: 'right'
+	     },	  
+         
+         items: [
+	   	
+		   		<%= raw [
+		   			extjs_std_numberfield('temperature', @item, {:allowBlank => true}), 
+		   			extjs_std_numberfield('humidity', @item, {:allowBlank => true}), 
+		   			extjs_std_combo('ventilation', @item, :allowBlank => true, :store => extjs_std_store_data(@item.ventilation_get_data_json))
+		   			].join(',') -%>
+		 ]
+		}
+	   	
+	    
+	   ],
+	   
+	   
+	   
+	  } 
+	]
+  }
+  ]
+}

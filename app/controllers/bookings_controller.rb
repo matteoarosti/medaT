@@ -181,4 +181,8 @@ def bitems_sc_destroy
 end
 
 
+def bitem_info
+  @item = BookingItem.find(params[:rec_id])
+end  
+
 end

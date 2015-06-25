@@ -456,12 +456,28 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			                fieldLabel: 'Booking',
 			                combineErrors: true,
 			                msgTarget : 'side',
-			                layout: 'hbox',
+			                layout: {
+			            	    type: 'hbox',
+			            	    align : 'stretch',
+			            	    pack  : 'start',
+			            	},
 			                anchor: '100%',
-			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                defaults: {xtype: 'textfield', hideLabel: true},
 			                items: [
-		                        {fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}}
-							]
+		                        { flex: 1, fieldLabel: 'Booking', disabled: true, bind: {value: '{rec.booking_id_Name}'}},		                       
+		                        { xtype : "button", text : '?', flex: 0.3,		 									 								 							
+		 							handler: function(){
+								    rec = this.getViewModel().getData().rec;
+								    
+								    if (rec.get('booking_item_id') === null)
+								      return false;
+								    
+								    acs_show_win_std('Info dettaglio booking', myApp.railsBaseUri + 'bookings/bitem_info',
+					                		 {rec_id: rec.get('booking_item_id')},
+					                		 700, 500, null, null, null, null, {mov_panel: this});
+		 							}, scope: this
+		                        }
+							]										                
 						}, {
 			                xtype: 'fieldcontainer',
 			                fieldLabel: 'Nave / Viaggio',
@@ -693,8 +709,12 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	       {text: 'E/U', width: 40, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: pb_get_image_IO},
                    {text: 'P/V', width: 40, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: pb_get_image_FE},
 				   {text: 'Nave', width: 130, dataIndex: 'ship_id_Name', renderer: function(value, metaData, rec){
-					   if (rec.get('handling_item_type') == 'FRCON')
-						   return rec.get('datetime_op_end');
+					   if (rec.get('handling_item_type') == 'FRCON'){
+						   if (rec.get('datetime_op_end') === null)
+							   return '(Anroca allacciato)';
+						   else
+							   return  ' -> ' + Ext.util.Format.date(rec.get('datetime_op_end'), 'd-m-y H:i');
+					   }
 					   else
 					   return value; 
 					}},
@@ -717,9 +737,15 @@ Ext.define('FeedViewer.MovimentoPanel', {
                                                     text : '<i class="fa fa-edit fa-1x"> Modifica',                                                                                                        
                                                     handler: function(){
                                                     	
-                                                    	acs_show_win_std('Modifica dettaglio', myApp.railsBaseUri + 'handling_headers/hitems_edit_simple',
-                           			                		 {rec_id: record.get('id')},
-                           			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
+                                                    	if (record.get('handling_item_type') == 'FRCON')
+                                                        	acs_show_win_std('Modifica dettaglio allaccio frigo', myApp.railsBaseUri + 'handling_headers/hitems_edit_rfcon',
+                                  			                		 {rec_id: record.get('id')},
+                                  			                		 600, 300, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
+                                                    		
+                                                    	else                                                     	
+	                                                    	acs_show_win_std('Modifica dettaglio', myApp.railsBaseUri + 'handling_headers/hitems_edit_simple',
+	                           			                		 {rec_id: record.get('id')},
+	                           			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
                                                     }
                                         }]
                             }).showAt(xy); 	                	

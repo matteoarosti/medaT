@@ -25,7 +25,29 @@
        <%= raw extjs_std_combo_model('carrier', @new_rec, :allowBlank => true) -%>,
        <%= raw extjs_std_textfield('driver', @new_rec, :allowBlank => true) -%>,
        <%= raw extjs_std_textfield('seal_shipowner', @new_rec, :allowBlank => true) -%>,
-       <%= raw extjs_std_textfield('seal_others', @new_rec, :allowBlank => true) -%>
+       <%= raw extjs_std_textfield('seal_others', @new_rec, :allowBlank => true) -%>,
+       
+	    {
+            xtype: 'fieldset',
+            title: 'In testata',
+            layout: 'anchor',
+            items: [
+            
+				{
+	                xtype: 'fieldcontainer',
+	                combineErrors: true,
+	                msgTarget : 'side',
+	                layout: 'hbox',
+	                anchor: '100%',
+	                defaults: {xtype: 'textfield', flex: 1, hideLabel: false, labelWidth: 120, labelAlign: 'right'},
+	                items: [
+    					<%= raw extjs_std_numberfield('weight_imp', @hh, :allowBlank => true, :input_prefix => 'hh_') -%>,
+    					<%= raw extjs_std_numberfield('temperature_imp', @hh, :allowBlank => true, :input_prefix => 'hh_') -%>,
+    					<%= raw extjs_std_textfield('imo_imp', @hh, :allowBlank => true, :input_prefix => 'hh_') -%>			                
+			        ]
+			    }
+    		]
+    	}       
 
    ],
       

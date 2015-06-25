@@ -34,8 +34,12 @@ def new_mov_search_handling
   hhs = HandlingHeader.where('1 = 1')
   hhs = hhs.where('container_number LIKE ?', "%#{params[:container_number]}%") unless params[:container_number].blank?
   hhs = hhs.where('num_booking LIKE ?', "%#{params[:booking_number]}%") unless params[:booking_number].blank?
-  if !params[:status].blank? 
-    hhs = hhs.where('handling_status = ?', params[:status])
+  if !params[:status].blank?
+    if params[:status] == 'CLOSE' 
+      hhs = hhs.where('handling_status = ?', 'CLOSE')
+    else
+      hhs = hhs.where('handling_status <> ?', 'CLOSE')
+    end
   end
  
   hhs = hhs.limit(100)
@@ -69,14 +73,14 @@ def new_mov_search_handling
   end
  
  #se non ci sono movimenti aperti, ne propongo uno nuovo (se cercavo per num container)
- if ret[:items].length > 0 && !handling_EDIT_exists && !params[:container_number].blank?
+ if ret[:items].length > 0 && !handling_EDIT_exists && !params[:container_number].blank? && params[:status]!='CLOSE'
   ret[:items] << {:container_number => params[:container_number], :is_container_editable => false,
         :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo movimento', :op => 'CRT', :op_descr => '[ Crea ]'} 
  end
  
  
  #se non ci sono movimenti aperti, ne propongo uno nuovo con possibilita' di creare container
- if ret[:items].length == 0  && !params[:container_number].blank?
+ if ret[:items].length == 0  && !params[:container_number].blank? && params[:status]!='CLOSE'
   #verifico il check digiti
   valid_CD = ImportHeader.check_digit(params[:container_number])
   

@@ -28,14 +28,27 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 
 	<%
  	######################################################
- 	#Tipo operazioni
+ 	#PIENI/VUOTI
  	###################################################### 
 	%>
- 	<% group_op = so_val.group_by { |d| d.container_FE } %>
+ 	<% group_op = so_val.group_by { |d|
+ 		k = d.container_FE
+ 		if d.container_FE == 'F'
+ 		 #i pieni vengono divisi tra fase di import e export (se hanno booking)
+ 		 ie = d.with_booking == true ? '_E' : '_I'
+ 		 k = k + ie
+ 		end  
+		k 	
+ 	} %>
 	<% group_op.each do |op_id, op_val| %>
 	
 
- 		<p class="bg-success" style="padding: 5px 10px"><%= op_id=='E' ? 'VUOTI' : 'PIENI' -%></p>
+ 		<p class="bg-success" style="padding: 5px 10px">
+ 			<%= op_id[0..1]=='E' ? 'VUOTI' : 'PIENI' -%>
+ 			<%= op_id[2..3]=='I' ? ' (fase di IMPORT)' : ' (fase di EXPORT)' unless op_id.size==1 -%>
+ 			 (conteggio: <%= "#{op_val.count()}" -%>)
+ 		</p>
+
 
 		<%
  		######################################################

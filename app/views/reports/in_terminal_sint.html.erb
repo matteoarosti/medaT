@@ -68,7 +68,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
  			<tr>
 				<td><%= eq.sizetype -%></td>
 				<td><%= eq.equipment_type -%></td>				
-				<td align=right><%= row.count -%></td>
+				<td align=right><%= row[1].count -%></td>
 			</tr>
 		<% end %>
 		</table>

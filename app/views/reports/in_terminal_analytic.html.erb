@@ -44,7 +44,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 
  		<p class="bg-success" style="padding: 5px 10px">
  			<%= op_id[0..1]=='E' ? 'VUOTI' : 'PIENI' -%>
- 			<%= op_id[1..2]=='I' ? ' (fase di IMPORT)' : ' (fase di export)' unless op_id.size==1 -%>
+ 			<%= op_id[2..3]=='I' ? ' (fase di IMPORT)' : ' (fase di export)' unless op_id.size==1 -%>
  			 (conteggio: <%= "#{op_val.count()}" -%>)
  		</p>
 

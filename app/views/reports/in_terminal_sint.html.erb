@@ -63,7 +63,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		 </tr>
  		
 		<% op_val.group_by{|a| a.equipment}.sort{|a,b| a[0].sizetype <=> b[0].sizetype}.each do |row| %>
-		    logger.info "aaaaaaaaaaaaaaaaaaaaa" + row.to_yaml		
+		    <% logger.info "aaaaaaaaaaaaaaaaaaaaa" + row.to_yaml %>		
 			<% eq = row[0] %>
  			<tr>
 				<td><%= eq.sizetype -%></td>

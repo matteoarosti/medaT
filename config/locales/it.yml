@@ -220,6 +220,9 @@ it:
     FRCON:
       long: "Allaccio frigo"
       short: "Allaccio frigo"      
+    RFCON:
+      long: "Allaccio frigo"
+      short: "Allaccio frigo"      
   menu:
     tables:
       tables: "Tabelle di base"

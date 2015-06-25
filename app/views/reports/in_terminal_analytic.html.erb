@@ -42,7 +42,10 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
  		} %>
 	<% group_op.each do |op_id, op_val| %>
 
- 		<p class="bg-success" style="padding: 5px 10px"><%= op_id.to_s -%> || <%= op_id[0..1]=='E' ? 'VUOTI' : 'PIENI' -%> (conteggio: <%= "#{op_val.count()}" -%>)</p>
+ 		<p class="bg-success" style="padding: 5px 10px">
+ 			<%= op_id[0..1]=='E' ? 'VUOTI' : 'PIENI' -%> (conteggio: <%= "#{op_val.count()}" -%>)
+ 			<%= op_id[1..2]=='I' ? ' (fase di IMPORT)' : ' (fase di export)' unless strlen(op_id)==1 -%>
+ 		</p>
 
 		<%
  		######################################################

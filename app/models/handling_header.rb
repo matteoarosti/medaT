@@ -218,8 +218,8 @@ def validate_insert_item(hi, name_function = '')
   op_config_set = op_config['set'] || {}
   if name_function != 'get_operations' && op_config_set['booking_copy'] == true
     
-   #segnalo errore: booking non presente
-   if hi.booking.nil? && !self.with_booking
+   #segnalo errore: booking non presente (in O_LOAD imbarco con VUOTO posso non avere il booking)
+   if hi.booking.nil? && !self.with_booking && (hi.container_FE != 'E' || hi.handling_item_type!= 'O_LOAD')
     ret[:is_valid] = false
     ret[:message]  = "Booking non presente" 
     logger.info ret.to_yaml

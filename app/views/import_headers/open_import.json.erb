@@ -159,6 +159,7 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';
+			         ret += '<tr><th>Armatore</th><td>' + rec.get('shipowner_id_Name') + '</td></tr>';
 			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';
 			         ret += '<tr><th>Weight</th><td>' + rec.get('weight') + '</td></tr>';			         
 			         ret += '</table>';
@@ -172,6 +173,7 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';
+			         ret += '<tr><th>Booking</th><td>' + rec.get('num_booking') + '</td></tr>';
 			         ret += '<tr><th>Stato</th><td>' + rec.get('container_status') + '</td></tr>';
 			         ret += '<tr><th>Temperature</th><td>' + rec.get('temperature') + '</td></tr>';			         
 			         ret += '</table>';

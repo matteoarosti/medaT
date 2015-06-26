@@ -2,14 +2,20 @@ class ImportItem < ActiveRecord::Base
 
   belongs_to :equipment
   belongs_to :import_header
+  belongs_to :shipowner
 
  def equipment_id_Name
   self.equipment.sizetype if self.equipment
  end  
  
+ def shipowner_id_Name
+   self.shipowner.name if self.shipowner
+ end  
+   
+ 
  def self.as_json_prop()
      return {
-        :methods => :equipment_id_Name
+        :methods => [:equipment_id_Name, :shipowner_id_Name]
       }
  end 
 

@@ -87,6 +87,17 @@ class ImportHeader < ActiveRecord::Base
         ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Iso " + spreadsheet.row(i)[4].to_s + " non valido" + "<br>"
       end
 
+      #Esegue il test per verificare se il peso e' un numerico
+      if ImportHeader.is_number(spreadsheet.row(i)[6])
+        booking = spreadsheet.row(i)[6].to_i.to_s
+      else
+        booking = spreadsheet.row(i)[6].to_s
+      end
+      if ImportHeader.check_booking(booking) == -1 and booking != ""
+        ret_string = ret_string + "Errore nel container numero " + spreadsheet.row(i)[0].to_s.sub(" ", "") + ". Booking " + booking + " non valido." + "<br>"
+      end
+
+
     end
 
     return ret_string
@@ -267,6 +278,14 @@ class ImportHeader < ActiveRecord::Base
 
   def self.check_imo(imo)
     if test_regexp(imo, "^([0-9][.][0-9]|[0-9])$") == ""
+      return -1
+    else
+      return 0
+    end
+  end
+
+  def self.check_booking(booking)
+    if test_regexp(booking, "^([a-zA-Z0-9]*)$") == ""
       return -1
     else
       return 0

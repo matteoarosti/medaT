@@ -19,7 +19,7 @@ class ImportItem < ActiveRecord::Base
       }
  end 
 
-  def self.AddRecord(import_header_id, shipowner_id, container_number, container_status, equipment_id, weight, temperature, imo)
+  def self.AddRecord(import_header_id, shipowner_id, container_number, container_status, equipment_id, weight, temperature, imo, booking)
     ImportItem.create(:import_header_id => import_header_id,
                       :shipowner_id => shipowner_id,
                       :container_number => container_number,
@@ -27,7 +27,9 @@ class ImportItem < ActiveRecord::Base
                       :equipment_id => equipment_id,
                       :weight => weight,
                       :temperature => temperature,
-                      :imo => imo)
+                      :imo => imo,
+                      :num_booking => booking
+    )
   end
 
 end

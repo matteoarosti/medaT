@@ -198,9 +198,12 @@ class ImportHeader < ActiveRecord::Base
                            IsoEquipment.get_id_by_iso(val), #Equipment
                            spreadsheet.row(i)[4]/1000,                            #weight
                            spreadsheet.row(i)[8].to_f,                            #temperature
-                           spreadsheet.row(i)[7].to_s)                            #IMO
+                           spreadsheet.row(i)[7].to_s,                            #IMO
+                           "")                                                    #Booking
     end
   end
+
+
 
   def self.import_l(import_header_id, file)
     spreadsheet = open_spreadsheet(file)
@@ -216,14 +219,20 @@ class ImportHeader < ActiveRecord::Base
       else
         val = spreadsheet.row(i)[4]
       end
+      if is_number(spreadsheet.row(i)[6])
+        booking = spreadsheet.row(i)[6].to_i.to_s
+      else
+        booking = spreadsheet.row(i)[6].to_s
+      end
       ImportItem.AddRecord(import_header_id,
-                           Shipowner.get_id_by_name(spreadsheet.row(i)[3].to_s),  #ShipOwner
-                           spreadsheet.row(i)[0].to_s.sub(" ", ""),               #Container
-                           spreadsheet.row(i)[2].to_s[0..0],                      #F/E
-                           IsoEquipment.get_id_by_iso(4), #Equipment
-                           spreadsheet.row(i)[1]/1000,                            #weight
-                           0,                            #temperature
-                           "")                            #IMO
+                           Shipowner.get_id_by_name(spreadsheet.row(i)[3].to_s),    #ShipOwner
+                           spreadsheet.row(i)[0].to_s.sub(" ", ""),                 #Container
+                           spreadsheet.row(i)[2].to_s[0..0],                        #F/E
+                           IsoEquipment.get_id_by_iso(4),                           #Equipment
+                           spreadsheet.row(i)[1]/1000,                              #weight
+                           0,                                                       #temperature
+                           "",                                                      #IMO
+                           booking)                                                 #Booking
     end
   end
 

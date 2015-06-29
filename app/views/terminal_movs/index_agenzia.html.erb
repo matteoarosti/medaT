@@ -1,0 +1,136 @@
+    <script>
+     //usato in my_models
+     root_path = '<%= root_path -%>';
+    </script>
+    
+    <%= javascript_include_tag "/FeedViewer/std_function.js" %>
+    <%= javascript_include_tag "/viewer/FeedViewer.js" %>
+    <%= javascript_include_tag "/FeedViewer/my_models.js" %>
+    
+    
+    <script type="text/javascript">
+    
+        function hasOption (name) {
+            return window.location.search.indexOf(name) >= 0;
+        }
+
+        Ext.Loader.setConfig({
+        	enabled: true,
+        	disableCaching : true,  
+        	paths  : {
+        		Sc : '/js/Sc',
+        		FeedViewer: '<%= root_path -%>FeedViewer'
+        	}
+        });
+        Ext.Loader.setPath('Ext.ux', '<%= root_path -%>ux');
+        Ext.require([
+            'Ext.grid.*',
+            'Ext.data.*',
+            'Ext.util.*',
+            'Ext.Action',
+            'Ext.tab.*',
+            'Ext.button.*',
+            'Ext.form.*',
+            'Ext.layout.container.Card',
+            'Ext.layout.container.Border',
+            'Ext.ux.ajax.SimManager',
+            'Ext.ux.PreviewPlugin',
+            'Ext.grid.plugin.BufferedRenderer',
+            'Ext.*',  'Ext.container.Viewport',
+            'FeedViewer.MovimentoPanel',
+            'FeedViewer.ScGrid', 'FeedViewer.MenuPanel', 'FeedViewer.NewHandlingHeaderPanel'
+        ]);
+        Ext.onReady(function(){
+            if (hasOption('simjax')) {
+                initAjaxSim();
+            }
+
+
+// ****** PER BUG UPDATE PROXY SU BUFFERED STORE
+Ext.define('Ext.ux.fixed.BufferedStore', {
+    override: 'Ext.data.BufferedStore',
+    contains: function(record) {
+        return this.indexOf(record) > -1;
+    }
+});
+
+
+ 		voci_menu = [
+    		           {
+                        task:<%= raw t("menu.movements.movements").to_json %>,
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                    task:<%= raw t("menu.movements.search_insert").to_json %>,
+                                    leaf:true,
+                                    iconCls:'task',
+                                    op: 'NEW_HANDLING_HEADER'
+                                }
+                            ]
+                    }, {
+                        task:<%= raw t("menu.bookings.bookings").to_json %>,
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                    task:<%= raw t("menu.bookings.new_booking").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'bookings', :action=>'form_new') -%>',                                    
+                                    op: 'new_tab',
+                                    width: 700,
+                                    height: 500
+                                }, {
+	                                task:<%= raw t("menu.bookings.search").to_json %>,
+                                 	url: '<%= url_for(:controller=>'bookings', :action=>'form_search') -%>',	                                
+	                                leaf:true,
+	                                op: 'new_tab'
+	                            }
+                            ]
+                    }, {
+                        task:<%= raw t("menu.report.reports").to_json %>,
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                             {
+                                task:<%= raw t("menu.report.movements").to_json %>,
+                                url: '<%= url_for(:controller=>'reports', :action=>'handlings_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }, {
+                                task:<%= raw t("menu.report.in_terminal").to_json %>,
+                                url: '<%= url_for(:controller=>'reports', :action=>'in_terminal_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }
+                            ]
+                    }, {
+                        task:<%= raw t("menu.user_manager.users").to_json %>,
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                             {
+                                	task:<%= raw t("menu.user_manager.logout").to_json %>,
+                                	op: 'LOGOUT',                                
+                                	leaf:true
+                            	}                            	
+                            ]
+                    }
+    		    ];
+
+            Ext.QuickTips.init();            
+            myApp = new FeedViewer.App({
+            	voci_menu: voci_menu,
+            	railsBaseUri: '<%= root_path -%>'
+            });
+            
+            
+            //creo il tab con le statistiche
+            acs_show_panel_std(myApp, '<%= url_for(:controller=>'terminal_movs', :action=>'tab_dashboard') -%>', {}, 'tttt');
+            
+        });
+    </script>

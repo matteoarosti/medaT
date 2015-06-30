@@ -37,6 +37,7 @@ en:
       name: "name"
       short_name: "short name"
       email: "email"
+      email_daily: "email daily"
       estimate_hourly_cost: "estimate hourly cost"
     ports:
       ports: "Ports"

@@ -16,6 +16,7 @@ it:
       name: "nome"
       short_name: "nome breve"
       email: "email"
+      email_daily: "email daily"
       estimate_hourly_cost: "costo orario preventivi"
     ports:
       ports: "Porti"

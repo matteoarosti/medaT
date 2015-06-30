@@ -35,7 +35,7 @@ end
 def hitems_sc_list  
 ##################################################
   ret = {}
-   ret[:items] = HandlingItem.handlingHeader(params[:handling_id]).limit(1000).as_json(HandlingItem.as_json_prop)
+   ret[:items] = HandlingItem.handlingHeader(params[:handling_id]).joins(:handling_header).limit(1000).as_json(HandlingItem.as_json_prop)
    ret[:success] = true
    render json: ret 
 end

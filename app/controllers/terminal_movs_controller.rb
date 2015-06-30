@@ -14,7 +14,13 @@ class TerminalMovsController < ApplicationController
     if User.current.mulettista?
       render "index_mulettista"
       return
+    end
+    
+    if User.current.agenzia?
+      render "index_agenzia"
+      return
     end    
+        
     
     #se sono qui: role non definito
     render "index_not_defined"
@@ -72,21 +78,25 @@ def new_mov_search_handling
       }
   end
  
- #se non ci sono movimenti aperti, ne propongo uno nuovo (se cercavo per num container)
- if ret[:items].length > 0 && !handling_EDIT_exists && !params[:container_number].blank? && params[:status]!='CLOSE'
-  ret[:items] << {:container_number => params[:container_number], :is_container_editable => false,
-        :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo movimento', :op => 'CRT', :op_descr => '[ Crea ]'} 
- end
- 
- 
- #se non ci sono movimenti aperti, ne propongo uno nuovo con possibilita' di creare container
- if ret[:items].length == 0  && !params[:container_number].blank? && params[:status]!='CLOSE'
-  #verifico il check digiti
-  valid_CD = ImportHeader.check_digit(params[:container_number])
   
-  ret[:items] << {:container_number => params[:container_number], :is_container_editable => true, :valid_CD => valid_CD,
-        :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo', :op => 'CRT', :op_descr => '[ Crea ]'}
- end
+  if User.current.can?(:handling_header, :create)
+     #se non ci sono movimenti aperti, ne propongo uno nuovo (se cercavo per num container)
+     if ret[:items].length > 0 && !handling_EDIT_exists && !params[:container_number].blank? && params[:status]!='CLOSE'
+      ret[:items] << {:container_number => params[:container_number], :is_container_editable => false,
+            :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo movimento', :op => 'CRT', :op_descr => '[ Crea ]'} 
+     end
+     
+     
+     #se non ci sono movimenti aperti, ne propongo uno nuovo con possibilita' di creare container
+     if ret[:items].length == 0  && !params[:container_number].blank? && params[:status]!='CLOSE'
+      #verifico il check digiti
+      valid_CD = ImportHeader.check_digit(params[:container_number])
+      
+      ret[:items] << {:container_number => params[:container_number], :is_container_editable => true, :valid_CD => valid_CD,
+            :stato => 'CRT', :stato_descr => '', :descr => 'Crea nuovo', :op => 'CRT', :op_descr => '[ Crea ]'}
+     end
+  end
+ 
  
  render json: ret
 end
@@ -188,7 +198,7 @@ end
     r = {'I' => {}, 'O' => {}, 'L' => {}, 'D' => {}}
     
     #raggruppo i movimenti aperti in base al lock
-     gcs = HandlingItem.select('DATE(datetime_op) as date_op, handling_type, handling_item_type, count(*) as t_cont').where('operation_type=?', 'MT').group('DATE(datetime_op), handling_type, handling_item_type')
+     gcs = HandlingItem.select('DATE(datetime_op) as date_op, handling_items.handling_type, handling_item_type, count(*) as t_cont').where('operation_type=?', 'MT').group('DATE(datetime_op), handling_items.handling_type, handling_item_type').joins(:handling_header)
      gcs.each do |gc|       
        if gc.handling_item_type == 'O_LOAD'
          r["L"]["#{gc.date_op}"] = r["L"]["#{gc.date_op}"].to_i + gc.t_cont;

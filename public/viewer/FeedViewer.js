@@ -7,6 +7,8 @@ Ext.define('FeedViewer.App', {
     initComponent: function(){
 	
 		this.railsBaseUri = this.initialConfig.railsBaseUri;
+		this.railsUser    = this.initialConfig.railsUser;
+		this.canModifyHandling = this.initialConfig.canModifyHandling;
 	
         Ext.define('Feed', {
             extend: 'Ext.data.Model',

@@ -216,7 +216,9 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
             Ext.QuickTips.init();            
             myApp = new FeedViewer.App({
             	voci_menu: voci_menu,
-            	railsBaseUri: '<%= root_path -%>'
+            	railsBaseUri: '<%= root_path -%>',
+            	railsUser: <%= raw User.current.to_json -%>,
+            	canModifyHandling: <%= raw User.current.can?(:handling_header, :all).to_json -%>
             });
             
             

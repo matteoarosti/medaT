@@ -30,6 +30,10 @@ class DeviseCreateUsers < ActiveRecord::Migration
       # t.string   :unlock_token # Only if unlock strategy is :email or :both
       # t.datetime :locked_at
 
+      
+      #medaT
+      t.string     :shipowner_flt #indico le compagnie di cui puo' gestire container/booking (separate da ;)
+      ### medaT
 
       t.timestamps
       t.integer :created_user_id      

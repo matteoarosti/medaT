@@ -129,11 +129,22 @@ class ImportItemsController < ApplicationController
   def import_L(rec, params, lock_type = nil)
  #################################################   
      hh = HandlingHeader.find_exist(rec, params)
+     
+     
+     #errore se non trovo il movimento aperto per il container
      if hh == false
         ret_status  = false
         message     = "Non trovato un movimento aperto per questo container"
         return {:success => ret_status, :message => message}
      end 
+     
+     #errore se FE non coincide tra la lista di imbarco e il movimento aperto
+     if rec.container_status != hh.container_FE
+       ret_status  = false
+       message     = "Il valore Full/Empty indicato nella lista non coincide con lo stato attuale del movimento"
+       return {:success => ret_status, :message => message}       
+     end
+     
      
      hi = hh.handling_items.new()
      hi.datetime_op = Time.now
@@ -146,6 +157,31 @@ class ImportItemsController < ApplicationController
      hi.container_FE = rec.container_status
      hi.ship_id = rec.import_header.ship_id
      hi.voyage = rec.import_header.voyage
+     
+     
+     #se e' impostato num_booking, provo a decodificarlo
+    #se ho ricevuto "num_booking", lo vado a decodificare in BookingItem
+    if !rec.num_booking.blank? && !rec.to_s.strip.empty?  
+     bh = Booking.get_by_num(rec.num_booking)
+     bi = BookingItem.get_by_num_eq(rec.num_booking, hh.equipment_id)
+     if bh.nil? || bi.nil?
+       if (bh.nil?)
+         logger.info 'Booking non trovatot'
+         return {:success => false, :message => "Booking inesistente"}
+       else
+         logger.info 'Booking non trovato per numero/equipment'
+         return {:success => false, :message => "Il booking indicato non comprende l'equipment selezionato ( #{hh.equipment.equipment_type} )"}        
+       end
+       return
+     else
+      logger.info 'Booking trovato'
+      hi.booking_id = bi.booking.id
+      hi.booking_item_id = bi.id    
+     end
+    end
+
+     
+     
           
      #se supera i vari controlli salvo il dettalio e aggiorno la testata
      validate_insert_item = hh.validate_insert_item(hi)

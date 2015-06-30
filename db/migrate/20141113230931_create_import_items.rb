@@ -11,6 +11,7 @@ class CreateImportItems < ActiveRecord::Migration
       t.string      :imo,                   :limit => 4
       t.string      :status,                :limit => 10 #OK, DANNEGGIATO, ...
       t.text        :notes,                 :limit => 64.kilobytes
+      t.string      :num_booking,           :limit => 25
        
       t.timestamps
       t.integer :created_user_id      

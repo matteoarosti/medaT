@@ -25,7 +25,24 @@ Ext.define('FeedViewer.MovimentoPanel', {
     				is_container_editable: false
     			}, 
     			formulas: {
-    		        // We'll explain formulas in more detail soon.
+
+    				
+    				//puo' essere modificato? (verifico anche i permessi utente)
+    				is_handling_modify_can:{
+    		          bind: {bindTo: '{is_handling_editable}', deep: true},
+    		          get: function (is_handling_editable) {
+    		        	  
+    		        	  if (myApp.canModifyHandling == false)
+    		        		return false;
+    		        	    		        	
+    		        	if (is_handling_editable == false) return true;
+    		        	return false;
+
+    		        }
+    		       },
+    		       
+    		       
+    				
     		        is_rec_crt:{
     		          bind: {bindTo: '{rec}'},
     		          get: function (rec) {
@@ -37,7 +54,6 @@ Ext.define('FeedViewer.MovimentoPanel', {
     		            //return (get.rec.get('container_status') == 'ANEW') ? true : false;
     		        }
     		       },
-
 
     		       
        		    //TODO: DRY
@@ -236,7 +252,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 										        }       
 										    },			    
 										}), 					
-									 bind: {value: '{rec.shipowner_id}', disabled: '{!is_container_editable}'}						  
+									 bind: {value: '{rec.shipowner_id}', disabled: '{!is_handling_editable}'}						  
 									},
 		                        	  {
 										xtype: 'combobox',
@@ -259,7 +275,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 											        }       
 											    },			    
 											}), 					
-										 bind: {value: '{rec.equipment_id}', disabled: '{!is_container_editable}'}						  
+										 bind: {value: '{rec.equipment_id}', disabled: '{!is_handling_editable}'}						  
 									  },									
 			                ]
 			            },			            
@@ -577,7 +593,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
  						{ xtype : "button", text : 'Modifica', width: '100%',
  							
 						    bind: {
-								visible: '{!is_handling_editable}'
+								//visible: '{!is_handling_editable}'
+						    	visible: '{is_handling_modify_can}'
 							},						    
  							
  							
@@ -593,6 +610,12 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						 
 						 {		xtype: 'button',
 					            text: 'Elimina',  cls: 'btn-del',  width: '100%',
+					            
+					            bind: {
+									//visible: '{!is_handling_editable}'
+							    	visible: '{is_handling_modify_can}'
+								},					            
+					            
 					            handler: function (btn, evt) {              					             
 					             
 					            	  m_view = this;
@@ -667,8 +690,10 @@ Ext.define('FeedViewer.MovimentoPanel', {
 		                xtype: 'button',
 		                text: 'Aggiungi <i class="fa fa-plus-circle"></i>',
 						bind: {
-								visible: '{!is_handling_editable}'
-						},		                
+							//visible: '{!is_handling_editable}'
+					    	visible: '{is_handling_modify_can}'
+						},						
+						
 		                handler: function(){	
 		                	acs_show_win_std('Seleziona tipo dettaglio', myApp.railsBaseUri + 'terminal_movs/add_handling_items_select_type',
 		                		 {rec_id: this.getViewModel().getData().rec.get('id')},
@@ -731,7 +756,11 @@ Ext.define('FeedViewer.MovimentoPanel', {
 	        	, listeners: {
 	                	itemcontextmenu : function(item, record, index, e, eOpts){
 	                		eOpts.stopEvent();
-                            var xy = eOpts.getXY();                         
+                            var xy = eOpts.getXY();
+                            
+                            if (myApp.canModifyHandling == false)
+                            	return false;
+                            
                             new Ext.menu.Menu({
                                         items : [{
                                                     text : '<i class="fa fa-edit fa-1x"> Modifica',                                                                                                        

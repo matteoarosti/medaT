@@ -23,5 +23,21 @@ class User < ActiveRecord::Base
   def self.current
     Thread.current[:current_user]
   end         
-         
+ 
+  
+ #gestione permessi
+  def can?(model, op)
+
+    #admin puo' fare tutto
+    if self.admin?
+      return true
+    end
+    
+    if self.agenzia? && (op == :view || model == :booking) 
+      return true
+    end
+    
+    return false
+  end
+          
 end

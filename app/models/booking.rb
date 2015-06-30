@@ -11,6 +11,22 @@ class Booking < ActiveRecord::Base
  scope :like_num_booking, ->(num_booking) {where("num_booking LIKE ?", "%#{num_booking}%")}
  scope :to_check, ->() {where("to_check = true")}
  
+ 
+#gestione permessi in base a utente
+def self.default_scope
+  if !User.current.shipowner_flt.blank?
+   if User.current.shipowner_flt.include?(',')
+     return self.where("shipowner_id IN (#{User.current.shipowner_flt})")
+   else
+     return self.where("shipowner_id = ?", User.current.shipowner_flt)
+   end
+  end
+  return nil
+end
+ 
+ 
+ 
+ 
  def shipowner_id_Name
   self.shipowner.name if self.shipowner
  end
@@ -89,7 +105,7 @@ def valida_insert_item(hi)
  num_impegni_booking = self.get_num_impegni(hi.booking_item.id, hi.handling_header.id)
  if hi.booking_item.quantity <= num_impegni_booking
    ret[:is_valid] = false
-   ret[:message]  = "Booking pieno, impossibile assegnare altro movimento (q: #{self.quantity}, imp: #{num_impegni_booking})"
+   ret[:message]  = "Booking pieno, impossibile assegnare altro movimento (q: #{hi.booking_item.quantity}, imp: #{num_impegni_booking})"
    return ret 
  end
  

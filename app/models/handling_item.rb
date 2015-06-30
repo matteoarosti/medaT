@@ -17,6 +17,17 @@ class HandlingItem < ActiveRecord::Base
  
  before_create :set_by_item_type
  
+ 
+#gestione permessi in base a utente
+def self.default_scope
+  if !User.current.shipowner_flt.blank?
+      return self.where({handling_headers: {shipowner_id: User.current.shipowner_flt}})
+  end
+  return nil
+end
+ 
+ 
+ 
  def set_by_item_type()    
  end
  
@@ -70,7 +81,7 @@ end
  #a ritroso (nell'handling) verifico se ho un dettaglio con il booking 
  def search_booking()
    #todo: se trovo un mancato posizionamento non devo considerare il booking assegnato?
-   self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc").each do |hii|
+   self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc").joins(:handling_header).each do |hii|
      if hii.datetime_op < self.datetime_op || (hii.datetime_op == self.datetime_op && hii.id <= self.id)
              return hii.booking if !hii.booking.nil?
      end 
@@ -81,7 +92,7 @@ end
 #a ritroso (nell'handling) verifico se ho un dettaglio con il booking_item 
 def search_booking_item()
   #todo: se trovo un mancato posizionamento non devo considerare il booking assegnato?
-  self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc, id desc").each do |hii|
+  self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc, id desc").joins(:handling_header).each do |hii|
     return hii.booking_item if !hii.booking_item.nil? 
   end
   return nil

@@ -1,4 +1,5 @@
 it:
+  search: "Ricerca"
   tables:
     equipment:
       equipment: "tipi container"

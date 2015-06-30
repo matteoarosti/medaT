@@ -15,6 +15,20 @@ class HandlingHeader < ActiveRecord::Base
  scope :da_posizionare, -> {where("da_posizionare = ?", true)}
  scope :by_type, ->(handling_type) {where("handling_type = ?", handling_type)}
 
+ 
+ #gestione permessi in base a utente
+ def self.default_scope
+   if !User.current.shipowner_flt.blank?
+    if User.current.shipowner_flt.include?(',')
+      return self.where("shipowner_id IN (#{User.current.shipowner_flt})")
+    else
+      return self.where("shipowner_id = ?", User.current.shipowner_flt)
+    end
+   end
+   return nil
+ end
+ 
+ 
  def handling_header_status() return self.handling_status end
 
   #valori per combo

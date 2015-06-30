@@ -63,7 +63,7 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                         children:
                             [
                                 {
-                                    task:<%= raw t("menu.movements.search_insert").to_json %>,
+                                    task:<%= raw t("search").to_json %>,
                                     leaf:true,
                                     iconCls:'task',
                                     op: 'NEW_HANDLING_HEADER'
@@ -125,7 +125,9 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
             Ext.QuickTips.init();            
             myApp = new FeedViewer.App({
             	voci_menu: voci_menu,
-            	railsBaseUri: '<%= root_path -%>'
+            	railsBaseUri: '<%= root_path -%>',
+            	railsUser: <%= raw User.current.to_json -%>,
+            	canModifyHandling: <%= raw User.current.can?(:handling_header, :all).to_json -%>
             });
             
             

@@ -14,7 +14,7 @@ class Booking < ActiveRecord::Base
  
 #gestione permessi in base a utente
 def self.default_scope
-  if !User.current.shipowner_flt.blank?
+  if !User.current.nil? && !User.current.shipowner_flt.blank?
    if User.current.shipowner_flt.include?(',')
      return self.where("shipowner_id IN (#{User.current.shipowner_flt})")
    else

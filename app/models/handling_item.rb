@@ -20,7 +20,7 @@ class HandlingItem < ActiveRecord::Base
  
 #gestione permessi in base a utente
 def self.default_scope
-  if !User.current.shipowner_flt.blank?
+  if !User.current.nil? && !User.current.shipowner_flt.blank?
       return self.where({handling_headers: {shipowner_id: User.current.shipowner_flt}})
   end
   return nil

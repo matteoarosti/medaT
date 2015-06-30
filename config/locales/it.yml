@@ -17,6 +17,7 @@ it:
       name: "nome"
       short_name: "nome breve"
       email: "email"
+      email_daily: "email daily"
       estimate_hourly_cost: "costo orario preventivi"
     ports:
       ports: "Porti"
@@ -258,4 +259,4 @@ it:
     user_manager:
       user_manager: "Gesione utenti"
       users: "Utenti"
-      logout: "Logout"
+      logout: "Uscita"

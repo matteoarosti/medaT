@@ -258,4 +258,4 @@ it:
     user_manager:
       user_manager: "Gesione utenti"
       users: "Utenti"
-      logout: "Logout"
+      logout: "Uscita"

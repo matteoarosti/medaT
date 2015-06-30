@@ -5,6 +5,7 @@ class CreateShipowners < ActiveRecord::Migration
       t.string      :short_name,            :limit => 3
       t.string      :email,                 :limit => 50
       t.decimal     :estimate_hourly_cost,  :precision => 5, :scale => 2
+      t.string      :email_daily,           :limit => 255
       
       t.timestamps
       t.integer :created_user_id

@@ -7,13 +7,22 @@ class ImportHeader < ActiveRecord::Base
   
  def self.as_json_prop()
      return {
-        :methods => :ship_id_Name
+        :methods => [:ship_id_Name, :count_by_status]
       }
  end   
  
  def ship_id_Name
   self.ship.name if self.ship
  end 
+ 
+ #conto le righe di dettaglio dividendo per stato
+ def count_by_status
+   ret = []
+   self.import_items.group_by{|ii| ii.status}.each do |ii_g|
+     ret << [ii_g[0].to_s.empty? ? 'ToDo' : ii_g[0].to_s, ii_g[1].count].join('=>')
+   end
+   return ret.join(', ')
+ end
 
   #Aggiunge un record alla tabella
   def self.add_record(ship_id, voyage, import_type)

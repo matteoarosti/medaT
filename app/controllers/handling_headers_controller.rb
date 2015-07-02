@@ -122,6 +122,16 @@ def hitems_sc_create
    else
     ret_status = false
     message = validate_insert_item[:message]
+   end
+   
+   #se provengo da "Da movimentare" oltre a creare il movimento (inspect) chiudo la movimentazione
+   if ret_status == true && !params[:handling_item_to_be_moved_close].to_s.empty?
+     logger.info "Chiudo to_be_moved"
+     hi = HandlingItem.find(params[:handling_item_to_be_moved_close])
+     hi.to_be_moved = false
+     hi.moved_by_user_id = current_user.id
+     hi.moved_at = Time.zone.now
+     hi.save!     
    end 
        
    render json: {:success => ret_status, :message => message, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]} 

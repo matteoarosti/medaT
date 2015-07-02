@@ -90,6 +90,10 @@ it:
       container: "container"
       details: "dettagli"
       date: "data"
+    to_be_moved:
+      ok: "Movimentato"
+      inspect_ok: "Ispezionato OK"
+      inspect_damage: "Ispezionato DAM"      
     to_be_handled:
       list: "lista container da movimentare"
       disable_request: "disabilita richiesta conferma"

@@ -109,6 +109,10 @@ en:
       container: "container"
       details: "details"
       date: "date"
+    to_be_moved:
+      ok: "Moved"
+      inspect_ok: "Inspect OK"
+      inspect_damage: "Inspect DAM"            
     to_be_handled:
       list: "list of container to be handled"
       disable_request: "disabled confirm request"

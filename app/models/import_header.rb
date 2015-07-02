@@ -328,4 +328,13 @@ class ImportHeader < ActiveRecord::Base
   end
 
 
+def status_get_data_json
+ [
+  {:cod=>'OPEN', :descr=>'Open'},
+  {:cod=>'CLOSE', :descr=>'Close'}
+ ] 
+end  
+ 
+  
+  
 end

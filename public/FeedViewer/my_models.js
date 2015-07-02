@@ -290,10 +290,10 @@ Ext.define("ImportHeader", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
         api: {
-            read: root_path + 'import_header/hitems_sc_read',
-            create: root_path + 'import_header/hitems_sc_create',
-            update: root_path + 'import_header/hitems_sc_update',
-            destroy: root_path + 'import_header/hitems_sc_destroy'
+            read: root_path + 'import_headers/sc_read',
+            create: root_path + 'import_headers/sc_create',
+            update: root_path + 'import_headers/sc_update',
+            destroy: root_path + 'import_headers/sc_destroy'
         },
         reader: {
             type: 'json',

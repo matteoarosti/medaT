@@ -10,6 +10,7 @@ class Booking < ActiveRecord::Base
 
  scope :like_num_booking, ->(num_booking) {where("num_booking LIKE ?", "%#{num_booking}%")}
  scope :to_check, ->() {where("to_check = true")}
+ scope :not_closed, -> {where("status <> ?", 'CLOSE')}
  
  
 #gestione permessi in base a utente

@@ -255,7 +255,8 @@ it:
     report:
       reports: "Report"
       movements: "Movimenti"
-      in_terminal: "In terminal"
+      in_terminal: "Giacenze"
+      booking_open: "Booking aperti"
     user_manager:
       user_manager: "Gesione utenti"
       users: "Utenti"

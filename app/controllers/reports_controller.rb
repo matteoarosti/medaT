@@ -11,7 +11,15 @@ class ReportsController < ApplicationController
   @hi = HandlingItem.new
  end    
 
+
+ def booking_open_parameters
+  @hh = HandlingHeader.new
+  @hi = HandlingItem.new
+  @bh = Booking.new
+  @bi = BookingItem.new
+ end    
  
+  
    
  def handlings_sint
  end  
@@ -26,5 +34,12 @@ class ReportsController < ApplicationController
   def in_terminal_analytic
   end  
  
+
+  def booking_open_analytic
+  end 
+  def booking_open_sint
+  end  
+    
+  
    
 end

@@ -103,6 +103,8 @@
 							fields: [] //serve
 						}, //store
 						columns: [{header: 'Numero', dataIndex: 'num_booking', width: 140},
+								  {header: 'Data Inser.', dataIndex: 'created_at', width: 100, xtype:  'datecolumn'},
+								  {header: 'Data Scade.', dataIndex: 'expiration', width: 100, xtype:  'datecolumn'},
 								  {header: 'Note', dataIndex: 'notes', flex: 1},
 						          {header: 'Stato', dataIndex: 'status', width: 80},
 						          {header: 'Compagnia', dataIndex: 'shipowner_id_Name', width: 120},

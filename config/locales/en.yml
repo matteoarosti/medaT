@@ -276,6 +276,7 @@ en:
       reports: "reports"
       movements: "Movements"
       in_terminal: "In terminal"
+      booking_open: "Open Booking"
     user_manager:
       user_manager: "User manager"
       users: "Users"

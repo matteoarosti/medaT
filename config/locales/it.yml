@@ -256,6 +256,7 @@ it:
       new_import: "Nuova importazione"
       open_import: "Apri importazione"
       list: "Elenco"
+      open_list: "Liste aperte"
     report:
       reports: "Report"
       movements: "Movimenti"

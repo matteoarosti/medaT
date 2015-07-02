@@ -4,6 +4,7 @@ class ImportHeader < ActiveRecord::Base
   belongs_to :ship
   
   scope :extjs_default_scope, -> {}
+  scope :not_closed, -> {where("import_status <> ?", 'CLOSE')}
   
  def self.as_json_prop()
      return {

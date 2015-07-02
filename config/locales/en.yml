@@ -276,6 +276,7 @@ en:
       new_import: "New import"
       open_import: "Open import"
       list: "List"
+      open_list: "Open"
     report:
       reports: "reports"
       movements: "Movements"

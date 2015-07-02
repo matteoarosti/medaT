@@ -83,7 +83,7 @@
 							xtype: 'store',
 							autoLoad: false,	
 							proxy: {
-								url: 'bookings/search_num_booking', 
+								url: <%= raw url_for(:controller=>'bookings', :action=>'search_num_booking').to_json -%>, 
 								extraParams: {container_number: null},
 								method: 'POST',
 								type: 'ajax',

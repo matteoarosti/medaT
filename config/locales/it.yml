@@ -223,6 +223,9 @@ it:
     INSPECT:
       long: "Ispezionato"
       short: "Ispezionato"
+    REPAIR:
+      long: "Riparato"
+      short: "Riparato"      
     FRCON:
       long: "Allaccio frigo"
       short: "Allaccio frigo"      

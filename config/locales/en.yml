@@ -243,6 +243,9 @@ en:
     INSPECT:
       long: "Inspect"
       short: "Inspect"
+    REPAIR:
+      long: "Repair"
+      short: "Repair"            
     FRCON:
       long: "Allaccio frigo"
       short: "Allaccio frigo"

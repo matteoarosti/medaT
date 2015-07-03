@@ -383,12 +383,24 @@
 			    
 
 			    
-			    listeners2: {
-					    cellclick: function(gridView,htmlElement,columnIndex,dataRecord){
-					        console.log(gridView);
-					        console.log(htmlElement);
-					        console.log(columnIndex);
-					        console.log(dataRecord);
+			    listeners: {
+					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
+
+					        if (columnIndex == 1) { //doppio click sul num_container... apro il movimento aperto
+
+									new_rec = HandlingHeader.load(rec.get('id'));
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Mov. ' + rec.get('container_number'),
+										closable: true			
+							        });
+							        
+			                		newPanel.getViewModel().setData({rec: new_rec, 
+			                			is_handling_editable: false,
+			                			is_container_editable: false
+			                		});
+			                    	myApp.feedInfo.add(newPanel).show();
+						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);    
+					        }
 					    }
 					}
 				    

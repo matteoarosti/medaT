@@ -184,8 +184,20 @@ def validate_insert_item(hi, name_function = '')
     ret[:message]  = 'Operazione non ammessa come iniziale'
     logger.info ret.to_yaml
     return ret
-   end 
+   end
   end
+  
+  #verifico che datatime_op sia maggiore o uguale all'ultimo movimento
+  if name_function != 'get_operations' && self.handling_status != 'NEW'    
+    last_datetime_op =  self.handling_items.order("datetime_op desc").first.datetime_op
+    if hi.datetime_op < last_datetime_op
+      ret[:is_valid] = false
+      ret[:message]  = "La data/ora dell'operazione non puo' essere precedente a quella dell'ultima operazione inserita per il movimento"
+      logger.info ret.to_yaml
+      return ret
+    end    
+  end
+  
   
   #verifiche sui "check" dichiarati sull'op
   op_config = h_type_config[hi.handling_item_type]

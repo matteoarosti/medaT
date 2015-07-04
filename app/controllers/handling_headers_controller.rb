@@ -163,7 +163,10 @@ end
  end
 
  
+ #su dettaglio: modifica valori base (data/vettore/autista/....)
+ ################################################
  def hitems_edit_simple_save
+ ################################################
    item = HandlingItem.find(params[:data][:id])
      
    if !params[:data][:datetime_op_date].to_s.empty? && !params[:data][:datetime_op_time].to_s.empty?
@@ -183,6 +186,40 @@ end
    end
    
    
+   #verifico che la data sia valida (compresa tra il movimento precedente e successivo)
+   prev_datetime_op = nil
+   next_datetime_op = nil
+   finded = false
+   
+   item.handling_header.handling_items.order('datetime_op asc').each do |hi|
+     if hi.id == item.id
+       finded = true
+       next #passo al record successivo 
+     end
+     
+     if finded == false
+       prev_datetime_op = hi.datetime_op
+     end
+     
+     if finded == true
+       next_datetime_op = hi.datetime_op
+       break
+     end 
+   end
+   
+   if (!prev_datetime_op.nil? && params[:data][:datetime_op] < prev_datetime_op) || 
+      (!next_datetime_op.nil? && params[:data][:datetime_op] > next_datetime_op)       
+      render json: {:success => false, :message => "Data operazione non valida (verifica dettaglio movimento precedente o successivo)"}
+      return
+   end
+   if  !params[:data][:datetime_op_end].nil?
+     if (!prev_datetime_op.nil? && params[:data][:datetime_op_end] < prev_datetime_op) || 
+        (!next_datetime_op.nil? && params[:data][:datetime_op_end] > next_datetime_op)       
+        render json: {:success => false, :message => "Data operazione finale non valida (verifica dettaglio movimento precedente o successivo)"}
+        return
+     end
+   end
+      
         
    params[:data][:fl_send_email_carrier] = nil if params[:data][:fl_send_email_carrier] == false
              

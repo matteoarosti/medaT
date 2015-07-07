@@ -6,6 +6,17 @@ class ReportsController < ApplicationController
   @hi = HandlingItem.new
  end    
 
+  def handlings_inspe_parameters
+   @hh = HandlingHeader.new
+   @hi = HandlingItem.new
+  end    
+
+  def handlings_rfcon_parameters
+   @hh = HandlingHeader.new
+   @hi = HandlingItem.new
+  end    
+
+   
  def in_terminal_parameters
   @hh = HandlingHeader.new
   @hi = HandlingItem.new
@@ -26,7 +37,20 @@ class ReportsController < ApplicationController
  
  def handlings_analytic
  end  
- 
+
+  def handlings_inspe_sint
+  end  
+  
+  def handlings_inspe_analytic
+  end  
+
+
+  def handlings_rfcon_sint
+  end  
+  
+  def handlings_rfcon_analytic
+  end  
+  
 
   def in_terminal_sint
   end  

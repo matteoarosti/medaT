@@ -262,6 +262,8 @@ it:
       open_list: "Liste aperte"
     report:
       reports: "Report"
+      movements_inspe: "Visite doganali"
+      movements_rfcon: "Allaccio frigo"      
       movements: "Movimenti"
       in_terminal: "Giacenze"
       booking_open: "Booking aperti"

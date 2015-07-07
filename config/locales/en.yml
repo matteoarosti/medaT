@@ -283,6 +283,8 @@ en:
     report:
       reports: "reports"
       movements: "Movements"
+      movements_inspe: "Visite doganali"
+      movements_rfcon: "Allaccio frigo"            
       in_terminal: "In terminal"
       booking_open: "Open Booking"
     user_manager:

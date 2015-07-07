@@ -180,6 +180,16 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                 op: 'new_win',
                                 leaf:true
                            	 }, {
+                                task:<%= raw t("menu.report.movements_inspe").to_json %>,
+                                url: '<%= url_for(:controller=>'reports', :action=>'handlings_inspe_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }, {
+                                task:<%= raw t("menu.report.movements_rfcon").to_json %>,
+                                url: '<%= url_for(:controller=>'reports', :action=>'handlings_rfcon_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }, {
                                 task:<%= raw t("menu.report.in_terminal").to_json %>,
                                 url: '<%= url_for(:controller=>'reports', :action=>'in_terminal_parameters') -%>',                                
                                 op: 'new_win',

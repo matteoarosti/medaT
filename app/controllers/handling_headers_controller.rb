@@ -28,6 +28,35 @@ end
 
 
 
+# Mostro esito cancellazione riga di dettaglio
+##################################################
+def hitem_delete_preview  
+##################################################
+  @item = HandlingItem.find(params[:rec_id])
+  @ret = @item.handling_header.hitem_delete_preview(@item)   
+end
+
+#elimino dettaglio
+def hitem_delete
+  hi = HandlingItem.find(params[:rec_id])
+  toChange = hi.handling_header.hitem_delete_preview(hi)
+  if toChange[:success] == true
+    toChange[:data].each do |f|
+      hi.handling_header.send("#{f[:field]}=", f[:new_value])
+      if f[:field] == 'num_booking'
+        hi.handling_header.booking_id = nil
+        hi.handling_header.booking_item_id = nil
+      end 
+    end
+    hi.destroy!
+    hi.handling_header.save!
+    
+  end
+  render json: {:success => true, :hh=>[hi.handling_header.as_json(extjs_sc_model.constantize.as_json_prop)]}
+end
+
+
+
 
 
 # Visualizzazione grid dettagli

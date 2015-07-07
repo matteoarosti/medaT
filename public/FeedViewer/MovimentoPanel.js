@@ -762,8 +762,9 @@ Ext.define('FeedViewer.MovimentoPanel', {
                             	return false;
                             
                             new Ext.menu.Menu({
-                                        items : [{
-                                                    text : '<i class="fa fa-edit fa-1x"> Modifica',                                                                                                        
+                                        items : [
+                                                 {
+                                                    text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
                                                     handler: function(){
                                                     	
                                                     	if (record.get('handling_item_type') == 'FRCON')
@@ -776,7 +777,20 @@ Ext.define('FeedViewer.MovimentoPanel', {
 	                           			                		 {rec_id: record.get('id')},
 	                           			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
                                                     }
-                                        }]
+                                                   }, {
+                                                       text : '<i class="fa fa-trash fa-1x"> Elimina</i>',                                                                                                        
+                                                       handler: function(){
+                                     					  Ext.MessageBox.confirm('Richieta conferma', 'Confermi eliminazione?', function(btn){
+                                     						   if(btn === 'yes'){
+       	                                                    	acs_show_win_std('Elimina dettaglio', myApp.railsBaseUri + 'handling_headers/hitem_delete_preview',
+       	                           			                		 {rec_id: record.get('id')},
+       	                           			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});                                     							   
+                                     						   }
+                                     					  });
+                                                    	   
+                                                       }
+                                                      }
+                                                 ]
                             }).showAt(xy); 	                	
 	                }, scope: this
 	            }        	

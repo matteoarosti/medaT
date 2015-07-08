@@ -25,7 +25,9 @@
        <%= raw extjs_std_combo_model('carrier', @new_rec, :allowBlank => true) -%>,
        <%= raw extjs_std_textfield('driver', @new_rec, :allowBlank => true) -%>,
        <%= raw extjs_std_textfield('seal_shipowner', @new_rec, :allowBlank => true) -%>,
-       <%= raw extjs_std_textfield('seal_others', @new_rec, :allowBlank => true) -%>
+       <%= raw extjs_std_textfield('seal_others', @new_rec, :allowBlank => true) -%>,
+       
+       <%= raw extjs_notes('notes', @hh, @new_rec) -%>       
 
    ],
       

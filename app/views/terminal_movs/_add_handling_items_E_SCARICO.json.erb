@@ -45,7 +45,9 @@
 			    },			    
 			}), 											  
 		},
-    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver'}
+    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver'},
+    
+    <%= raw extjs_notes('notes', @hh, @new_rec) -%>    
    ],
    
 	buttons:[<%= render :partial=>'add_handling_items_buttons' -%>]   

@@ -191,7 +191,29 @@ end
    @item = HandlingItem.find(params['rec_id'])
  end
 
+
+#modifica note
+def hitems_edit_notes
+  @item = HandlingItem.find(params['rec_id'])
+end
  
+#su dettaglio: modifica valori base (data/vettore/autista/....)
+################################################
+def hitems_edit_notes_save
+################################################
+  item = HandlingItem.find(params[:data][:id])
+  params[:data].permit!
+  #filtro solo gli attributi presenti nel model e salvo
+  item.update(params[:data])
+  item.save!()
+  hh = item.handling_header 
+  render json: {:success => true, :message => '', :hh=>[hh.as_json(HandlingHeader.as_json_prop)]}    
+    
+end
+
+
+
+  
  #su dettaglio: modifica valori base (data/vettore/autista/....)
  ################################################
  def hitems_edit_simple_save

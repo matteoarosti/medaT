@@ -104,8 +104,9 @@ module ApplicationHelper
    uncheckedValue: false  #{add_attr} }" 
  end
 
- def extjs_std_textareafield(name, item)
-  ret = "{xtype: 'textareafield', name: #{name.to_json}, value: #{item.send(name).to_json}, fieldLabel: #{name.humanize.to_json}, anchor: '100%', grow: true}"
+ def extjs_std_textareafield(name, item, p = {}, attr = {})
+  add_attr = extsj_create_attr_str(attr)
+  ret = "{xtype: 'textareafield', name: #{name.to_json}, value: #{item.send(name).to_json}, fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json}, anchor: '100%', grow: true #{add_attr} }"
  end
 
  def extjs_std_datetimefield(name, item) 
@@ -178,7 +179,7 @@ module ApplicationHelper
          fieldLabel: #{label.to_json},
          combineErrors: true,
          msgTarget : 'side',
-         layout: 'hbox',
+         layout: '#{p[:layout] || "hbox"}',
          anchor: '100%',
          defaults: {xtype: 'textfield', flex: 1, hideLabel: #{(p[:hideLabel] || false).to_json}},
          items: [
@@ -187,6 +188,24 @@ module ApplicationHelper
    }    
    "
  end
+ 
+ 
+ 
+ def extjs_notes(label, hh, hi, p={})
+   ret = ""
+   ret += "{xtype: 'tbfill'}, " unless p[:tbfill] == "N"
+   
+   ar_note_field = []
+   ar_note_field << extjs_std_textareafield('notes',  hi, {:fieldLabel => "Note"}, {:width => "100%"})
+   ar_note_field << extjs_std_textareafield('notes_int',  hi, {:fieldLabel => "Note interne"}, {:width => "100%"})  unless !User.current.can?(:handling_header, :notes_int)
+  
+     
+     ret += extjs_fieldcontainer('', {:layout=>"vbox"}, ar_note_field)
+   
+
+ end
+ 
+ 
  
  
  def extjs_posizionamento(label, hh, hi)     

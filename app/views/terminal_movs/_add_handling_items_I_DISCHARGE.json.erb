@@ -50,7 +50,9 @@
 			        ]
 			    }
     		]
-    	}    	
+    	}, 
+    	
+        <%= raw extjs_notes('notes', @hh, @new_rec) -%>	   	
    ],
    
    	buttons:[<%= render :partial=>'add_handling_items_buttons' -%>]

@@ -22,7 +22,9 @@
 	   <%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,
        <%= raw extjs_std_combo_model('shipper', @new_rec) -%>,
        <%= raw extjs_std_combo_model('terminal', @new_rec) -%>,
-       <%= raw extjs_std_textfield('driver', @new_rec) -%>
+       <%= raw extjs_std_textfield('driver', @new_rec) -%>,
+       
+       <%= raw extjs_notes('notes', @hh, @new_rec) -%>
    ],
    
    

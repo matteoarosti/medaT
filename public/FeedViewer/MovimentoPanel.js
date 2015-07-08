@@ -113,9 +113,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 	  		        	return '';
 	  		            //return (get.rec.get('container_status') == 'ANEW') ? true : false;
 	  		        }
-	  		       },
-    		       
-    		       
+	  		       }
+	  		       
     			
     		    }    			
     		},    
@@ -749,11 +748,28 @@ Ext.define('FeedViewer.MovimentoPanel', {
 				   {text: 'Sigillo', width: 80, dataIndex: 'seal'},
 				   {text: 'Spediz.', width: 90, dataIndex: 'shipper_id_Name'},
 				   {text: 'Terminal.', width: 90, dataIndex: 'terminal_id_Code'},
-				   {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock}				   
+				   {header: 'Notes', dataIndex: 'notes', width: 50, renderer: pb_get_notes_icon},
+				   {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock}
         	       ]
                  
         	
 	        	, listeners: {
+	        		
+	        		
+
+					    celldblclick: function(gridView,htmlElement,columnIndex,rec, a, b, c, d, e, f){					    	
+					    	
+					        if (columnIndex == 12) { //doppio click su "notes"
+                            	acs_show_win_std('Note dettaglio', myApp.railsBaseUri + 'handling_headers/hitems_edit_notes',
+     			                		 {rec_id: rec.get('id')},
+     			                		 600, 300, null, null, null, null, {mov_panel: gridView.up('panel').up('panel').up('panel')});
+					        	
+					        } //column notes
+					    },
+	        		
+	        		
+	        		
+	        		
 	                	itemcontextmenu : function(item, record, index, e, eOpts){
 	                		eOpts.stopEvent();
                             var xy = eOpts.getXY();

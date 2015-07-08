@@ -4,16 +4,27 @@ class ImportHeader < ActiveRecord::Base
   belongs_to :ship
   
   scope :extjs_default_scope, -> {}
+  scope :not_closed, -> {where("import_status <> ?", 'CLOSE')}
   
  def self.as_json_prop()
      return {
-        :methods => :ship_id_Name
+        :methods => [:ship_id_Name, :count_by_status]
       }
  end   
  
  def ship_id_Name
   self.ship.name if self.ship
  end 
+ 
+ #conto le righe di dettaglio dividendo per stato
+ def count_by_status
+   return '' if self.import_status == 'CLOSE'
+   ret = []
+   self.import_items.group_by{|ii| ii.status}.each do |ii_g|
+     ret << [ii_g[0].to_s.empty? ? 'ToDo' : ii_g[0].to_s, ii_g[1].count].join('=>')
+   end
+   return ret.join(', ')
+ end
 
   #Aggiunge un record alla tabella
   def self.add_record(ship_id, voyage, import_type)
@@ -318,4 +329,13 @@ class ImportHeader < ActiveRecord::Base
   end
 
 
+def status_get_data_json
+ [
+  {:cod=>'OPEN', :descr=>'Open'},
+  {:cod=>'CLOSE', :descr=>'Close'}
+ ] 
+end  
+ 
+  
+  
 end

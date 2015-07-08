@@ -63,8 +63,7 @@
      	},
 
      	
-     	
-   {xtype: 'checkbox', value: true, name: 'only_MT', fieldLabel: 'Solo op. di movimentazione', inputValue: true, uncheckedValue: false}
+  {xtype: 'checkbox', value: false, name: 'only_close', fieldLabel: 'Solo op. chiuse', inputValue: true, uncheckedValue: false}   	
    
    , {
             xtype: 'radiogroup',
@@ -96,7 +95,7 @@
             if(fp.getForm().isValid()){
                 fp.getForm().submit({
                     method: 'POST',
-                    url: '<%= url_for(:controller=>'reports', :action=>'handlings_sint') -%>',             
+                    url: '<%= url_for(:controller=>'reports', :action=>'handlings_rfcon_sint') -%>',             
                     params: {formValues: Ext.encode(fp.getValues())},
                     method: 'POST',
                     standardSubmit: true,
@@ -111,7 +110,7 @@
             if(fp.getForm().isValid()){
                 fp.getForm().submit({
                     method: 'POST',
-                    url: '<%= url_for(:controller=>'reports', :action=>'handlings_analytic') -%>',             
+                    url: '<%= url_for(:controller=>'reports', :action=>'handlings_rfcon_analytic') -%>',             
                     params: {formValues: Ext.encode(fp.getValues())},
                     method: 'POST',
                     standardSubmit: true,

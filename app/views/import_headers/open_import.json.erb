@@ -143,14 +143,17 @@
 			        text: 'Seq',
 			        width: 50,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			         ret = '<h5>' + (rowIndex + 1) + '</h5>';
+			         return ret;
 			        }			        
 			    }, {
 			        dataIndex: 'container_number',
 			        text: 'Container',
 			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         return '<h1>' + rec.get('container_number') + '</h1>';
+			         ret = '<h1>' + rec.get('container_number') + '</h1>';
+			         ret += '<h5>Open mv: ' + rec.get('open_handling_header_id') + '</h5>'
+			         return ret;
 			        }			        
 			    }, {
 			        dataIndex: 'container_number',
@@ -457,12 +460,25 @@
 			    
 
 			    
-			    listeners2: {
-					    cellclick: function(gridView,htmlElement,columnIndex,dataRecord){
-					        console.log(gridView);
-					        console.log(htmlElement);
-					        console.log(columnIndex);
-					        console.log(dataRecord);
+			    listeners: {
+					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
+					        if (columnIndex == 1) { //doppio click sul num_container... apro il movimento aperto
+					        
+					        	if (rec.get('open_handling_header_id') !== null){
+									new_rec = HandlingHeader.load(rec.get('open_handling_header_id'));
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Mov. ' + rec.get('container_number'),
+										closable: true			
+							        });
+							        
+			                		newPanel.getViewModel().setData({rec: new_rec, 
+			                			is_handling_editable: false,
+			                			is_container_editable: false
+			                		});
+			                    	myApp.feedInfo.add(newPanel).show();
+						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);
+						        } //se ho un movimento aperto    
+					        }
 					    }
 					}
 				    

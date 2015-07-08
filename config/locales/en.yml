@@ -109,6 +109,10 @@ en:
       container: "container"
       details: "details"
       date: "date"
+    to_be_moved:
+      ok: "Moved"
+      inspect_ok: "Inspect OK"
+      inspect_damage: "Inspect DAM"            
     to_be_handled:
       list: "list of container to be handled"
       disable_request: "disabled confirm request"
@@ -245,6 +249,9 @@ en:
     INSPECT:
       long: "Inspect"
       short: "Inspect"
+    REPAIR:
+      long: "Repair"
+      short: "Repair"            
     FRCON:
       long: "Allaccio frigo"
       short: "Allaccio frigo"
@@ -278,10 +285,14 @@ en:
       new_import: "New import"
       open_import: "Open import"
       list: "List"
+      open_list: "Open"
     report:
       reports: "reports"
       movements: "Movements"
+      movements_inspe: "Visite doganali"
+      movements_rfcon: "Allaccio frigo"            
       in_terminal: "In terminal"
+      booking_open: "Open Booking"
     user_manager:
       user_manager: "User manager"
       users: "Users"

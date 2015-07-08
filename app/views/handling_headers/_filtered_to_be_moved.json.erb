@@ -119,7 +119,7 @@
 			   , {
 			        dataIndex: 'container_number',
 			        text: <%= raw t('forms.to_be_handled.positioning').to_json -%>,
-			        flex: 1,
+			        width: 150,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';			         
@@ -131,11 +131,11 @@
 			         
 			        }			        	        
 			    }, {
-			        text: <%= raw t('forms.to_be_handled.ok').to_json -%>, width: 100, hidden: false, sortable: false,
-			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        
-			        
+			        text: <%= raw t('forms.to_be_moved.ok').to_json -%>, width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
 			        	var loc_grid = this;
-			        	if (Ext.isEmpty(rec.get('status')) == false) return '';
+			        	
+			        	if (rec.get('lock_type') == 'INSPECT' && rec.get('handling_header').lock_fl == true && rec.get('handling_header').lock_type == 'INSPECT') return '';
 			            var id = Ext.id();
 			            setTimeout(function() {
 			            			          
@@ -256,7 +256,195 @@
 			     
 			     
         
-        ],
+				, {
+			        text: <%= raw t('forms.to_be_moved.inspect_ok').to_json -%>, width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        	var loc_grid = this;
+
+			        	if (rec.get('lock_type') != 'INSPECT' || rec.get('handling_header').lock_fl == false || rec.get('handling_header').lock_type != 'INSPECT') return '';
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            
+			                ok_img = 'fa-check-circle';
+			                				            
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+								cls: 'btn-ok',
+		                		scale: 'large',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+											Ext.Ajax.request({
+											   method: 'POST',
+											   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
+											   jsonData: {
+											    handling_item_to_be_moved_close: rec.get('id'),
+											   	data: {
+											   		handling_header_id: rec.get('handling_header_id'), 
+											   		handling_item_type: 'INSPECT'											   		
+											   	}
+											   },
+															   success: function(result, request) {
+															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  
+															   	  } else {
+																      store.remove(rec);															   	  
+															   	  }															   	 
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  															      
+															   }
+
+											});
+										  		
+										  return false;										
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }, {
+			        text: <%= raw t('forms.to_be_moved.inspect_damaged').to_json -%>, width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        	var loc_grid = this;		
+			        		        
+			        	if (rec.get('lock_type') != 'INSPECT' || rec.get('handling_header').lock_fl == false || rec.get('handling_header').lock_type != 'INSPECT') return '';			        
+			            var id = Ext.id();
+			            setTimeout(function() {
+
+			                var buttonRotto = Ext.create('Ext.button.Button', {
+								text: '<i class="fa fa-warning fa-3x"></i>',
+								cls: 'btn-del',
+		                		scale: 'large',			                    
+			                        handler: function(grid, rowIndex, colIndex, a, b) {
+
+			                        
+			                           //costruisco una form
+			                           //se ho spuntato 'hide_check' committo subito
+			                           //altrimenti mostro la form per la conferma
+			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+			                           header_form_values = header_form.getValues();
+			                           
+			                           loc_form = Ext.create('Ext.form.Panel', {
+										    title: '',
+										    bodyPadding: 10,
+										    defaultType: 'textfield',
+										    	layout: {
+												    type: 'vbox',
+												    align : 'stretch',
+												    pack  : 'start',
+												},
+										    items: [
+										    {
+										            xtype: 'fieldcontainer',
+										            fieldLabel: 'Data/Ora',
+										            layout: 'hbox',
+										            items: [
+										                {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},										                 
+										            	{xtype: 'datefield', name: 'datetime_op_date', width: 120, value: header_form_values.datetime_op_date},
+										            	{xtype: 'timefield', name: 'datetime_op_time', width:  70, value: header_form_values.datetime_op_time},
+										            ]
+										      }, 
+										      {xtype: 'textareafield', name: 'notes', fieldLabel: <%= raw t('forms.to_be_inspect.notes').to_json -%>}
+										    ]
+										    , 	buttons:
+											        [{
+											            text: 'Conferma',
+											            handler: function (btn, evt) {              
+											             form = this.up('form').getForm();
+											             tmp_win  = this.up('window');
+											             if (form.isValid()) {
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
+															   jsonData: {
+															   		handling_item_to_be_moved_close: rec.get('id'),
+															   		data: {
+															   				handling_header_id: rec.get('handling_header_id'), 
+															   				handling_item_type: 'INSPECT'															   				
+															   			},
+															   		set_lock_type: 'DAMAGED'
+															   },
+															   success: function(result, request) {
+															   		var jsonData = Ext.JSON.decode(result.responseText);
+															   
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  
+															   	  } else {
+																      store.remove(rec);
+																      tmp_win.close();															   	 
+															   	  }															   	 
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+															   }
+															});	
+														  return false;												             
+											             }
+											            }
+											          }
+											         ]
+  
+										});
+
+
+			                           loc_win = Ext.create('Ext.window.Window',{
+										    layout: 'fit',
+										    items: loc_form,
+										    title: <%= raw t('forms.to_be_inspect.import_confirm').to_json -%>,
+										    width: 500,
+										    height: 300,
+										    id: 'myWindow'
+										}).show();
+													                           			                           
+			                           return false;
+
+
+
+			                        }, scope: rec
+
+			                });			                
+			                if (Ext.get(id)) {
+			                    buttonRotto.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }           
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        ], //column
         
         
         
@@ -279,12 +467,24 @@
 			    
 
 			    
-			    listeners2: {
-					    cellclick: function(gridView,htmlElement,columnIndex,dataRecord){
-					        console.log(gridView);
-					        console.log(htmlElement);
-					        console.log(columnIndex);
-					        console.log(dataRecord);
+			    listeners: {
+					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
+
+					        if (columnIndex == 1) { //doppio click sul num_container... apro il movimento aperto
+
+									new_rec = HandlingHeader.load(rec.get('handling_header_id'));
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Mov. ' + rec.get('container_number'),
+										closable: true			
+							        });
+							        
+			                		newPanel.getViewModel().setData({rec: new_rec, 
+			                			is_handling_editable: false,
+			                			is_container_editable: false
+			                		});
+			                    	myApp.feedInfo.add(newPanel).show();
+						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);    
+					        }
 					    }
 					}
 				    

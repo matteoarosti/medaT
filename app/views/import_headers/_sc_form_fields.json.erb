@@ -1,3 +1,19 @@
+<% l_item = ImportHeader.new %>
 [
-	{"fieldLabel":"id","bind":"{rec.id}","disabled":true}
+	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
+	
+	{
+		"xtype":"combobox",
+		"fieldLabel":"Stato",
+		"multiselect":false,
+		"displayField":"descr",
+		"valueField":"cod",
+		//"queryMode":"local",
+		"forceSelection": true,
+		"triggerAction": "all",  
+		
+		store: <%= raw extjs_std_store_data(l_item.status_get_data_json) -%>,					
+		"bind":"{rec.import_status}"					  
+	}
+	
 ]

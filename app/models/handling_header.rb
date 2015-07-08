@@ -99,12 +99,17 @@ class HandlingHeader < ActiveRecord::Base
  end     
  
 
+
+ def last_dett
+  hh = self.handling_items.order('datetime_op desc, id desc').first
+ end 
+  
  def last_IN
-  hh = self.handling_items.where("handling_type = ?", "I").order('datetime_op desc').first
+  hh = self.handling_items.where("handling_type = ?", "I").order('datetime_op desc, id desc').first
  end 
 
  def last_OUT
-  hh = self.handling_items.where("handling_type = ?", "O").order('datetime_op desc').first
+  hh = self.handling_items.where("handling_type = ?", "O").order('datetime_op desc, id desc').first
  end 
  
  
@@ -114,6 +119,91 @@ class HandlingHeader < ActiveRecord::Base
   "TMOV" => 'Movimentazione Terminal'
  }
 
+ 
+ 
+ #verifico l'eliminazione di una riga di dettaglio
+ def hitem_delete_preview(hi)
+   last_dett = self.last_dett()
+   success = true
+   data = []
+   if last_dett.id != hi.id
+     success = false
+     data << {:field => "Errore.<br/>E' possibile eliminare solo l'ultimo dettaglio del movimento"}
+     return {:success => success, :data => data}     
+   end
+   
+   his = self.handling_items.where("id < ?", hi.id).order('datetime_op desc, id desc')   
+   
+   
+   #nuovo stato
+   new_status = nil
+   case self.handling_status
+    when "CLOSE"
+      new_status = "OPEN"
+    when "OPEN"
+     if self.handling_items.count == 1
+      new_status = "NEW"
+       data << {:field => "container_FE", :old_value => self.container_FE, :new_value => nil} 
+       data << {:field => "container_in_terminal", :old_value => self.container_in_terminal, :new_value => nil}
+       data << {:field => "lock_type", :old_value => self.lock_type, :new_value => nil}
+       data << {:field => "lock_fl",   :old_value => self.lock_fl,   :new_value => nil}         
+     end  
+   end
+   data << {:field => "handling_status", :old_value => self.handling_status, :new_value => new_status} if !new_status.nil?
+   
+   #nuovo F/E
+   new_FE = nil
+   if !hi.container_FE.to_s.empty?
+     #cerco il precedente FE impostato
+     his.each do |hi_tmp|
+       if !hi_tmp.container_FE.to_s.empty?
+         new_FE = hi_tmp.container_FE
+         break
+       end
+     end     
+   end
+   data << {:field => "container_FE", :old_value => self.container_FE, :new_value => new_FE} if !new_FE.nil? && new_FE != self.container_FE
+
+     #nuovo container_in_terminal
+     new_IO = nil
+     if !hi.handling_type.to_s.empty?
+       #cerco il precedente IO impostato
+       his.each do |hi_tmp|
+         if !hi_tmp.handling_type.to_s.empty?
+           if hi_tmp.handling_type == "I"
+             new_IO = true
+           else
+             new_IO = false
+           end
+           break
+         end
+       end     
+     end
+     data << {:field => "container_in_terminal", :old_value => self.container_in_terminal, :new_value => new_IO} if !new_IO.nil? && new_IO != self.container_in_terminal
+     
+     #reset booking
+     new_booking = nil
+     if !hi.booking.nil?
+      data << {:field => "num_booking", :old_value => self.num_booking, :new_value => nil} if !hi.booking.nil?
+     end
+    
+     #lock
+     if hi.handling_item_type == 'INSPECT'
+       data << {:field => "lock_type", :old_value => self.lock_type, :new_value => 'INSPECT'}
+       data << {:field => "lock_fl",   :old_value => self.lock_fl,   :new_value => true}
+     end
+     if hi.handling_item_type == 'REPAIR'
+       data << {:field => "lock_type", :old_value => self.lock_type, :new_value => 'DAMAGED'}
+       data << {:field => "lock_fl",   :old_value => self.lock_fl,   :new_value => true}         
+     end
+     
+       
+        
+   return {:success => success, :data => data}
+   
+ end
+ 
+ 
 
 
  #in base allo stato, al tipo e all'ultima operazione
@@ -184,8 +274,20 @@ def validate_insert_item(hi, name_function = '')
     ret[:message]  = 'Operazione non ammessa come iniziale'
     logger.info ret.to_yaml
     return ret
-   end 
+   end
   end
+  
+  #verifico che datatime_op sia maggiore o uguale all'ultimo movimento
+  if name_function != 'get_operations' && self.handling_status != 'NEW'    
+    last_datetime_op =  self.handling_items.order("datetime_op desc").first.datetime_op
+    if hi.datetime_op < last_datetime_op
+      ret[:is_valid] = false
+      ret[:message]  = "La data/ora dell'operazione non puo' essere precedente a quella dell'ultima operazione inserita per il movimento"
+      logger.info ret.to_yaml
+      return ret
+    end    
+  end
+  
   
   #verifiche sui "check" dichiarati sull'op
   op_config = h_type_config[hi.handling_item_type]

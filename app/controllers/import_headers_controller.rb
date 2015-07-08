@@ -3,6 +3,21 @@ class ImportHeadersController < ApplicationController
   def extjs_sc_model
     'ImportHeader'
   end
+  
+  
+  #come lista mostro solo le liste aperte
+  ##########################################
+   def extjs_sc_list
+  ########################################## 
+    model_class = extjs_sc_model.to_s
+      
+    ret = {}
+    ret[:items] = model_class.constantize.extjs_default_scope.not_closed.limit(params[:limit]).offset(params[:start]).as_json(model_class.constantize.as_json_prop)
+    ret[:total] = model_class.constantize.extjs_default_scope.count
+    
+    render json: ret
+   end  
+  
 
 #  def import_file(ship_id, voyage, import_type)
   def import_file

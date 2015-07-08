@@ -164,7 +164,7 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                 op: 'new_win',
                                 leaf:true
                             }, {
-                                task:<%= raw t("menu.import.list").to_json %>,
+                                task:<%= raw t("menu.import.open_list").to_json %>,
                                 url: '<%= url_for(:controller=>'import_headers', :action=>'extjs_sc_crt_tab') -%>',                                
                                 leaf:true
                             }]
@@ -180,8 +180,23 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                 op: 'new_win',
                                 leaf:true
                            	 }, {
+                                task:<%= raw t("menu.report.movements_inspe").to_json %>,
+                                url: '<%= url_for(:controller=>'reports', :action=>'handlings_inspe_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }, {
+                                task:<%= raw t("menu.report.movements_rfcon").to_json %>,
+                                url: '<%= url_for(:controller=>'reports', :action=>'handlings_rfcon_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }, {
                                 task:<%= raw t("menu.report.in_terminal").to_json %>,
                                 url: '<%= url_for(:controller=>'reports', :action=>'in_terminal_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }, {
+                                task:<%= raw t("menu.report.booking_open").to_json %>,
+                                url: '<%= url_for(:controller=>'reports', :action=>'booking_open_parameters') -%>',                                
                                 op: 'new_win',
                                 leaf:true
                            	 }

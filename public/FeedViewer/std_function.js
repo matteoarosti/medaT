@@ -46,6 +46,13 @@
 		return value;
 	}
 
+	pb_get_notes_icon = function(value, metaData, rec, rowIndex, colIndex, store) {
+		if (Ext.isEmpty(rec.get('notes')) && Ext.isEmpty(rec.get('notes_int')))
+			return '<i class="fa fa-square-o fa-2x" style="color:transparent;"></i>';
+		//segnalo presenza note			
+		return '<i class="fa fa-file-text-o fa-2x" style="color:red;"></i>';
+		
+	}
 	
 	
 // ----------------------------------------

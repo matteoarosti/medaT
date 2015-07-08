@@ -166,6 +166,13 @@ TMOV:
    lock_type: INSPECT
   set:
    clear_lock: true   
+ REPAIR:
+  label: Repair
+  icon: '<i class="fa fa-thumbs-o-up fa-2x" style="color:green;"></i>'
+  check:
+   lock_type: DAMAGED
+  set:
+   clear_lock: true   
 
 
 ########################################################################

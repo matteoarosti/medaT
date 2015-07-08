@@ -83,7 +83,7 @@
 							xtype: 'store',
 							autoLoad: false,	
 							proxy: {
-								url: 'bookings/search_num_booking', 
+								url: <%= raw url_for(:controller=>'bookings', :action=>'search_num_booking').to_json -%>, 
 								extraParams: {container_number: null},
 								method: 'POST',
 								type: 'ajax',
@@ -103,6 +103,8 @@
 							fields: [] //serve
 						}, //store
 						columns: [{header: 'Numero', dataIndex: 'num_booking', width: 140},
+								  {header: 'Data Inser.', dataIndex: 'created_at', width: 100, xtype:  'datecolumn'},
+								  {header: 'Data Scade.', dataIndex: 'expiration', width: 100, xtype:  'datecolumn'},
 								  {header: 'Note', dataIndex: 'notes', flex: 1},
 						          {header: 'Stato', dataIndex: 'status', width: 80},
 						          {header: 'Compagnia', dataIndex: 'shipowner_id_Name', width: 120},

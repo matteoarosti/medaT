@@ -6,19 +6,51 @@ class ReportsController < ApplicationController
   @hi = HandlingItem.new
  end    
 
+  def handlings_inspe_parameters
+   @hh = HandlingHeader.new
+   @hi = HandlingItem.new
+  end    
+
+  def handlings_rfcon_parameters
+   @hh = HandlingHeader.new
+   @hi = HandlingItem.new
+  end    
+
+   
  def in_terminal_parameters
   @hh = HandlingHeader.new
   @hi = HandlingItem.new
  end    
 
+
+ def booking_open_parameters
+  @hh = HandlingHeader.new
+  @hi = HandlingItem.new
+  @bh = Booking.new
+  @bi = BookingItem.new
+ end    
  
+  
    
  def handlings_sint
  end  
  
  def handlings_analytic
  end  
- 
+
+  def handlings_inspe_sint
+  end  
+  
+  def handlings_inspe_analytic
+  end  
+
+
+  def handlings_rfcon_sint
+  end  
+  
+  def handlings_rfcon_analytic
+  end  
+  
 
   def in_terminal_sint
   end  
@@ -26,5 +58,12 @@ class ReportsController < ApplicationController
   def in_terminal_analytic
   end  
  
+
+  def booking_open_analytic
+  end 
+  def booking_open_sint
+  end  
+    
+  
    
 end

@@ -1,0 +1,90 @@
+{
+ success: true,
+
+   items: [
+       
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Verifica esito', flex: 50,
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	data: <%= raw @ret[:data].to_json -%>
+        	    }),
+        	    
+        	    
+  		    columns: [
+  		    	{
+			        dataIndex: 'field',
+			        text: 'Campo',
+			        flex: 2,			        			        
+			    }, {
+			        dataIndex: 'old_value',
+			        text: 'Valore attuale',
+			        flex: 1,			        			        
+			    }, {
+			        dataIndex: 'new_value',
+			        text: 'Nuovo valore',
+			        flex: 1,			        			        
+			    }
+			]
+			
+			
+		<% if @ret[:success] == true %>	
+			
+		, buttons:
+	        [
+	          {
+	            text: 'Elimina',  cls: 'btn-del',
+	            handler: function (btn, evt) {
+	            
+
+					Ext.Ajax.request({
+	                    url: <%= raw url_for(:controller=>'handling_headers', :action=>'hitem_delete').to_json -%>,
+	                    waitMsg: 'Salvataggio in corso....',
+						method:'POST',                     
+	                    jsonData: {rec_id: <%= @item.id -%>},	
+	             	
+						success: function(result, request) {
+						 var returnData = Ext.JSON.decode(result.responseText);
+						 //ricarico la testata e i dettagli
+						 rec = this.up('window').open_vars.mov_panel.getViewModel().getData().rec;
+						 																		
+						 rec.set(returnData.hh[0]);
+						 this.up('window').open_vars.mov_panel.getViewModel().setData({rec: rec});					 
+						 this.up('window').open_vars.mov_panel.down('grid').store.reload();
+						 
+						 //chiudo										
+						 this.up('window').close();
+											
+						 							
+						}, scope: this,
+						
+						failure: function(rec, op) {
+							var result = Ext.JSON.decode(op.getResponse().responseText);
+							Ext.MessageBox.show({
+		                        title: 'EXCEPTION',
+		                        msg: result.message,
+		                        icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})					
+						}, scope: this,						
+										 
+			    	});	             
+
+	            
+	            
+	            
+	            }//hanlder function 
+	           }
+	         ]              
+	     <% end %>    
+			
+	     }
+	 ]
+}
+ 

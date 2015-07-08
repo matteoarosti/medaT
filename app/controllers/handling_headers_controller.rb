@@ -28,6 +28,35 @@ end
 
 
 
+# Mostro esito cancellazione riga di dettaglio
+##################################################
+def hitem_delete_preview  
+##################################################
+  @item = HandlingItem.find(params[:rec_id])
+  @ret = @item.handling_header.hitem_delete_preview(@item)   
+end
+
+#elimino dettaglio
+def hitem_delete
+  hi = HandlingItem.find(params[:rec_id])
+  toChange = hi.handling_header.hitem_delete_preview(hi)
+  if toChange[:success] == true
+    toChange[:data].each do |f|
+      hi.handling_header.send("#{f[:field]}=", f[:new_value])
+      if f[:field] == 'num_booking'
+        hi.handling_header.booking_id = nil
+        hi.handling_header.booking_item_id = nil
+      end 
+    end
+    hi.destroy!
+    hi.handling_header.save!
+    
+  end
+  render json: {:success => true, :hh=>[hi.handling_header.as_json(extjs_sc_model.constantize.as_json_prop)]}
+end
+
+
+
 
 
 # Visualizzazione grid dettagli
@@ -122,6 +151,16 @@ def hitems_sc_create
    else
     ret_status = false
     message = validate_insert_item[:message]
+   end
+   
+   #se provengo da "Da movimentare" oltre a creare il movimento (inspect) chiudo la movimentazione
+   if ret_status == true && !params[:handling_item_to_be_moved_close].to_s.empty?
+     logger.info "Chiudo to_be_moved"
+     hi = HandlingItem.find(params[:handling_item_to_be_moved_close])
+     hi.to_be_moved = false
+     hi.moved_by_user_id = current_user.id
+     hi.moved_at = Time.zone.now
+     hi.save!     
    end 
        
    render json: {:success => ret_status, :message => message, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]} 
@@ -152,8 +191,33 @@ end
    @item = HandlingItem.find(params['rec_id'])
  end
 
+
+#modifica note
+def hitems_edit_notes
+  @item = HandlingItem.find(params['rec_id'])
+end
  
+#su dettaglio: modifica valori base (data/vettore/autista/....)
+################################################
+def hitems_edit_notes_save
+################################################
+  item = HandlingItem.find(params[:data][:id])
+  params[:data].permit!
+  #filtro solo gli attributi presenti nel model e salvo
+  item.update(params[:data])
+  item.save!()
+  hh = item.handling_header 
+  render json: {:success => true, :message => '', :hh=>[hh.as_json(HandlingHeader.as_json_prop)]}    
+    
+end
+
+
+
+  
+ #su dettaglio: modifica valori base (data/vettore/autista/....)
+ ################################################
  def hitems_edit_simple_save
+ ################################################
    item = HandlingItem.find(params[:data][:id])
      
    if !params[:data][:datetime_op_date].to_s.empty? && !params[:data][:datetime_op_time].to_s.empty?
@@ -173,6 +237,40 @@ end
    end
    
    
+   #verifico che la data sia valida (compresa tra il movimento precedente e successivo)
+   prev_datetime_op = nil
+   next_datetime_op = nil
+   finded = false
+   
+   item.handling_header.handling_items.order('datetime_op asc').each do |hi|
+     if hi.id == item.id
+       finded = true
+       next #passo al record successivo 
+     end
+     
+     if finded == false
+       prev_datetime_op = hi.datetime_op
+     end
+     
+     if finded == true
+       next_datetime_op = hi.datetime_op
+       break
+     end 
+   end
+   
+   if (!prev_datetime_op.nil? && params[:data][:datetime_op] < prev_datetime_op) || 
+      (!next_datetime_op.nil? && params[:data][:datetime_op] > next_datetime_op)       
+      render json: {:success => false, :message => "Data operazione non valida (verifica dettaglio movimento precedente o successivo)"}
+      return
+   end
+   if  !params[:data][:datetime_op_end].nil?
+     if (!prev_datetime_op.nil? && params[:data][:datetime_op_end] < prev_datetime_op) || 
+        (!next_datetime_op.nil? && params[:data][:datetime_op_end] > next_datetime_op)       
+        render json: {:success => false, :message => "Data operazione finale non valida (verifica dettaglio movimento precedente o successivo)"}
+        return
+     end
+   end
+      
         
    params[:data][:fl_send_email_carrier] = nil if params[:data][:fl_send_email_carrier] == false
              

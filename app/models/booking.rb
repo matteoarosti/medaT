@@ -10,6 +10,7 @@ class Booking < ActiveRecord::Base
 
  scope :like_num_booking, ->(num_booking) {where("num_booking LIKE ?", "%#{num_booking}%")}
  scope :to_check, ->() {where("to_check = true")}
+ scope :not_closed, -> {where("status <> ?", 'CLOSE')}
  
  
 #gestione permessi in base a utente
@@ -139,10 +140,21 @@ def refresh_status(bi)
   bi.status = new_status
   bi.save!
   message = "Lo stato del booking/equipment e' stato modificato in #{new_status}"
+  
+  #verifico se devo chiudere l'intero booking
+    to_close = true
+    self.booking_items.each do |bi_tmp|
+      to_close = false if bi_tmp.status == 'OPEN'
+    end
+    if to_close && self.status != 'CLOSE'
+      self.status = 'CLOSE'
+      self.save!
+      message += "<br>Lo stato del booking e' stato modificato in CLOSE."
+    end
+  
  end
  
- return {:message => message}
- 
+ return {:message => message} 
 end
  
  

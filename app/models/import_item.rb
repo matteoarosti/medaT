@@ -13,9 +13,16 @@ class ImportItem < ActiveRecord::Base
  end  
    
  
+ #se e' ancora da importare, ricerco l'eventuale handling_header non chiuso per il container
+ def open_handling_header_id
+   hh = HandlingHeader.not_closed.container(self.container_number).first
+   return hh.id unless hh.nil?
+   return nil 
+ end
+ 
  def self.as_json_prop()
      return {
-        :methods => [:equipment_id_Name, :shipowner_id_Name]
+        :methods => [:equipment_id_Name, :shipowner_id_Name, :open_handling_header_id]
       }
  end 
 

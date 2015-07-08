@@ -7,6 +7,7 @@ class CreateShippers < ActiveRecord::Migration
       t.string      :city,                  :limit => 50
       t.string      :country,               :limit => 50
       t.string      :email,                 :limit => 50
+      t.string      :email_notify,          :limit => 200  #valori separati da ","      
       t.decimal     :unit_cost,             :precision => 5, :scale => 2
       t.decimal     :scartaggio_cost,       :precision => 5, :scale => 2
       

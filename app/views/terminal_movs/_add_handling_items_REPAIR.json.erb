@@ -20,14 +20,11 @@
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},
 
 	   <%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,
-       <%= raw extjs_std_combo_model('shipper', @new_rec) -%>,
-       <%= raw extjs_std_combo_model('terminal', @new_rec) -%>,
-       <%= raw extjs_std_textfield('driver', @new_rec) -%>,
-       
-       <%= raw extjs_notes('notes', @hh, @new_rec) -%>
+	   
+       <%= raw extjs_notes('notes', @hh, @new_rec) -%>	   
+
    ],
-   
-   
+      
 	buttons:[<%= render :partial=>'add_handling_items_buttons' -%>]
 	   
   }

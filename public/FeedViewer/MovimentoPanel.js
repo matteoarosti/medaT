@@ -113,9 +113,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 	  		        	return '';
 	  		            //return (get.rec.get('container_status') == 'ANEW') ? true : false;
 	  		        }
-	  		       },
-    		       
-    		       
+	  		       }
+	  		       
     			
     		    }    			
     		},    
@@ -749,11 +748,28 @@ Ext.define('FeedViewer.MovimentoPanel', {
 				   {text: 'Sigillo', width: 80, dataIndex: 'seal'},
 				   {text: 'Spediz.', width: 90, dataIndex: 'shipper_id_Name'},
 				   {text: 'Terminal.', width: 90, dataIndex: 'terminal_id_Code'},
-				   {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock}				   
+				   {header: 'Notes', dataIndex: 'notes', width: 50, renderer: pb_get_notes_icon},
+				   {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock}
         	       ]
                  
         	
 	        	, listeners: {
+	        		
+	        		
+
+					    celldblclick: function(gridView,htmlElement,columnIndex,rec, a, b, c, d, e, f){					    	
+					    	
+					        if (columnIndex == 12) { //doppio click su "notes"
+                            	acs_show_win_std('Note dettaglio', myApp.railsBaseUri + 'handling_headers/hitems_edit_notes',
+     			                		 {rec_id: rec.get('id')},
+     			                		 600, 300, null, null, null, null, {mov_panel: gridView.up('panel').up('panel').up('panel')});
+					        	
+					        } //column notes
+					    },
+	        		
+	        		
+	        		
+	        		
 	                	itemcontextmenu : function(item, record, index, e, eOpts){
 	                		eOpts.stopEvent();
                             var xy = eOpts.getXY();
@@ -762,8 +778,9 @@ Ext.define('FeedViewer.MovimentoPanel', {
                             	return false;
                             
                             new Ext.menu.Menu({
-                                        items : [{
-                                                    text : '<i class="fa fa-edit fa-1x"> Modifica',                                                                                                        
+                                        items : [
+                                                 {
+                                                    text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
                                                     handler: function(){
                                                     	
                                                     	if (record.get('handling_item_type') == 'FRCON')
@@ -776,7 +793,20 @@ Ext.define('FeedViewer.MovimentoPanel', {
 	                           			                		 {rec_id: record.get('id')},
 	                           			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
                                                     }
-                                        }]
+                                                   }, {
+                                                       text : '<i class="fa fa-trash fa-1x"> Elimina</i>',                                                                                                        
+                                                       handler: function(){
+                                     					  Ext.MessageBox.confirm('Richieta conferma', 'Confermi eliminazione?', function(btn){
+                                     						   if(btn === 'yes'){
+       	                                                    	acs_show_win_std('Elimina dettaglio', myApp.railsBaseUri + 'handling_headers/hitem_delete_preview',
+       	                           			                		 {rec_id: record.get('id')},
+       	                           			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});                                     							   
+                                     						   }
+                                     					  });
+                                                    	   
+                                                       }
+                                                      }
+                                                 ]
                             }).showAt(xy); 	                	
 	                }, scope: this
 	            }        	

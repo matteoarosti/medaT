@@ -31,6 +31,7 @@ TMOV:
   label: In after Emptying
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
   check:
+   with_booking: false  
    container_in_terminal: false
    container_FE: F
   set:
@@ -78,6 +79,7 @@ TMOV:
   label: 'In From Return'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
   check:
+   with_booking: true  
    container_in_terminal: false
    container_FE: F
   set:

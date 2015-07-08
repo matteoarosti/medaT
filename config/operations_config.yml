@@ -20,6 +20,7 @@ TMOV:
   label: Out for Emptying
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 
   check:
+   with_booking: false  
    container_in_terminal: true
    container_FE: F
 #   container_status: AVAILABLE

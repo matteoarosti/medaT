@@ -24,7 +24,9 @@
 	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
 	<%= raw extjs_std_combo_model('carrier', @new_rec) -%>,
     {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver', allowBlank: false},    
-    <%= raw extjs_to_be_moved('to_be_moved', @hh, @new_rec) -%>
+    <%= raw extjs_to_be_moved('to_be_moved', @hh, @new_rec) -%>,
+    
+    <%= raw extjs_notes('notes', @hh, @new_rec) -%>    
    ],
    
    

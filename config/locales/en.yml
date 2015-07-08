@@ -200,9 +200,15 @@ en:
     O_FILLING:
       long: "Out for Filling"
       short: "Out Filling"
+    O_RETURN:
+      long: "Out for Return"
+      short: "Out Return"
     I_FILLING:
       long: "In From Filling"
       short: "In Filling"
+    I_RETURN:
+      long: "In From Return"
+      short: "In Return"
     I_TRANSFER:
       long: "In By Transfer From Other Terminal"
       short: "Trans. Term"

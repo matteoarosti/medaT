@@ -1,0 +1,35 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+    {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
+    {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},  
+    {xtype: 'hiddenfield', name: 'handling_type', value: 'O'},
+    {xtype: 'hiddenfield', name: 'container_FE', value: '<%= @hh.container_FE.to_s -%>'},
+   // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},   
+    
+	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
+	<%= raw extjs_std_combo_model('carrier', @new_rec) -%>,
+    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver', allowBlank: false},    
+    <%= raw extjs_to_be_moved('to_be_moved', @hh, @new_rec) -%>
+   ],
+   
+   
+	buttons:[<%= render :partial=>'add_handling_items_buttons' -%>]
+	
+  }
+ ]
+}

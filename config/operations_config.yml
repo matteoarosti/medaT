@@ -50,6 +50,18 @@ TMOV:
    container_in_terminal: false
    booking_copy: true
    operation_type: 'MT'
+ O_RETURN:
+  label: Out for Return
+  icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
+  check:
+   with_booking: true
+   container_in_terminal: true
+   container_FE: F
+#   container_status: AVAILABLE
+  set:
+   container_in_terminal: false
+   booking_copy: true
+   operation_type: 'MT'
  I_FILLING:
   label: 'In From Filling'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
@@ -60,6 +72,18 @@ TMOV:
    container_in_terminal: true
    container_FE_copy: true
    seal_exp_copy: true   
+   operation_type: 'MT'
+   lock_INSPECT: IF_EMPTY
+ I_RETURN:
+  label: 'In From Return'
+  icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
+  check:
+   container_in_terminal: false
+   container_FE: F
+  set:
+   container_in_terminal: true
+   container_FE_copy: true
+   seal_exp_copy: true
    operation_type: 'MT'
    lock_INSPECT: IF_EMPTY
  I_TRANSFER:

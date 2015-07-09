@@ -108,6 +108,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 	  		        	if (rec){
 	  		        		if (rec.get('lock_type') == 'INSPECT') return '<i class="fa fa-search fa-2x" style="color:red;"></i>';
 	  		        		if (rec.get('lock_type') == 'DAMAGED') return '<i class="fa fa-warning fa-2x" style="color:red;"></i>';
+	  		        		if (rec.get('lock_type') == 'LOCK') return '<i class="fa fa-lock fa-2x" style="color:red;"></i>';
 	  		        		return '<i class="fa fa-warning fa-2x" style="color:transparent;"></i>';
 	  		        	}
 	  		        	return '';

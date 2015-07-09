@@ -153,15 +153,15 @@ TMOV:
  LOCK:
   label: Lock handling
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
+  check:
   set:
-   handling_header_status: LOCK
  UNLOCK:
   label: Unlock handling
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
   check:
-   handling_header_status: OPEN
+   lock_type: LOCK
   set:
-   handling_header_status: OPEN
+   clear_lock: true
  INSPECT:
   label: Inspect
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'

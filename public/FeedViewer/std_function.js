@@ -40,9 +40,11 @@
 	pb_get_image_lock = function(value, metaData, rec, rowIndex, colIndex, store) {
 		if (value == 'INSPECT') metaData.tdAttr = 'data-qtip="Da ispezionare"';
 		if (value == 'DAMAGED') metaData.tdAttr = 'data-qtip="Danneggiato"';					
+		if (value == 'LOCK') metaData.tdAttr = 'data-qtip="In Lock"';
 		
 		if (value == 'INSPECT') return '<i class="fa fa-search fa-2x" style="color:red;"></i>';
 		if (value == 'DAMAGED') return '<i class="fa fa-warning fa-2x" style="color:red;"></i>';
+		if (value == 'LOCK') return '<i class="fa fa-lock fa-2x" style="color:red;"></i>';
 		return value;
 	}
 

@@ -317,8 +317,14 @@ end
     when 'lock_INSPECT'         
      #per ogni hh aggiungo altre informazioni 
      hh_as_json_prop = HandlingHeader.as_json_prop
-     hh_as_json_prop[:methods] << :get_lock_INSPECT_date         
-     render json: HandlingHeader.where('1=1').locked_INSPECT.limit(1000).as_json(hh_as_json_prop)
+     hh_as_json_prop[:methods] << :get_lock_INSPECT_date
+     items = HandlingHeader.where('1=1').locked_INSPECT
+     
+     #prendo solo quelli che hanno un inspect aperto abbinato ad una nave
+     items = items.joins(" INNER JOIN handling_items hi ON handling_headers.id = hi.handling_header_id AND hi.lock_fl = true
+       AND handling_headers.lock_type = hi.lock_type AND hi.ship_id IS NOT NULL ")
+     
+     render json: items.limit(1000).as_json(hh_as_json_prop)
      
      when 'lock_DAMAGED'         
       #per ogni hh aggiungo altre informazioni 
@@ -327,7 +333,7 @@ end
       render json: HandlingHeader.where('1=1').locked_DAMAGED.limit(1000).as_json(hh_as_json_prop)
 
    when 'to_be_moved'          
-     #per ogni hh aggiungo altre informazioni 
+     #per ogni hh aggiungo altre informazioni 11111
      hh_as_json_prop = HandlingItem.as_json_prop
      hh_as_json_prop[:include] = hh_as_json_prop[:include] || [] 
      hh_as_json_prop[:include] << {:handling_header => {:include=>[:equipment, :shipowner]}}              

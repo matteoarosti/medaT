@@ -272,7 +272,7 @@ en:
     movements:
       movements: "Movements"
       search_insert: "Search / Insert"
-      to_inspect: "To inspect"
+      to_inspect_from_ship: "To inspect"
       damaged: "Damaged"
       to_handle: "To handle"
     bookings:

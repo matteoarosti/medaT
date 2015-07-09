@@ -9,9 +9,9 @@ class HandlingHeader < ActiveRecord::Base
  scope :container, ->(container_number) {where("container_number = ?", container_number)}
  scope :is_in_terminal, -> {where("container_in_terminal=?", true)}
  scope :not_closed, -> {where("handling_status <> ?", 'CLOSE')}
- scope :locked, -> {where("lock_fl=?", true)}
- scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')} 
- scope :locked_DAMAGED, -> {locked.where("lock_type = ?", 'DAMAGED')}
+ scope :locked, -> {where("handling_headers.lock_fl=?", true)}
+ scope :locked_INSPECT, -> {locked.where("handling_headers.lock_type = ?", 'INSPECT')} 
+ scope :locked_DAMAGED, -> {locked.where("handling_headers.lock_type = ?", 'DAMAGED')}
  scope :da_posizionare, -> {where("da_posizionare = ?", true)}
  scope :by_type, ->(handling_type) {where("handling_type = ?", handling_type)}
 

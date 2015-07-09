@@ -108,7 +108,7 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                     iconCls:'task',
                                     op: 'NEW_HANDLING_HEADER'
                                 }, {
-                                    task:<%= raw t("menu.movements.to_inspect").to_json %>,
+                                    task:<%= raw t("menu.movements.to_inspect_from_ship").to_json %>,
                                     leaf: true,
                                  	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'lock_INSPECT') -%>',                                    
                                     op: 'new_tab',                                

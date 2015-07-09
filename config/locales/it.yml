@@ -252,7 +252,7 @@ it:
     movements:
       movements: "Movimenti"
       search_insert: "Ricerca / Inserisci"
-      to_inspect: "Da ispezionare"
+      to_inspect_from_ship: "Da ispezionare (da nave)"
       damaged: "Danneggiati"
       to_handle: "Da movimentare"
     bookings:

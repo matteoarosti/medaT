@@ -69,11 +69,27 @@
 				                boxLabel: 'Disabilita richiesta conferma',
 				                name: 'hide_check',
 				                inputValue: '1'
-				      }    
+				      }
+				      
+
+				      
+					 , {	
+							flex: 1,
+							xtype: 'checkboxfield',
+			                boxLabel: 'Mostra anche gi&agrave; importati',
+			                itemId: 'show_imported',
+			                name: 'show_imported',
+			                inputValue: '1'
+					      }
+				          
 				     
 				    ]
-				 }, '->',
-					{iconCls: 'fa fa-check-circle', text: 'Importa tutti', cls: 'btn-ok',
+				 }
+				 
+				 , '->'
+				 
+				 
+				 , {iconCls: 'fa fa-check-circle', text: 'Importa tutti', cls: 'btn-ok',
 						handler: function(event, toolEl, panel){
 											form = this.up('panel').down('form').getForm();
 											grid = this.up('grid');
@@ -131,8 +147,19 @@
 				 		}
 				 	},
 				 
-				    {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
-				 						this.up('grid').getStore().load();}}
+				    {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){
+				    
+			                    
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    header_form_values = header_form.getValues();
+
+				    			show_imported = header_form.findField('show_imported').getValue();
+				    			if (show_imported == true)
+				    			 show_imported_out = 1;
+				    			else
+				    			 show_imported_out = 0;
+				    			this.up('grid').store.proxy.extraParams.show_imported = show_imported_out;								    					 
+				 				this.up('grid').getStore().load();}}
 				 ]
 			  }
 			],

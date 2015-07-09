@@ -25,6 +25,32 @@
        <%= raw extjs_std_combo_model('carrier', @new_rec) -%>,
        <%= raw extjs_std_textfield('driver', @new_rec) -%>,
        
+       
+	    {
+            xtype: 'fieldset',
+            title: 'Peso / Sigillo',
+            layout: 'anchor',
+            items: [
+            
+				{
+	                xtype: 'fieldcontainer',
+	                combineErrors: true,
+	                msgTarget : 'side',
+	                layout: 'hbox',
+	                anchor: '100%',
+	                defaults: {xtype: 'textfield', flex: 1, hideLabel: false, labelWidth: 120, labelAlign: 'right'},
+	                items: [
+    					<%= raw extjs_std_textfield('weight_imp', @hh, :allowBlank => true, :input_prefix => 'hh_') -%>,
+    					<%= raw extjs_std_textfield('seal_shipowner', @new_rec, :allowBlank => true) -%>,
+    					<%= raw extjs_std_textfield('seal_others', @new_rec, :allowBlank => true) -%>			                
+			        ]
+			    }
+    		]
+    	},
+       
+       
+       
+       
 	    <%= raw extjs_std_combo('container_FE', @new_rec,
 	    	:store => extjs_std_store_data(@new_rec.container_FE_get_data_json)
 	    	) -%>,

@@ -736,7 +736,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 				   {text: 'Nave', width: 130, dataIndex: 'ship_id_Name', renderer: function(value, metaData, rec){
 					   if (rec.get('handling_item_type') == 'FRCON'){
 						   if (rec.get('datetime_op_end') === null)
-							   return '(Anroca allacciato)';
+							   return '(Ancora allacciato)';
 						   else
 							   return  ' -> ' + Ext.util.Format.date(rec.get('datetime_op_end'), 'd-m-y H:i');
 					   }

@@ -96,6 +96,7 @@ TMOV:
    container_in_terminal: false
    handling_header_status: NEW
   set:
+   seal_imp_copy: true  
    container_in_terminal: true
    container_FE_copy: true
    operation_type: 'MT'

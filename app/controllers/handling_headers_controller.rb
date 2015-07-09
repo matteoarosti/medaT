@@ -321,10 +321,10 @@ end
      items = HandlingHeader.where('1=1').locked_INSPECT
      
      #prendo solo quelli che hanno un inspect aperto abbinato ad una nave
-#     items = items.joins(" INNER JOIN handling_items hi ON handling_headers.id = hi.handling_header_id AND hi.lock_fl = true
-#       AND handling_headers.lock_type = hi.lock_type AND hi.ship_id IS NOT NULL ")
+     items = items.joins(" INNER JOIN handling_items hi ON handling_headers.id = hi.handling_header_id AND hi.lock_fl = true
+       AND handling_headers.lock_type = hi.lock_type AND hi.ship_id IS NOT NULL ")
      
-     render json: items.limit(1000).as_json(hh_as_json_prop)
+     render json: items.limit(2000).as_json(hh_as_json_prop)
      
      when 'lock_DAMAGED'         
       #per ogni hh aggiungo altre informazioni 

@@ -30,6 +30,7 @@ end
 
 items = HandlingItem.where('1=1')
 items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']} }) unless formValues['shipowner_id'].blank?
+items = items.where({handling_items: {shipper_id: formValues['shipper_id']} }) unless formValues['shipper_id'].blank?
 items = items.where({handling_item_type: formValues['handling_item_type']}) unless formValues['handling_item_type'].blank?
 items = items.where("datetime_op >= ?", datetime_from) unless formValues['datetime_op_from'].blank?
 items = items.where("datetime_op <= ?", datetime_to) unless formValues['datetime_op_to'].blank?

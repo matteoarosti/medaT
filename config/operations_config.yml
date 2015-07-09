@@ -208,6 +208,7 @@ INSPE:
   icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 
   label: Custom Inspections 
   set:
+   operation_type: 'CI'  
    handling_header_status: CLOSE
   
   

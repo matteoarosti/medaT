@@ -42,19 +42,28 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
  	###################################################### 
 	%>
  	<% group_op = so_val.group_by { |d|
- 		k = d.container_FE
+ 	
+ 		#gestisco raggruppamento con un array
+ 		k = {}
+ 		k[:container_FE] = d.container_FE
+ 		
+ 		#separo anche in base al lock
+ 		k[:lock_type] = d.lock_type
+ 		
+ 		#i pieni vengono divisi tra fase di import e export (se hanno booking)
  		if d.container_FE == 'F'
- 		 #i pieni vengono divisi tra fase di import e export (se hanno booking)
- 		 ie = d.with_booking == true ? '_E' : '_I'
- 		 k = k + ie
+ 		 ie = d.with_booking == true ? 'E' : 'I'
+ 		 k[:in_import_export] = ie
  		end  
+  
 		k
  		} %>
 	<% group_op.each do |op_id, op_val| %>
 
  		<p class="bg-success" style="padding: 5px 10px">
- 			<%= op_id[0..1]=='E' ? 'VUOTI' : 'PIENI' -%>
- 			<%= op_id[2..3]=='I' ? ' (fase di IMPORT)' : ' (fase di EXPORT)' unless op_id.size==1 -%>
+ 			<%= op_id[:container_FE]=='E' ? 'VUOTI' : 'PIENI' -%>
+ 			<%= "[ Lock type: #{op_id[:lock_type]} ] " unless op_id[:lock_type].nil? -%>
+ 			<%= op_id[:in_import_export]=='I' ? ' (fase di IMPORT)' : ' (fase di EXPORT)' unless op_id[:in_import_export].nil? -%>
  			 (conteggio: <%= "#{op_val.count()}" -%>)
  		</p>
 
@@ -76,10 +85,13 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 
 		<% op_val.sort_by{|a| 
 		
+			a_last_IN_datetime_op = nil
+			a_last_IN_datetime_op = a.last_IN.datetime_op unless a.last_IN.nil? 
+		
 			if formValues['seq_ord'] == 'date_tipo'
-				[a.last_IN.datetime_op, a.equipment.equipment_type]
+				[a_last_IN_datetime_op, a.equipment.equipment_type]
 			else
-				[a.equipment.equipment_type, a.last_IN.datetime_op]
+				[a.equipment.equipment_type, a_last_IN_datetime_op]
 			end
 		
 		
@@ -91,7 +103,7 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 				<td><%= row.num_booking.to_s -%></td>
 				<td><%= !row.booking.nil? ? row.booking.ship.name : '' -%></td>
 				<td><%= !row.booking.nil? ? row.booking.voyage : '' -%></td>
-				<td><%= row.last_IN().datetime_op.strftime("%d/%m/%y %H:%M") -%></td>
+				<td><%= row.last_IN().datetime_op.strftime("%d/%m/%y %H:%M") unless row.last_IN.nil? -%></td>
 			</tr>
 		<% end %>
 		</table>

@@ -48,11 +48,22 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
  	
  		k 	
  	} %>
-	<% group_op.each do |op_id, op_val| %>
-	
+	<% group_op.sort_by{|a|
+	 a[0][:container_FE].to_s}.each do |op_id, op_val| %>
 
- 		<p class="bg-success" style="padding: 5px 10px">
- 			<%= op_id[:container_FE]=='E' ? 'VUOTI' : 'PIENI' -%>
+ 		<p class="bg-success" style="padding: 5px 10px"> 		
+ 			<%
+ 				case op_id[:container_FE]
+ 				 when "E" 
+ 				  fe = "VUOTI"
+ 				 when "F"
+ 				  fe = "PIENI"
+ 				 else
+ 				  fe = "NON DEFINITI"
+ 				end
+
+ 			 -%>
+ 			<%= fe.to_s -%>
  			<%= "[ Lock type: #{op_id[:lock_type]} ] " unless op_id[:lock_type].nil? -%>
  			<%= op_id[:in_import_export]=='I' ? ' (fase di IMPORT)' : ' (fase di EXPORT)' unless op_id[:in_import_export].nil? -%>
  			 (conteggio: <%= "#{op_val.count()}" -%>)

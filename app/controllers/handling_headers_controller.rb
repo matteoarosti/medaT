@@ -140,30 +140,40 @@ def hitems_sc_create
      hi.set_lock(params[:set_lock_type])
    end  
      
-   #se supera i vari controlli salvo il dettalio e aggiorno la testata
-   validate_insert_item = hh.validate_insert_item(hi)
-   if validate_insert_item[:is_valid]
-    hi.save!()   
-    hh.assign_attributes(hh_params) 
-    r = hh.sincro_save_header(hi)
-    ret_status  = r[:success]
-    message     = r[:message]
-   else
-    ret_status = false
-    message = validate_insert_item[:message]
-   end
    
-   #se provengo da "Da movimentare" oltre a creare il movimento (inspect) chiudo la movimentazione
-   if ret_status == true && !params[:handling_item_to_be_moved_close].to_s.empty?
-     logger.info "Chiudo to_be_moved"
-     hi = HandlingItem.find(params[:handling_item_to_be_moved_close])
-     hi.to_be_moved = false
-     hi.moved_by_user_id = current_user.id
-     hi.moved_at = Time.zone.now
-     hi.save!     
-   end 
+  ActiveRecord::Base.transaction do   
+   begin     
+     #se supera i vari controlli salvo il dettalio e aggiorno la testata
+     validate_insert_item = hh.validate_insert_item(hi)
+     if validate_insert_item[:is_valid]
+      hi.save!()   
+      hh.assign_attributes(hh_params) 
+      r = hh.sincro_save_header(hi)
+      ret_status  = r[:success]
+      message     = r[:message]
+     else
+      ret_status = false
+      message = validate_insert_item[:message]
+     end
+     
+     #se provengo da "Da movimentare" oltre a creare il movimento (inspect) chiudo la movimentazione
+     if ret_status == true && !params[:handling_item_to_be_moved_close].to_s.empty?
+       logger.info "Chiudo to_be_moved"
+       hi = HandlingItem.find(params[:handling_item_to_be_moved_close])
+       hi.to_be_moved = false
+       hi.moved_by_user_id = current_user.id
+       hi.moved_at = Time.zone.now
+       hi.save!     
+     end 
+         
+     render json: {:success => ret_status, :message => message, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]}
        
-   render json: {:success => ret_status, :message => message, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]} 
+   rescue
+     to_rollback = true   
+     render json: {:success => false, :message => 'Errore sconosciuto. Contattare amministratore di sistema', :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]}     
+   end
+   raise ActiveRecord::Rollback if to_rollback    
+  end #transaction      
 end
 
 

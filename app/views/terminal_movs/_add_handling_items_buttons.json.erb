@@ -3,6 +3,7 @@
             handler: function (btn, evt) {              
              form = this.up('form').getForm();
              if (form.isValid()) {
+             	btn.disable();
              	new_rec = Ext.create('HandlingItem', {});
              	new_rec.data = form.getValues();
              	new_rec.save({
@@ -38,7 +39,8 @@
 	                        msg: result.message,
 	                        icon: Ext.MessageBox.ERROR,
 	                        buttons: Ext.Msg.OK
-                    	})
+                    	});
+                        btn.enable();
 					} 				 
 		    	});
              }             
@@ -50,6 +52,7 @@
             handler: function (btn, evt) {              
              form = this.up('form').getForm();
              if (form.isValid()) {
+             	btn.disable();
              	new_rec = Ext.create('HandlingItem', {});
              	new_rec.data = form.getValues();
              	new_rec.save({
@@ -79,7 +82,8 @@
 	                        msg: result.message,
 	                        icon: Ext.MessageBox.ERROR,
 	                        buttons: Ext.Msg.OK
-                    	})
+                    	});
+                    	btn.enable();
 					} 				 
 		    	});
              }             

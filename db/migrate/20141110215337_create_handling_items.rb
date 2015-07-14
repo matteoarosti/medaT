@@ -20,6 +20,7 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.belongs_to  :carrier
       t.belongs_to  :terminal
       t.belongs_to  :shipper
+      t.belongs_to  :inspection_type
 
       #abbinamento con booking
       t.belongs_to  :booking

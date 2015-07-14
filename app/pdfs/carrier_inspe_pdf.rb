@@ -23,7 +23,7 @@ class CarrierInspePdf < Prawn::Document
     riga_from = 0
     riga_to   = 0
     grid([riga_from,0], [riga_to,9]).bounding_box do
-      text "VISITA DOGANALE N. #{hi.id}", :size => 12      
+      text "VISITA DOGANALE N. #{hi.id}, #{hi.inspection_type.name unless hi.inspection_type.nil?}", :size => 12      
     end
     
               

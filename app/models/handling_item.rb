@@ -6,6 +6,7 @@ class HandlingItem < ActiveRecord::Base
  belongs_to :booking_item
  belongs_to :shipper
  belongs_to :terminal
+ belongs_to :inspection_type
  
  scope :extjs_default_scope, -> {}
  scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)} 
@@ -59,7 +60,8 @@ end
     self.terminal.code if self.terminal
   end
   def handling_item_type_short
-    I18n.t("operations.#{self.handling_item_type}.short") if !self.handling_item_type.empty?
+    ret = I18n.t("operations.#{self.handling_item_type}.short") if !self.handling_item_type.empty?
+    ret += '<br>' + self.inspection_type.name if !self.inspection_type.nil? && self.handling_item_type == 'CUST_INSPECTION'
   end
 
  def self.as_json_prop()

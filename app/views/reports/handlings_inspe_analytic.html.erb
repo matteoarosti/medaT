@@ -58,10 +58,13 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
  	#Tipo operazioni
  	###################################################### 
 	%>
- 	<% group_op = so_val.group_by { |d| d.handling_item_type } %>
+ 	<% group_op = so_val.group_by { |d| [d.handling_item_type, d.inspection_type] } %>
 	<% group_op.each do |op_id, op_val| %>
 
- 		<p class="bg-success" style="padding: 5px 10px"><%= t("operations.#{op_id}.long") -%></p>
+ 		<p class="bg-success" style="padding: 5px 10px">
+ 			<%= t("operations.#{op_id[0]}.long") -%> - 
+ 			<%= op_id[1].name unless op_id[1].nil? -%>
+ 		</p>
 
 		<%
  		######################################################

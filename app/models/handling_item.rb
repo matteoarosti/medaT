@@ -62,6 +62,7 @@ end
   def handling_item_type_short
     ret = I18n.t("operations.#{self.handling_item_type}.short") if !self.handling_item_type.empty?
     ret += '<br>' + self.inspection_type.name if !self.inspection_type.nil? && self.handling_item_type == 'CUST_INSPECTION'
+    ret
   end
 
  def self.as_json_prop()

@@ -17,7 +17,7 @@
      
     items: [       
      	{xtype: 'hidden', name: 'authenticity_token', value: '<%= form_authenticity_token %>'},
-     	<%= raw extjs_std_combo_model('shipowner', @hh, {:allowBlank=>true}, {:multiSelect => true}) -%>,     	
+     	<%= raw extjs_std_combo_model('shipowner', @hh, {:allowBlank=>true}, {:multiSelect => false}) -%>,     	
 	],
     
    buttons: [

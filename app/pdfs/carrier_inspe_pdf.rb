@@ -62,7 +62,8 @@ class CarrierInspePdf < Prawn::Document
     #riga 2
     riga_from = riga_to + 1
     riga_to   = riga_from
-    grid([riga_from,0], [riga_to,5]).bounding_box do write_cell('Equipment description', hi.handling_header.equipment.equipment_type) end
+    grid([riga_from,0], [riga_to,1]).bounding_box do write_cell('Equipment', hi.handling_header.equipment.equipment_type) end
+    grid([riga_from,2], [riga_to,5]).bounding_box do write_cell('Terminal',  !hi.terminal.nil? ? hi.terminal.code : '') end    
     grid([riga_from,6], [riga_to,7]).bounding_box do write_cell('Frigo Temp.', !hi_search_booking_item.nil? ? hi_search_booking_item.temperature.to_s : '') end
     grid([riga_from,8], [riga_to,8]).bounding_box do write_cell('Frigo Humid.', !hi_search_booking_item.nil? ? hi_search_booking_item.humidity.to_s : '') end      
     grid([riga_from,9], [riga_to,10]).bounding_box do write_cell('Frigo Vent.', !hi_search_booking_item.nil? ? hi_search_booking_item.ventilation.to_s : '') end
@@ -102,7 +103,7 @@ class CarrierInspePdf < Prawn::Document
     riga_from = riga_to + 1
     riga_to   = riga_from
     grid([riga_from,0], [riga_to,3]).bounding_box do write_cell('Shipper', !hi.shipper.nil? ? hi.shipper.name : '') end
-    grid([riga_from,4], [riga_to,5]).bounding_box do write_cell('Autista', hi.driver) end
+    grid([riga_from,4], [riga_to,5]).bounding_box do write_cell('Applicant', hi.driver) end
     grid([riga_from,6], [riga_to,7]).bounding_box do write_cell('Goods weight', out_weight.to_s) end #ToDo (Imp o Exp?)      
     grid([riga_from,8], [riga_to,10]).bounding_box do write_cell('Goods description', '') end #???
 

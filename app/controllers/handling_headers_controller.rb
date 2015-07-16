@@ -86,6 +86,11 @@ def hitems_sc_create
   end
   
   
+   if !params[:data][:set_lock_type_DAMAGED].nil?     
+     params[:set_lock_type] = 'DAMAGED' if params[:data][:set_lock_type_DAMAGED] == true
+     params[:data].delete(:set_lock_type_DAMAGED)
+   end
+   
   
    hh = HandlingHeader.find(params[:data][:handling_header_id])
    hi = hh.handling_items.new()

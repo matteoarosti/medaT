@@ -1,5 +1,5 @@
 {
-    "success": true,
+ "success": true,
  "items": [
   {
    xtype: 'form',
@@ -17,9 +17,10 @@
    items: [
     {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
     {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},  
-   // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},
 
 	   <%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,
+	   
+	    {xtype: 'checkbox', name: 'set_lock_type_DAMAGED', fieldLabel: 'Danneg. <i class="fa fa-warning fa-2x" style="color:red;"></i>', inputValue: true, uncheckedValue: false},
 
        <%= raw extjs_notes('notes', @hh, @new_rec) -%>
    ],

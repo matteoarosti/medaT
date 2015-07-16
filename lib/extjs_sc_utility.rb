@@ -3,6 +3,16 @@
  
  
  class ActiveRecord::Base
+   
+   def display_info_record
+     created_user = User.find(self.created_user_id) rescue created_user = User.new 
+     updated_user = User.find(self.updated_user_id) rescue updated_user = User.new
+     
+     ret = ''
+     ret += "Created on #{self.created_at.strftime("%d/%m/%y %H:%M")} by #{created_user.name.to_s}"
+     ret += "<br/>Last modified on #{self.updated_at.strftime("%d/%m/%y %H:%M")} by #{updated_user.name.to_s}"
+     return ret
+   end
  
 
   ###################################################################

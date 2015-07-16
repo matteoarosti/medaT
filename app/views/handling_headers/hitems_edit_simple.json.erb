@@ -16,7 +16,7 @@
      
    items: [
     {xtype: 'hiddenfield', name: 'id', value: '<%= @item.id -%>'}   
-    
+        
 	, <%= raw extjs_std_datetimefield('datetime_op', @item) -%>    
     , <%= raw extjs_std_combo_model('carrier', @item, :allowBlank => true) -%>
     , <%= raw extjs_std_textfield('driver', @item, :allowBlank => true) -%>
@@ -25,7 +25,9 @@
     <% if @item.handling_item_type == 'CUST_INSPECTION' %>
      , <%= raw extjs_std_combo('inspection_type_id', @item, :valueField => 'id', :displayField => 'name', :allowBlank => false, :store => extjs_std_store_data(InspectionType.get_data_json)) -%>,
     <% end %>
-    , <%= raw extjs_std_booleanfield('fl_send_email_carrier', @item) -%>    
+    , <%= raw extjs_std_booleanfield('fl_send_email_carrier', @item) -%>
+    
+    , {xtype: 'tbfill'}, {height: 40, xtype: 'displayfield', fieldLabel: 'Info record', value: <%= raw @item.display_info_record.to_json -%>}
    ]
    
    , buttons: [	

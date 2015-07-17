@@ -179,7 +179,16 @@
 			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h1>' + rec.get('container_number') + '</h1>';
-			         ret += '<h5>Open mv: ' + rec.get('open_handling_header_id') + '</h5>'
+			         if (Ext.isEmpty(rec.get('open_handling_header_id')) == false){
+			          ret += '<h5>Movim #' + rec.get('open_handling_header_id') + '&nbsp;';
+			            ret += ' ' + pb_get_image_status(rec.get('open_handling_header_rec').handling_status);
+			            ret += ' ' + pb_get_image_in_terminal(rec.get('open_handling_header_rec').container_in_terminal);			            
+			            ret += ' ' + pb_get_image_FE(rec.get('open_handling_header_rec').container_FE);
+			            ret += ' ' + pb_get_image_with_booking(rec.get('open_handling_header_rec').booking_id);
+			            if (Ext.isEmpty(rec.get('open_handling_header_rec').lock_type) == false)
+			             ret += ' ' + pb_get_image_lock(rec.get('open_handling_header_rec').lock_type);
+			          ret += '</h5>';
+			         }
 			         return ret;
 			        }			        
 			    }, {

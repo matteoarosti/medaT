@@ -1,8 +1,9 @@
 // ---------------------------------------------------------------------
  	pb_get_image_IO = function(val, metaData){
+ 	   if(typeof(metaData) !== 'undefined'){ 		
 		if (val == 'I') metaData.tdAttr = 'data-qtip="Entrata"';
 		if (val == 'O') metaData.tdAttr = 'data-qtip="Uscita"';					
-		
+ 	   }	
 		if (val == 'I') return '<i class="fa fa-download fa-2x" style="color:green;"></i>';
 		if (val == 'O') return '<i class="fa fa-upload fa-2x" style="color:red;"></i>';
 	}
@@ -13,13 +14,19 @@
 		if (val == false) return '<i class="fa fa-upload fa-2x" style="color:red;"></i>';
 	}
  	 	
- 	 	
+
+ 	pb_get_image_with_booking = function(val, metaData){
+		if (Ext.isEmpty(val) == false) return '<i class="fa fa-cloud-upload fa-2x" style="color:green;"></i>';
+		if (Ext.isEmpty(val) == true) return '<i class="fa fa-cloud-upload fa-2x" style="color:red;"></i>';
+	}
+
  	
 	
 	pb_get_image_FE = function(val, metaData){
+	   if(typeof(metaData) !== 'undefined'){	
 		if (val == 'F') metaData.tdAttr = 'data-qtip="Pieno"';
 		if (val == 'E') metaData.tdAttr = 'data-qtip="Vuoto"';					
-		
+	   }
 		if (val == 'F') return '<i class="fa fa-square fa-2x" style="color:brown;"></i>';
 		if (val == 'E') return '<i class="fa fa-square-o fa-2x" style="color:brown;"></i>';
 	}
@@ -27,10 +34,12 @@
 
 
 	pb_get_image_status = function(value, metaData, rec, rowIndex, colIndex, store) {
+	   if(typeof(metaData) !== 'undefined'){		
 		if (value == 'OPEN') metaData.tdAttr = 'data-qtip="Open"';
 		if (value == 'CLOSE') metaData.tdAttr = 'data-qtip="Close"';					
 		if (value == 'NEW') metaData.tdAttr = 'data-qtip="New"';
-		
+	   }
+	   
 		if (value == 'OPEN') return '<i class="fa fa-circle-o fa-2x" style="color:green;"></i>';
 		if (value == 'CLOSE') return '<i class="fa fa-times fa-2x" style="color:gray;"></i>';
 		if (value == 'NEW') return '<i class="fa fa-plus fa-2x" style="color:red;"></i>';
@@ -38,10 +47,12 @@
 	}
 	
 	pb_get_image_lock = function(value, metaData, rec, rowIndex, colIndex, store) {
+	   if(typeof(metaData) !== 'undefined'){		
 		if (value == 'INSPECT') metaData.tdAttr = 'data-qtip="Da ispezionare"';
 		if (value == 'DAMAGED') metaData.tdAttr = 'data-qtip="Danneggiato"';					
 		if (value == 'LOCK') metaData.tdAttr = 'data-qtip="In Lock"';
-		
+	   }
+	   
 		if (value == 'INSPECT') return '<i class="fa fa-search fa-2x" style="color:red;"></i>';
 		if (value == 'DAMAGED') return '<i class="fa fa-warning fa-2x" style="color:red;"></i>';
 		if (value == 'LOCK') return '<i class="fa fa-lock fa-2x" style="color:red;"></i>';

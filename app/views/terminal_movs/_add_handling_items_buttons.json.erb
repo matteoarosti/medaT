@@ -33,9 +33,10 @@
 					}, scope: this,
 					
 					failure: function(rec, op) {
+						var result = Ext.JSON.decode(op.getResponse().responseText);
 						Ext.MessageBox.show({
 	                        title: 'EXCEPTION',
-	                        msg: 'Errore sconosciuto',
+	                        msg: result.message,
 	                        icon: Ext.MessageBox.ERROR,
 	                        buttons: Ext.Msg.OK
                     	});
@@ -75,9 +76,10 @@
 					}, scope: this,
 					
 					failure: function(rec, op) {
+						var result = Ext.JSON.decode(op.getResponse().responseText);
 						Ext.MessageBox.show({
 	                        title: 'EXCEPTION',
-	                        msg: 'Errore sconosciuto',
+	                        msg: result.message,
 	                        icon: Ext.MessageBox.ERROR,
 	                        buttons: Ext.Msg.OK
                     	});

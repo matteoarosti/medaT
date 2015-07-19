@@ -12,7 +12,7 @@ class HandlingItem < ActiveRecord::Base
  scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)} 
  scope :locked, -> {where("lock_fl=?", true)}
  scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')}
- scope :locked_DAMAGED, -> {locked.where("lock_type = ?", 'DAMAGED')}
+ scope :locked_DAMAGED, -> {locked.where("lock_type IN(?)", ['DAMAGED', 'DAMAGED_AU'])}
  scope :to_be_moved, -> {where("to_be_moved=?", true)}
 
  

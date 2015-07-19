@@ -169,12 +169,18 @@ TMOV:
   check:
    lock_type: INSPECT
   set:
-   clear_lock: true   
+   clear_lock: true
+ DAMAGED_AU:
+  label: Authorized
+  icon: '<i class="fa fa-warning fa-2x" style="color:green;"></i>'
+  check:
+   lock_type: DAMAGED
+  set:         
  REPAIR:
   label: Repair
   icon: '<i class="fa fa-thumbs-o-up fa-2x" style="color:green;"></i>'
   check:
-   lock_type: DAMAGED
+   lock_type: DAMAGED_AU
   set:
    clear_lock: true   
 

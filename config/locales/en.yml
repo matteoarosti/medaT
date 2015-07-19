@@ -249,6 +249,9 @@ en:
     INSPECT:
       long: "Inspect"
       short: "Inspect"
+    DAMAGED_AU:
+      long: "Authorized"
+      short: "Authorized"      
     REPAIR:
       long: "Repair"
       short: "Repair"            
@@ -257,7 +260,11 @@ en:
       short: "Allaccio frigo"
     RFCON:
       long: "Allaccio frigo"
-      short: "Allaccio frigo"                  
+      short: "Allaccio frigo"
+  lock_type:
+    INSPECT: "Da ispezionare"
+    DAMAGED: "Danneggiato - Da autorizzare"
+    DAMAGED_AU: "Danneggiato - Autorizzato" 
   menu:
     tables:
       tables: "Tables"

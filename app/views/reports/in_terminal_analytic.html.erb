@@ -74,7 +74,8 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 
  			 -%>
  			<%= fe.to_s -%>
- 			<%= "[ Lock type: #{op_id[:lock_type]} ] " unless op_id[:lock_type].nil? -%>
+ 			<%= "[ Stato: Buono ] " if op_id[:lock_type].nil? -%>
+ 			<%= "[ Stato: #{t("lock_type.#{op_id[:lock_type]}")} ] " unless op_id[:lock_type].nil? -%>
  			<%= op_id[:in_import_export]=='I' ? ' (fase di IMPORT)' : ' (fase di EXPORT)' unless op_id[:in_import_export].nil? -%>
  			 (conteggio: <%= "#{op_val.count()}" -%>)
  		</p>

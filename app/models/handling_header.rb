@@ -11,7 +11,7 @@ class HandlingHeader < ActiveRecord::Base
  scope :not_closed, -> {where("handling_status <> ?", 'CLOSE')}
  scope :locked, -> {where("handling_headers.lock_fl=?", true)}
  scope :locked_INSPECT, -> {locked.where("handling_headers.lock_type = ?", 'INSPECT')} 
- scope :locked_DAMAGED, -> {locked.where("handling_headers.lock_type = ?", 'DAMAGED')}
+ scope :locked_DAMAGED, -> {locked.where("handling_headers.lock_type IN(?)", ['DAMAGED', 'DAMAGED_AU'])}
  scope :da_posizionare, -> {where("da_posizionare = ?", true)}
  scope :by_type, ->(handling_type) {where("handling_type = ?", handling_type)}
 
@@ -565,10 +565,16 @@ end
 ################################################################
 def get_lock_DAMAGED_date
 ################################################################
-  hi_DAMAGED = HandlingItem.handlingHeader(self.id).locked_DAMAGED.last
+  hi_DAMAGED = HandlingItem.handlingHeader(self.id).where('lock_type = ?', 'DAMAGED').last
   hi_DAMAGED.datetime_op if (hi_DAMAGED)    
 end
  
+################################################################
+def get_lock_DAMAGED_AU_date
+################################################################
+  hi_DAMAGED_AU = HandlingItem.handlingHeader(self.id).where('lock_type = ?', 'DAMAGED_AU').last
+  hi_DAMAGED_AU.datetime_op if (hi_DAMAGED_AU)    
+end
  
 ################################################################
 def get_handling_type_config(operatios_config)

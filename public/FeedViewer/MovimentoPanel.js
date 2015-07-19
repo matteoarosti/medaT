@@ -106,10 +106,16 @@ Ext.define('FeedViewer.MovimentoPanel', {
 	     		      bind: {bindTo: '{rec}', deep: true},
 	  		          get: function (rec) {
 	  		        	if (rec){
+	  		        	  /*	
 	  		        		if (rec.get('lock_type') == 'INSPECT') return '<i class="fa fa-search fa-2x" style="color:red;"></i>';
 	  		        		if (rec.get('lock_type') == 'DAMAGED') return '<i class="fa fa-warning fa-2x" style="color:red;"></i>';
 	  		        		if (rec.get('lock_type') == 'LOCK') return '<i class="fa fa-lock fa-2x" style="color:red;"></i>';
 	  		        		return '<i class="fa fa-warning fa-2x" style="color:transparent;"></i>';
+	  		        	  */	
+	  		        		
+	  		        		return pb_get_image_lock(rec.get('lock_type'));	  		        		
+	  		        		
+	  		        		
 	  		        	}
 	  		        	return '';
 	  		            //return (get.rec.get('container_status') == 'ANEW') ? true : false;

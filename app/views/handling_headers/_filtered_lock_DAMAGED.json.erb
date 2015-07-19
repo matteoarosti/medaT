@@ -29,13 +29,25 @@
         	    	autoLoad: true,
         	    	fields: [],
         	    	proxy: {
-        	            type: 'ajax',
         	            url: <%= raw  (root_path + 'handling_headers/get_row_by_filtered_type').to_json -%>,
-        	            extraParams: {filtered_type: <%= raw filtered_type.to_json -%>},
+        	            extraParams: {
+        	            	filtered_type: <%= raw filtered_type.to_json -%>,
+        	            	form_user: {}
+        	            },
         	            reader: {
         	                type: 'json',
+							method: 'POST',        	                
         	                rootProperty: 'items'
-        	            }
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
         	        }
         	    }),
         	   
@@ -54,27 +66,37 @@
 					},
 				    padding: '10 10 10 10',
 				    items: [
-				    	{
-				    		flex: 1,
-				            xtype: 'fieldcontainer',
-				            fieldLabel: <%= raw t('forms.damageds.date_time').to_json -%>, labelAlign: 'right',
+						{
+				            xtype: 'radiogroup',
+				            fieldLabel: '',
 				            layout: 'hbox',
-				            items: [
-				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
-				            	{xtype: 'timefield', name: 'datetime_op_time', width:  70},
-				            ]
-				      }, {	
-								flex: 1, padding: '0 0 0 10',
-								xtype: 'checkboxfield',
-				                boxLabel: <%= raw t('forms.damageds.disable_request').to_json -%>,
-				                name: 'hide_check',
-				                inputValue: '1'
-				      }    
+				            items: [{
+				                boxLabel: 'Da autorizzare',
+				                name: 'damaged_status',
+				                inputValue: 'TO_AUTH',
+				                width: 150                
+				            }, {
+				                boxLabel: 'Autorizzati',
+				                name: 'damaged_status',
+				                inputValue: 'AUTH',
+				                width: 150
+				            }, {
+				                boxLabel: 'Entrambi',
+				                name: 'damaged_status',
+				                inputValue: '',
+				            	checked: true,
+				                width: 150
+				            }]
+				        },	        			
 				     
 				    ]
 				 }, '->',  {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
-				 						console.log(this.up('grid'));
-				 						this.up('grid').getStore().load();}}
+				 
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    header_form_values = header_form.getValues();
+
+				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
+				 				this.up('grid').getStore().load();}}
 				 ]
 			  }
 			],
@@ -92,7 +114,15 @@
 			        text: <%= raw t('forms.damageds.container').to_json -%>,
 			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         return '<h1>' + rec.get('container_number') + '</h1>';
+			         ret = '<h1>' + rec.get('container_number') + '</h1>';
+			          ret += '<h5>Movim #' + rec.get('id') + '&nbsp;';
+			            ret += ' ' + pb_get_image_status(rec.get('handling_status'));
+			            ret += ' ' + pb_get_image_in_terminal(rec.get('container_in_terminal'));			            
+			            ret += ' ' + pb_get_image_FE(rec.get('container_FE'));
+			            ret += ' ' + pb_get_image_with_booking(rec.get('booking_id'));
+			            ret += ' ' + pb_get_image_lock(rec.get('lock_type'));
+			          ret += '</h5>';
+			          return ret;			         
 			        }			        
 			    }, {
 			        dataIndex: 'container_number',
@@ -102,8 +132,7 @@
 			         ret = '';
 			         ret += '<table class=import_item_detail>';
 			         ret += '<tr><th>Compagnia</th><td>' + rec.data.shipowner.name + '</td></tr>';
-			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';
-			         ret += '<tr><th>Stato</th><td>' + rec.get('container_status') + '</td></tr>';			         			         
+			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';			         			         
 			         ret += '</table>';
 			         return ret;
 			         
@@ -115,7 +144,8 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';			         
-					 ret += '<tr><th>Segnalato il</th><td>' + Ext.util.Format.date(rec.get('get_lock_DAMAGED_date'), 'd-m-Y H:i:s') + '</td></tr>';			         
+					 ret += '<tr><th>Segnalato il</th><td>' + Ext.util.Format.date(rec.get('get_lock_DAMAGED_date'), 'd-m-Y H:i') + '</td></tr>';			         
+					 ret += '<tr><th>Autorizzato il</th><td>' + Ext.util.Format.date(rec.get('get_lock_DAMAGED_AU_date'), 'd-m-Y H:i') + '</td></tr>';
 			         ret += '</table>';
 			         return ret;
 			         

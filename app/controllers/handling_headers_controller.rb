@@ -173,8 +173,9 @@ def hitems_sc_create
          
      render json: {:success => ret_status, :message => message, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]}
        
-   rescue
-     to_rollback = true   
+   rescue => exception
+     to_rollback = true  
+     logger.info exception.backtrace
      render json: {:success => false, :message => 'Errore sconosciuto. Contattare amministratore di sistema', :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]}     
    end
    raise ActiveRecord::Rollback if to_rollback    
@@ -344,8 +345,18 @@ end
      when 'lock_DAMAGED'         
       #per ogni hh aggiungo altre informazioni 
       hh_as_json_prop = HandlingHeader.as_json_prop
-      hh_as_json_prop[:methods] << :get_lock_DAMAGED_date         
-      render json: HandlingHeader.where('1=1').locked_DAMAGED.limit(1000).as_json(hh_as_json_prop)
+      hh_as_json_prop[:methods] << :get_lock_DAMAGED_date     
+      hh_as_json_prop[:methods] << :get_lock_DAMAGED_AU_date        
+      items = HandlingHeader.where('1=1')
+      case params[:form_user][:damaged_status]
+        when 'TO_AUTH'
+          items = items.where('lock_type=?', 'DAMAGED') 
+        when 'AUTH'
+          items = items.where('lock_type=?', 'DAMAGED_AU')
+        else
+          items = items.locked_DAMAGED          
+      end    
+      render json: items.limit(2000).as_json(hh_as_json_prop)
 
    when 'to_be_moved'          
      #per ogni hh aggiungo altre informazioni 11111

@@ -244,7 +244,8 @@ it:
   lock_type:
     INSPECT: "Da ispezionare"
     DAMAGED: "Danneggiato - Da autorizzare"
-    DAMAGED_AU: "Danneggiato - Autorizzato"             
+    DAMAGED_AU: "Danneggiato - Autorizzato"
+    LOCK: "Bloccato"             
   menu:
     tables:
       tables: "Tabelle di base"

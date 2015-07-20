@@ -734,7 +734,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						   if (rec.get('datetime_op_end') === null)
 							   return '(Ancora allacciato)';
 						   else
-							   return  ' -> ' + Ext.util.Format.date(rec.get('datetime_op_end'), 'd-m-y H:i');
+							   return  ' -> ' + Ext.util.Format.date(rec.get('datetime_op_end'), 'd/m/y H:i');
 					   }
 
 					   if (rec.get('handling_item_type') == 'INSPECT'){

@@ -58,7 +58,7 @@
 		if (value == 'DAMAGED') return '<i class="fa fa-warning fa-2x" style="color:red;"></i>';
 		if (value == 'DAMAGED_AU') return '<i class="fa fa-warning fa-2x" style="color:green;"></i>';		
 		if (value == 'LOCK') return '<i class="fa fa-lock fa-2x" style="color:red;"></i>';
-		return value;
+		return '<i class="fa fa-lock fa-2x" style="color:transparent;"></i>';
 	}
 
 	pb_get_notes_icon = function(value, metaData, rec, rowIndex, colIndex, store) {

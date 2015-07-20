@@ -105,17 +105,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			        icon_lock_type:{
 	     		      bind: {bindTo: '{rec}', deep: true},
 	  		          get: function (rec) {
-	  		        	if (rec){
-	  		        	  /*	
-	  		        		if (rec.get('lock_type') == 'INSPECT') return '<i class="fa fa-search fa-2x" style="color:red;"></i>';
-	  		        		if (rec.get('lock_type') == 'DAMAGED') return '<i class="fa fa-warning fa-2x" style="color:red;"></i>';
-	  		        		if (rec.get('lock_type') == 'LOCK') return '<i class="fa fa-lock fa-2x" style="color:red;"></i>';
-	  		        		return '<i class="fa fa-warning fa-2x" style="color:transparent;"></i>';
-	  		        	  */	
-	  		        		
-	  		        		return pb_get_image_lock(rec.get('lock_type'));	  		        		
-	  		        		
-	  		        		
+	  		        	if (rec){	  		        		
+	  		        		return pb_get_image_lock(rec.get('lock_type'));	  		        			  		        			  		        		
 	  		        	}
 	  		        	return '';
 	  		            //return (get.rec.get('container_status') == 'ANEW') ? true : false;
@@ -323,10 +314,9 @@ Ext.define('FeedViewer.MovimentoPanel', {
 			                xtype: 'fieldcontainer',
 			                frame: false,
 			                //fieldLabel: 'Stato / Lock',
-			                combineErrors: true,
-			                msgTarget : 'side',
 			                layout: 'hbox',
 			                anchor: '100%',
+			                width: '100%',
 			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
 			                items: [
 			                        {xtype: "panel", bind: '{icon_handling_status} {rec.handling_status}'},
@@ -342,9 +332,9 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	     
         	     
         	     {         
-        	    	 width: 260,
+        	    	 width: 280,
                      xtype: 'fieldset', border: true, collapsible: false,
-                     title: 'Import',
+                     title: 'Fase di Import',
                      defaults: {
                          hideLabel: false,
                          labelWidth: 100,
@@ -417,9 +407,9 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	     
     	     
         	     {         
-        	    	 width: 260,
+        	    	 width: 280,
                      xtype: 'fieldset', border: true, collapsible: false,
-                     title: 'Export',
+                     title: 'Fase di Export',
                      defaults: {
                          hideLabel: false,
                          labelWidth: 100,
@@ -522,7 +512,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	     
         	     
         	     {         
-        	    	 width: 130,
+        	    	 width: 100,
                      xtype: 'fieldset', border: true, collapsible: false,
                      title: 'Azioni',
                      //combineErrors: true,
@@ -735,7 +725,7 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						    {
 						        return rowIndex + 1;
 						    }},
-        	       {text: 'Data/ora', width: 160, dataIndex: 'datetime_op', xtype:  'datecolumn', format: 'd-m-Y H:i:s'},
+        	       {text: 'Data/ora', width: 110, dataIndex: 'datetime_op', xtype:  'datecolumn', format: 'd/m/y H:i'},
         	       {text: 'Op', width: 160, dataIndex: 'handling_item_type_short', width: 100},
         	       {text: 'E/U', width: 40, dataIndex: 'handling_type', tooltip: 'Entrata / Uscita', tdCls: 'm-only-icon', renderer: pb_get_image_IO},
                    {text: 'P/V', width: 40, dataIndex: 'container_FE', tooltip: 'Pieno / Vuoto', tdCls: 'm-only-icon', renderer: pb_get_image_FE},
@@ -746,7 +736,15 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						   else
 							   return  ' -> ' + Ext.util.Format.date(rec.get('datetime_op_end'), 'd-m-y H:i');
 					   }
-					   else
+
+					   if (rec.get('handling_item_type') == 'INSPECT'){
+						   if (rec.get('lock_type') == 'DAMAGED')
+							   return ' --> Danneggiato';
+						   else
+							   return  ' --> Buono';
+					   }
+					   
+					   
 					   return value; 
 					}},
 				   {text: 'Voy', width: 60, dataIndex: 'voyage'},

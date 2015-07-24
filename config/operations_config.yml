@@ -14,7 +14,7 @@ TMOV:
    container_FE_copy: true
    operation_type: 'MT'
    seal_imp_copy: true
-   start_reefer_connection: true
+   start_reefer_connection: IF_FULL
    lock_INSPECT: IF_EMPTY
  O_EMPTYING:
   label: Out for Emptying
@@ -23,7 +23,6 @@ TMOV:
    with_booking: false  
    container_in_terminal: true
    container_FE: F
-#   container_status: AVAILABLE
   set:  
    container_in_terminal: false
    operation_type: 'MT'
@@ -47,11 +46,11 @@ TMOV:
    with_booking: false
    container_in_terminal: true
    container_FE: E
-#   container_status: AVAILABLE
   set:  
    container_in_terminal: false
    booking_copy: true
    operation_type: 'MT'
+   end_reefer_connection: true   
  O_RETURN:
   label: Out for Return
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
@@ -59,11 +58,11 @@ TMOV:
    with_booking: true
    container_in_terminal: true
    container_FE: F
-#   container_status: AVAILABLE
   set:
    container_in_terminal: false
    booking_copy: true
    operation_type: 'MT'
+   end_reefer_connection: true   
  I_FILLING:
   label: 'In From Filling'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
@@ -76,7 +75,7 @@ TMOV:
    seal_exp_copy: true   
    operation_type: 'MT'
    lock_INSPECT: IF_EMPTY
-   start_reefer_connection: true   
+   start_reefer_connection: IF_FULL   
  I_RETURN:
   label: 'In From Return'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -90,6 +89,7 @@ TMOV:
    seal_exp_copy: true
    operation_type: 'MT'
    lock_INSPECT: IF_EMPTY
+   start_reefer_connection: IF_FULL   
  I_TRANSFER:
   label: 'In By Transfer From Other Terminal'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>' 
@@ -101,7 +101,8 @@ TMOV:
    container_in_terminal: true
    container_FE_copy: true
    operation_type: 'MT'
-   lock_INSPECT: IF_EMPTY   
+   lock_INSPECT: IF_EMPTY
+   start_reefer_connection: IF_FULL      
  O_LOAD:
   label: Out For Load
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
@@ -125,7 +126,8 @@ TMOV:
    container_FE_copy: false
    operation_type: 'MT'
    booking_reset: true
-   lock_INSPECT: IF_EMPTY   
+   lock_INSPECT: IF_EMPTY
+   start_reefer_connection: IF_FULL      
  I_REUSE:
   label: In for reuse
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -137,7 +139,8 @@ TMOV:
    container_in_terminal: true
    booking_copy: true
    operation_type: 'MT'
-   lock_INSPECT: IF_EMPTY   
+   lock_INSPECT: IF_EMPTY
+   start_reefer_connection: IF_FULL      
  REQ_ESTIMATE:
   label: Estimate Request
   icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'

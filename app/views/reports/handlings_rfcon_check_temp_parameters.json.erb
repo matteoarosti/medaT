@@ -1,0 +1,67 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   title: '', closable: false,
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	
+     
+    items: [
+       
+     {xtype: 'hidden', name: 'authenticity_token', value: '<%= form_authenticity_token %>'},
+     <%= raw extjs_std_combo_model('shipowner', @hh, {:allowBlank=>true}, {:multiSelect => false}) -%>
+     
+   
+   , {
+            xtype: 'radiogroup',
+            fieldLabel: 'Ordina per',
+            layout: 'hbox',
+            items: [{
+                boxLabel: 'Tipo / Data',
+                name: 'seq_ord',
+                inputValue: 'tipo_date',
+                width: 180               
+            }, {
+                boxLabel: 'Data / Tipo',
+                name: 'seq_ord',
+                inputValue: 'date_tipo',                
+                width: 180,
+                checked: true
+            }]
+        }
+        	
+     	
+     	
+    ],
+    
+   buttons: [
+	{
+        text: '<i class="fa fa-navicon fa"></i> Analitica',
+        handler: function(){
+        	fp = this.up('form');
+            if(fp.getForm().isValid()){
+                fp.getForm().submit({
+                    method: 'POST',
+                    url: '<%= url_for(:controller=>'reports', :action=>'handlings_rfcon_check_temp') -%>',             
+                    params: {formValues: Ext.encode(fp.getValues())},
+                    method: 'POST',
+                    standardSubmit: true,
+                    target: '_blank'
+                });
+            }
+        }
+    }    
+   ] 
+    
+  }
+ ]
+}

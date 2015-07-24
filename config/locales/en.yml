@@ -301,6 +301,7 @@ en:
       movements_rfcon: "Allaccio frigo"            
       in_terminal: "In terminal"
       booking_open: "Open Booking"
+      rfcon_check_temp: "Reefer check temp"      
     user_manager:
       user_manager: "User manager"
       users: "Users"

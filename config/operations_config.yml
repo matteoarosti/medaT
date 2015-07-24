@@ -76,6 +76,7 @@ TMOV:
    seal_exp_copy: true   
    operation_type: 'MT'
    lock_INSPECT: IF_EMPTY
+   start_reefer_connection: true   
  I_RETURN:
   label: 'In From Return'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -112,6 +113,7 @@ TMOV:
    handling_header_status: CLOSE
    booking_copy: true
    operation_type: 'MT'
+   end_reefer_connection: true   
  I_NOT_POSIT:
   label: In for missing positioning
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'
@@ -205,6 +207,14 @@ FRCON:
   set:
    end_reefer_connection: true
    handling_header_status: CLOSE
+ CUST_INSPECTION:
+  icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 
+  label: Custom Inspections
+  check:
+   container_in_terminal: true
+  set:
+   operation_type: 'CI'
+
 
 ########################################################################
 #HANDLING_ONLY_CUSTOMS_INSPECTION:

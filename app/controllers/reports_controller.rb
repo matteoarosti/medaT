@@ -16,6 +16,12 @@ class ReportsController < ApplicationController
    @hi = HandlingItem.new
   end    
 
+ def handlings_rfcon_check_temp_parameters
+   @hh = HandlingHeader.new
+   @hi = HandlingItem.new
+ end    
+ 
+  
    
  def in_terminal_parameters
   @hh = HandlingHeader.new

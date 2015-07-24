@@ -18,9 +18,12 @@
     {xtype: 'hiddenfield', name: 'id', value: '<%= @item.id -%>'}   
     
 	, <%= raw extjs_std_datetimefield('datetime_op', @item) -%>
+	
 	<% if !@item.datetime_op_end.nil? %>
-	, <%= raw extjs_std_datetimefield('datetime_op_end', @item) -%>
-	<% end %>    
+	, <%= raw extjs_std_datetimefield('datetime_op_end', @item) -%>		
+	<% end %>
+	
+    , {xtype: 'tbfill'}, {height: 40, xtype: 'displayfield', fieldLabel: 'Info record', value: <%= raw @item.display_info_record.to_json -%>}	    
    ]
    
    , buttons: [	

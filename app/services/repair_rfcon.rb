@@ -17,7 +17,7 @@ class RepairRfcon
           #print "\n(ingresso pieno con id #{hi.id}) - NO I_DISCHARGE"
           cont_rfcon +=1
           
-          if hi.id == hh.last_dett.id || hh.id == 896 || hh.id == 902
+          if hi.id == hh.last_dett.id
             cont_udett += 1            
             print "\n - ultimo dett -> creo movimento allaccio frigo "
  

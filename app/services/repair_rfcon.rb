@@ -28,8 +28,8 @@ class RepairRfcon
             if !last_datetime_op.nil? && hi.datetime_op < last_datetime_op
               print "\nDa correggere hi #{hi.handling_item_type} con id #{hi.id} (datetime: #{hi.datetime_op.to_s} -> #{last_datetime_op} "
               print "\nLast datetime hh: #{hh.last_dett.datetime_op.to_s}"
-              #hi.datetime_op = last_datetime_op
-              #hi.save!
+              hi.datetime_op = last_datetime_op
+              hi.save!
             else
               last_datetime_op = hi.datetime_op
             end

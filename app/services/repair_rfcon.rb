@@ -1,11 +1,57 @@
 class RepairRfcon
-  def call
-    
+  
+  def test_datetime_op
     cont_hh = 0
     cont_rfcon = 0
     cont_udett  = 0
+
+    #verifico dopo non e' rispettato l'ordinamento datetime_op
+    HandlingHeader.where('handling_type=?', 'TMOV').each do |hh|
+      last_datetime_op = nil
+      error = 0
+      hh.handling_items.order('id').each do |hi|
+        if !last_datetime_op.nil? && hi.datetime_op < last_datetime_op
+          error += 1
+        else
+          last_datetime_op = hi.datetime_op
+        end
+      end
+
+      if error > 0
+        cont_hh +=1
+        print "\n(#{cont_hh}) num_errori: #{error}, Id: #{hh.id}, container: #{hh.container_number}"
+        
+        if error==1
+          last_datetime_op = nil          
+          #provo a correggere l'errore
+          hh.handling_items.order('id').each do |hi|
+            if !last_datetime_op.nil? && hi.datetime_op < last_datetime_op
+              print "\nDa correggere hi #{hi.handling_item_type} con id #{hi.id} (datetime: #{hi.datetime_op.to_s} -> #{last_datetime_op} "
+              #hi.datetime_op = last_datetime_op
+              #hi.save!
+            else
+              last_datetime_op = hi.datetime_op
+            end
+          end          
+        end
+        
+      end
+      
+    end #hh
     
-    HandlingHeader.not_closed.where('handling_type=?', 'TMOV').where('equipment_id IN (2,5)').limit(100).each do |hh|
+    #per ora mi fermo qui
+    return true    
+  end
+  
+  
+  ###############################################################
+  def call    
+  ###############################################################    
+    cont_hh = 0
+    cont_rfcon = 0
+    cont_udett  = 0
+            
+    HandlingHeader.not_closed.where('handling_type=?', 'TMOV').where('equipment_id IN (2,5)').each do |hh|
       cont_hh += 1
       
       #print "\n----------------------------\n"     
@@ -21,11 +67,11 @@ class RepairRfcon
             cont_udett += 1            
             print "\n - ultimo dett -> creo movimento allaccio frigo "
  
-            hi_reefer = hh.handling_items.new()
-            hi_reefer.datetime_op = hi.datetime_op
-            hi_reefer.operation_type = 'AF'
-            hi_reefer.handling_item_type = 'FRCON'
-            hi_reefer.save!            
+ #           hi_reefer = hh.handling_items.new()
+ #           hi_reefer.datetime_op = hi.datetime_op
+ #           hi_reefer.operation_type = 'AF'
+ #           hi_reefer.handling_item_type = 'FRCON'
+ #           hi_reefer.save!            
           
           else
             

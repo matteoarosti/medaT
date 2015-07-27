@@ -9,6 +9,7 @@ class RepairRfcon
     HandlingHeader.where('handling_type=?', 'TMOV').each do |hh|
       last_datetime_op = nil
       error = 0
+      error_datetime_op = nil
       hh.handling_items.order('id').each do |hi|
         if !last_datetime_op.nil? && hi.datetime_op < last_datetime_op
           error_datetime_op = hi.datetime_op

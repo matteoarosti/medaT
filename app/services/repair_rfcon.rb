@@ -1,5 +1,115 @@
 class RepairRfcon
   
+  
+  ########################################################## 
+  def call_all
+  ##########################################################
+    cont_hh = 0
+    cont_rfcon = 0
+    cont_udett  = 0
+       
+    
+   
+    HandlingHeader.where('handling_type=?', 'TMOV').where('equipment_id IN (2,5)').each do |hh|
+      cont_hh += 1
+      
+      hh_status = 0  #0 default, 1 con 'I' 'F' trovato, 2 con RFCON, 3 con 'O' 'F' trovato
+      hi_start = nil
+      hi_end = nil      
+
+      print "\n-----------------------------------------------------------"
+      print "\nId: #{hh.id}, container: #{hh.container_number}"      
+                 
+      #scorro i movimenti in ordine
+      hh.handling_items.order('datetime_op, id').each do |hi|
+
+        #INGRESSO PIENO
+        if hi.handling_type == 'I' && hi.container_FE == 'F'
+          print "\n(ingresso pieno con id #{hi.id})"
+          if hh_status != 0
+            print "\nErrore hh_status (#{hh_status})"
+            return 
+          end
+          
+          hh_status = 1
+          hi_start = hi          
+        end
+
+                
+        #USCITA PIENO
+        if hi.handling_type == 'O' && hi.container_FE == 'F'
+          print "\n(uscita pieno con id #{hi.id})"
+          if hh_status < 1
+            print "\n*************Errore hh_status (#{hh_status})************"
+            return unless hi.handling_item_type == 'O_LOAD'
+          end
+          
+          
+          if hh_status == 2 #con RFCON
+            print "\nRFCON gia' presente"
+            #resetto stato
+            hh_status = 0
+            hi_start = nil
+            hi_end = nil                  
+          end
+
+          if hh_status == 1 #solo ingresso PIENO
+            hh_status = 1
+            hi_end = hi          
+            
+            print "\nCreo RFCON con data #{hi_start.datetime_op.to_s} - #{hi_end.datetime_op.to_s}"
+            
+            if hi_start.datetime_op == hi_end.datetime_op
+              print "\nDate hi_start e hi_end coincidenti. "
+              return
+            end
+
+              #creo dettaglio allaccio frigo
+                       hi_reefer = hh.handling_items.new()
+                       hi_reefer.datetime_op = hi_start.datetime_op
+                       hi_reefer.datetime_op_end = hi_end.datetime_op
+                       hi_reefer.operation_type = 'AF'
+                       hi_reefer.handling_item_type = 'FRCON'
+                       hi_reefer.save!            
+            
+            
+            #resetto stato
+            hh_status = 0
+            hi_start = nil
+            hi_end = nil      
+            
+          end
+                              
+        end
+        
+        
+        
+        #Allaccio frigo
+        if hi.handling_item_type == 'FRCON'
+          print "\nTrovato allaccio frigo"
+          hh_status = 2
+        end
+        
+        
+      end #do hi
+      
+      
+      #print "\n\n"
+    end
+    
+    print "\n\nTotale hh: #{cont_hh}"
+    print "\n\nTotale hh con rfcon: #{cont_rfcon}"
+    print "\n\nTotale hh udett: #{cont_udett}"    
+    
+  end
+  
+  
+  
+  
+  
+  
+  
+  
   def test_datetime_op
     cont_hh = 0
     cont_rfcon = 0

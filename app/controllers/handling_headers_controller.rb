@@ -64,7 +64,7 @@ end
 def hitems_sc_list  
 ##################################################
   ret = {}
-   ret[:items] = HandlingItem.handlingHeader(params[:handling_id]).joins(:handling_header).limit(1000).as_json(HandlingItem.as_json_prop)
+   ret[:items] = HandlingItem.handlingHeader(params[:handling_id]).joins(:handling_header).order('datetime_op, id').limit(1000).as_json(HandlingItem.as_json_prop)
    ret[:success] = true
    render json: ret 
 end
@@ -258,7 +258,7 @@ end
    next_datetime_op = nil
    finded = false
    
-   item.handling_header.handling_items.order('datetime_op asc').each do |hi|
+   item.handling_header.handling_items.order('datetime_op, id').each do |hi|
      if hi.id == item.id
        finded = true
        next #passo al record successivo 

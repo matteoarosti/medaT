@@ -72,14 +72,12 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 		 <tr>
 		  <th width=70>Data/ora</th>
 		  <th width=70>Disallaccio</th>
+		  <th width=100>Giornate fatt.</th>
 		  <th width=40>Tipo</th>
 		  <th width=80>Container</th>
 		  <th width=80>Booking</th>
 		  <th width=80>Nave</th>
 		  <th width=80>Viaggio</th>
-		  <th width=80>Vettore</th>
-		  <th width=80>Autista</th>
-		  <th width=80>Sigillo</th>		  		  
 		 </tr>
 
 		<% op_val.sort_by{|a| 
@@ -151,14 +149,12 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
  			<tr>
  				<td><%= row.datetime_op.strftime("%d/%m/%y %H:%M") -%></td>
  				<td><%= row.datetime_op_end.strftime("%d/%m/%y %H:%M") unless row.datetime_op_end.nil? -%></td>
+ 				<td><%= "#{(((((row.datetime_op_end - row.datetime_op).to_i / 3600).to_i + 1)/24).to_i + 1)}" unless row.datetime_op_end.nil? %></td>
 				<td><%= eq.equipment_type -%></td>				
 				<td><%= row.handling_header.container_number.to_s -%></td>
 				<td><%= out_booking -%></td>
 				<td><%= out_ship -%></td>
 				<td><%= out_voyage -%></td>
-				<td><%= row.carrier.name.to_s unless row.carrier.blank? -%></td>
-				<td><%= row.driver.to_s -%></td>
-				<td><%= out_seal -%></td>
 			</tr>
 		<% end %>
 		</table>

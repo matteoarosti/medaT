@@ -275,7 +275,7 @@ end
    end
   
    
-if 1==2    
+    
    if (!prev_datetime_op.nil? && params[:data][:datetime_op] < prev_datetime_op) || 
       (!next_datetime_op.nil? && params[:data][:datetime_op] > next_datetime_op)       
       render json: {:success => false, :message => "Data operazione non valida (verifica dettaglio movimento precedente o successivo)"}
@@ -288,7 +288,7 @@ if 1==2
         return
      end
    end
-end      
+      
         
    params[:data][:fl_send_email_carrier] = nil if params[:data][:fl_send_email_carrier] == false
              

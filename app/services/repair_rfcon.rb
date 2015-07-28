@@ -23,12 +23,12 @@ class RepairRfcon
         cont_hh +=1
         print "\n(#{cont_hh}) num_errori: #{error}, Id: #{hh.id}, container: #{hh.container_number}"
         
-        if error==1 && error_datetime_op < '01-07-2015 00:00:00'
+        if error==1
           last_datetime_op = nil                    
           #provo a correggere l'errore
           hh.handling_items.order('id').each do |hi|
             if !last_datetime_op.nil? && hi.datetime_op < last_datetime_op
-              if hi.datetime_op < '01-07-2015 00:00:00' && last_datetime_op < '01-07-2015 00:00:00'
+              if hi.datetime_op < '25-06-2015 00:00:00' && last_datetime_op < '25-06-2015 00:00:00'
                 print "\nDa correggere hi #{hi.handling_item_type} con id #{hi.id} (datetime: #{hi.datetime_op.to_s} -> #{last_datetime_op} "
                 print "\nLast datetime hh: #{hh.last_dett.datetime_op.to_s}"                
                 print "\n - ESEGUO"

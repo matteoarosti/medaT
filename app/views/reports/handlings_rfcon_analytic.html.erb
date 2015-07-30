@@ -31,10 +31,10 @@ end
 items = HandlingItem.where('1=1')
 items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']} }) unless formValues['shipowner_id'].blank?
 items = items.where({handling_item_type: formValues['handling_item_type']}) unless formValues['handling_item_type'].blank?
-items = items.where("datetime_op >= ?", datetime_from) unless formValues['datetime_op_from'].blank?
-items = items.where("datetime_op <= ?", datetime_to) unless formValues['datetime_op_to'].blank?
+items = items.where("datetime_op_end >= ?", datetime_from) unless formValues['datetime_op_from'].blank?
+items = items.where("datetime_op_end <= ?", datetime_to) unless formValues['datetime_op_to'].blank?
 items = items.where("operation_type = ?", 'AF')
-items = items.where("datetime_op_end IS NOT NULL") if formValues['only_close'] == true
+items = items.where("datetime_op_end IS NOT NULL")
 
 
 items = items.joins(:handling_header)
@@ -55,13 +55,64 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 
 	<%
  	######################################################
- 	#Tipo operazioni
+ 	#Nave/Viaggio fase di imbarco/sbarco
  	###################################################### 
 	%>
- 	<% group_op = so_val.group_by { |d| d.handling_item_type } %>
-	<% group_op.each do |op_id, op_val| %>
+ 	<% group_op = so_val.group_by { |d|
+ 		### d.handling_item_type
+ 		 
+ 		#gestisco raggruppamento con un array
+ 		k = {:ship => nil, :voyage => nil} 		
+ 		k[:handling_type]	 = d.handling_header.handling_type
+ 		k[:is_import_export] = d.is_import_export()
+		bk = d.search_booking 		
+ 		
 
- 		<p class="bg-success" style="padding: 5px 10px"><%= t("operations.#{op_id}.long") -%></p>
+		  if k[:handling_type] == 'TMOV'			 
+			  if k[:is_import_export] == 'E'
+			  	#Export: provo a recuperare nave/viaggio da booking
+			  	  hi_O_LOAD = d.handling_header.get_O_LOAD			 			 
+			  	  if !hi_O_LOAD.nil?
+			  	    k[:ship] 	= hi_O_LOAD.ship.name.to_s
+				    k[:voyage]	= hi_O_LOAD.voyage.to_s
+			  	  else
+				   if !bk.nil?
+				    k[:ship] 	= "[#{bk.ship.name.to_s}]"
+				    k[:voyage]	= "[#{bk.voyage.to_s}]"
+				   end
+				  end 
+			  else
+			     #Import: provo a recuperare nave/viaggio dal movimento di sbarco
+			       hi_discharge = d.handling_header.get_I_DISCHARGE
+			       if !hi_discharge.nil?
+			  	    k[:ship] 	= hi_discharge.ship.name.to_s
+			  	    k[:voyage] 	= hi_discharge.voyage.to_s
+			  	   end
+			  end
+		   end  
+		k
+
+ 		 
+    } %>
+	<% group_op.sort_by{|a| 
+		[		
+			a[0][:ship].to_s,
+			a[0][:voyage].to_s,
+			a[0][:handling_type],
+			a[0][:is_import_export]
+			
+		]
+	}.each do |op_id, op_val| %>
+
+ 		<p class="bg-success" style="padding: 5px 10px">
+ 			<b><%= t("handling_type.#{op_id[:handling_type]}.long") -%></b>
+ 			<% if op_id[:handling_type] == 'TMOV' %>
+ 			 <% out_fase_di = op_id[:is_import_export]=='I' ? 'IMPORT' : 'EXPORT' %>
+ 			 <span>
+ 			 	Nave: <b><%= op_id[:ship]-%></b>, Viaggio: <b><%= op_id[:voyage] -%></b>, Fase di <b><%= out_fase_di -%></b>
+ 			 </span>
+ 			<% end %> 
+ 		</p>
 
 		<%
  		######################################################
@@ -75,9 +126,6 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 		  <th width=100>Giornate fatt.</th>
 		  <th width=40>Tipo</th>
 		  <th width=80>Container</th>
-		  <th width=80>Booking</th>
-		  <th width=80>Nave</th>
-		  <th width=80>Viaggio</th>
 		 </tr>
 
 		<% op_val.sort_by{|a| 
@@ -152,9 +200,6 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
  				<td><%= "#{(((((row.datetime_op_end - row.datetime_op).to_i / 3600).to_i + 1)/24).to_i + 1)}" unless row.datetime_op_end.nil? %></td>
 				<td><%= eq.equipment_type -%></td>				
 				<td><%= row.handling_header.container_number.to_s -%></td>
-				<td><%= out_booking -%></td>
-				<td><%= out_ship -%></td>
-				<td><%= out_voyage -%></td>
 			</tr>
 		<% end %>
 		</table>

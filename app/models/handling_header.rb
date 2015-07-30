@@ -111,7 +111,14 @@ class HandlingHeader < ActiveRecord::Base
  def last_OUT
   hh = self.handling_items.where("handling_type = ?", "O").order('datetime_op desc, id desc').first
  end 
- 
+
+ def get_I_DISCHARGE
+  hh = self.handling_items.where("handling_item_type = ?", "I_DISCHARGE").first
+ end 
+  
+ def get_O_LOAD
+  hh = self.handling_items.where("handling_item_type = ?", "O_LOAD").first
+ end
  
 
 #COSTANTI (DA NON USARE PIU')

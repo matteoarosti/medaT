@@ -17,10 +17,10 @@ end
 items = HandlingItem.where('1=1')
 items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']} }) unless formValues['shipowner_id'].blank?
 items = items.where({handling_item_type: formValues['handling_item_type']}) unless formValues['handling_item_type'].blank?
-items = items.where("datetime_op >= ?", datetime_from) unless formValues['datetime_op_from'].blank?
-items = items.where("datetime_op <= ?", datetime_to) unless formValues['datetime_op_to'].blank?
+items = items.where("datetime_op_end >= ?", datetime_from) unless formValues['datetime_op_from'].blank?
+items = items.where("datetime_op_end <= ?", datetime_to) unless formValues['datetime_op_to'].blank?
 items = items.where("operation_type = ?", 'AF')
-items = items.where("datetime_op_end IS NOT NULL") if formValues['only_close'] == true
+items = items.where("datetime_op_end IS NOT NULL")
 
 
 items = items.select('shipowner_id, handling_item_type, equipment_id, count(*) as C_ROW').joins(:handling_header).group("shipowner_id, handling_item_type, equipment_id")

@@ -20,15 +20,6 @@
      {xtype: 'hidden', name: 'authenticity_token', value: '<%= form_authenticity_token %>'},
      <%= raw extjs_std_combo_model('shipowner', @hh, {:allowBlank=>true}, {:multiSelect => false}) -%>,
      
-     
-  /*  
-  ToDo: recuperare in automatico tutti i possibile valori di handling_item_type
-     <%= raw extjs_std_combo('handling_item_type', @hi,
-    	{:store => extjs_std_store_data(@hi.handling_item_type_get_data_json), :allowBlank=>true},
-    	{:multiSelect => true}
-    	) -%>,
-   */ 	
-    	
     	
    		{
 			                xtype: 'fieldcontainer',
@@ -60,10 +51,9 @@
      		{xtype: 'timefield', name: 'datetime_op_to_time', width:  70},
      		
      		]
-     	},
+     	}
 
-     	
-  {xtype: 'checkbox', value: false, name: 'only_close', fieldLabel: 'Solo op. chiuse', inputValue: true, uncheckedValue: false}   	
+     	   	
    
    , {
             xtype: 'radiogroup',

@@ -65,6 +65,31 @@
      	
      	
    {xtype: 'checkbox', value: true, name: 'only_MT', fieldLabel: 'Solo op. di movimentazione', inputValue: true, uncheckedValue: false}
+
+
+   , {
+            xtype: 'radiogroup',
+            fieldLabel: 'Pieni/Vuoti',
+            layout: 'hbox',
+            items: [{
+                boxLabel: 'Pieni',
+                name: 'flt_container_FE',
+                inputValue: 'F',
+                width: 180               
+            }, {
+                boxLabel: 'Vuoti',
+                name: 'flt_container_FE',
+                inputValue: 'E',
+                width: 180               
+            }, {
+                boxLabel: 'Entrambi',
+                name: 'flt_container_FE',
+                inputValue: '',
+                width: 180,
+                checked: true
+            }]
+        }
+
    
    , {
             xtype: 'radiogroup',

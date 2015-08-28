@@ -360,12 +360,41 @@ end
       end    
       render json: items.limit(2000).as_json(hh_as_json_prop)
 
-   when 'to_be_moved'          
+   when 'to_be_moved'
      #per ogni hh aggiungo altre informazioni 11111
      hh_as_json_prop = HandlingItem.as_json_prop
      hh_as_json_prop[:include] = hh_as_json_prop[:include] || [] 
-     hh_as_json_prop[:include] << {:handling_header => {:include=>[:equipment, :shipowner]}}              
-     render json: HandlingItem.where('1=1').to_be_moved.limit(1000).as_json(hh_as_json_prop)     
+     hh_as_json_prop[:include] << {:handling_header => {:include=>[:equipment, :shipowner]}}
+     ret = HandlingItem.where('1=1').to_be_moved.limit(500)
+     
+     #recupero tutte le prenotazioni container (uscita per riempimento, in cui e' il mulettista a scegliere il container)
+     
+     to_do_items = ToDoItem.where('1=1').not_closed.prenotazione_container.limit(1000).each do |tdi|
+       ret << {
+         :to_be_moved_type => tdi.to_do_type,
+         :id => tdi.id, #attenzione: se ho lo stesso id di un handling_item potrebbe non essere visualizzato
+         :handling_type => tdi.handling_type,
+         :container_FE => tdi.container_FE,
+         :carrier_id_Name => tdi.carrier.name,
+         :driver => tdi.driver,
+         :created_at => tdi.created_at,
+         :handling_header => {
+            :container_number => "DA ASSEGNARE",
+            :fila => '', :blocco => '', :tiro => '',
+            :shipowner => {:name => tdi.shipowner.name},
+            :equipment => {:equipment_type => tdi.equipment.equipment_type}
+         }
+       }       
+     end
+     
+     #ordino per data     
+     render json: ret.sort_by{|a|
+       if a.is_a? Hash
+         a[:created_at]         
+       else
+         a.created_at
+       end 
+     }.as_json(hh_as_json_prop)     
    end 
  end
    

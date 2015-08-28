@@ -118,18 +118,44 @@ Ext.define('FeedViewer.ScGrid', {
                 		newPanel.getViewModel().setData({rec: new_rec});
                     	myApp.feedInfo.add(newPanel).show();			    			
 			    		}, scope: this},
+			    				    	
+			    	{text: 'Filtra', iconCls: 'fa fa-filter fa-2x', handler: function(){
+			    		my_listeners = {
+		                		onConfirm: function(fromWindow, fromForm){
+		                			this.down('grid').getStore().proxy.extraParams['my_filters'] = fromForm.getValues();
+		                			fromWindow.close();
+		                			this.down('grid').getStore().load();		                			
+		                		}, scope: this
+			    		
+			    		};
+			    		new_win = acs_show_win_std('Applica Filtri', 
+			    				this.filter_url,
+				     	 		this.down('grid').getStore().proxy.extraParams,
+				     	 		400, 300, my_listeners);										
+						 			    			
+			    		}, scope: this},			    	
 			    	
 					{xtype: 'tbfill'}, 
 					{text: 'Elimina', iconCls: 'fa fa-trash fa-2x', cls: 'btn-del',
 						handler: function(a,b,c,d){
 								grid = this.up('grid');
 			                    var selection = grid.getView().getSelectionModel().getSelection();
-			                    if (selection) {
-			                        if(selection.length>0) {
-						                    grid.getStore().remove(selection);
-						                    grid.getStore().sync();
-						            }
-			                    }
+			                    
+								Ext.MessageBox.confirm('Richieta conferma', 'Eliminare i record correnti?', function(btn){
+								  if(btn === 'yes'){
+					  			                    
+				                    if (selection) {
+				                        if(selection.length>0) {
+							                    grid.getStore().remove(selection);
+							                    grid.getStore().sync();
+							            }
+				                    }
+			                      
+			                      
+			                      
+			                      }
+			                    });
+			                    
 			                }					
 					}
 				]
@@ -161,9 +187,9 @@ Ext.define('FeedViewer.ScGrid', {
     				 if (form.isValid()) { 
     					 rec.save({
 							success: function(rec, op) {
-							//aggiorno il recordset con il record ritornato dal server (per id, updated_at...)
-							var result = Ext.JSON.decode(op.getResponse().responseText);
-							rec.set(result.data[0]);	
+								//aggiorno il recordset con il record ritornato dal server (per id, updated_at...)
+								var result = Ext.JSON.decode(op.getResponse().responseText);
+							 	rec.set(result.data[0]);	
 							},
     					 
     					 });
@@ -177,10 +203,18 @@ Ext.define('FeedViewer.ScGrid', {
     				panel = this.up('panel');
     				grid = this.up('grid');
     				rec = this.up('form').getViewModel().getData().rec;
-    				 if (form.isValid()) { 
-    					 grid.getStore().remove(rec);
-    					 panel.close();
-    				 }
+    				
+    				
+					Ext.MessageBox.confirm('Richieta conferma', 'Eliminare i record correnti?', function(btn){
+					  if(btn === 'yes'){
+    				
+	    				 if (form.isValid()) { 
+	    					 grid.getStore().remove(rec);
+	    					 panel.close();
+	    				 }
+    				  }
+    			    });				 
+	    				 
     			}
     		}	
     		]

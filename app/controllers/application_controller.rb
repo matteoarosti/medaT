@@ -36,6 +36,11 @@ class ApplicationController < ActionController::Base
     }  
   end
   
+  #apertura form filtri
+  def extjs_sc_crt_filter_view
+    model_class = extjs_sc_model.to_s
+    @item = model_class.constantize.new
+  end
   
  
   def get_combo_data
@@ -53,7 +58,17 @@ class ApplicationController < ActionController::Base
     model_class = extjs_sc_model.to_s
       
     ret = {}
-    ret[:items] = model_class.constantize.extjs_default_scope.limit(params[:limit]).offset(params[:start]).as_json(model_class.constantize.as_json_prop)
+    ret[:items] = model_class.constantize.extjs_default_scope
+      
+    #gestione eventuali filtri
+    unless params[:my_filters].nil?
+      params[:my_filters].each do |kp, p|
+        ret[:items] = ret[:items].where("#{kp} = ?", p) unless p.blank?
+      end
+    end  
+      
+        
+    ret[:items] = ret[:items].limit(params[:limit]).offset(params[:start]).as_json(model_class.constantize.as_json_prop)
     ret[:total] = model_class.constantize.extjs_default_scope.count
     
     render json: ret
@@ -129,14 +144,21 @@ class ApplicationController < ActionController::Base
   ret[:url] = url_for(:action=>'extjs_sc_list')
   ret[:method] = 'POST'
   ret[:type] = 'ajax'
-  ret[:actionMethods] = 'POST'
+  ret[:paramsAsJson] = true
+  
+  ###ret[:actionMethods] = 'POST'
+  ret[:actionMethods] = {
+     :read => 'POST',
+     :create => 'POST',
+     :update => 'POST',
+     :destroy => 'POST'
+  }
+
   
   
   ret[:reader] = {:type => 'json', :method => 'POST', :rootProperty=>'items', :totalProperty=> 'total'}
   ret[:writer] = {:type => 'json', :rootProperty => 'data', :writeAllFields=>true,
-              :getRecordData => "function (record)
-            {
-              console.log('getRecordData2222');
+              :getRecordData => "function (record){
                 return { 'data': Ext.JSON.encode(record.data) };
             }"}
   ret[:api] = {

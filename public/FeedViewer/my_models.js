@@ -52,7 +52,6 @@ Ext.define("Shipowner", { extend: "Ext.data.Model",
             rootProperty: 'data',
             getRecordData: function (record)
         		{
-        			console.log('getRecordData');
           			return { 'data': Ext.JSON.encode(record.data) };
         		}
         },        
@@ -369,6 +368,139 @@ Ext.define("Terminal", { extend: "Ext.data.Model",
             successProperty: 'success',
             rootProperty: 'items',
             messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});
+Ext.define("RepairPosition", { extend: "Ext.data.Model",
+    fields: [],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: root_path + 'repair_positions/sc_read',
+            create: root_path + 'repair_positions/sc_create',
+            update: root_path + 'repair_positions/sc_update',
+            destroy: root_path + 'repair_positions/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});
+Ext.define("RepairComponent", { extend: "Ext.data.Model",
+    fields: [],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: root_path + 'repair_components/sc_read',
+            create: root_path + 'repair_components/sc_create',
+            update: root_path + 'repair_components/sc_update',
+            destroy: root_path + 'repair_components/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});
+Ext.define("RepairProcessing", { extend: "Ext.data.Model",
+    fields: [],
+    proxy: {
+        type: 'ajax',
+        api: {
+            read: root_path + 'repair_processings/sc_read',
+            create: root_path + 'repair_processings/sc_create',
+            update: root_path + 'repair_processings/sc_update',
+            destroy: root_path + 'repair_processings/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});
+Ext.define("RepairPrice", { extend: "Ext.data.Model",
+    fields: [],    
+    proxy: {
+        type: 'ajax',
+        
+        method: 'POST',
+        
+		//Add these two properties
+		actionMethods: {
+			read: 'POST'
+		},
+        
+        api: {
+            read: root_path + 'repair_prices/sc_read',
+            create: root_path + 'repair_prices/sc_create',
+            update: root_path + 'repair_prices/sc_update',
+            destroy: root_path + 'repair_prices/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message',
+            method: 'POST'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});
+Ext.define("ToDoItem", { extend: "Ext.data.Model",
+    fields: [],    
+    proxy: {
+        type: 'ajax',
+        
+        method: 'POST',
+        
+		//Add these two properties
+		actionMethods: {
+			read: 'POST'
+		},
+        
+        api: {
+            read: root_path + 'to_do_items/sc_read',
+            create: root_path + 'to_do_items/sc_create',
+            update: root_path + 'to_do_items/sc_update',
+            destroy: root_path + 'to_do_items/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message',
+            method: 'POST'
         },
         writer: {
             type: 'json',

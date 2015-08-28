@@ -682,6 +682,25 @@ Ext.define('FeedViewer.MovimentoPanel', {
         	, {
         	    xtype: 'gridpanel',        		
         	    title: 'Distinta movimenti', flex: 50,
+        	    
+/*        	    
+        	    features: [
+        	               Ext.create('Ext.grid.feature.RowBody', {
+        	                   getAdditionalData : function(data, rowIndex, record, orig) {
+        	                       var headerCt = this.view.headerCt;
+        	                       var colspan = headerCt.getColumnCount();
+        	                       return {
+        	                           rowBody : '<div style="padding-left: 130px;padding-top:5px"><b>Continent:</b> Some bla bla bla for record on row number ' + rowIndex + '</div>',
+        	                           //rowBodyCls : (rowIndex % 2) ? 'bg-snow' : this.rowBodyCls,
+        	                           rowBodyColspan : colspan
+        	                       };
+        	                   }
+        	               })        
+        	           ],
+ */       	           
+        	           
+        	           
+        	    
         	    tools: [{  
 		                xtype: 'button',
 		                text: 'Aggiungi <i class="fa fa-plus-circle"></i>',

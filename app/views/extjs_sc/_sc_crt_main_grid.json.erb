@@ -1,6 +1,9 @@
 {
   xtype: 'sc_grid',
   model_name: <%= raw (sc_model_class).to_json -%>,
+  
+  filter_url: <%= raw url_for(:action => 'extjs_sc_crt_filter_view').to_json -%>,
+  
   title: <%= raw (sc_model_class + ' List').to_json -%>,
   closable: true,
   

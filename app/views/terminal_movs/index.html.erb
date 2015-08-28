@@ -94,7 +94,42 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                  task:<%= raw t("menu.tables.terminals").to_json %>,
                                  url: '<%= url_for(:controller=>'terminals', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
-                             }   		                 
+                             }
+                             
+                             
+                             //riparazioni
+							 , {
+	    		                task:<%= raw t("menu.tables.tables_repair").to_json %>,
+	    		                iconCls:'task-folder', 
+	    		                expanded: false,
+	    		                children:
+	    		                [
+								  { 
+                                 	task:<%= raw t("menu.tables.repair_positions").to_json %>,
+                                 	url: '<%= url_for(:controller=>'repair_positions', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 	leaf:true 
+                             	  },
+								  { 
+                                 	task:<%= raw t("menu.tables.repair_components").to_json %>,
+                                 	url: '<%= url_for(:controller=>'repair_components', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 	leaf:true 
+                             	  },
+								  { 
+                                 	task:<%= raw t("menu.tables.repair_processing").to_json %>,
+                                 	url: '<%= url_for(:controller=>'repair_processings', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 	leaf:true 
+                             	  },
+								  { 
+                                 	task:<%= raw t("menu.tables.repair_prices").to_json %>,
+                                 	url: '<%= url_for(:controller=>'repair_prices', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 	leaf:true 
+                             	  }
+                             	  
+	    		                ]                             
+                              }
+                             
+                             
+                                		                 
     		                ]
                         }, {
                         task:<%= raw t("menu.movements.movements").to_json %>,
@@ -121,6 +156,11 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                     task: <%= raw t("menu.movements.to_handle").to_json %>,
                                     leaf: true,
                                  	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'to_be_moved') -%>',                                    
+                                    op: 'new_tab',                                
+                                }, {
+                                    task: <%= raw t("menu.movements.prenotations").to_json %>,
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'to_do_items', :action=>'extjs_sc_crt_tab') -%>',                                    
                                     op: 'new_tab',                                
                                 }
                             ]

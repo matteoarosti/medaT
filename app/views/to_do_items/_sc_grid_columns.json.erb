@@ -1,0 +1,31 @@
+[
+{"text":"id",			"dataIndex":"id",					width: 60, "xtype":"numbercolumn","align":"right","format":"0"},
+{text: "<%= t('tables.to_do_items.status') -%>",  "dataIndex":"status",  "flex":1},
+{text: "<%= t('tables.to_do_items.handling_item_type') -%>",  "dataIndex":"handling_item_type",  "flex":1},
+{text: "<%= t('tables.to_do_items.num_booking') -%>",  "dataIndex":"num_booking",  "flex":1},
+{text: "<%= t('tables.ship_owners.ship_owners') -%>",  "dataIndex":"shipowner_id",  "flex":1,
+	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+					 if (typeof(rec.data.shipowner) === 'undefined')
+					 	return value;
+					 else
+					 	return rec.data.shipowner.name;
+	}
+},
+{text: "<%= t('tables.equipment.equipment_type') -%>",  "dataIndex":"equipment_id",  "flex":1,
+	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+					 if (typeof(rec.data.equipment) === 'undefined')
+					 	return value;
+					 else
+					 	return rec.data.equipment.equipment_type;
+	}
+},
+{text: "<%= t('tables.carriers.name') -%>",  "dataIndex":"carrier_id",  "flex":1,
+	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+					 if (typeof(rec.data.carrier) === 'undefined')
+					 	return value;
+					 else
+					 	return rec.data.carrier.name;
+	}
+},
+{text: "<%= t('tables.to_do_items.driver') -%>",  "dataIndex":"driver",  "flex":1},
+]

@@ -1,0 +1,13 @@
+[
+	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
+	<%= raw extjs_std_combo_bind('status', @new_rec, :field_name => 'status', :store => extjs_std_store_data(ToDoItem.new.status_get_data_json)) -%>,
+	<%= raw extjs_std_combo_bind('to_do_type', @new_rec, :field_name => 'to_do_type', :store => extjs_std_store_data(ToDoItem.new.to_do_type_get_data_json)) -%>,
+	<%= raw extjs_std_combo_bind('handling_item_type', @new_rec, :field_name => 'handling_item_type', :store => extjs_std_store_data(ToDoItem.new.handling_item_type_get_data_json)) -%>,	
+	<%= raw extjs_std_combo_bind('handling_type', @new_rec, :field_name => 'handling_type', :store => extjs_std_store_data(ToDoItem.new.handling_type_get_data_json)) -%>,
+	<%= raw extjs_std_combo_bind('container_FE', @new_rec, :field_name => 'container_FE', :store => extjs_std_store_data(ToDoItem.new.container_FE_get_data_json)) -%>,	
+	{"fieldLabel":"<%= t('tables.to_do_items.num_booking') -%>","bind":"{rec.num_booking}","maxLength":50},
+	<%= raw extjs_std_combo_model_bind('shipowner', @new_rec) -%>,
+	<%= raw extjs_std_combo_model_bind('equipment', @new_rec) -%>,
+	<%= raw extjs_std_combo_model_bind('carrier', @new_rec) -%>,
+	{"fieldLabel":"<%= t('tables.to_do_items.driver') -%>","bind":"{rec.driver}","maxLength":50}
+]

@@ -1,0 +1,10 @@
+[
+	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
+	<%= raw extjs_std_combo_model_bind('repair_processing', @new_rec) -%>,
+	<%= raw extjs_std_combo_model_bind('shipowner', @new_rec) -%>,
+	<%= raw extjs_std_numberfield_bind('customer_time', @new_rec) -%>,
+	<%= raw extjs_std_numberfield_bind('customer_material_price', @new_rec) -%>,
+
+	<%= raw extjs_std_numberfield_bind('provider_time', @new_rec) -%>,
+	<%= raw extjs_std_numberfield_bind('provider_material_price', @new_rec) -%>,	
+]

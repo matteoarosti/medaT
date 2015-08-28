@@ -1,6 +1,14 @@
 it:
   search: "Ricerca"
   tables:
+    std:
+      description_it: "Descrizione (it)"
+      description_en: "Descrizione (en)"
+    to_do_items:
+      num_booking: "Num. booking"
+      driver: "Autista"
+      handling_item_type: "Tipo"
+      status: "Stato"
     equipment:
       equipment: "tipi container"
       equipment_type: "tipo"
@@ -53,6 +61,17 @@ it:
       terminals: "terminal"
       code: "codice terminal"
       name: "denominazione"
+    repair_processings:
+      repair_component: "Componente"  
+      repair_position: "Posizione"
+      preparation_time_type: "Tipo preparation time"
+    repair_prices:
+      repair_processing: "Processo"
+      customer_time: "Tempo (cliente)"
+      customer_material_price: "Costo materiale (cliente)"
+      provider_time: "Tempo (fornitorie)"
+      provider_material_price: "Costo materiale (fornitore)"
+      
   forms:
     mov_search:
       insert_n: "inserisci il numero di container/booking:"
@@ -263,6 +282,7 @@ it:
       to_inspect_from_ship: "Da ispezionare (da nave)"
       damaged: "Danneggiati"
       to_handle: "Da movimentare"
+      prenotations: "Prenotazioni / ToDo"
     bookings:
       bookings: "Booking"
       new_booking: "Nuovo booking"

@@ -140,13 +140,97 @@
 			            setTimeout(function() {
 			            			          
 			                ok_img = 'fa-check-circle';
-			                				            
 			            
 			                var buttonOK = Ext.create('Ext.button.Button', {
 			                	
 								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
 		                		scale: 'large',			                    
 			                        handler: function(button, b, c, d, e) {
+			                        
+			                           if (rec.get('to_be_moved_type') == 'CONT_PRE_ASS'){
+			                            //e' una preassegnazione di container (es: uscita vuoto per riempimento)
+			                            // apro la maschera perche' e' direttamente il mulettista che sceglie il container e esegue l'operazione sul movimento
+			                            console.log('PRE-ASSEGNAZIONE'); 
+				                			                             
+			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+			                           header_form_values = header_form.getValues();
+			                             
+           								loc_form = Ext.create('Ext.form.Panel', {
+											    title: '',
+											    bodyPadding: 10,
+											    defaultType: 'textfield',
+											    	layout: {
+													    type: 'vbox',
+													    align : 'stretch',
+													    pack  : 'start',
+													},
+											    items: [
+											      {xtype: 'hiddenfield', name: 'to_do_item_id', value: rec.get('id')},
+											      {xtype: 'textfield', 	   name: 'num_container', fieldLabel: 'Container'},
+											      {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes'}										    										    										    
+											    ]
+											    , 	buttons:
+												        [{
+												            text: <%= raw t('forms.to_be_handled.confirm').to_json -%>,
+												            handler: function (btn, evt) {              
+												             form = this.up('form').getForm();
+												             tmp_win  = this.up('window');
+												             if (form.isValid()) {
+																Ext.Ajax.request({
+																   method: 'POST',
+																   url: '<%= url_for(:controller=>'to_do_items', :action=>'close_to_be_moved') -%>',
+																   jsonData: {
+																   	data: form.getValues()
+																   },
+																   success: function(result, request) {
+																   
+																      var jsonData = Ext.JSON.decode(result.responseText);
+																   
+																   	  if (jsonData.success == false){
+																		Ext.MessageBox.show({
+													                        title: 'EXCEPTION',
+													                        msg: jsonData.message,
+													                        icon: Ext.MessageBox.ERROR,
+													                        buttons: Ext.Msg.OK
+												                    	})															   	  
+																   	  } else {
+																	      store.remove(rec);
+																	      tmp_win.close();
+																   	  }																   
+																   
+
+																   },
+																   failure: function(response, opts) {
+																      console.log('server-side failure with status code ' + response.status);
+																		Ext.MessageBox.show({
+													                        title: 'EXCEPTION',
+													                        msg: response.status,
+													                        icon: Ext.MessageBox.ERROR,
+													                        buttons: Ext.Msg.OK
+												                    	})																      
+																   }
+																});	
+															  return false;												             
+												             }
+												            }
+												          }
+												         ]
+	  
+											});		
+											
+				                           loc_win = Ext.create('Ext.window.Window',{
+											    layout: 'fit',
+											    items: loc_form,
+											    title: <%= raw t('forms.to_be_handled.import_confirm').to_json -%>,
+											    width: 500,
+											    height: 300,
+											    id: 'myWindow'
+											}).show();
+														                             
+			                             
+			                             
+			                           	return false; //FINE PRE-ASSEGNAZIONE
+			                           }
 			                        
 			                           //costruisco una form
 			                           //se ho spuntato 'hide_check' committo subito

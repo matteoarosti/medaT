@@ -34,6 +34,42 @@ module ApplicationHelper
  end
 
 
+ 
+  def extjs_std_combo_bind(name, item, p = {}, attr = {})
+  
+   field_name = p[:field_name] || name + '_id'
+   if p[:displayField].nil?
+     p[:valueField] = 'cod'
+     p[:displayField] = 'descr'
+   else
+     p[:valueField] = p[:valueField] || p[:displayField]
+   end
+   
+   add_attr = extsj_create_attr_str(attr)
+   
+   ret = "
+     {
+       xtype: 'combobox', 
+       fieldLabel: #{name.humanize.to_json},
+       displayField: #{p[:displayField].to_json},
+       valueField: #{p[:valueField].to_json || p[:displayField].to_json},
+       forceSelection: true,
+       allowBlank: #{p[:allowBlank] || false},
+       triggerAction: 'all',
+       typeAhead: true,
+       queryMode: 'local',
+       lastQuery: '',  
+       store: #{p[:store]},
+       bind: \"{rec.#{field_name}}\",
+       listeners: {#{p[:listeners]}}
+       #{add_attr}
+     }
+     "
+   return ret 
+  end
+
+ 
+ 
  def extjs_std_combo_model(name, item, p = {}, attr = {})
   field_name = name + '_id'
   model_class = name.camelize.constantize
@@ -59,7 +95,39 @@ module ApplicationHelper
     "
   return ret 
  end
+
  
+  def extjs_std_combo_model_bind(name, item, p = {}, attr = {})
+   field_name = name + '_id'
+   model_class = name.camelize.constantize
+ 
+   add_attr = extsj_create_attr_str(attr)
+   
+   ret = "
+     {
+       xtype: 'combobox',  
+       fieldLabel: #{name.humanize.to_json},
+       displayField: #{model_class.combo_displayField.to_json},
+       valueField: 'id',
+       forceSelection: true,
+       allowBlank: #{p[:allowBlank] || false},
+       triggerAction: 'all',
+       typeAhead: true,
+       queryMode: 'local',
+       lastQuery: '',  
+       store: #{p[:store] || extjs_std_store_model(name)},
+       bind: \"{rec.#{field_name}}\",
+       listeners: {#{p[:listeners]}}
+       #{add_attr}
+     }
+     "
+   return ret 
+  end
+
+ 
+ 
+ 
+  
  
  def extsj_create_attr_str(attrs)
   return '' if attrs.empty?
@@ -80,6 +148,12 @@ module ApplicationHelper
    input_name = p[:input_name] || p[:input_prefix].to_s + name
    add_attr = extsj_create_attr_str(attr)
    ret = "{xtype: 'numberfield', fieldLabel: #{name.humanize.to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false} #{add_attr}}" 
+  end
+
+  def extjs_std_numberfield_bind(name, item, p = {}, attr = {})
+   input_name = p[:input_name] || p[:input_prefix].to_s + name
+   add_attr = extsj_create_attr_str(attr)
+   ret = "{xtype: 'numberfield', bind: \"{rec.#{name}}\", fieldLabel: #{name.humanize.to_json}, allowBlank: #{p[:allowBlank] || false} #{add_attr}}" 
   end
  
   

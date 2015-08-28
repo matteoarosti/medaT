@@ -1,0 +1,23 @@
+[
+{text:"id",		"dataIndex":"id",		width: 60, "xtype":"numbercolumn","align":"right","format":"0"},
+{text: "<%= t('tables.repair_processings.repair_position') -%>",  "dataIndex":"repair_position_id",  "flex":1,
+	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+					 if (typeof(rec.data.repair_position) === 'undefined')
+					 	return value;
+					 else
+					 	return rec.data.repair_position.description_it;
+	}
+},{text: "<%= t('tables.repair_processings.repair_component') -%>",  "dataIndex":"repair_component_id",  "flex":1,
+	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+					 if (typeof(rec.data.repair_component) === 'undefined')
+					 	return value;
+					 else
+					 	return rec.data.repair_component.description_it;
+	}
+},
+{text: "<%= t('tables.std.description_it') -%>",  "dataIndex": "description_it",  "flex":1},
+{text: "<%= t('tables.std.description_en') -%>",  "dataIndex": "description_en",  "flex":1},
+
+{text: "<%= t('tables.repair_processings.preparation_time_type') -%>",  "dataIndex": "preparation_time_type",  width: 150}
+
+]

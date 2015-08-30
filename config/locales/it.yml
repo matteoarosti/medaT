@@ -282,7 +282,10 @@ it:
       to_inspect_from_ship: "Da ispezionare (da nave)"
       damaged: "Danneggiati"
       to_handle: "Da movimentare"
+    prenotations:
       prenotations: "Prenotazioni / ToDo"
+      list: "Lista completa"
+      new_O_FILLING: "Nuovo vuoto per carico"
     bookings:
       bookings: "Booking"
       new_booking: "Nuovo booking"

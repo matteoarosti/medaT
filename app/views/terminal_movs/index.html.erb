@@ -157,14 +157,27 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                     leaf: true,
                                  	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'to_be_moved') -%>',                                    
                                     op: 'new_tab',                                
-                                }, {
-                                    task: <%= raw t("menu.movements.prenotations").to_json %>,
-                                    leaf: true,
-                                 	url: '<%= url_for(:controller=>'to_do_items', :action=>'extjs_sc_crt_tab') -%>',                                    
-                                    op: 'new_tab',                                
                                 }
                             ]
                     }, {
+                        task:<%= raw t("menu.prenotations.prenotations").to_json %>,
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+								{
+                                    task: <%= raw t("menu.prenotations.list").to_json %>,
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'to_do_items', :action=>'extjs_sc_crt_tab') -%>',                                    
+                                    op: 'new_tab',                                
+                                }, {
+                                    task: <%= raw t("menu.prenotations.new_O_FILLING").to_json %>,
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'to_do_items', :action=>'new_O_FILLING') -%>',                                    
+                                    op: 'new_win',                                
+                                }                            
+                        ]    
+                     },{
                         task:<%= raw t("menu.bookings.bookings").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,

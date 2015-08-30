@@ -1,0 +1,2 @@
+module RepairComponentsHelper
+end

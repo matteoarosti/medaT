@@ -5,6 +5,71 @@ class ToDoItemsController < ApplicationController
   end   
   
   
+  
+  #Prenota uscita vuoto per riempimento
+  def new_O_FILLING
+
+    @item = ToDoItem.new
+    @item.status = 'OPEN'
+    @item.to_do_type = 'CONT_PRE_ASS'
+    @item.handling_item_type = 'O_FILLING'
+    @item.handling_type = 'O'
+    @item.container_FE = 'E'
+        
+    
+    #Inserimento record in ToDoItem
+    if params[:exe_save] == 'Y'      
+      @item.num_booking = params[:num_booking]
+      @item.shipowner_id = params[:shipowner_id]
+      @item.equipment_id = params[:equipment_id]
+      @item.carrier_id   = params[:carrier_id]
+      @item.driver       = params[:driver]
+
+      hh = HandlingHeader.new
+      hi = hh.handling_items.new()
+      hh.shipowner = @item.shipowner
+      hh.equipment = @item.equipment
+        
+              
+      #verifico esistenza e validita booking  
+       bh = Booking.get_by_num(params[:num_booking])
+       bi = BookingItem.get_by_num_eq(params[:num_booking], @item.equipment_id)
+       if bh.nil? || bi.nil?
+         if (bh.nil?)
+           render json: {:success => false, :message => "Booking inesistente"}
+         else
+           render json: {:success => false, :message => "Il booking indicato non comprende l'equipment selezionato ( #{hh.equipment.equipment_type} )"}        
+         end
+         return
+       end
+       
+      hi.booking = bh
+      hi.booking_item = bi   
+      verifica_validazione = hi.booking.valida_insert_item(hi)    
+          
+        if verifica_validazione[:is_valid] == false
+              render json: {:success => false, :message => verifica_validazione[:message]}   
+              return   
+        end        
+
+      
+      #se sono qui procedo al salvataggio
+      r = @item.save  
+      
+      if r
+        message = 'Salvataggio esequito'
+      else
+        message = 'Errore in fase di salvataggio'
+      end
+      
+      render json: {:success => r, :message => message}
+      return
+    end
+    
+  end
+  
+  
+  
   #viene assegnato dal mulettista un container a una prenotazione
   def close_to_be_moved
     to_do_item_id = params[:data][:to_do_item_id]

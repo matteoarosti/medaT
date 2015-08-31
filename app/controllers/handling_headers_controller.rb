@@ -365,26 +365,31 @@ end
      hh_as_json_prop = HandlingItem.as_json_prop
      hh_as_json_prop[:include] = hh_as_json_prop[:include] || [] 
      hh_as_json_prop[:include] << {:handling_header => {:include=>[:equipment, :shipowner]}}
-     ret = HandlingItem.where('1=1').to_be_moved.limit(500)
+     ret = HandlingItem.joins(:handling_header).where('1=1').to_be_moved
+     if !params[:flt_num_container].to_s.empty?
+       ret = ret.where("handling_headers.container_number LIKE ?", "%#{params[:flt_num_container].upcase}%")
+     end
+     ret = ret.limit(500)
      
      #recupero tutte le prenotazioni container (uscita per riempimento, in cui e' il mulettista a scegliere il container)
-     
-     to_do_items = ToDoItem.where('1=1').not_closed.prenotazione_container.limit(1000).each do |tdi|
-       ret << {
-         :to_be_moved_type => tdi.to_do_type,
-         :id => tdi.id, #attenzione: se ho lo stesso id di un handling_item potrebbe non essere visualizzato
-         :handling_type => tdi.handling_type,
-         :container_FE => tdi.container_FE,
-         :carrier_id_Name => tdi.carrier.name,
-         :driver => tdi.driver,
-         :created_at => tdi.created_at,
-         :handling_header => {
-            :container_number => "DA ASSEGNARE",
-            :fila => '', :blocco => '', :tiro => '',
-            :shipowner => {:name => tdi.shipowner.name},
-            :equipment => {:equipment_type => tdi.equipment.equipment_type}
-         }
-       }       
+     unless !params[:flt_num_container].to_s.empty?
+       to_do_items = ToDoItem.where('1=1').not_closed.prenotazione_container.limit(1000).each do |tdi|
+         ret << {
+           :to_be_moved_type => tdi.to_do_type,
+           :id => tdi.id, #attenzione: se ho lo stesso id di un handling_item potrebbe non essere visualizzato
+           :handling_type => tdi.handling_type,
+           :container_FE => tdi.container_FE,
+           :carrier_id_Name => tdi.carrier.name,
+           :driver => tdi.driver,
+           :created_at => tdi.created_at,
+           :handling_header => {
+              :container_number => "DA ASSEGNARE",
+              :fila => '', :blocco => '', :tiro => '',
+              :shipowner => {:name => tdi.shipowner.name},
+              :equipment => {:equipment_type => tdi.equipment.equipment_type}
+           }
+         }       
+       end
      end
      
      #ordino per data     

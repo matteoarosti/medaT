@@ -73,7 +73,7 @@ class ToDoItemsController < ApplicationController
   #viene assegnato dal mulettista un container a una prenotazione
   def close_to_be_moved
     to_do_item_id = params[:data][:to_do_item_id]
-    num_container = params[:data][:num_container]
+    num_container = params[:data][:num_container].to_s.upcase
       
     hh = HandlingHeader.not_closed.container(num_container).first    
 

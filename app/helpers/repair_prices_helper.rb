@@ -1,0 +1,2 @@
+module RepairPricesHelper
+end

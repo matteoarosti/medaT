@@ -18,7 +18,7 @@
 		 {
 				flex: 1,
 				layout: 'fit',
-        	    title: <%= raw t('forms.to_be_handled.list').to_json -%>, flex: 50,
+        	    //title: <%= raw t('forms.to_be_handled.list').to_json -%>, flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
@@ -43,9 +43,11 @@
         	   dockedItems: [
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
-        	    items: [{
+        	    items: [
+        	    '->',
+        	    {
 				    xtype: 'form',	
-				    hidden: true,
+				    hidden: false,
 				    height: 50,
 				    layout: {
 					    type: 'hbox',
@@ -55,7 +57,7 @@
 				    padding: '10 10 10 10',
 				    items: [
 				    	{
-				    		flex: 1,
+				    		flex: 1, hidden: true,
 				            xtype: 'fieldcontainer',
 				            fieldLabel: <%= raw t('forms.to_be_handled.date_time').to_json -%>, labelAlign: 'right',
 				            layout: 'hbox',
@@ -64,18 +66,35 @@
 				            	{xtype: 'timefield', name: 'datetime_op_time', width:  70},
 				            ]
 				      }, {	
-								flex: 1, padding: '0 0 0 10',
+								flex: 1, padding: '0 0 0 10', hidden: true,
 								xtype: 'checkboxfield',
 				                boxLabel: <%= raw t('forms.to_be_handled.disable_request').to_json -%>,
 				                name: 'hide_check',
 				                inputValue: '1',
 				                value: 1
 				      }    
+					, {	
+								width: 200, labelWidth: 120, padding: '0 0 0 10',
+								xtype: 'textfield',
+								fieldStyle: 'font-size: 16px; text-transform: uppercase;',
+				                fieldLabel: 'Ricerca container',
+				                name: 'flt_num_container'
+				      }				 
 				     
 				    ]
-				 }, '->',  {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
-				 						console.log(this.up('grid'));
-				 						this.up('grid').getStore().load();}}
+				 }
+
+				 
+				 
+				 ,  {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh',
+				 				scale: 'large', 
+				 				handler: function(event, toolEl, panel){
+				 						loc_grid = this.up('grid');
+				 						header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+				 						loc_grid.getStore().proxy.extraParams.flt_num_container = header_form.findField('flt_num_container').getValue(); 
+				 						loc_grid.getStore().load();
+				 				}
+				 	}
 				 ]
 			  }
 			],
@@ -166,18 +185,31 @@
 													},
 											    items: [
 											      {xtype: 'hiddenfield', name: 'to_do_item_id', value: rec.get('id')},
-											      {xtype: 'textfield', 	   name: 'num_container', fieldLabel: 'Container'},
+											      {xtype: 'textfield', 	   name: 'num_container', fieldLabel: 'Container', 
+											       fieldStyle: 'font-size: 32px; text-transform: uppercase;'},
 											      {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes'}										    										    										    
 											    ]
-											    , 	buttons:
+											    ,
+								    			dockedItems: [{
+												    xtype: 'toolbar',
+												    dock: 'right',
+												    width: 135,
+													defaults: {
+												        xtype: 'button', scale: 'medium', textAlign: 'left'
+									                },			    
+												    margin: '5 5 5 5',
+											    
+											     	items:
 												        [{
-												            text: <%= raw t('forms.to_be_handled.confirm').to_json -%>,
+												            text: 'Conferma',
+												            scale: 'large', cls: 'btn-confirm',
 												            handler: function (btn, evt) {              
 												             form = this.up('form').getForm();
 												             tmp_win  = this.up('window');
 												             if (form.isValid()) {
 																Ext.Ajax.request({
 																   method: 'POST',
+																   waitMsg: 'Attendere',
 																   url: '<%= url_for(:controller=>'to_do_items', :action=>'close_to_be_moved') -%>',
 																   jsonData: {
 																   	data: form.getValues()
@@ -195,6 +227,7 @@
 												                    	})															   	  
 																   	  } else {
 																	      store.remove(rec);
+																	      store.load();
 																	      tmp_win.close();
 																   	  }																   
 																   
@@ -213,15 +246,25 @@
 															  return false;												             
 												             }
 												            }
+												          }, 
+												          
+												          {
+												            text: 'Chiudi',												            
+												            scale: 'large',
+												            handler: function (btn, evt) {
+												            	tmp_win  = this.up('window');
+												            	tmp_win.close();
+												            }
 												          }
+												          
 												         ]
-	  
+	  												}]
 											});		
 											
 				                           loc_win = Ext.create('Ext.window.Window',{
 											    layout: 'fit',
 											    items: loc_form,
-											    title: <%= raw t('forms.to_be_handled.import_confirm').to_json -%>,
+											    title: 'Assegna container',
 											    width: 500,
 											    height: 300,
 											    id: 'myWindow'
@@ -275,6 +318,7 @@
 															   },
 															   success: function(response, opts) {
 															      store.remove(rec);
+															      store.load();
 															      tmp_win.close();
 															   },
 															   failure: function(response, opts) {
@@ -303,6 +347,7 @@
 											   },
 											   success: function(response, opts) {
 											      store.remove(rec);
+											      store.load();
 											   },
 											   failure: function(response, opts) {
 											      console.log('server-side failure with status code ' + response.status);
@@ -380,7 +425,8 @@
 												                        buttons: Ext.Msg.OK
 											                    	})															   	  
 															   	  } else {
-																      store.remove(rec);															   	  
+																      store.remove(rec);
+																	  store.load();
 															   	  }															   	 
 															   },
 															   failure: function(response, opts) {
@@ -480,6 +526,7 @@
 											                    	})															   	  
 															   	  } else {
 																      store.remove(rec);
+																      store.load();
 																      tmp_win.close();															   	 
 															   	  }															   	 
 															   },

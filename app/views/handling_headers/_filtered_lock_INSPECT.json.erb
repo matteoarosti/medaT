@@ -15,11 +15,10 @@
 
   items: [
        
-   // grid con righe import
 		 {
 				flex: 1,
-				//layout: 'fit',
-        	    title: <%= raw t('forms.to_be_inspect.details_label').to_json -%>, flex: 50,
+				layout: 'fit',
+        	    //title: <%= raw t('forms.to_be_inspect.details_label').to_json -%>, flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
@@ -44,7 +43,9 @@
         	   dockedItems: [
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
-        	    items: [{
+        	    items: [
+        	     '->',
+        	    	{
 				    xtype: 'form',	
 				    height: 50,
 				    layout: {
@@ -55,7 +56,7 @@
 				    padding: '10 10 10 10',
 				    items: [
 				    	{
-				    		flex: 1,
+				    		flex: 1, hidden: true,
 				            xtype: 'fieldcontainer',
 				            fieldLabel: <%= raw t('forms.to_be_inspect.date_time').to_json -%>, labelAlign: 'right',
 				            layout: 'hbox',
@@ -64,17 +65,32 @@
 				            	{xtype: 'timefield', name: 'datetime_op_time', width:  70},
 				            ]
 				      }, {	
-								flex: 1, padding: '0 0 0 10',
+								flex: 1, padding: '0 0 0 10', hidden: true,
 								xtype: 'checkboxfield',
 				                boxLabel: <%= raw t('forms.to_be_inspect.disable_request').to_json -%>,
 				                name: 'hide_check',
 				                inputValue: '1'
 				      }    
 				     
+				     
+					, {	
+								width: 200, labelWidth: 120, padding: '0 0 0 10',
+								xtype: 'textfield',
+								fieldStyle: 'font-size: 16px; text-transform: uppercase;',
+				                fieldLabel: 'Ricerca container',
+				                name: 'flt_num_container'
+				      }				 
+				     
+				     
 				    ]
-				 }, '->',  {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){ 
-				 						console.log(this.up('grid'));
-				 						this.up('grid').getStore().load();}}
+				 }, {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
+				 		handler: function(event, toolEl, panel){ 
+				 						loc_grid = this.up('grid');
+				 						header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+				 						loc_grid.getStore().proxy.extraParams.flt_num_container = header_form.findField('flt_num_container').getValue(); 
+				 						loc_grid.getStore().load();
+				 			}
+				 		}
 				 ]
 			  }
 			],

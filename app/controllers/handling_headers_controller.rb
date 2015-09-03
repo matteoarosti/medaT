@@ -342,6 +342,11 @@ end
      items = items.joins(" INNER JOIN handling_items hi ON handling_headers.id = hi.handling_header_id AND hi.lock_fl = true
        AND handling_headers.lock_type = hi.lock_type AND hi.ship_id IS NOT NULL ")
      
+     if !params[:flt_num_container].to_s.empty?
+       items = items.where("container_number LIKE ?", "%#{params[:flt_num_container].upcase}%")
+     end
+       
+       
      render json: items.limit(2000).as_json(hh_as_json_prop)
      
      when 'lock_DAMAGED'         

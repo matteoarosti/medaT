@@ -117,8 +117,8 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';
-			         ret += '<tr><th>Compagnia</th><td>' + rec.data.shipowner.name + '</td></tr>';
-			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';
+			         ret += '<tr><th>Comp.</th><td>' + rec.data.shipowner.name + '</td></tr>';
+			         ret += '<tr><th>Equip.</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';
 			         ret += '<tr><th>Stato</th><td>' + rec.get('container_status') + '</td></tr>';			         			         
 			         ret += '</table>';
 			         return ret;
@@ -131,7 +131,7 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';			         
-					 ret += '<tr><th>Da ispezionare dal</th><td>' + Ext.util.Format.date(rec.get('get_lock_INSPECT_date'), 'd-m-Y H:i:s') + '</td></tr>';			         
+					 ret += '<tr><th>Da ispezionare dal</th><td>' + Ext.util.Format.date(rec.get('get_lock_INSPECT_date'), 'd-m-Y H:i') + '</td></tr>';			         
 			         ret += '</table>';
 			         return ret;
 			         

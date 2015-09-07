@@ -257,6 +257,11 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                 url: '<%= url_for(:controller=>'reports', :action=>'booking_open_parameters') -%>',                                
                                 op: 'new_win',
                                 leaf:true
+                           	 }, {
+                                task:<%= raw t("menu.report.movements_ship_voyage").to_json %>,
+                                url: '<%= url_for(:controller=>'reports', :action=>'handlings_ship_voyage_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
                            	 }
                             ]
                     }, {

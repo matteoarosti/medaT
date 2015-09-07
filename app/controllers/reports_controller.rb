@@ -20,7 +20,13 @@ class ReportsController < ApplicationController
    @hh = HandlingHeader.new
    @hi = HandlingItem.new
  end    
- 
+
+  def handlings_ship_voyage_parameters
+   @hh = HandlingHeader.new
+   @hi = HandlingItem.new
+  end    
+
+  
   
    
  def in_terminal_parameters
@@ -56,7 +62,14 @@ class ReportsController < ApplicationController
   
   def handlings_rfcon_analytic
   end  
+
+  def handlings_ship_voyage_sint
+  end  
   
+  def handlings_ship_voyage_analytic
+  end  
+ 
+    
 
   def in_terminal_sint
   end  

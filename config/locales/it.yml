@@ -192,8 +192,8 @@ it:
       short: "Visita doganale"                        
   operations:
     I_DISCHARGE:
-      long: "Discharge da Nave"
-      short: "Disch. Nave"
+      long: "Sbarco da nave"
+      short: "Sbarco"
     O_EMPTYING:
       long: "Uscita PIENO per svuotamento"
       short: "Out Empting"
@@ -216,8 +216,8 @@ it:
       long: "Ingresso per trasferimento da altro Terminal"
       short: "Trans. Term"
     O_LOAD:
-      long: "Load su Nave"
-      short: "Out For Load"
+      long: "Imbarco su nave"
+      short: "Imbarco"
     I_NOT_POSIT:
       long: "Ingresso per mancato posizionamento"
       short: "Miss Posit."
@@ -302,6 +302,7 @@ it:
       movements_inspe: "Visite doganali"
       movements_rfcon: "Allaccio frigo"      
       movements: "Movimenti"
+      movements_ship_voyage: "Per nave/viaggio"
       in_terminal: "Giacenze"
       booking_open: "Booking aperti"
       rfcon_check_temp: "Controllo temp. frigo"

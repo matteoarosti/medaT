@@ -1,0 +1,159 @@
+<style type="text/css">
+<!--
+@page { size:auto; margin: 1cm }
+-->
+</style>
+
+<style media="print">
+ h1.medaT-report{padding: 0px 0px; margin: 0px 0px; font-size: 13px;}
+ table.medaT-report tr td, table.medaT-report tr th{font-size: 9px; padding: 0px 2px}
+</style>
+
+
+<% formValues = JSON.parse params['formValues'] %>
+<% ship = Ship.find(formValues['ship_id']) %>
+<h1 class=medaT-report>Lista per nave/viaggio: <%= "#{ship.name} / #{formValues['voyage']}" -%></h1>
+
+<%
+#Recupero elenco movimenti in base ai parametri
+
+items = HandlingItem.where('1=1')
+items = items.where(ship_id: formValues['ship_id'])
+items = items.where(voyage: formValues['voyage'])
+items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']} }) unless formValues['shipowner_id'].blank?
+items = items.where("handling_items.container_FE = ?", formValues['flt_container_FE']) if !formValues['flt_container_FE'].empty?
+items = items.where({handling_item_type: formValues['handling_item_type']}) unless formValues['handling_item_type'].blank?
+
+
+items = items.joins(:handling_header)
+group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
+%>
+
+
+<%
+ ######################################################
+ #ShipOwner
+ ###################################################### 
+%>
+<% group_shipowner.each do |so_id, so_val| %>
+ <% so = Shipowner.find(so_id) %>
+
+    <p class="bg-primary" style="padding: 10px"><%= so.name -%></p>
+ 
+
+	<%
+ 	######################################################
+ 	#Tipo operazioni
+ 	###################################################### 
+	%>
+ 	<% group_op = so_val.group_by { |d| d.handling_item_type } %>
+	<% group_op.each do |op_id, op_val| %>
+
+ 		<p class="bg-success" style="padding: 5px 10px"><%= t("operations.#{op_id}.long") -%></p>
+
+		<%
+ 		######################################################
+ 		#Tipo operazioni
+ 		###################################################### 
+		%>
+		<table class="table table-striped table-bordered table-condensed medaT-report">
+		 <tr>
+		  <th width=80>Data/ora</th>
+		  <th width=40>Tipo</th>
+		  <th width=80>Container</th>
+		  <th width=80>Pieno / Vuoto</th>
+		  <th width=80>Booking</th>
+		  <th width=80>Sigillo</th>		  
+		  <th width=40 align=right>Peso</th>		  
+		 </tr>
+
+		<% op_val.sort_by{|a| 
+		
+			if formValues['seq_ord'] == 'date_tipo'
+				[a.datetime_op, a.handling_header.equipment.equipment_type]
+			else
+				[a.handling_header.equipment.equipment_type, a.datetime_op]
+			end
+		
+		
+			}.each do |row| %>
+			<% eq = Equipment.find(row.handling_header.equipment_id) %>
+			
+			<%
+			 out_ship 		= ""
+			 out_voyage		= ""
+			 out_booking 	= ""
+			 
+			 is_import_export = row.is_import_export()			 
+			 bk = row.search_booking			 
+			 
+			 #nave/viaggio lo trovo in linea o eventualmente lo recupero dal booking
+			 if !row.ship.nil? || !row.voyage.to_s.empty?
+			  out_ship 		= row.ship.name.to_s unless row.ship.nil?
+			  out_voyage 	= row.voyage.to_s 
+			 else
+			 
+			  if is_import_export == 'E'
+			  	#Export: provo a recuperare nave/viaggio da booking			 			 
+				  if !bk.nil?
+				   out_ship 	= "[#{bk.ship.name.to_s}]"
+				   out_voyage	= "[#{bk.voyage.to_s}]"
+				  end
+			  else
+			     #Import: provo a recuperare nave/viaggio dal movimento di sbarco
+			       hi_discharge = row.search_hi_by_item_type('I_DISCHARGE')
+			  	   out_ship = "[#{hi_discharge.ship.name.to_s}]" unless hi_discharge.nil?
+			  	   out_voyage = "[#{hi_discharge.voyage.to_s}]" unless hi_discharge.nil?
+			  end
+			 end
+			 
+			 if !row.booking.nil?
+			 	out_booking = row.booking.num_booking.to_s
+			 else
+			 	out_booking = "[#{bk.num_booking.to_s}]" if !bk.nil?
+			 end
+			  
+			 
+			 out_seal_ar = []
+			 case is_import_export
+			 	when "I"
+			 		out_seal_ar << row.handling_header.seal_imp_shipowner.to_s unless row.handling_header.seal_imp_shipowner.to_s.blank?
+			 		out_seal_ar << row.handling_header.seal_imp_others.to_s unless row.handling_header.seal_imp_others.to_s.blank?
+			 		out_weight	= row.handling_header.weight_imp
+			 	when "E"
+			 		out_seal_ar << row.handling_header.seal_exp_shipowner.to_s unless row.handling_header.seal_exp_shipowner.to_s.blank?
+			 		out_seal_ar << row.handling_header.seal_exp_others.to_s unless row.handling_header.seal_exp_others.to_s.blank?
+			 		out_weight	= row.handling_header.weight_exp			 	
+			 end  
+			  
+			 out_seal = out_seal_ar.join('/') 
+			  
+			  
+			%>
+			
+			
+						
+ 			<tr>
+ 				<td><%= row.datetime_op.strftime("%d/%m/%y %H:%M") -%></td>
+				<td><%= eq.equipment_type -%></td>				
+				<td><%= row.handling_header.container_number.to_s -%></td>
+				<td><%= row.container_FE == 'E' ? 'Vuoto' : 'Pieno' -%></td>
+				<td><%= out_booking -%></td>
+				<td><%= out_seal -%></td>
+				<td align=right><%= out_weight -%></td>
+			</tr>
+		<% end %>
+		</table>
+
+
+	<% end %>
+
+
+
+
+
+
+
+
+ 
+<% end %>

@@ -12,63 +12,79 @@ items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']
 items = items.where("handling_items.container_FE = ?", formValues['flt_container_FE']) if !formValues['flt_container_FE'].empty?
 items = items.where({handling_item_type: formValues['handling_item_type']}) unless formValues['handling_item_type'].blank?
 
-items = items.select('shipowner_id, handling_item_type, equipment_id, count(*) as C_ROW').joins(:handling_header).group("shipowner_id, handling_item_type, equipment_id")
-group_shipowner = items.group_by { |d| d.shipowner_id }
+items = items.select('handling_items.created_user_id, handling_items.container_FE, shipowner_id, handling_item_type, equipment_id, count(*) as C_ROW').joins(:handling_header).group("handling_items.created_user_id, handling_items.container_FE, shipowner_id, handling_item_type, equipment_id")
+group_sottobordo = items.group_by { |d| d.created_user_id }
 %>
 
 
 <%
  ######################################################
- #ShipOwner
+ #OPERATORE SOTTOBORDO
  ###################################################### 
 %>
-<% group_shipowner.each do |so_id, so_val| %>
- <% so = Shipowner.find(so_id) %>
+<% group_sottobordo.each do |sottob_id, sottob_val| %>
 
-    <p class="bg-primary" style="padding: 10px"><%= so.name -%></p>
- 
+	<% user = User.find(sottob_id) %>
+    <p class="bg-primary" style="padding: 10px">Operatore alla spunta: <b><%= user.name -%></b></p>
 
-	<%
- 	######################################################
- 	#Tipo operazioni
- 	###################################################### 
-	%>
- 	<% group_op = so_val.group_by { |d| d.handling_item_type } %>
-	<% group_op.each do |op_id, op_val| %>
-
- 		<p class="bg-success" style="padding: 5px 10px"><%= t("operations.#{op_id}.long") -%></p>
 
 		<%
- 		######################################################
- 		#Tipo operazioni
- 		###################################################### 
+		 ######################################################
+		 #ShipOwner
+		 ###################################################### 
 		%>
-		<table class="table table-striped table-bordered table-condensed">
-		 <tr>
-		  <th width=200>Dimensione</th>
-		  <th>Tipo</th>
-		  <th width=80>Quantit&agrave;</th>
-		 </tr>
- 		<% ###group_eq = op_val.group_by { |d| d.equipment_id } %>
-		<% op_val.each do |row| %>
-			<% eq = Equipment.find(row.equipment_id) %>
- 			<tr>
-				<td><%= eq.sizetype -%></td>
-				<td><%= eq.equipment_type -%></td>				
-				<td align=right><%= row.C_ROW -%></td>
-			</tr>
+		<% sottob_val.group_by{|d| d.shipowner_id}.each do |so_id, so_val| %>
+
+		 <% so = Shipowner.find(so_id) %>
+		
+		    <p class="bg-primary" style="padding: 10px"><%= so.name -%></p>
+		 
+		
+			<%
+		 	######################################################
+		 	#Tipo operazioni
+		 	###################################################### 
+			%>
+		 	<% group_op = so_val.group_by {|d| 
+		 		#d.handling_item_type
+		 		
+		 		k = {}
+		 		k[:handling_item_type] = d.handling_item_type
+		 		k[:container_FE] = d.container_FE
+		 		k
+		 	} %>
+			<% group_op.each do |op_id, op_val| %>
+		
+		 		<p class="bg-success" style="padding: 5px 10px">
+		 			<%= t("operations.#{op_id[:handling_item_type]}.long") -%>
+		 			<span><b><%= op_id[:container_FE]=='F' ? 'PIENI' : 'VUOTI' %></b></span>
+		 		</p>
+		
+				<%
+		 		######################################################
+		 		#Tipo operazioni
+		 		###################################################### 
+				%>
+				<table class="table table-striped table-bordered table-condensed">
+				 <tr>
+				  <th width=200>Dimensione</th>
+				  <th>Tipo</th>
+				  <th width=80>Quantit&agrave;</th>
+				 </tr>
+		 		<% ###group_eq = op_val.group_by { |d| d.equipment_id } %>
+				<% op_val.each do |row| %>
+					<% eq = Equipment.find(row.equipment_id) %>
+		 			<tr>
+						<td><%= eq.sizetype -%></td>
+						<td><%= eq.equipment_type -%></td>				
+						<td align=right><%= row.C_ROW -%></td>
+					</tr>
+				<% end %>
+				</table>
+		
+		
+			<% end %>
+		 
 		<% end %>
-		</table>
-
-
-	<% end %>
-
-
-
-
-
-
-
-
- 
-<% end %>
+		
+<% end %>		

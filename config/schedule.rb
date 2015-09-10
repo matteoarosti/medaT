@@ -30,7 +30,7 @@ every 3.minute do
 end
 
 every 2.hours do
-  runner "SendCodeco.new.call(3, [3], 'enrico.detti@live.it')"
+  runner "SendCodeco.new.call(3, [3], 'matteo.arosti@gmail.com')"
 end
 
 

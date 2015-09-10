@@ -4,7 +4,8 @@ class Booking < ActiveRecord::Base
  belongs_to :shipowner
  belongs_to :equipment
  belongs_to :ship
- 
+ belongs_to :port
+
  has_many :booking_items, :dependent => :destroy
  has_many :handling_headers
 

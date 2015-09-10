@@ -37,7 +37,7 @@ class CreateHandlingItems < ActiveRecord::Migration
       #flag vari
       t.boolean    :fl_send_email_carrier,      :default => nil #true=inviato, false=errore
       t.boolean    :fl_send_email_shipper,      :default => nil #true=inviato, false=errore
-      t.boolean    :codeco_sent
+      t.integer    :codeco_send,                :defualt => nil
       
       
       t.timestamps

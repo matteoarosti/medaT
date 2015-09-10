@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-# per rigenerare /etc/crontab
+# Istruzioni per rigenerare /etc/crontab
 # $ whenever -w
 
 

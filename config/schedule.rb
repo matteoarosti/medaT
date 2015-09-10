@@ -23,12 +23,15 @@
 set :environment, "development"
 
 every 3.minute do
- runner "SendEmailHiNotify.new.call"  
+  runner "SendEmailHiCarrier.new.call"
+end
+
+every 2.hours do
+  runner "SendCodecoCma.new.call"
 end
 
 
 #riavvio ambiente spring (sembra ogni tanto bloccare le chiamate rails schedulate
-every 4.hours do 
+every 5.hours do 
   command "cd /var/www/rails-app/medaT; bin/spring stop"
-  runner "VerifyImports.new.call" 
 end

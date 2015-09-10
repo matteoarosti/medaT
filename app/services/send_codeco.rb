@@ -15,7 +15,8 @@ class SendCodeco
     his = his.where({codeco_send: nil})
     his = his.where({container_FE: container_fe})
     his = his.where({operation_type: 'MT'}) #devono essere inviati solo i movimenti terminal
-    his = his.limit(10)
+    his = his.where({ship_id: nil}) #devono essere inviati solo i movimenti terminal
+
     cs = CodecoSend.new
     cs.save
 

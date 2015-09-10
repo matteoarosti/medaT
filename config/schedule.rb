@@ -19,6 +19,9 @@
 
 # Learn more: http://github.com/javan/whenever
 
+# per rigenerare /etc/crontab
+# $ whenever -w
+
 
 set :environment, "development"
 
@@ -27,7 +30,7 @@ every 3.minute do
 end
 
 every 2.hours do
-  runner "SendCodecoCma.new.call"
+  runner "SendCodeco.new.call(3, [3], 'enrico.detti@live.it')"
 end
 
 

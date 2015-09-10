@@ -125,7 +125,7 @@ class SendCodeco
       c_row = c_row + 'DTM+7:' + c_dataora + ':203' + "'" + "\n"
       c_count += 1
       if c_export == "E" then
-        c_row = c_row + 'LOC+11+' + c_destinazione + '::6' + "'" + "\n"
+        c_row = c_row + 'LOC+11+' + c_destinazione.to_s + '::6' + "'" + "\n"
         c_count += 1
       end
       c_row = c_row + 'LOC+165+ITAOI:139:6+ITAOIDDOR:TER:ZZZ' + "'" + "\n"

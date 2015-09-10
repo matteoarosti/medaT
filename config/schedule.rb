@@ -26,7 +26,7 @@
 set :environment, "development"
 
 every 3.minute do
-  runner "SendEmailHiCarrier.new.call"
+  runner "SendEmailHiNotify.new.call"
 end
 
 every 2.hours do

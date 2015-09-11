@@ -28,13 +28,16 @@ class SendCodeco
     end
 
 
+    if content_file != ""
 
-    begin
-      mm = HandlingMailer.send_codeco_email(email_to, subject, content_file, file_name).deliver!
-      set_codeco_sent(his, cs)
-    rescue Exception => e
-      #gestire l'errore
-      print "ERRORE: #{e.message}"
+      begin
+        mm = HandlingMailer.send_codeco_email(email_to, subject, content_file, file_name).deliver!
+        set_codeco_sent(his, cs)
+      rescue Exception => e
+        #gestire l'errore
+        print "ERRORE: #{e.message}"
+      end
+
     end
 
   end #call
@@ -117,7 +120,7 @@ class SendCodeco
         if c_booking != ''
           c_destinazione = hi.handling_header.booking.port.port_code.to_s
           if c_destinazione != ''
-            c_row = c_row + 'RFF+BN:' + c_booking + "'" + "\n" #rimuove gli ultima 4 caratteri dal numero di booking
+            c_row = c_row + 'RFF+BN:' + c_booking + "'" + "\n"
             c_count += 1
           end
         end
@@ -125,6 +128,7 @@ class SendCodeco
       c_row = c_row + 'DTM+7:' + c_dataora + ':203' + "'" + "\n"
       c_count += 1
       if c_export == "E" then
+        puts hi.id.to_s + " " + hi.handling_header.container_number
         c_row = c_row + 'LOC+11+' + c_destinazione.to_s + '::6' + "'" + "\n"
         c_count += 1
       end

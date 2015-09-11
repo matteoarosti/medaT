@@ -165,6 +165,10 @@
 		                		scale: 'large',			                    
 			                        handler: function(button, b, c, d, e) {
 			                        
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();
+			                        
+			                        
 			                           if (rec.get('to_be_moved_type') == 'CONT_PRE_ASS'){
 			                            //e' una preassegnazione di container (es: uscita vuoto per riempimento)
 			                            // apro la maschera perche' e' direttamente il mulettista che sceglie il container e esegue l'operazione sul movimento
@@ -202,7 +206,9 @@
 												        [{
 												            text: 'Conferma',
 												            scale: 'large', cls: 'btn-confirm',
-												            handler: function (btn, evt) {              
+												            handler: function (btn, evt) {
+												             btn.disable();
+												                           
 												             form = this.up('form').getForm();
 												             tmp_win  = this.up('window');
 												             if (form.isValid()) {
@@ -305,7 +311,9 @@
 										    , 	buttons:
 											        [{
 											            text: <%= raw t('forms.to_be_handled.confirm').to_json -%>,
-											            handler: function (btn, evt) {              
+											            handler: function (btn, evt) {
+											             btn.disable();
+											                           
 											             form = this.up('form').getForm();
 											             tmp_win  = this.up('window');
 											             if (form.isValid()) {
@@ -403,6 +411,9 @@
 		                		scale: 'large',			                    
 			                        handler: function(button, b, c, d, e) {
 			                        
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();			                        
+			                        
 											Ext.Ajax.request({
 											   method: 'POST',
 											   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
@@ -464,7 +475,11 @@
 								text: '<i class="fa fa-warning fa-3x"></i>',
 								cls: 'btn-del',
 		                		scale: 'large',			                    
-			                        handler: function(grid, rowIndex, colIndex, a, b) {
+			                        //handler: function(grid, rowIndex, colIndex, a, b) {
+			                        handler: function(button, b, c, d, e) {
+
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();
 
 			                        
 			                           //costruisco una form
@@ -498,7 +513,9 @@
 										    , 	buttons:
 											        [{
 											            text: 'Conferma',
-											            handler: function (btn, evt) {              
+											            handler: function (btn, evt) { 
+											             btn.disable();
+											                          
 											             form = this.up('form').getForm();
 											             tmp_win  = this.up('window');
 											             if (form.isValid()) {

@@ -1,0 +1,2 @@
+module RepairHandlingItemsHelper
+end

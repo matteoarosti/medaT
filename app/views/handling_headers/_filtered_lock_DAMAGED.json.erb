@@ -114,13 +114,13 @@
 			        text: <%= raw t('forms.damageds.container').to_json -%>,
 			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         ret = '<h1>' + rec.get('container_number') + '</h1>';
+			         ret = '<h1>' + rec.get('handling_header').container_number + '</h1>';
 			          ret += '<h5>Movim #' + rec.get('id') + '&nbsp;';
-			            ret += ' ' + pb_get_image_status(rec.get('handling_status'));
-			            ret += ' ' + pb_get_image_in_terminal(rec.get('container_in_terminal'));			            
-			            ret += ' ' + pb_get_image_FE(rec.get('container_FE'));
-			            ret += ' ' + pb_get_image_with_booking(rec.get('booking_id'));
-			            ret += ' ' + pb_get_image_lock(rec.get('lock_type'));
+			            ret += ' ' + pb_get_image_status(rec.get('handling_header').handling_status);
+			            ret += ' ' + pb_get_image_in_terminal(rec.get('handling_header').container_in_terminal);			            
+			            ret += ' ' + pb_get_image_FE(rec.get('handling_header').container_FE);
+			            ret += ' ' + pb_get_image_with_booking(rec.get('handling_header').booking_id);
+			            ret += ' ' + pb_get_image_lock(rec.get('handling_header').lock_type);
 			          ret += '</h5>';
 			          return ret;			         
 			        }			        
@@ -131,8 +131,8 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';
-			         ret += '<tr><th>Compagnia</th><td>' + rec.data.shipowner.name + '</td></tr>';
-			         ret += '<tr><th>Equipment</th><td>' + rec.get('equipment_id_Name') + '</td></tr>';			         			         
+			         ret += '<tr><th>Compagnia</th><td>' + rec.get('handling_header').shipowner.name + '</td></tr>';
+			         ret += '<tr><th>Equipment</th><td>' + rec.get('handling_header').equipment.equipment_type + '</td></tr>';			         			         
 			         ret += '</table>';
 			         return ret;
 			         
@@ -159,18 +159,8 @@
 			    listeners: {
 					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
 					        if (columnIndex == 1) { //doppio click sul num_container... apro il movimento aperto
-									new_rec = HandlingHeader.load(rec.get('id'));
-							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
-										title: 'Mov. ' + rec.get('container_number'),
-										closable: true			
-							        });
-							        
-			                		newPanel.getViewModel().setData({rec: new_rec, 
-			                			is_handling_editable: false,
-			                			is_container_editable: false
-			                		});
-			                    	myApp.feedInfo.add(newPanel).show();
-						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);    
+							  //rec.get('id') e' id di RepairHandlingItem
+							  acs_show_panel_std(myApp, '<%= url_for(:controller=>'repair_handling_items', :action=>'rhi_edit') -%>', {rec_id: rec.get('id')}, 'Modifica');	    
 					        }
 					    }
 					}

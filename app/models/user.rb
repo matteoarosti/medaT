@@ -37,8 +37,26 @@ class User < ActiveRecord::Base
       return true
     end
     
-    
+    #default
     return false
   end
+  
+  
+  #gestione permessi speciali per admin
+   def admin_can?(model, op)
+ 
+     #esco se non admin
+     if !self.admin?
+       return false
+     end
+     
+     #solo alcuni possono vedere/manutenere le tabelle repair
+     if [1,2,4].include?(self.id) 
+       return true
+     end
+     
+     #default
+     return false
+   end
           
 end

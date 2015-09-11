@@ -1,0 +1,440 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  itemId: 'tab_panel',
+  closable: true,
+  title: 'Repair',
+  flex: 1,
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+
+
+	viewModel: {
+			data: {
+				rec: <%= raw @item.to_json(RepairHandlingItem.as_json_prop) -%>,
+				enable_operations: <%= raw @item.enable_operations_list.to_json -%>
+			}    			
+	},    
+
+
+  items: [
+  
+     //INTESTAZIONE (CONTAINER, EQUIPMENT, ....)
+	{
+	  xtype: 'panel',
+	  border: true,
+	    layout: {
+		    type: 'hbox',
+		    pack: 'start',
+		    align: 'stretch'
+		},
+	  bodyStyle: 'background-color: #e0e0e0;',
+		
+      defaults: {
+      	style: 'margin: 10px; padding: 10px;'
+      },
+	
+	  items: [
+	     <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Container', value: #{@item.handling_header.container_number.to_json}}" -%>,
+		 <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Compagnia', value: #{@item.handling_header.shipowner.name.to_json}}" -%>,	     
+	     <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Equipment', value: #{@item.handling_header.equipment.equipment_type.to_json}}" -%>
+	  ]
+	} //INTESTAZIONE
+	
+	, 
+	
+	//TABLE LAYOUT (3 columns)
+	{
+	  xtype: 'panel',
+	  flex: 1,
+	    layout: {
+		    type: 'table',
+		    columns: 3,
+		    tableAttrs: {
+		        style: {
+		            width: '100%',
+		            height: '100%'
+		        }
+    		}
+		},
+		
+        defaults: {
+			xtype: 'panel', border: false,     
+            // applied to each contained panel
+            bodyStyle:'padding:10px; border: 0px;',
+            style: 'margin: 10px; padding: 10px; border: 1px solid grey;',
+            border: true,
+			layout: {
+				    type: 'vbox',
+				    pack: 'start',
+				    align: 'stretch'
+			}
+            
+        },		
+	
+	  items: [
+
+			//IN GARAGE
+			{			  			  			
+			  items: [
+				{html: '<h2>Ingresso in officina</h2>'},
+				{xtype: 'textfield', fieldLabel: 'Portato il', bind: '{rec.in_garage_at:date("d/m/Y H:i")}'},
+				{xtype: 'textfield', fieldLabel: 'Portato da', bind: '{rec.in_garage_user_name}'}
+			  ]
+			  
+        	  , dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'bottom',
+        	    items: [
+						{iconCls: 'fa fa-refresh', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.in_garage_modify}'}, 
+							handler: function(event, toolEl, panel){ 
+				 			}
+				 		}        	    
+        	    ]
+        	   }
+        	  ]
+			  
+			} //IN GARAGE
+
+
+
+			//PREVENTIVO REDATTO
+			, {		
+			  colspan: 2,	  			  			
+			  items: [
+				{html: '<h2>Redazione preventivo</h2>'},
+				{xtype: 'textfield', fieldLabel: 'Redatto il', bind: '{rec.estimate_at:date("d/m/Y H:i")}'},
+				{xtype: 'textfield', fieldLabel: 'Redatto da', bind: '{rec.estimate_user_name}'}
+			  ]
+			  
+        	  , dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'bottom',
+        	    items: [
+						{iconCls: 'fa fa-refresh',  text: 'Crea/modifica preventivo', bind: {disabled: '{!enable_operations.estimate_modify}'},
+							handler: function(event, toolEl, panel){
+								//per test: imposto subito il preventivo come inviato
+								Ext.Ajax.request({
+				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_estimate').to_json -%>,
+				                    waitMsg: 'Salvataggio in corso....',
+									method:'POST',                     
+				                    jsonData: {rec_id: <%= @item.id -%>},	
+				             	
+									success: function(result, request) {					
+										var returnData = Ext.JSON.decode(result.responseText);
+
+										if (returnData.success == false){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: returnData.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})
+					                      return false;										
+										}
+										
+										//aggiorno il record per il bind e operation_list
+										tab_panel = this.up('container[itemId=tab_panel]');
+										rec = returnData.data[0];																				
+										tab_panel.getViewModel().setData({rec: rec});
+										tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
+									}, scope: this,
+									
+									failure: function(rec, op) {
+										alert('error');
+										var result = Ext.JSON.decode(op.getResponse().responseText);
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: result.message,
+					                        icon: Ext.MessageBox.ERROR,
+					                        buttons: Ext.Msg.OK
+				                    	})					
+									}, scope: this,						
+													 
+						    	});
+				 			}
+				 		}, {iconCls: 'fa fa-refresh',  text: 'Visualizza',
+							handler: function(event, toolEl, panel){ 
+				 			}
+				 		}, {iconCls: 'fa fa-refresh',  text: 'Richiedi variazione', bind: {disabled: '{!enable_operations.estimate_request_modify}'},				 		
+							handler: function(event, toolEl, panel){
+							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
+							   if(btn === 'yes'){
+								Ext.Ajax.request({
+				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'req_estimate_modify').to_json -%>,
+				                    waitMsg: 'Salvataggio in corso....',
+									method:'POST',                     
+				                    jsonData: {rec_id: <%= @item.id -%>},	
+				             	
+									success: function(result, request) {					
+										var returnData = Ext.JSON.decode(result.responseText);
+
+										if (returnData.success == false){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: returnData.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})
+					                      return false;										
+										}
+										
+										//aggiorno il record per il bind e operation_list
+										tab_panel = this.up('container[itemId=tab_panel]');
+										rec = returnData.data[0];																				
+										tab_panel.getViewModel().setData({rec: rec});
+										tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
+									}, scope: this,
+									
+									failure: function(rec, op) {
+										alert('error');
+										var result = Ext.JSON.decode(op.getResponse().responseText);
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: result.message,
+					                        icon: Ext.MessageBox.ERROR,
+					                        buttons: Ext.Msg.OK
+				                    	})					
+									}, scope: this,						
+													 
+						    	});							   
+							   } //btn == 'yes'
+							  }, this); 
+
+				 			}
+				 		}, {iconCls: 'fa fa-refresh',  text: 'Note',
+							handler: function(event, toolEl, panel){ 
+				 			}
+				 		}
+				 		
+        	    ]
+        	   }
+        	  ]
+			  
+			} //REDATTO
+		
+
+		
+
+
+
+			//AUTORIZZATO (da shipowner)
+			, {			  			  			
+			  items: [
+				{html: '<h2>Autorizzazione del preventivo</h2>'},
+				{xtype: 'textfield', fieldLabel: 'Autorizzato il', bind: '{rec.estimate_authorized_at:date("d/m/Y H:i")}'},
+				{xtype: 'textfield', fieldLabel: 'Autorizzato da', bind: '{rec.estimate_authorized_user_name}'}
+			  ]
+			  
+        	  , dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'bottom',
+        	    items: [
+						{iconCls: 'fa fa-refresh', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.estimate_authorized_modify}'},
+							handler: function(event, toolEl, panel){
+							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
+							   if(btn === 'yes'){
+								Ext.Ajax.request({
+				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_authorized').to_json -%>,
+				                    waitMsg: 'Salvataggio in corso....',
+									method:'POST',                     
+				                    jsonData: {rec_id: <%= @item.id -%>},	
+				             	
+									success: function(result, request) {					
+										var returnData = Ext.JSON.decode(result.responseText);
+
+										if (returnData.success == false){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: returnData.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})
+					                      return false;										
+										}
+										
+										//aggiorno il record per il bind e operation_list
+										tab_panel = this.up('container[itemId=tab_panel]');
+										rec = returnData.data[0];																				
+										tab_panel.getViewModel().setData({rec: rec});
+										tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
+									}, scope: this,
+									
+									failure: function(rec, op) {
+										alert('error');
+										var result = Ext.JSON.decode(op.getResponse().responseText);
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: result.message,
+					                        icon: Ext.MessageBox.ERROR,
+					                        buttons: Ext.Msg.OK
+				                    	})					
+									}, scope: this,						
+													 
+						    	});							   
+							   } //btn == 'yes'
+							  }, this); 
+							 
+				 			}
+				 		}, {iconCls: 'fa fa-refresh', text: 'Visualizza dettagli',
+							handler: function(event, toolEl, panel){							 
+				 			} //handler
+				 		}        	    
+        	    ]
+        	   }
+        	  ]
+			  
+			} //AUTORIZZATO
+		
+		
+		
+		
+
+			//CONTAINER RIPARATO
+			, {			  			  			
+			  items: [
+				{html: '<h2>Riparazione eseguita</h2>'},
+				{xtype: 'textfield', fieldLabel: 'Riparato il', bind: '{rec.repair_completed_at:date("d/m/Y H:i")}'},
+				{xtype: 'textfield', fieldLabel: 'Riparato da', bind: '{rec.repair_completed_user_name}'}
+			  ]
+			  
+        	  , dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'bottom',
+        	    items: [
+						{iconCls: 'fa fa-refresh', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.repair_completed_modify}'},
+							handler: function(event, toolEl, panel){
+							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
+							   if(btn === 'yes'){
+								Ext.Ajax.request({
+				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_repair_completed').to_json -%>,
+				                    waitMsg: 'Salvataggio in corso....',
+									method:'POST',                     
+				                    jsonData: {rec_id: <%= @item.id -%>},	
+				             	
+									success: function(result, request) {					
+										var returnData = Ext.JSON.decode(result.responseText);
+
+										if (returnData.success == false){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: returnData.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})
+					                      return false;										
+										}
+										
+										//aggiorno il record per il bind e operation_list
+										tab_panel = this.up('container[itemId=tab_panel]');
+										rec = returnData.data[0];																				
+										tab_panel.getViewModel().setData({rec: rec});
+										tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
+									}, scope: this,
+									
+									failure: function(rec, op) {
+										alert('error');
+										var result = Ext.JSON.decode(op.getResponse().responseText);
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: result.message,
+					                        icon: Ext.MessageBox.ERROR,
+					                        buttons: Ext.Msg.OK
+				                    	})					
+									}, scope: this,						
+													 
+						    	});							   
+							   } //btn == 'yes'
+							  }, this); 
+
+				 			} //handler
+				 		}        	    
+        	    ]
+        	   }
+        	  ]
+			  
+			} //RIPARATO
+		
+		
+
+
+			//CONTAINER RIPORTATO IN TERMINAL
+			, {			  			  			
+			  items: [
+				{html: '<h2>Ritorno in terminal</h2>'},
+				{xtype: 'textfield', fieldLabel: 'In terminal il', bind: '{rec.out_garage_at:date("d/m/Y H:i")}'},
+				{xtype: 'textfield', fieldLabel: 'In terminal da', bind: '{rec.out_garage_user_name}'}
+			  ]
+			  
+        	  , dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'bottom',
+        	    items: [
+						{iconCls: 'fa fa-refresh', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.out_garage_modify}'}, 
+							handler: function(event, toolEl, panel){
+							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
+							   if(btn === 'yes'){
+								Ext.Ajax.request({
+				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_out_garage').to_json -%>,
+				                    waitMsg: 'Salvataggio in corso....',
+									method:'POST',                     
+				                    jsonData: {rec_id: <%= @item.id -%>},	
+				             	
+									success: function(result, request) {					
+										var returnData = Ext.JSON.decode(result.responseText);
+
+										if (returnData.success == false){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: returnData.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})
+					                      return false;										
+										}
+										
+										//aggiorno il record per il bind e operation_list
+										tab_panel = this.up('container[itemId=tab_panel]');
+										rec = returnData.data[0];																				
+										tab_panel.getViewModel().setData({rec: rec});
+										tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
+									}, scope: this,
+									
+									failure: function(rec, op) {
+										alert('error');
+										var result = Ext.JSON.decode(op.getResponse().responseText);
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: result.message,
+					                        icon: Ext.MessageBox.ERROR,
+					                        buttons: Ext.Msg.OK
+				                    	})					
+									}, scope: this,						
+													 
+						    	});							   
+							   } //btn == 'yes'
+							  }, this); 
+							 
+				 			} //handler
+				 		}        	    
+        	    ]
+        	   }
+        	  ]
+			  
+			} //RIPORTATO IN TERMINAL
+	     
+
+	  ]
+	} //INTESTAZIONE
+	
+     
+  
+  ]
+ }
+ ]
+}

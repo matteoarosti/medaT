@@ -170,7 +170,12 @@ def hitems_sc_create
        hi.moved_at = Time.zone.now
        hi.save!     
      end 
-         
+       
+      #apro eventuale item in RepairHandlingItem
+      if hi.lock_type == 'DAMAGED'
+        rhi = RepairHandlingItem.create_from_hi(hi)
+      end
+       
      render json: {:success => ret_status, :message => message, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]}
        
    rescue => exception
@@ -349,7 +354,7 @@ end
        
      render json: items.limit(2000).as_json(hh_as_json_prop)
      
-     when 'lock_DAMAGED'         
+     when 'lock_DAMAGED_OLDDDD'
       #per ogni hh aggiungo altre informazioni 
       hh_as_json_prop = HandlingHeader.as_json_prop
       hh_as_json_prop[:methods] << :get_lock_DAMAGED_date     
@@ -364,6 +369,12 @@ end
           items = items.locked_DAMAGED          
       end    
       render json: items.limit(2000).as_json(hh_as_json_prop)
+      
+   when 'lock_DAMAGED'
+     items = RepairHandlingItem.where('repair_status=?', 'OPEN')
+     items = items.joins(:handling_header)
+     render json: items.limit(2000).as_json(RepairHandlingItem.as_json_prop)     
+        
 
    when 'to_be_moved'
      #per ogni hh aggiungo altre informazioni 11111

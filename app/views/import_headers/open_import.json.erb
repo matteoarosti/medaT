@@ -246,6 +246,9 @@
 		                		scale: 'large',			                    
 			                        handler: function(button, b, c, d, e) {
 			                        
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();
+			                        
 			                           //costruisco una form
 			                           //se ho spuntato 'hide_check' committo subito
 			                           //altrimenti mostro la form per la conferma
@@ -277,7 +280,9 @@
 										    , 	buttons:
 											        [{
 											            text: 'Conferma',
-											            handler: function (btn, evt) {              
+											            handler: function (btn, evt) {
+											             btn.disable();
+											                           
 											             form = this.up('form').getForm();
 											             tmp_win  = this.up('window');
 											             if (form.isValid()) {
@@ -392,7 +397,12 @@
 								text: '<i class="fa fa-warning fa-3x"></i>',
 								cls: 'btn-del',
 		                		scale: 'large',			                    
-			                        handler: function(grid, rowIndex, colIndex, a, b) {
+			                        //handler: function(grid, rowIndex, colIndex, a, b) {			                        
+			                        handler: function(button, b, c, d, e) {
+
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();
+
 
 		                           //costruisco una form
 			                           //se ho spuntato 'hide_check' committo subito
@@ -425,7 +435,9 @@
 										    , 	buttons:
 											        [{
 											            text: 'Conferma',
-											            handler: function (btn, evt) {              
+											            handler: function (btn, evt) {
+											             btn.disable();
+											                           
 											             form = this.up('form').getForm();
 											             tmp_win  = this.up('window');
 											             if (form.isValid()) {

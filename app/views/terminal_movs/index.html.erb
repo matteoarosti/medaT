@@ -97,6 +97,7 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                              }
                              
                              
+<% if User.current.admin_can?(:repair, :table) %>                             
                              //riparazioni
 							 , {
 	    		                task:<%= raw t("menu.tables.tables_repair").to_json %>,
@@ -127,7 +128,7 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                              	  
 	    		                ]                             
                               }
-                             
+<% end %>                             
                              
                                 		                 
     		                ]

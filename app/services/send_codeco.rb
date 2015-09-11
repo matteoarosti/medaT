@@ -16,6 +16,7 @@ class SendCodeco
     his = his.where({container_FE: container_fe})
     his = his.where({operation_type: 'MT'}) #devono essere inviati solo i movimenti terminal
     his = his.where({ship_id: nil}) #devono essere inviati solo i movimenti terminal
+    his = his.limit(10)
 
     cs = CodecoSend.new
     cs.save
@@ -33,6 +34,7 @@ class SendCodeco
       begin
         mm = HandlingMailer.send_codeco_email(email_to, subject, content_file, file_name).deliver!
         set_codeco_sent(his, cs)
+        set_codeco_send(cs)
       rescue Exception => e
         #gestire l'errore
         print "ERRORE: #{e.message}"
@@ -128,7 +130,6 @@ class SendCodeco
       c_row = c_row + 'DTM+7:' + c_dataora + ':203' + "'" + "\n"
       c_count += 1
       if c_export == "E" then
-        puts hi.id.to_s + " " + hi.handling_header.container_number
         c_row = c_row + 'LOC+11+' + c_destinazione.to_s + '::6' + "'" + "\n"
         c_count += 1
       end
@@ -174,7 +175,15 @@ class SendCodeco
 
 
   def prepare_subject_cma(shipowner, container_fe)
-    return 'C'
+    if container_fe ==  "F"
+      subject = 'ICOP CODECO FULL CONTAINERS ' + Time.now.strftime("%Y%m%d_%H%M") + ".txt"
+    end
+
+    if container_fe ==  "E"
+      subject = 'ICOP CODECO EMPTY CONTAINERS ' + Time.now.strftime("%Y%m%d_%H%M") + ".txt"
+    end
+
+    return subject
   end
 
 
@@ -191,7 +200,7 @@ class SendCodeco
 
 
   def set_codeco_send(cs)
-
+    cs.shipowner_id = 3
   end
 
 

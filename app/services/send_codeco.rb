@@ -1,13 +1,11 @@
 class SendCodeco
 
   def call(shipowner, shipowner_list, email_to)
-
     send_codeco(shipowner, shipowner_list, 'F', email_to)
-
     send_codeco(shipowner, shipowner_list, 'E', email_to)
-
   end
 
+  
   def send_codeco(shipowner, shipwowner_list, container_fe, email_to)
     #legge tutti gli hi di una data e di una compagnia
     his = HandlingItem.where({handling_headers: {shipowner_id: shipowner} })
@@ -31,6 +29,7 @@ class SendCodeco
     if content_file != ""
 
       begin
+        print "\nInvio email a #{email_to}\n"
         mm = HandlingMailer.send_codeco_email(email_to, subject, content_file, file_name).deliver!
         set_codeco_sent(his, cs)
         set_codeco_send(cs)
@@ -42,6 +41,8 @@ class SendCodeco
     end
 
   end #call
+  
+  
 
 
   def prepare_file_cma(shipowner, his, cs, container_fe)

@@ -55,6 +55,34 @@ end
 
 
 
+def estimate_edit
+  @item = RepairHandlingItem.find(params[:rhi_id])
+end
+
+def get_estimate_items
+  ret = {}
+   rhi = RepairHandlingItem.find(params[:rhi_id])
+   ret[:items] = rhi.repair_estimate_items.as_json(RepairEstimateItem.as_json_prop)
+   ret[:success] = true
+   render json: ret
+end
+
+def estimate_new_row  
+  @rhi = RepairHandlingItem.find(params[:rhi_id])
+  @rei = @rhi.repair_estimate_items.new
+end
+
+def get_processings_by_rhi
+  rhi = RepairHandlingItem.find(params[:rhi_id])
+  ret = {}
+   rps = RepairPrice.where("shipowner_id=?", rhi.handling_header.shipowner_id)
+   ret[:items] = rps.as_json(RepairPrice.as_json_prop)
+   ret[:success] = true
+   render json: ret
+end
+
+
+
 
 def exe_save(item)
    message = ''

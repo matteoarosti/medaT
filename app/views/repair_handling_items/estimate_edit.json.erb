@@ -1,0 +1,131 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  title: 'Preventivo',
+  flex: 1,
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+
+
+  items: [
+  
+     //INTESTAZIONE (CONTAINER, EQUIPMENT, ....)
+	{
+	  xtype: 'panel',
+	  border: true,
+	    layout: {
+		    type: 'hbox',
+		    pack: 'start',
+		    align: 'stretch'
+		},
+	  bodyStyle: 'background-color: #e0e0e0;',
+		
+      defaults: {
+      	style: 'margin: 10px; padding: 10px;'
+      },
+	
+	  items: [
+	     <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Container', value: #{@item.handling_header.container_number.to_json}}" -%>,
+		 <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Compagnia', value: #{@item.handling_header.shipowner.name.to_json}}" -%>,	     
+	     <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Equipment', value: #{@item.handling_header.equipment.equipment_type.to_json}}" -%>
+	  ]
+	} //INTESTAZIONE
+	
+
+	//GRID ---
+   // grid con righe preventivo
+		, {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Righe preventivo',
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'get_estimate_items').to_json -%>,
+        	            extraParams: {        	            	
+        	            	rhi_id: <%= @item.id -%>
+        	            },
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	    }),
+        	   
+ 		        	   
+        	           	    
+        	    
+			    columns: [
+			     {
+			        dataIndex: 'container_number',
+			        text: 'prova',
+			        width: 50,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			     }
+			    ],
+			    
+			    
+			    
+			    
+			dockedItems: [
+			  {
+			    xtype: 'toolbar',
+			    dock: 'right',
+			    width: 135,
+				defaults: {
+			        xtype: 'button', scale: 'medium', textAlign: 'left'
+                },			    
+			    margin: '40 10 10 10',
+			    items: [
+			    	{text: 'Nuova riga', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add', 
+			    		handler: function(){
+			    			//apro la form per una nuova riga di dettaglio
+							 my_listeners = {};						    
+						     new_win = acs_show_win_std('Riga preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_new_row').to_json -%>,
+				     	 		{rhi_id: <%= @item.id -%>},
+				     	 		500, 400, my_listeners);										
+			    			
+			    		}
+			    	}
+			    ]
+			  }
+			 ]
+
+			    
+
+				    
+
+                        	    
+        	}    
+ 	
+	//--- GRID
+     
+  
+  ]
+ }
+ ]
+}

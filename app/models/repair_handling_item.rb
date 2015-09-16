@@ -2,6 +2,7 @@ class RepairHandlingItem < ActiveRecord::Base
   
   belongs_to :handling_item
   has_one :handling_header, through: :handling_item
+  has_many :repair_estimate_items, :dependent => :destroy
   
   
   #ho concluso tutte le fasi della riparazione

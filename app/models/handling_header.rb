@@ -3,6 +3,7 @@ class HandlingHeader < ActiveRecord::Base
  belongs_to :shipowner
  belongs_to :equipment
  belongs_to :booking
+ belongs_to :pier #banchina
  has_many :handling_items, :dependent => :destroy
    
  scope :extjs_default_scope, -> { eager_load(:shipowner, :equipment) }

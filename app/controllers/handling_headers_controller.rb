@@ -380,7 +380,7 @@ end
      #per ogni hh aggiungo altre informazioni 11111
      hh_as_json_prop = HandlingItem.as_json_prop
      hh_as_json_prop[:include] = hh_as_json_prop[:include] || [] 
-     hh_as_json_prop[:include] << {:handling_header => {:include=>[:equipment, :shipowner]}}
+     hh_as_json_prop[:include] << {:handling_header => {:include=>[:equipment, :shipowner, :pier]}}
      ret = HandlingItem.joins(:handling_header).where('1=1').to_be_moved
      if !params[:flt_num_container].to_s.empty?
        ret = ret.where("handling_headers.container_number LIKE ?", "%#{params[:flt_num_container].upcase}%")

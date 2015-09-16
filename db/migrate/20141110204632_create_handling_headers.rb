@@ -43,6 +43,7 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.string     :fila,                      :limit => 5
       t.integer    :blocco
       t.integer    :tiro
+      t.belongs_to :pier    #banchina
       
 
       t.timestamps

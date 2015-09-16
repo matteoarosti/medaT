@@ -1,0 +1,39 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   title: '', 
+   closable: false,
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	
+     
+    items: [       
+     	{xtype: 'hidden', name: 'id', value: '<%= @rei.id %>'},
+		{xtype: 'hidden', name: 'repair_handling_item', value: '<%= @rei.repair_handling_item.id %>'},     	
+		<%= raw extjs_std_combo('repair_processing', @rei,
+				:valueField => 'id',
+				:displayField => 'repair_processing_name',
+				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_processings_by_rhi', :rhi_id => @rhi.id))) -%>
+     	     	
+	],
+    
+   buttons: [
+    {
+        text: '<i class="fa fa-navicon fa"></i> Analitica',
+        handler: function(){
+        }
+    }    
+   ] 
+    
+  }
+ ]
+}

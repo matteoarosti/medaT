@@ -117,7 +117,16 @@
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
 						{iconCls: 'fa fa-refresh',  text: 'Crea/modifica preventivo', bind: {disabled: '{!enable_operations.estimate_modify}'},
-							handler: function(event, toolEl, panel){
+						
+						    handler: function(event, toolEl, panel){
+							 my_listeners = {};						    
+						     new_win = acs_show_win_std('Dettaglio Preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_edit').to_json -%>,
+				     	 		{rhi_id: <%= @item.id -%>},
+				     	 		900, 700, my_listeners);										
+						     
+						    },
+						
+							handler222222: function(event, toolEl, panel){
 								//per test: imposto subito il preventivo come inviato
 								Ext.Ajax.request({
 				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_estimate').to_json -%>,

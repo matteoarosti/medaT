@@ -139,11 +139,28 @@
 			        text: <%= raw t('forms.to_be_handled.positioning').to_json -%>,
 			        width: 150,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         
+			         fila = '';
+			         tiro = '';
+			         blocco = '';
+			         banchina = '';
+			         console.log(rec.get('handling_header'));
+			         console.log(rec.get('handling_header').fila);
+			         if (!Ext.isEmpty(rec.get('handling_header').fila))
+			          fila = rec.get('handling_header').fila + '';
+			         if (!Ext.isEmpty(rec.get('handling_header').blocco))
+			          blocco = rec.get('handling_header').blocco;
+			         if (!Ext.isEmpty(rec.get('handling_header').tiro))
+			          tiro = rec.get('handling_header').tiro;
+			         if (!Ext.isEmpty(rec.get('handling_header').pier))
+			          banchina = rec.get('handling_header').pier.name;
+			          
 			         ret = '';
-			         ret += '<table class=import_item_detail>';			         
-					 ret += '<tr><th>Fila</th><td>' + rec.get('handling_header').fila + '</td></tr>';			         
-					 ret += '<tr><th>Blocco</th><td>' + rec.get('handling_header').blocco + '</td></tr>';
-					 ret += '<tr><th>Tiro</th><td>' + rec.get('handling_header').tiro + '</td></tr>';
+			         ret += '<table class=import_item_detail>';			  
+ 			         ret += '<tr><td colspan=2 style="padding-left: 0px">' + banchina + '</td></tr>';			         
+					 ret += '<tr><th>Fila</th><td>' + fila + '</td></tr>';			         
+					 ret += '<tr><th>Blocco</th><td>' + blocco + '</td></tr>';
+					 ret += '<tr><th>Tiro</th><td>' + tiro + '</td></tr>';
 			         ret += '</table>';
 			         return ret;
 			         

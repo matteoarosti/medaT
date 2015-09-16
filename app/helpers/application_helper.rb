@@ -72,14 +72,15 @@ module ApplicationHelper
  
  def extjs_std_combo_model(name, item, p = {}, attr = {})
   field_name = name + '_id'
+  input_name = p[:input_name] || (p[:input_prefix].to_s + name + '_id')    
   model_class = name.camelize.constantize
 
   add_attr = extsj_create_attr_str(attr)
   
   ret = "
     {
-      xtype: 'combobox', name: #{field_name.to_json}, value: #{item.send(field_name).to_json}, 
-      fieldLabel: #{name.humanize.to_json},
+      xtype: 'combobox', name: #{input_name.to_json}, value: #{item.send(field_name).to_json},
+      fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json},
       displayField: #{model_class.combo_displayField.to_json},
       valueField: 'id',
       forceSelection: true,
@@ -286,7 +287,8 @@ module ApplicationHelper
   #TODO: serve gestirlo meglio?   
   hh.fila   = nil
   hh.blocco = nil
-  hh.tiro   = nil 
+  hh.tiro   = nil
+  hh.pier   = nil 
    
  #posizionamento
    ret = "
@@ -302,11 +304,12 @@ module ApplicationHelper
                msgTarget : 'side',
                layout: 'hbox',
                anchor: '100%',
-               defaults: {xtype: 'textfield', flex: 1, hideLabel: false, labelWidth: 100, labelAlign: 'right'},
+               defaults: {xtype: 'textfield', width: 90, hideLabel: false, labelWidth: 40, labelAlign: 'right'},
                items: [                 
                     #{extjs_std_textfield('fila', hh, :allowBlank => true, :input_prefix => 'hh_')},
                     #{extjs_std_textfield('blocco', hh, :allowBlank => true, :input_prefix => 'hh_')},
-                    #{extjs_std_textfield('tiro', hh, :allowBlank => true, :input_prefix => 'hh_')}   
+                    #{extjs_std_textfield('tiro', hh, :allowBlank => true, :input_prefix => 'hh_')},
+                    #{extjs_std_combo_model('pier', hh, {:allowBlank => true, :input_prefix => 'hh_', :fieldLabel => 'Banchina'}, {:flex => 1, :labelWidth => 90})}  
            ]
        }
      ]

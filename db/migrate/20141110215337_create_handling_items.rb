@@ -11,6 +11,7 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.integer     :ship_id,               :limit => 8
       t.string      :voyage,                :limit => 15
       t.string      :driver,                :limit => 50
+      t.string      :plate,                 :limit => 15 #targa mezzo
       t.boolean     :export
       t.string      :seal_shipowner,        :limit => 15
       t.string      :seal_others,           :limit => 15

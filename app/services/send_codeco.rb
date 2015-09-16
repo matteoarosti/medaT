@@ -17,6 +17,8 @@ class SendCodeco
 
     cs = CodecoSend.new
     cs.save
+    
+    print "\nCodeco id: #{cs.id.to_s}\n"
 
     case shipowner
       when 3 #CMA

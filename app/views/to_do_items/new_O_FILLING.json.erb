@@ -19,7 +19,8 @@
     	<%= raw extjs_std_combo_model('shipowner', @item) -%>,
     	<%= raw extjs_std_combo_model('equipment', @item) -%>,
     	<%= raw extjs_std_combo_model('carrier', @item) -%>,
-    	{xtype: 'textfield', name: 'driver', fieldLabel: 'Autista', allowBlank: false}
+    	{xtype: 'textfield', name: 'driver', fieldLabel: 'Autista', allowBlank: false, maxLength: 15},
+    	{xtype: 'textfield', name: 'plate', fieldLabel: 'Targa', allowBlank: false, maxLength: 15}
 	], 
 	
 	

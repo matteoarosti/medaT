@@ -119,11 +119,18 @@
 			        text: <%= raw t('forms.to_be_handled.details').to_json -%>,
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         
+			         
+			         if (Ext.isEmpty(rec.get('plate')))
+			          out_plate = '';
+			         else
+			          out_plate = '[' + rec.get('plate') + ']';
+			          
 			         ret = '';
 			         ret += '<table class=import_item_detail>';
 			         ret += '<tr><th>Comp.</th><td>' + rec.data.handling_header.shipowner.name + '</td></tr>';
 			         ret += '<tr><th>Equip.</th><td>' + rec.get('handling_header').equipment.equipment_type + '</td></tr>';	
-			         ret += '<tr><th>Vet./Aut.</th><td>' + rec.get('carrier_id_Name') + '/' + rec.get('driver') + '</td></tr>';
+			         ret += '<tr><th>Targa/Aut.</th><td>' + out_plate + ' ' + rec.get('driver') + ' - ' + rec.get('carrier_id_Name') + '</td></tr>';
 			         ret += '</table>';
 			         return ret;
 			         

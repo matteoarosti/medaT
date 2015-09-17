@@ -281,15 +281,27 @@ module ApplicationHelper
  end
  
  
+ def extjs_driver_plate(label, hi, p = {})  
+   ret = ""
+   
+   ar_note_field = []
+   ar_note_field << "{xtype: 'textfield', name: 'driver', fieldLabel: 'Driver', maxLength: 50}"
+   ar_note_field << "{xtype: 'textfield', labelAlign: 'right', name: 'plate', fieldLabel: 'Targa', maxLength: 15}"
+     
+   ret += extjs_fieldcontainer('', {:layout=>"hbox"}, ar_note_field)  
+ end
+
  
  
- def extjs_posizionamento(label, hh, hi)     
+ def extjs_posizionamento(label, hh, hi, p = {})     
   #TODO: serve gestirlo meglio?   
   hh.fila   = nil
   hh.blocco = nil
   hh.tiro   = nil
   hh.pier   = nil 
-   
+  
+  allowBlank = p[:allowBlank].to_s 
+        
  #posizionamento
    ret = "
    {
@@ -306,10 +318,10 @@ module ApplicationHelper
                anchor: '100%',
                defaults: {xtype: 'textfield', width: 90, hideLabel: false, labelWidth: 40, labelAlign: 'right'},
                items: [                 
-                    #{extjs_std_textfield('fila', hh, :allowBlank => true, :input_prefix => 'hh_')},
-                    #{extjs_std_textfield('blocco', hh, :allowBlank => true, :input_prefix => 'hh_')},
-                    #{extjs_std_textfield('tiro', hh, :allowBlank => true, :input_prefix => 'hh_')},
-                    #{extjs_std_combo_model('pier', hh, {:allowBlank => true, :input_prefix => 'hh_', :fieldLabel => 'Banchina'}, {:flex => 1, :labelWidth => 90})}  
+                    #{extjs_std_textfield('fila', hh, :allowBlank => allowBlank, :input_prefix => 'hh_')},
+                    #{extjs_std_textfield('blocco', hh, :allowBlank => allowBlank, :input_prefix => 'hh_')},
+                    #{extjs_std_textfield('tiro', hh, :allowBlank => allowBlank, :input_prefix => 'hh_')},
+                    #{extjs_std_combo_model('pier', hh, {:allowBlank => allowBlank, :input_prefix => 'hh_', :fieldLabel => 'Banchina'}, {:flex => 1, :labelWidth => 90})}  
            ]
        }
      ]

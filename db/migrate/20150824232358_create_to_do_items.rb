@@ -25,6 +25,7 @@ class CreateToDoItems < ActiveRecord::Migration
       t.string      :voyage,                :limit => 15
       t.belongs_to  :carrier      
       t.string      :driver,                :limit => 50
+      t.string      :plate,                 :limit => 15 #targa mezzo      
       
       t.text        :notes,                 :limit => 64.kilobytes
       t.text        :notes_int,             :limit => 64.kilobytes

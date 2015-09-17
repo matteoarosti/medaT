@@ -23,7 +23,7 @@
 	   <%= raw extjs_std_combo('inspection_type_id', @new_rec, :valueField => 'id', :displayField => 'name', :allowBlank => false, :store => extjs_std_store_data(InspectionType.get_data_json)) -%>,
        <%= raw extjs_std_combo_model('shipper', @new_rec) -%>,
        <%= raw extjs_std_combo_model('terminal', @new_rec) -%>,
-       <%= raw extjs_std_textfield('driver', @new_rec) -%>,
+       <%= raw extjs_driver_plate('Autista / Targa', @new_rec) -%>,
        
        <%= raw extjs_notes('notes', @hh, @new_rec) -%>
    ],

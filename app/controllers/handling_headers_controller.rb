@@ -397,6 +397,7 @@ end
            :container_FE => tdi.container_FE,
            :carrier_id_Name => tdi.carrier.name,
            :driver => tdi.driver,
+           :plate  => tdi.plate,
            :created_at => tdi.created_at,
            :handling_header => {
               :container_number => "DA ASSEGNARE",

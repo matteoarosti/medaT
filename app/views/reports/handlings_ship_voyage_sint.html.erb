@@ -1,4 +1,6 @@
-<h1>Handling Sintetica</h1>
+<% formValues = JSON.parse params['formValues'] %>
+<% ship = Ship.find(formValues['ship_id']) %>
+<h1 class=medaT-report>Lista per nave/viaggio: <%= "#{ship.name} / #{formValues['voyage']}" -%></h1>
 
 <%
 #Recupero elenco movimenti in base ai parametri

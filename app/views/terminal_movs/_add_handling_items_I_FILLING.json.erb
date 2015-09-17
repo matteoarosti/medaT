@@ -22,8 +22,8 @@
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},   
     
 	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
-    <%= raw extjs_std_combo_model('carrier', @new_rec) -%>,
-    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver'},
+    <%= raw extjs_std_combo_model('carrier', @new_rec) -%>,    
+    <%= raw extjs_driver_plate('Autista / Targa', @new_rec) -%>,
     
 
 	    {
@@ -50,7 +50,7 @@
     
     
     <%= raw extjs_to_be_moved('to_be_moved', @hh, @new_rec) -%>,
-    <%= raw extjs_posizionamento('da_posizionare', @hh, @new_rec) -%>,
+    <%= raw extjs_posizionamento('da_posizionare', @hh, @new_rec, {:allowBlank => false}) -%>,
     <%= raw extjs_info_booking(@hh, @new_rec) -%>,
     
     <%= raw extjs_notes('notes', @hh, @new_rec) -%>

@@ -23,7 +23,7 @@
     
 	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,    
     <%= raw extjs_std_combo_model('carrier', @new_rec) -%>,
-    {xtype: 'textfield', name: 'driver', fieldLabel: 'Driver'},
+    <%= raw extjs_driver_plate('Autista / Targa', @new_rec) -%>,
     
 
 	    {

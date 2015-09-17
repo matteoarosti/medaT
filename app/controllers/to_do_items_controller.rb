@@ -112,6 +112,7 @@ class ToDoItemsController < ApplicationController
     hi.container_FE = tdi.container_FE
     hi.carrier_id   = tdi.carrier_id
     hi.driver       = tdi.driver
+    hi.plate        = tdi.plate
     
    #controllo su numero booking
    if !tdi.num_booking.blank?  

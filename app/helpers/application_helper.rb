@@ -300,7 +300,8 @@ module ApplicationHelper
   hh.tiro   = nil
   hh.pier   = nil 
   
-  allowBlank = p[:allowBlank].to_s 
+  allowBlank = p[:allowBlank]
+  allowBlank = true if allowBlank.to_s.empty? 
         
  #posizionamento
    ret = "

@@ -41,7 +41,7 @@ class CreateHandlingHeaders < ActiveRecord::Migration
             
       #fila (stiva), blocco, tiro
       t.string     :fila,                      :limit => 5
-      t.integer    :blocco
+      t.string     :blocco,                    :limit => 3
       t.integer    :tiro
       t.belongs_to :pier    #banchina
       

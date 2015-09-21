@@ -17,9 +17,13 @@ class RepairPrice < ActiveRecord::Base
 
   
   def repair_processing_name
-    [ self.repair_processing.repair_component.description_it, 
-      self.repair_processing.repair_position.description_it, 
-      self.repair_processing.description_it].join(' | ')
+   if self.repair_processing.nil?
+   	return '#PROC_DELETE#'
+   else 
+    return [ self.repair_processing.repair_component.nil? ? '#DEL#' : self.repair_processing.repair_component.description_it, 
+      self.repair_processing.repair_position.nil? ? '#DEL#' : self.repair_processing.repair_position.description_it, 
+      self.repair_processing.description_it.to_s].join(' | ')
+   end   
   end
 
   

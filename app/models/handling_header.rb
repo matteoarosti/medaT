@@ -524,11 +524,11 @@ end
 ################################################################
 def sincro_set_end_reefer_connection(value, hi)
 ################################################################
-  #se richiesto chiudo l'operazione di allaccio frigo per il container in corso
+  #se richiesto chiudo l'operazione di allaccio frigo per il container in corso (dettagli non ancora chiusi)
     if (value == true)
-      logger.info "Termino allaccio frigo"
       self.handling_items.each do |hi_reefer|
-        if hi_reefer.handling_item_type == 'FRCON'
+        if hi_reefer.handling_item_type == 'FRCON' && hi_reefer.datetime_op_end.nil?
+      	   logger.info "Termino allaccio frigo"        
            hi_reefer.datetime_op_end = hi.datetime_op
            hi_reefer.save!
         end

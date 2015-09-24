@@ -9,7 +9,7 @@ class RepairPrice < ActiveRecord::Base
       return {
          :include=>{
             :repair_processing => {},
-            :shipowner => {:only => [:name]}
+            :shipowner => {:only => [:name, :short_name]}
             },
          :methods=>[:repair_processing_name]
          }
@@ -20,8 +20,8 @@ class RepairPrice < ActiveRecord::Base
    if self.repair_processing.nil?
    	return '#PROC_DELETE#'
    else 
-    return [ self.repair_processing.repair_component.nil? ? '#DEL#' : self.repair_processing.repair_component.description_it, 
-      self.repair_processing.repair_position.nil? ? '#DEL#' : self.repair_processing.repair_position.description_it, 
+    return [ self.repair_processing.repair_position.nil? ? '#DEL#' : self.repair_processing.repair_position.description_it, 
+      self.repair_processing.repair_component.nil? ? '#DEL#' : self.repair_processing.repair_component.description_it, 
       self.repair_processing.description_it.to_s].join(' | ')
    end   
   end

@@ -6,5 +6,9 @@
 	<%= raw extjs_std_numberfield_bind('customer_material_price', @new_rec) -%>,
 
 	<%= raw extjs_std_numberfield_bind('provider_time', @new_rec) -%>,
-	<%= raw extjs_std_numberfield_bind('provider_material_price', @new_rec) -%>,	
+	<%= raw extjs_std_numberfield_bind('provider_material_price', @new_rec) -%>,
+	
+	{"fieldLabel":"Code1","bind":"{rec.code1}","maxLength":20},
+	{"fieldLabel":"Code2","bind":"{rec.code2}","maxLength":20},
+		
 ]

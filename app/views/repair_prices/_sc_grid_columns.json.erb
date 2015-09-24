@@ -1,12 +1,12 @@
 [
 {text:"id",		"dataIndex":"id",		width: 60, "xtype":"numbercolumn","align":"right","format":"0"},
 {text: "<%= t('tables.repair_prices.repair_processing') -%>",  "dataIndex":"repair_processing_name",  "flex":1}, 
-{text: "<%= t('tables.ships.shipowner') -%>",  "dataIndex":"shipowner_id",  "flex":1,
+{text: "<%= t('tables.ships.shipowner') -%>",  "dataIndex":"shipowner_id",  width: 80,
 	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 					 if (typeof(rec.data.shipowner) === 'undefined')
 					 	return value;
 					 else
-					 	return rec.data.shipowner.name;
+					 	return rec.data.shipowner.short_name;
 	}
 }
 	, {text: "<%= t('tables.repair_prices.customer_time') -%>",  "dataIndex":"customer_time",  width: 80}
@@ -14,5 +14,8 @@
 
 	, {text: "<%= t('tables.repair_prices.provider_time') -%>",  "dataIndex":"provider_time",  width: 80}
 	, {text: "<%= t('tables.repair_prices.provider_material_price') -%>",  "dataIndex":"provider_material_price",  width: 80}
+
+	, {text: "Code1",  "dataIndex":"code1",  width: 80}
+	, {text: "Code2",  "dataIndex":"code2",  width: 80}
 	
 ]

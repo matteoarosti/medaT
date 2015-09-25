@@ -18,21 +18,110 @@
      
     items: [       
      	{xtype: 'hidden', name: 'id', value: '<%= @rei.id %>'},
-		{xtype: 'hidden', name: 'repair_handling_item', value: '<%= @rei.repair_handling_item.id %>'},     	
-		<%= raw extjs_std_combo('repair_processing', @rei,
+		{xtype: 'hidden', name: 'repair_handling_item_id', value: '<%= @rei.repair_handling_item.id %>'},
+		
+		<%= raw extjs_std_combo('description_it', @rei.repair_processing.repair_position,
+				:input_name => 'flt_repair_position',
 				:valueField => 'id',
+				:displayField => 'description_it',
+				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_positions_by_rhi', :rhi_id => @rhi.id)),
+				:listeners => "change: function(combo, record, index) {
+								  this.up('form').do_refresh_on_change_position();			  
+							    }"
+			)				
+				 -%>,
+
+		<%= raw extjs_std_combo('description_it', @rei.repair_processing.repair_component,
+				:input_name => 'flt_repair_component',		
+				:valueField => 'id',
+				:displayField => 'description_it',
+				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_components_by_rhi', :rhi_id => @rhi.id)),
+				:listeners => "change: function(combo, record, index) {
+								  this.up('form').do_refresh_on_change_component();			  
+							    }"
+				
+			) -%>,
+		
+		     	
+		<%= raw extjs_std_combo('repair_processing_id', @rei,
+				:valueField => 'repair_processing_id',
 				:displayField => 'repair_processing_name',
-				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_processings_by_rhi', :rhi_id => @rhi.id))) -%>
+				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_processings_by_rhi', :rhi_id => @rhi.id)),
+				:listeners => "change: function(combo, record, index) {
+								  this.up('form').do_refresh_on_change_processing();			  
+							    }"
+				
+			) -%>,
+		
+		<%= raw extjs_std_numberfield('quantity', @rei, {:allowBlank => false}) -%>,		
+		<%= raw extjs_std_textfield('side', @rei, {:allowBlank => true}, {:maxLength => 20}) -%>,
+		
+		<%= raw extjs_std_textareafield('provider_notes', @rei, {:fieldLabel => "Note"}, {:width => "100%"}) -%>,
+		
+	   	{xtype: 'fieldset',
+         title: '',
+         layout: {type: 'hbox'},
+         items: [				
+		
+	   		<%= raw [   		
+	   			extjs_std_textfield('provider_time', @rei, {:allowBlank => true, :fieldLabel => 'Tempo'}, {:disabled => true}), 
+	   			extjs_std_textfield('provider_material_price', @rei, {:allowBlank => true, :fieldLabel => 'Materiale'}, {:disabled => true}) 
+	   			].join(',') -%>
+	   	]
+	   }					
      	     	
 	],
     
    buttons: [
     {
-        text: '<i class="fa fa-navicon fa"></i> Analitica',
-        handler: function(){
-        }
+        text: '<i class="fa fa-navicon fa"></i> Aggiungi',
+        handler: function(btn, evt) {
+        	 m_win = this.up('window');
+        	 form = this.up('form').getForm();
+             if (form.isValid()) {
+             	btn.disable();
+						form.submit({
+	                        url: '<%= url_for(:controller => 'repair_handling_items', :action=>'save_rei') -%>', 
+	                        success: function(fp, o) {
+	                        	m_win.fireEvent('onClose');
+	                            m_win.close();
+	                        },
+							failure: function(fp, op) {
+								var result = Ext.JSON.decode(op.response.responseText);
+								Ext.MessageBox.show({
+			                        title: 'Errore',
+			                        msg: result.message,
+			                        buttons: Ext.Msg.OK
+		                    	});                                
+								btn.enable();
+	                        }	                        
+	                    });             	
+             	
+			 }
+        	
+        } //handler Aggiungi
     }    
    ] 
+   
+   
+   , do_refresh_on_change_position: function(){
+		      f = this.getForm().findField('flt_repair_component');
+		      f.getStore().proxy.extraParams =  this.getForm().getValues();
+		      f.getStore().load();
+    }     
+   
+   , do_refresh_on_change_component: function(){
+		      f = this.getForm().findField('repair_processing_id');
+		      f.getStore().proxy.extraParams =  this.getForm().getValues();
+		      f.getStore().load();
+    }     
+
+   , do_refresh_on_change_processing: function(){
+		      f = this.getForm().findField('repair_processing_id');
+		      this.getForm().findField('provider_time').setValue(f.selection.data.provider_time);
+		      this.getForm().findField('provider_material_price').setValue(f.selection.data.provider_material_price);		      
+
+    }     
     
   }
  ]

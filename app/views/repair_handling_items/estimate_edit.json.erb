@@ -31,9 +31,9 @@
       },
 	
 	  items: [
-	     <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Container', value: #{@item.handling_header.container_number.to_json}}" -%>,
-		 <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Compagnia', value: #{@item.handling_header.shipowner.name.to_json}}" -%>,	     
-	     <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Equipment', value: #{@item.handling_header.equipment.equipment_type.to_json}}" -%>
+	     <%= raw "{flex: 1, labelAlign: 'right', xtype: 'textfield', fieldLabel: 'Container', value: #{@item.handling_header.container_number.to_json}}" -%>,
+		 <%= raw "{flex: 1, labelAlign: 'right', xtype: 'textfield', fieldLabel: 'Compagnia', value: #{@item.handling_header.shipowner.name.to_json}}" -%>,	     
+	     <%= raw "{flex: 1, labelAlign: 'right', xtype: 'textfield', fieldLabel: 'Equipment', value: #{@item.handling_header.equipment.equipment_type.to_json}}" -%>
 	  ]
 	} //INTESTAZIONE
 	
@@ -79,19 +79,55 @@
         	    
 			    columns: [
 			     {
-			        dataIndex: 'container_number',
-			        text: 'prova',
-			        width: 50,
+			        text: 'Seq',
+			        width: 40,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         return '<h5>' + (rowIndex + 1) + '</h5>';
 			        }			        
-			     }
-			    ],
+			     },
+			     {text: "<%= t('tables.repair_prices.repair_processing') -%>",  "dataIndex":"repair_processing_name",  flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<h3>' + value + '</h3>';
+			        
+
+			         if (Ext.isEmpty(rec.get('side')) == false){
+			         	ret += '<table class=import_item_detail>';
+					 	ret += '<tr><th width=100>Dettaglio</th><td width=200>' + rec.get('side') + '&nbsp;</td></tr>';
+			         	ret += '</table>';
+			         }
+			         
+					 if (Ext.isEmpty(rec.get('provider_notes')) == false){
+					 	ret += '<table>';				         
+					 	ret += '<tr><th width=100>Note</th><td>' + rec.get('provider_notes') + '&nbsp;</td></tr>';
+					 	ret += '</table>';					 
+			         }
+			         			         
+			         return ret;
+			        }			        			     
+			     },
+			     {text: "<%= t('tables.std.quantity') -%>",  "dataIndex":"quantity",  width: 90, align: 'right',
+					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
+								        }			     
+			     },
+			     {text: "<%= t('tables.std.time') -%>",  "dataIndex":"provider_time",  width: 90, align: 'right',
+					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
+								        }			     
+			     },
+			     {text: "<%= t('tables.std.material_price') -%>",  "dataIndex":"provider_material_price",  width: 90, align: 'right',
+					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
+								        }			     
+			     },
+			     
+			    ]
 			    
 			    
+		<% unless params[:only_view] == 'Y' %>	    
 			    
-			    
-			dockedItems: [
+			, dockedItems: [
 			  {
 			    xtype: 'toolbar',
 			    dock: 'right',
@@ -104,18 +140,35 @@
 			    	{text: 'Nuova riga', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add', 
 			    		handler: function(){
 			    			//apro la form per una nuova riga di dettaglio
-							 my_listeners = {};						    
+
+			 				my_listeners = {
+		                		onClose: function(fromWindow){
+		                			this.up('grid').store.load();
+		                		}, scope: this		                		
+		                		
+		                	};
+						    
 						     new_win = acs_show_win_std('Riga preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_new_row').to_json -%>,
 				     	 		{rhi_id: <%= @item.id -%>},
 				     	 		500, 400, my_listeners);										
 			    			
 			    		}
-			    	}
+			    	},{xtype: 'tbfill'}, 
+			    	{text: 'Chiudi', iconCls: 'fa fa-plus fa-2x', cls: 'btn-close', 
+			    		handler: function(){
+				    		this.up('window').close();			    			
+			    		}
+			    	}, 
+			    	{text: 'Conferma', iconCls: 'fa fa-plus fa-2x', cls: 'btn-ok', 
+			    		handler: function(){
+				    		this.up('window').fireEvent('onConfirm', this.up('window'));			    			
+			    		}
+			    	}			    	
 			    ]
 			  }
 			 ]
 
-			    
+		<% end %>	    
 
 				    
 

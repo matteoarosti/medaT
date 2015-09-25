@@ -1,5 +1,8 @@
 class RepairComponent < ActiveRecord::Base
   
+  has_many :repair_processings
+  has_many :repair_prices, through: :repair_processings
+  
   scope :extjs_default_scope, -> {}
 
     

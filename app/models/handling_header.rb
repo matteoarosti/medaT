@@ -498,6 +498,32 @@ def sincro_set_handling_header_status(value, hi)
  self.handling_status = value
 end
 
+
+################################################################
+def sincro_set_handling_header_status_by_config(value, hi)
+################################################################
+ #chiudo in base ai parametri indicati sulla compagnia e in base al tipo di equipment (frigo o no) 
+ #value contiene elenco parametri
+ 
+  #se e' stato indicato shipowner_id verifico di essere in una compagnia di quelle elencate
+  if !value[:shipowner_id].nil? 
+    if !value[:shipowner_id].to_s.split(',').include? self.shipowner_id.to_s
+      logger.info "Esco perche' la compagnia non e' di quelle elencate"
+      return false #esco perche' la shipwowner non e' di quelle elencate
+    end
+  end
+    
+  if !value[:reefer].nil?
+    if self.equipment.reefer != value[:reefer]
+      logger.info "Non combagia reefer/non reefer"
+      return false #esco perche' non combacia reefer/non reefer
+    end 
+  end  
+  
+  self.handling_status = value[:new_status]
+end
+
+
 ################################################################
 def sincro_set_operation_type(value, hi)
 ################################################################

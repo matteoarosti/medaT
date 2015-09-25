@@ -70,9 +70,21 @@ s = Ext.create('Ext.container.Viewport',{
         
         items:[
         
+								   {
+										xtype: 'panel',
+										title: '',
+							            region: 'north',
+							            height: 42,
+							            style: 'border-bottom: 1px dotted gray;',
+							            html: [ "<div>",
+							                    "<div id=\"header-customer-logo\"></div>",
+							                    "<div id=\"header-user-name\">" + <%= raw User.current.email.to_json -%> + "</div>",
+							                    "</div>" ],
+							        }        
+        
         
          
-		{
+		, {
 			xtype: 'panel',
 			title: 'Menu',
             region: 'west',

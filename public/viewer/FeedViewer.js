@@ -56,7 +56,20 @@ Ext.define('FeedViewer.App', {
                 type: 'border',
                 padding: 5
             },
-            items: [this.createFeedPanel() ,this.createFeedInfo() ]
+            items: [this.createFeedPanel() ,this.createFeedInfo()
+            						, {
+										xtype: 'panel',
+										title: '',
+							            region: 'north',
+							            height: 42,
+							            style: 'border-bottom: 1px dotted gray;',
+							            html: [ "<div>",
+							                    "<div id=\"header-customer-logo\"></div>",
+							                    "<div id=\"header-user-name\">" + this.railsUser.email + "</div>",
+							                    "</div>" ],
+							        }
+
+             ]
         });
         this.callParent(arguments);
     },

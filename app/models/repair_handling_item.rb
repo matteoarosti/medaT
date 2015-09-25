@@ -81,6 +81,8 @@ class RepairHandlingItem < ActiveRecord::Base
   end
 
   
+  
+  
   def self.as_json_prop()
       return {
         :methods => [:in_garage_user_name, :estimate_user_name, :estimate_authorized_user_name, :repair_completed_user_name, :out_garage_user_name], 

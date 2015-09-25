@@ -1,3 +1,14 @@
+#header-customer-logo {float: left; background-color: red; height: 40px; width: 70px; background-image: url(image-path("customer-logo.png"));}
+#header-user-name {
+	height: 42px; vertical-align: middle; 
+	border-left: 1px dotted gray; 
+	float: right; 
+	font-style: italic; 
+	margin-top: 15px; 
+	padding-top: 5px; padding-right: 20px;  padding-left: 20px; 
+	font-weight: bold;
+}
+
 .x-btn.btn-confirm {
 	background-color: #48D1CC !important;
 }
@@ -22,6 +33,10 @@
 }
 
 .x-btn.btn-ok .x-btn-inner-default-toolbar-small {
+	color: white !important;
+}
+
+.x-btn.btn-ok .x-btn-inner-default-toolbar-medium {
 	color: white !important;
 }
 

@@ -1,7 +1,8 @@
 module ApplicationHelper
 
  def extjs_std_combo(name, item, p = {}, attr = {})
- 
+
+  input_name = p[:input_name] || name
   value = item.send(name) || p[:value]
  
   if p[:displayField].nil?
@@ -15,7 +16,7 @@ module ApplicationHelper
   
   ret = "
     {
-      xtype: 'combobox', name: #{name.to_json}, value: #{value.to_json}, 
+      xtype: 'combobox', name: #{input_name.to_json}, value: #{value.to_json}, 
       fieldLabel: #{name.humanize.to_json},
       displayField: #{p[:displayField].to_json},
       valueField: #{p[:valueField].to_json || p[:displayField].to_json},
@@ -142,7 +143,7 @@ module ApplicationHelper
  def extjs_std_textfield(name, item, p = {}, attr = {})
   input_name = p[:input_name] || p[:input_prefix].to_s + name
   add_attr = extsj_create_attr_str(attr)
-  ret = "{xtype: 'textfield', fieldLabel: #{name.humanize.to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false} #{add_attr}}" 
+  ret = "{xtype: 'textfield', fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false} #{add_attr}}" 
  end
 
   def extjs_std_numberfield(name, item, p = {}, attr = {})

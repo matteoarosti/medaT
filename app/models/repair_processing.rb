@@ -3,6 +3,8 @@ class RepairProcessing < ActiveRecord::Base
   belongs_to :repair_position
   belongs_to :repair_component
   
+  has_many :repair_prices
+  
   scope :extjs_default_scope, -> {}
     
   def self.as_json_prop()
@@ -17,7 +19,7 @@ class RepairProcessing < ActiveRecord::Base
   
   def combo_name
     ret = ""
-    [self.repair_component.description_it, self.repair_position.description_it, self.description_it].join(' | ')
+    [self.repair_position.description_it, self.repair_component.description_it, self.description_it].join(' | ')
   end
   
   

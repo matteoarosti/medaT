@@ -67,7 +67,7 @@
 			xtype: 'panel', border: false,     
             // applied to each contained panel
             bodyStyle:'padding:10px; border: 0px;',
-            style: 'margin: 10px; padding: 10px; border: 1px solid grey;',
+            style: 'margin: 10px; padding: 10px; border: 1px solid grey; border-top: 10px solid grey;',
             border: true,
 			layout: {
 				    type: 'vbox',
@@ -89,12 +89,16 @@
 			  
         	  , dockedItems: [
         	   { 
+        	    defaults: {scale: 'medium'},
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
-						{iconCls: 'fa fa-refresh', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.in_garage_modify}'}, 
+						{iconCls: '', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.in_garage_modify}'}, 
 							handler: function(event, toolEl, panel){ 
 				 			}
-				 		}        	    
+				 		},
+				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
+				 			bind: {visible: '{rec.in_garage_at}'}
+				 		}	        	    
         	    ]
         	   }
         	  ]
@@ -114,63 +118,79 @@
 			  
         	  , dockedItems: [
         	   { 
+        	    defaults: {scale: 'medium'},        	   
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
-						{iconCls: 'fa fa-refresh',  text: 'Crea/modifica preventivo', bind: {disabled: '{!enable_operations.estimate_modify}'},
+						{iconCls: '',  text: 'Crea/modifica preventivo', bind: {disabled: '{!enable_operations.estimate_modify}'},
 						
 						    handler: function(event, toolEl, panel){
-							 my_listeners = {};						    
+
+			 				my_listeners = {
+		                		onConfirm: function(fromWindow){
+
+
+									Ext.Ajax.request({
+					                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_estimate').to_json -%>,
+					                    waitMsg: 'Salvataggio in corso....',
+										method:'POST',                     
+					                    jsonData: {rec_id: <%= @item.id -%>},	
+					             	
+										success: function(result, request) {					
+											var returnData = Ext.JSON.decode(result.responseText);
+	
+											if (returnData.success == false){
+												Ext.MessageBox.show({
+							                        title: 'EXCEPTION',
+							                        msg: returnData.message,
+							                        icon: Ext.MessageBox.ERROR,
+							                        buttons: Ext.Msg.OK
+						                    	})
+						                      return false;										
+											}
+											
+											//aggiorno il record per il bind e operation_list
+											tab_panel = this.up('container[itemId=tab_panel]');
+											rec = returnData.data[0];																				
+											tab_panel.getViewModel().setData({rec: rec});
+											tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
+											fromWindow.close();
+										}, scope: this,
+										
+										failure: function(rec, op) {
+											alert('error');
+											var result = Ext.JSON.decode(op.getResponse().responseText);
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: result.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})					
+										}, scope: this,						
+														 
+							    	});
+
+
+		                			
+
+		                		}, scope: this		                		
+		                	}
+
+						    
 						     new_win = acs_show_win_std('Dettaglio Preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_edit').to_json -%>,
 				     	 		{rhi_id: <%= @item.id -%>},
-				     	 		900, 700, my_listeners);										
+				     	 		900, 650, my_listeners);										
 						     
 						    },
 						
-							handler222222: function(event, toolEl, panel){
-								//per test: imposto subito il preventivo come inviato
-								Ext.Ajax.request({
-				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_estimate').to_json -%>,
-				                    waitMsg: 'Salvataggio in corso....',
-									method:'POST',                     
-				                    jsonData: {rec_id: <%= @item.id -%>},	
-				             	
-									success: function(result, request) {					
-										var returnData = Ext.JSON.decode(result.responseText);
-
-										if (returnData.success == false){
-											Ext.MessageBox.show({
-						                        title: 'EXCEPTION',
-						                        msg: returnData.message,
-						                        icon: Ext.MessageBox.ERROR,
-						                        buttons: Ext.Msg.OK
-					                    	})
-					                      return false;										
-										}
-										
-										//aggiorno il record per il bind e operation_list
-										tab_panel = this.up('container[itemId=tab_panel]');
-										rec = returnData.data[0];																				
-										tab_panel.getViewModel().setData({rec: rec});
-										tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
-									}, scope: this,
-									
-									failure: function(rec, op) {
-										alert('error');
-										var result = Ext.JSON.decode(op.getResponse().responseText);
-										Ext.MessageBox.show({
-					                        title: 'EXCEPTION',
-					                        msg: result.message,
-					                        icon: Ext.MessageBox.ERROR,
-					                        buttons: Ext.Msg.OK
-				                    	})					
-									}, scope: this,						
-													 
-						    	});
+				 		}, {iconCls: '',  text: 'Visualizza',
+							handler: function(event, toolEl, panel){
+							 my_listeners = {}
+						     new_win = acs_show_win_std('Dettaglio Preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_edit').to_json -%>,
+				     	 		{rhi_id: <%= @item.id -%>, only_view: 'Y'},
+				     	 		900, 650, my_listeners);										
+							  
 				 			}
-				 		}, {iconCls: 'fa fa-refresh',  text: 'Visualizza',
-							handler: function(event, toolEl, panel){ 
-				 			}
-				 		}, {iconCls: 'fa fa-refresh',  text: 'Richiedi variazione', bind: {disabled: '{!enable_operations.estimate_request_modify}'},				 		
+				 		}, {iconCls: '',  text: 'Richiedi variazione', bind: {disabled: '{!enable_operations.estimate_request_modify}'},				 		
 							handler: function(event, toolEl, panel){
 							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
 							   if(btn === 'yes'){
@@ -216,9 +236,12 @@
 							  }, this); 
 
 				 			}
-				 		}, {iconCls: 'fa fa-refresh',  text: 'Note',
+				 		}, {iconCls: '',  text: 'Note',
 							handler: function(event, toolEl, panel){ 
 				 			}
+				 		},
+				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
+				 			bind: {visible: '{rec.estimate_at}'}
 				 		}
 				 		
         	    ]
@@ -242,9 +265,10 @@
 			  
         	  , dockedItems: [
         	   { 
+        	    defaults: {scale: 'medium'},        	   
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
-						{iconCls: 'fa fa-refresh', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.estimate_authorized_modify}'},
+						{iconCls: '', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.estimate_authorized_modify}'},
 							handler: function(event, toolEl, panel){
 							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
 							   if(btn === 'yes'){
@@ -290,9 +314,12 @@
 							  }, this); 
 							 
 				 			}
-				 		}, {iconCls: 'fa fa-refresh', text: 'Visualizza dettagli',
+				 		}, {iconCls: '', text: 'Dettagli',
 							handler: function(event, toolEl, panel){							 
 				 			} //handler
+				 		},
+				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
+				 			bind: {visible: '{rec.estimate_authorized_at}'}
 				 		}        	    
         	    ]
         	   }
@@ -314,9 +341,10 @@
 			  
         	  , dockedItems: [
         	   { 
+        	    defaults: {scale: 'medium'},        	   
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
-						{iconCls: 'fa fa-refresh', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.repair_completed_modify}'},
+						{iconCls: '', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.repair_completed_modify}'},
 							handler: function(event, toolEl, panel){
 							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
 							   if(btn === 'yes'){
@@ -362,6 +390,9 @@
 							  }, this); 
 
 				 			} //handler
+				 		},
+				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
+				 			bind: {visible: '{rec.repair_completed_at}'}
 				 		}        	    
         	    ]
         	   }
@@ -382,9 +413,10 @@
 			  
         	  , dockedItems: [
         	   { 
+        	    defaults: {scale: 'medium'},        	   
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
-						{iconCls: 'fa fa-refresh', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.out_garage_modify}'}, 
+						{iconCls: '', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.out_garage_modify}'}, 
 							handler: function(event, toolEl, panel){
 							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
 							   if(btn === 'yes'){
@@ -430,7 +462,10 @@
 							  }, this); 
 							 
 				 			} //handler
-				 		}        	    
+				 		},
+				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
+				 			bind: {visible: '{rec.out_garage_at}'}
+				 		}
         	    ]
         	   }
         	  ]

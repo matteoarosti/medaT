@@ -4,6 +4,9 @@ it:
     std:
       description_it: "Descrizione (it)"
       description_en: "Descrizione (en)"
+      quantity: "Quantità"
+      time: "Tempo"
+      material_price: "Prezzo mat."
     to_do_items:
       num_booking: "Num. booking"
       driver: "Autista"

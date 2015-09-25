@@ -69,13 +69,61 @@ end
 
 def estimate_new_row  
   @rhi = RepairHandlingItem.find(params[:rhi_id])
-  @rei = @rhi.repair_estimate_items.new
+  @rei = @rhi.repair_estimate_items.new(
+    :repair_processing => RepairProcessing.new(
+        :repair_position => RepairPosition.new(),
+        :repair_component => RepairComponent.new()
+      )
+  )
 end
+
+def save_rei
+  ret = {}  
+  @rhi = RepairHandlingItem.find(params[:repair_handling_item_id])
+  repair_price = RepairPrice.where("repair_processing_id=?", params[:repair_processing_id]).where("shipowner_id=?", @rhi.handling_item.handling_header.shipowner_id).first  
+  n = @rhi.repair_estimate_items.new
+   n.repair_processing_id = params[:repair_processing_id]
+   n.quantity = params[:quantity].to_s.gsub(',', '.').to_f
+   n.side = params[:side]
+   n.provider_notes = params[:provider_notes]
+   
+   n.set_auto_data(repair_price)  
+     
+  n.save!
+  ret[:success] = true
+  render json: ret
+end
+
+
+#in base a rhi (da cui prendo shipowner) mostro l'elenco dei positions (con almeno un record a listino)
+def get_positions_by_rhi
+  rhi = RepairHandlingItem.find(params[:rhi_id])
+  ret = {}         
+  rps = RepairPosition.joins({:repair_processings => :repair_prices}).where({repair_prices: {shipowner_id: rhi.handling_header.shipowner_id}})
+   ret[:items] = rps.as_json(RepairPosition.as_json_prop)
+   ret[:success] = true
+   render json: ret
+end
+
+#in base a rhi (da cui prendo shipowner) mostro l'elenco dei components (con almeno un record in listino)
+def get_components_by_rhi
+  rhi = RepairHandlingItem.find(params[:rhi_id])
+  ret = {}         
+  rps = RepairComponent.joins({:repair_processings => :repair_prices})
+  rps = rps.where({repair_prices: {shipowner_id: rhi.handling_header.shipowner_id}})
+  rps = rps.where({repair_processings: {repair_position_id: params[:flt_repair_position]} })  
+   ret[:items] = rps.as_json(RepairComponent.as_json_prop)
+   ret[:success] = true
+   render json: ret
+end
+
 
 def get_processings_by_rhi
   rhi = RepairHandlingItem.find(params[:rhi_id])
   ret = {}
-   rps = RepairPrice.where("shipowner_id=?", rhi.handling_header.shipowner_id)
+   rps = RepairPrice.joins(:repair_processing).where("shipowner_id=?", rhi.handling_header.shipowner_id)
+   rps = rps.where({repair_processings: {repair_position_id: params[:flt_repair_position]} })
+   rps = rps.where({repair_processings: {repair_component_id: params[:flt_repair_component]} })     
    ret[:items] = rps.as_json(RepairPrice.as_json_prop)
    ret[:success] = true
    render json: ret

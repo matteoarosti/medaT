@@ -7,6 +7,7 @@ it:
       quantity: "Quantità"
       time: "Tempo"
       material_price: "Prezzo mat."
+      name: "Nome"
     to_do_items:
       num_booking: "Num. booking"
       driver: "Autista"
@@ -279,6 +280,7 @@ it:
       shippers: "Spedizionieri"
       ships: "navi"
       terminals: "Terminal"
+      piers: "Banchine"
     movements:
       movements: "Movimenti"
       search_insert: "Ricerca / Inserisci"

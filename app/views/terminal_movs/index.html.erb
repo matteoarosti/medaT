@@ -94,6 +94,10 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                  task:<%= raw t("menu.tables.terminals").to_json %>,
                                  url: '<%= url_for(:controller=>'terminals', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
+                             }, { 
+                                 task:<%= raw t("menu.tables.piers").to_json %>,
+                                 url: '<%= url_for(:controller=>'piers', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 leaf:true 
                              }
                              
                              

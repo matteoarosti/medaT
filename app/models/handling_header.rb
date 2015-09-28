@@ -140,6 +140,13 @@ class HandlingHeader < ActiveRecord::Base
      return {:success => success, :data => data}     
    end
    
+   #se ho gia' inviato il codeco non posso eliminare il dettaglio
+   if hi.codeco_send.to_i > 0
+     success = false
+     data << {:field => "Impossibile rimuovere.<br/>Codeo gia' inviato."}
+     return {:success => success, :data => data}          
+   end
+   
    his = self.handling_items.where("id < ?", hi.id).order('datetime_op desc, id desc')   
    
    

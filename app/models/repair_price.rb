@@ -11,8 +11,17 @@ class RepairPrice < ActiveRecord::Base
             :repair_processing => {},
             :shipowner => {:only => [:name, :short_name]}
             },
-         :methods=>[:repair_processing_name]
+         :methods=>[:repair_processing_name, :repair_processing_description]
          }
+  end
+
+  
+  def repair_processing_description
+   if self.repair_processing.nil?
+    return '#PROC_DELETE#'
+   else 
+    return self.repair_processing.description_it.to_s
+   end   
   end
 
   

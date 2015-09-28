@@ -43,7 +43,7 @@
 		, {
 				flex: 1,
 				layout: 'fit',
-        	    title: 'Righe preventivo',
+        	    title: '',
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
@@ -106,17 +106,17 @@
 			         return ret;
 			        }			        			     
 			     },
-			     {text: "<%= t('tables.std.quantity') -%>",  "dataIndex":"quantity",  width: 90, align: 'right',
+			     {text: "<%= t('tables.std.quantity') -%>",  "dataIndex":"quantity",  width: 80, align: 'right',
 					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
 								        }			     
 			     },
-			     {text: "<%= t('tables.std.time') -%>",  "dataIndex":"provider_time",  width: 90, align: 'right',
+			     {text: "<%= t('tables.std.time') -%>",  "dataIndex":"provider_time",  width: 80, align: 'right',
 					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
 								        }			     
 			     },
-			     {text: "<%= t('tables.std.material_price') -%>",  "dataIndex":"provider_material_price",  width: 90, align: 'right',
+			     {text: "<%= t('tables.std.material_price') -%>",  "dataIndex":"provider_material_price",  width: 80, align: 'right',
 					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
 								        }			     
@@ -130,7 +130,7 @@
 			, dockedItems: [
 			  {
 			    xtype: 'toolbar',
-			    dock: 'right',
+			    dock: 'bottom',
 			    width: 135,
 				defaults: {
 			        xtype: 'button', scale: 'medium', textAlign: 'left'
@@ -159,10 +159,15 @@
 				    		this.up('window').close();			    			
 			    		}
 			    	}, 
-			    	{text: 'Conferma', iconCls: 'fa fa-plus fa-2x', cls: 'btn-ok', 
-			    		handler: function(){
-				    		this.up('window').fireEvent('onConfirm', this.up('window'));			    			
-			    		}
+			    	{text: 'Conferma', iconCls: 'fa fa-plus fa-2x', cls: 'btn-ok',			    	
+				    		handler: function(){
+							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi la chiusura e l\'invio del preventivo?', function(btn){
+							   if(btn === 'yes'){				    		
+					    		this.up('window').fireEvent('onConfirm', this.up('window'));
+					    		}
+					    	  }, this);			    			
+				    		}
+				    	
 			    	}			    	
 			    ]
 			  }

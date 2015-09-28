@@ -21,6 +21,7 @@
 		{xtype: 'hidden', name: 'repair_handling_item_id', value: '<%= @rei.repair_handling_item.id %>'},
 		
 		<%= raw extjs_std_combo('description_it', @rei.repair_processing.repair_position,
+				:fieldLabel => 'Posizione',
 				:input_name => 'flt_repair_position',
 				:valueField => 'id',
 				:displayField => 'description_it',
@@ -32,6 +33,7 @@
 				 -%>,
 
 		<%= raw extjs_std_combo('description_it', @rei.repair_processing.repair_component,
+				:fieldLabel => 'Componente',
 				:input_name => 'flt_repair_component',		
 				:valueField => 'id',
 				:displayField => 'description_it',
@@ -44,8 +46,9 @@
 		
 		     	
 		<%= raw extjs_std_combo('repair_processing_id', @rei,
+				:fieldLabel => 'Lavorazione',
 				:valueField => 'repair_processing_id',
-				:displayField => 'repair_processing_name',
+				:displayField => 'repair_processing_description',
 				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_processings_by_rhi', :rhi_id => @rhi.id)),
 				:listeners => "change: function(combo, record, index) {
 								  this.up('form').do_refresh_on_change_processing();			  
@@ -118,8 +121,13 @@
 
    , do_refresh_on_change_processing: function(){
 		      f = this.getForm().findField('repair_processing_id');
-		      this.getForm().findField('provider_time').setValue(f.selection.data.provider_time);
-		      this.getForm().findField('provider_material_price').setValue(f.selection.data.provider_material_price);		      
+		      if (Ext.isEmpty(f.selection)){
+		      	this.getForm().findField('provider_time').setValue('');
+		      	this.getForm().findField('provider_material_price').setValue('');
+		      } else {
+		      	this.getForm().findField('provider_time').setValue(f.selection.data.provider_time);
+		      	this.getForm().findField('provider_material_price').setValue(f.selection.data.provider_material_price);		      
+		      }		      
 
     }     
     

@@ -26,8 +26,20 @@ items = items.where({handling_item_type: formValues['handling_item_type']}) unle
 
 
 items = items.joins(:handling_header)
-group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
+###group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
+group_sottobordo = items.group_by { |d| d.created_user_id }
 %>
+
+
+<%
+ ######################################################
+ #OPERATORE SOTTOBORDO
+ ###################################################### 
+%>
+<% group_sottobordo.each do |sottob_id, sottob_val| %>
+
+	<% user = User.find(sottob_id) %>
+	<p class="bg-primary" style="padding: 10px">Operatore alla spunta: <b><%= user.name -%></b></p>
 
 
 <%
@@ -35,7 +47,7 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
  #ShipOwner
  ###################################################### 
 %>
-<% group_shipowner.each do |so_id, so_val| %>
+<% sottob_val.group_by{|d| d.handling_header.shipowner_id}.each do |so_id, so_val| %>
  <% so = Shipowner.find(so_id) %>
 
     <p class="bg-primary" style="padding: 10px"><%= so.name -%></p>
@@ -149,11 +161,7 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 	<% end %>
 
 
-
-
-
-
-
+  <% end %>
 
  
 <% end %>

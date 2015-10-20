@@ -138,7 +138,17 @@ class ToDoItemsController < ApplicationController
    #verifico e inserisco
     #se supera i vari controlli salvo il dettalio e aggiorno la testata
     validate_insert_item = hh.validate_insert_item(hi)
+    confirmed = false
     if validate_insert_item[:is_valid]
+    
+		 #se non avevo verificato il num_container ritorno il num_container verificato
+		  if params[:data][:num_container].to_s.upcase != params[:data][:num_container_verified].to_s.upcase
+		   render json: {:success => true,
+		   	 			  :num_container_verified => params[:data][:num_container].to_s.upcase,
+		   				  :message => "Confermare scelta container"}
+		   return
+		  end 	    
+    
       hi.save!()       
       r = hh.sincro_save_header(hi) 
                                     
@@ -151,12 +161,13 @@ class ToDoItemsController < ApplicationController
       
       ret_status  = r[:success]
       message     = r[:message]
+      confirmed   = true      
     else
         ret_status  = validate_insert_item[:is_valid]
         message     = validate_insert_item[:message]         
     end
     
-    render json: {:success => ret_status, :message => message}   
+    render json: {:success => ret_status, :message => message, :confirmed => confirmed}   
   end
   
 end

@@ -151,8 +151,6 @@
 			         tiro = '';
 			         blocco = '';
 			         banchina = '';
-			         console.log(rec.get('handling_header'));
-			         console.log(rec.get('handling_header').fila);
 			         if (!Ext.isEmpty(rec.get('handling_header').fila))
 			          fila = rec.get('handling_header').fila + '';
 			         if (!Ext.isEmpty(rec.get('handling_header').blocco))
@@ -212,6 +210,7 @@
 													},
 											    items: [
 											      {xtype: 'hiddenfield', name: 'to_do_item_id', value: rec.get('id')},
+											      {xtype: 'hiddenfield', name: 'num_container_verified'},
 											      {xtype: 'textfield', 	   name: 'num_container', fieldLabel: 'Container', 
 											       fieldStyle: 'font-size: 32px; text-transform: uppercase;'},
 											      {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes'}										    										    										    
@@ -228,7 +227,7 @@
 											    
 											     	items:
 												        [{
-												            text: 'Conferma',
+												            text: 'Verifica',
 												            scale: 'large', cls: 'btn-confirm',
 												            handler: function (btn, evt) {
 												             btn.disable();
@@ -248,6 +247,9 @@
 																      var jsonData = Ext.JSON.decode(result.responseText);
 																   
 																   	  if (jsonData.success == false){
+																   	  	form.findField('num_container_verified').setValue('');
+																	    btn.setText('Verifica');
+																	    btn.enable();
 																		Ext.MessageBox.show({
 													                        title: 'EXCEPTION',
 													                        msg: jsonData.message,
@@ -255,15 +257,25 @@
 													                        buttons: Ext.Msg.OK
 												                    	})															   	  
 																   	  } else {
+																   	  	 if (jsonData.confirmed == true){
 																	      store.remove(rec);
 																	      store.load();
 																	      tmp_win.close();
+																	     } else { //non confermato ... riabilito bottone per confermare
+																	       form.findField('num_container_verified').setValue(jsonData.num_container_verified);
+																	       btn.setText('Conferma');
+																	       btn.enable();
+																	     } 
 																   	  }																   
 																   
 
 																   },
 																   failure: function(response, opts) {
 																      console.log('server-side failure with status code ' + response.status);
+																		form.findField('num_container_verified').setValue('');
+																	    btn.setText('Verifica');
+																	    btn.enable();																      
+																      
 																		Ext.MessageBox.show({
 													                        title: 'EXCEPTION',
 													                        msg: response.status,

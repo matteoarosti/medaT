@@ -522,8 +522,15 @@ def sincro_set_handling_header_status_by_config(value, hi)
     
   if !value[:reefer].nil?
     if self.equipment.reefer != value[:reefer]
-      logger.info "Non combagia reefer/non reefer"
+      logger.info "Non combacia reefer/non reefer"
       return false #esco perche' non combacia reefer/non reefer
+    end 
+  end
+
+  if !value[:container_FE].nil?
+    if self.container_FE.to_s != value[:container_FE]
+      logger.info "Non combacia container_FE"
+      return false #esco perche' non combacia container_FE
     end 
   end  
   

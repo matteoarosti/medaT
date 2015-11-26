@@ -1,17 +1,20 @@
-<h1>Handling Sintetica</h1>
-
 <%
 #Recupero elenco movimenti in base ai parametri
 
 formValues = JSON.parse params['formValues']
 
+datetime_from_out = ''
+datetime_to_out = ''
+
 #gestione campi data/ora
 if !formValues['datetime_op_from'].blank?
 	datetime_from = Time.zone.parse(formValues['datetime_op_from'] + ' ' + (formValues['datetime_op_from_time'] || '00:00') + ':00')
+	datetime_from_out = datetime_from.strftime("%d/%m/%y %H:%M").to_s
 end
 
 if !formValues['datetime_op_to'].blank?
 	datetime_to = Time.zone.parse(formValues['datetime_op_to'] + ' ' + (formValues['datetime_op_to_time'] || '23:59') + ':59')
+	datetime_to_out = datetime_to.strftime("%d/%m/%y %H:%M").to_s
 end
 
 items = HandlingItem.where('1=1')
@@ -26,6 +29,8 @@ items = items.where("operation_type = ?", 'MT') if formValues['only_MT'] == true
 items = items.select('shipowner_id, handling_item_type, equipment_id, count(*) as C_ROW').joins(:handling_header).group("shipowner_id, handling_item_type, equipment_id")
 group_shipowner = items.group_by { |d| d.shipowner_id }
 %>
+
+<h1>Stampa movimenti - Sintetica<br/><span>[<%= datetime_from_out -%> - <%= datetime_to_out.to_s -%>]</span></h1>
 
 
 <%

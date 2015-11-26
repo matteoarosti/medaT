@@ -16,6 +16,11 @@ TMOV:
    seal_imp_copy: true
    start_reefer_connection: IF_FULL
    lock_INSPECT: IF_EMPTY
+   handling_header_status_by_config:
+    :new_status: CLOSE
+    :shipowner_id: 3
+    :reefer: false
+    :container_FE: F   
  O_EMPTYING:
   label: Out for Emptying
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>' 

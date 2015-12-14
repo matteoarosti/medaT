@@ -1,0 +1,72 @@
+{
+ "success": true,
+ "items": [
+
+   {
+    xtype: 'container',
+	title: 'Nuovo Import', closable: true,    
+    items: [
+    
+	 {
+   			xtype: 'form',
+	        frame: true,
+
+	        bodyPadding: '10 10 0',
+	
+	        defaults: {
+	            anchor: '100%',
+	            allowBlank: false,
+	            msgTarget: 'side',
+	            labelWidth: 50
+	        },
+	
+	        items: [
+				{
+		            xtype: 'filefield',
+		            emptyText: 'Seleziona un file dal tuo archivio',
+		            fieldLabel: 'File',
+		            name: 'file',
+		            buttonText: '',
+		            buttonConfig: {
+		                iconCls: 'upload-icon'
+		            }
+		        },
+        
+				{xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}
+		        
+		        ],
+	
+	        buttons: [{
+	            text: 'Importa',
+	            handler: function(){
+	                var form = this.up('form').getForm();
+	                if(form.isValid()){
+	                    form.submit({
+	                        url: '<%= url_for(:action=>'exe_import_file') -%>',
+	                        waitMsg: 'Importazione in corso....',
+	                        success: function(fp, o) {
+	                            Ext.Msg.alert('Import terminato', 'okkk');
+	                        },
+							failure: function(fp, o) {
+	                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                                Ext.Msg.alert('Import non eseguito. ', o.result.message);
+	                            console.log('Failure!');	                            
+	                        }	                        
+	                    });
+	                }
+	            }
+	        }]
+	   } 
+	   
+	   
+	   
+	      
+    ]
+   }
+
+
+	    
+
+  
+ ]
+}

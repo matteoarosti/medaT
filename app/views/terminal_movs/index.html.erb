@@ -128,6 +128,11 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                  	task:<%= raw t("menu.tables.repair_prices").to_json %>,
                                  	url: '<%= url_for(:controller=>'repair_prices', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  	leaf:true 
+                             	  },
+								  { 
+                                 	task: 'Import',
+                                 	url: '<%= url_for(:controller=>'repair_imports', :action=>'import_file') -%>',                                  
+                                 	leaf:true 
                              	  }
                              	  
 	    		                ]                             

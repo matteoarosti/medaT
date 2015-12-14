@@ -9,6 +9,7 @@ class RepairHandlingItem < ActiveRecord::Base
   def is_all_completed
     return false if self.in_garage_at.nil? ||
                    self.estimate_at.nil? ||
+                   self.estimate_sent_at.nil? ||
                    self.estimate_authorized_at.nil? ||
                    self.repair_completed_at.nil? ||
                    self.out_garage_at.nil?
@@ -57,7 +58,8 @@ class RepairHandlingItem < ActiveRecord::Base
     ret[:in_garage_modify] = self.estimate_at.nil? ? true : false      
     ret[:estimate_modify] = self.estimate_at.nil? ? true : false      
     ret[:estimate_request_modify] = !self.estimate_at.nil? && self.estimate_authorized_at.nil? ? true : false
-    ret[:estimate_authorized_modify] = self.estimate_authorized_at.nil? && !self.estimate_at.nil? ? true : false
+    ret[:estimate_sent_modify] = !self.estimate_at.nil? && self.estimate_sent_at.nil? ? true : false
+    ret[:estimate_authorized_modify] = self.estimate_authorized_at.nil? && !self.estimate_at.nil? && !self.estimate_sent_at.nil?  ? true : false
     ret[:repair_completed_modify] = !self.estimate_at.nil? && self.repair_completed_at.nil? ? true : false
     ret[:out_garage_modify] = !self.repair_completed_at.nil? && self.out_garage_at.nil? ? true : false
     ret
@@ -69,6 +71,9 @@ class RepairHandlingItem < ActiveRecord::Base
   end
   def estimate_user_name
     User.find(self.estimate_user_id).name if User.find(self.estimate_user_id) rescue nil
+  end
+  def estimate_sent_user_name
+    User.find(self.estimate_sent_user_id).name if User.find(self.estimate_sent_user_id) rescue nil
   end
   def estimate_authorized_user_name
     User.find(self.estimate_authorized_user_id).name if User.find(self.estimate_authorized_user_id) rescue nil
@@ -85,7 +90,7 @@ class RepairHandlingItem < ActiveRecord::Base
   
   def self.as_json_prop()
       return {
-        :methods => [:in_garage_user_name, :estimate_user_name, :estimate_authorized_user_name, :repair_completed_user_name, :out_garage_user_name], 
+        :methods => [:in_garage_user_name, :estimate_user_name, :estimate_sent_user_name, :estimate_authorized_user_name, :repair_completed_user_name, :out_garage_user_name], 
         :include=>{
            :handling_header  => {
              :include => {

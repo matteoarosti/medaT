@@ -18,7 +18,65 @@
 			data: {
 				rec: <%= raw @item.to_json(RepairHandlingItem.as_json_prop) -%>,
 				enable_operations: <%= raw @item.enable_operations_list.to_json -%>
-			}    			
+			}
+			
+			, test_with_note: function(note){
+			  			cls = 'fa fa-2x fa-file-text-o';
+    		        	 if (Ext.isEmpty(note) == false)
+    		        	 	cls = cls + " with-note";
+    		        	  else
+    		        		cls = cls + " with-no-note";    
+    		        	
+    		        	return cls;			  
+			}
+			
+    		, formulas: {    		    			  
+
+    		        with_note_in_garage:{
+    		          bind: {bindTo: '{rec}'},
+    		          get: function (rec) {
+    		            return this.test_with_note(rec.in_garage_notes)
+    		        }
+    		       },
+    		        with_note_estimate:{
+    		          bind: {bindTo: '{rec}'},
+    		          get: function (rec) {
+    		            return this.test_with_note(rec.estimate_notes)
+    		        }
+    		       },
+    		        with_note_estimate_sent:{
+    		          bind: {bindTo: '{rec}'},
+    		          get: function (rec) {
+    		            return this.test_with_note(rec.estimate_sent_notes)
+    		        }
+    		       },
+    		        with_note_estimate_authorized:{
+    		          bind: {bindTo: '{rec}'},
+    		          get: function (rec) {
+    		            return this.test_with_note(rec.estimate_authorized_notes)
+    		        }
+    		       },
+    		        with_note_repair_completed:{
+    		          bind: {bindTo: '{rec}'},
+    		          get: function (rec) {
+    		            return this.test_with_note(rec.repair_completed_notes)
+    		        }
+    		       },
+    		        with_note_out_garage:{
+    		          bind: {bindTo: '{rec}'},
+    		          get: function (rec) {
+    		            return this.test_with_note(rec.out_garage_notes)
+    		        }
+    		       }
+    		       
+    		       
+    		       
+    		       
+    		       
+    		
+    		} //formulas
+			
+			    			
 	},    
 
 
@@ -98,6 +156,13 @@
 				 		},
 				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
 				 			bind: {visible: '{rec.in_garage_at}'}
+				 		},{scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_in_garage}'},
+					 		handler: function(event, toolEl, panel){
+                            	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'in_garage_notes'},
+     			                		 600, 300);
+					 			 
+					 		}
 				 		}	        	    
         	    ]
         	   }
@@ -109,7 +174,7 @@
 
 			//PREVENTIVO REDATTO
 			, {		
-			  colspan: 2,	  			  			
+			  colspan: 1,	  			  			
 			  items: [
 				{html: '<h2>Redazione preventivo</h2>'},
 				{xtype: 'textfield', fieldLabel: 'Redatto il', bind: '{rec.estimate_at:date("d/m/Y H:i")}'},
@@ -121,13 +186,12 @@
         	    defaults: {scale: 'medium'},        	   
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
-						{iconCls: '',  text: 'Crea/modifica preventivo', bind: {disabled: '{!enable_operations.estimate_modify}'},
+						{iconCls: '',  text: 'Crea/modifica', bind: {disabled: '{!enable_operations.estimate_modify}'},
 						
 						    handler: function(event, toolEl, panel){
 
 			 				my_listeners = {
 		                		onConfirm: function(fromWindow){
-
 
 									Ext.Ajax.request({
 					                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_estimate').to_json -%>,
@@ -178,7 +242,7 @@
 						    
 						     new_win = acs_show_win_std('Dettaglio Preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_edit').to_json -%>,
 				     	 		{rhi_id: <%= @item.id -%>},
-				     	 		900, 650, my_listeners);										
+				     	 		900, 650, my_listeners, null, 'Y');										
 						     
 						    },
 						
@@ -190,12 +254,47 @@
 				     	 		900, 650, my_listeners);										
 							  
 				 			}
-				 		}, {iconCls: '',  text: 'Richiedi variazione', bind: {disabled: '{!enable_operations.estimate_request_modify}'},				 		
+				 		}, {xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
+				 			bind: {visible: '{rec.estimate_at}'}
+				 		},{scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_estimate}'},
+					 		handler: function(event, toolEl, panel){
+                            	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'estimate_notes'},
+     			                		 600, 300);					 			 
+					 		}				 		
+				 		}
+				 		
+        	    ]
+        	   }
+        	  ]
+			  
+			} //REDATTO
+		
+
+		
+		
+		
+
+			//INVIATO A COMPAGNIA
+			, {		
+			  colspan: 1,	  			  			
+			  items: [
+				{html: '<h2>Inviato a compagnia</h2>'},
+				{xtype: 'textfield', fieldLabel: 'Inviato il', bind: '{rec.estimate_sent_at:date("d/m/Y H:i")}'},
+				{xtype: 'textfield', fieldLabel: 'Inviato da', bind: '{rec.estimate_sent_user_name}'}
+			  ]
+			  
+        	  , dockedItems: [
+        	   { 
+        	    defaults: {scale: 'medium'},        	   
+        	    xtype: 'toolbar', dock: 'bottom',
+        	    items: [
+						{iconCls: '',  text: 'Inviato', bind: {disabled: '{!enable_operations.estimate_sent_modify}'},				 		
 							handler: function(event, toolEl, panel){
 							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
 							   if(btn === 'yes'){
 								Ext.Ajax.request({
-				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'req_estimate_modify').to_json -%>,
+				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_estimate_sent').to_json -%>,
 				                    waitMsg: 'Salvataggio in corso....',
 									method:'POST',                     
 				                    jsonData: {rec_id: <%= @item.id -%>},	
@@ -236,21 +335,24 @@
 							  }, this); 
 
 				 			}
-				 		}, {iconCls: '',  text: 'Note',
-							handler: function(event, toolEl, panel){ 
-				 			}
-				 		},
-				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
-				 			bind: {visible: '{rec.estimate_at}'}
+				 		}, {xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
+				 			bind: {visible: '{rec.estimate_sent_at}'}
+				 		},{scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_estimate_sent}'},
+					 		handler: function(event, toolEl, panel){
+                            	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'estimate_sent_notes'},
+     			                		 600, 300);					 			 
+					 		}				 		
 				 		}
 				 		
         	    ]
         	   }
         	  ]
 			  
-			} //REDATTO
+			} //INVIATO A COMPAGNIA
 		
-
+		
+		
 		
 
 
@@ -268,58 +370,75 @@
         	    defaults: {scale: 'medium'},        	   
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
-						{iconCls: '', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.estimate_authorized_modify}'},
-							handler: function(event, toolEl, panel){
-							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
-							   if(btn === 'yes'){
-								Ext.Ajax.request({
-				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_authorized').to_json -%>,
-				                    waitMsg: 'Salvataggio in corso....',
-									method:'POST',                     
-				                    jsonData: {rec_id: <%= @item.id -%>},	
-				             	
-									success: function(result, request) {					
-										var returnData = Ext.JSON.decode(result.responseText);
+        	    
+						{iconCls: '',  text: 'Autorizza/modifica', bind: {disabled: '{!enable_operations.estimate_authorized_modify}'},
+						
+						    handler: function(event, toolEl, panel){
 
-										if (returnData.success == false){
+			 				my_listeners = {
+		                		onConfirm: function(fromWindow){
+
+									Ext.Ajax.request({
+					                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_authorized').to_json -%>,
+					                    waitMsg: 'Salvataggio in corso....',
+										method:'POST',                     
+					                    jsonData: {rec_id: <%= @item.id -%>},	
+					             	
+										success: function(result, request) {					
+											var returnData = Ext.JSON.decode(result.responseText);
+	
+											if (returnData.success == false){
+												Ext.MessageBox.show({
+							                        title: 'EXCEPTION',
+							                        msg: returnData.message,
+							                        icon: Ext.MessageBox.ERROR,
+							                        buttons: Ext.Msg.OK
+						                    	})
+						                      return false;										
+											}
+											
+											//aggiorno il record per il bind e operation_list
+											tab_panel = this.up('container[itemId=tab_panel]');
+											rec = returnData.data[0];																				
+											tab_panel.getViewModel().setData({rec: rec});
+											tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
+											fromWindow.close();
+										}, scope: this,
+										
+										failure: function(rec, op) {
+											alert('error');
+											var result = Ext.JSON.decode(op.getResponse().responseText);
 											Ext.MessageBox.show({
 						                        title: 'EXCEPTION',
-						                        msg: returnData.message,
+						                        msg: result.message,
 						                        icon: Ext.MessageBox.ERROR,
 						                        buttons: Ext.Msg.OK
-					                    	})
-					                      return false;										
-										}
-										
-										//aggiorno il record per il bind e operation_list
-										tab_panel = this.up('container[itemId=tab_panel]');
-										rec = returnData.data[0];																				
-										tab_panel.getViewModel().setData({rec: rec});
-										tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
-									}, scope: this,
-									
-									failure: function(rec, op) {
-										alert('error');
-										var result = Ext.JSON.decode(op.getResponse().responseText);
-										Ext.MessageBox.show({
-					                        title: 'EXCEPTION',
-					                        msg: result.message,
-					                        icon: Ext.MessageBox.ERROR,
-					                        buttons: Ext.Msg.OK
-				                    	})					
-									}, scope: this,						
-													 
-						    	});							   
-							   } //btn == 'yes'
-							  }, this); 
-							 
-				 			}
-				 		}, {iconCls: '', text: 'Dettagli',
-							handler: function(event, toolEl, panel){							 
-				 			} //handler
-				 		},
-				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
+					                    	})					
+										}, scope: this,						
+														 
+							    	});
+
+
+		                			
+
+		                		}, scope: this		                		
+		                	}
+
+						    
+						     new_win = acs_show_win_std('Dettaglio Preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_edit').to_json -%>,
+				     	 		{rhi_id: <%= @item.id -%>, authorizing: 'Y'},
+				     	 		900, 650, my_listeners);										
+						     
+						    },
+						
+				 		}, {xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
 				 			bind: {visible: '{rec.estimate_authorized_at}'}
+				 		}, {scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_estimate_authorized}'},
+					 		handler: function(event, toolEl, panel){
+                            	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'estimate_authorized_notes'},
+     			                		 600, 300);					 			 
+					 		}				 		
 				 		}        	    
         	    ]
         	   }
@@ -393,6 +512,12 @@
 				 		},
 				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
 				 			bind: {visible: '{rec.repair_completed_at}'}
+				 		}, {scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_repair_completed}'},
+					 		handler: function(event, toolEl, panel){
+                            	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'repair_completed_notes'},
+     			                		 600, 300);					 			 
+					 		}				 		
 				 		}        	    
         	    ]
         	   }
@@ -465,6 +590,12 @@
 				 		},
 				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
 				 			bind: {visible: '{rec.out_garage_at}'}
+				 		}, {scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_out_garage}'},
+					 		handler: function(event, toolEl, panel){
+                            	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'out_garage_notes'},
+     			                		 600, 300);					 			 
+					 		}				 		
 				 		}
         	    ]
         	   }

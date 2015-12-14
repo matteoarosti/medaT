@@ -17,14 +17,14 @@ class CreateRepairEstimateItems < ActiveRecord::Migration
       t.decimal :customer_material_price,  precision: 10, scale: 2
 
       t.decimal :quantity,                 precision: 10, scale: 2
-      
-      t.boolean :confirmed                 #autorizzato si/no
-      
+            
       t.string  :preparation_time_type,    :limit => 50 #ID: Impact Damage, WT: Wear Time, CL: Cleaning (le operazioni CL non vanno sommate nel preparation_time del preventivo)
       
       t.string  :side,                     :limit => 20 #dettaglio posizione (es: lato sx, ....)
       
+      t.boolean :confirmed                 #autorizzato si/no      
       t.text    :provider_notes,           :limit => 64.kilobytes
+      t.text    :authorization_notes,      :limit => 64.kilobytes
       
       t.timestamps            
       t.integer :created_user_id      

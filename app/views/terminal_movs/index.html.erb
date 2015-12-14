@@ -207,6 +207,56 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
 	                                op: 'new_tab'
 	                            }
                             ]
+                    },{
+                        task:<%= raw t("menu.repairs.repairs").to_json %>,
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                                {
+                                    task:<%= raw t("menu.repairs.all").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repairs_list', :filtered_type => 'ALL') -%>',                                    
+                                    op: 'new_tab',
+                                    width: 700,
+                                    height: 500
+                                }, {
+                                    task:<%= raw t("menu.repairs.to_estimate").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repairs_list', :filtered_type => 'TO_ESTIMATE') -%>',                                    
+                                    op: 'new_tab',
+                                    width: 700,
+                                    height: 500
+                                }, {
+                                    task:<%= raw t("menu.repairs.to_sent").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repairs_list', :filtered_type => 'TO_SENT') -%>',                                    
+                                    op: 'new_tab',
+                                    width: 700,
+                                    height: 500
+                                }, {
+                                    task:<%= raw t("menu.repairs.to_authorized").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repairs_list', :filtered_type => 'TO_AUTHORIZED') -%>',                                    
+                                    op: 'new_tab',
+                                    width: 700,
+                                    height: 500
+                                }, {
+                                    task:<%= raw t("menu.repairs.to_repair").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repairs_list', :filtered_type => 'TO_REPAIR') -%>',                                    
+                                    op: 'new_tab',
+                                    width: 700,
+                                    height: 500
+                                }, {
+                                    task:<%= raw t("menu.repairs.to_out_garage").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repairs_list', :filtered_type => 'TO_OUT_GARAGE') -%>',                                    
+                                    op: 'new_tab',
+                                    width: 700,
+                                    height: 500
+                                }
+                            ]
                     }, {
                         task:<%= raw t("menu.import.import").to_json %>,
                         iconCls:'task-folder',

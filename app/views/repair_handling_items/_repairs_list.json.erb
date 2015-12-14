@@ -1,0 +1,227 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  title: 'Danneggiati',
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+	
+  	
+
+  items: [
+       
+   // grid con righe import
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    //title: <%= raw t('forms.damageds.details_label').to_json -%>, flex: 50,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'repair_handling_items/get_row_by_filtered_type').to_json -%>,
+        	            extraParams: {
+        	            	filtered_type: <%= raw filtered_type.to_json -%>,
+        	            	form_user: {}
+        	            },
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	   dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
+        	    items: [
+        	    '->', {
+				    xtype: 'form',	
+				    height: 50,
+				    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+				    padding: '10 10 10 10',
+				    items: [
+						{	
+								width: 200, labelWidth: 120, padding: '0 0 0 10',
+								xtype: 'textfield',
+								fieldStyle: 'font-size: 16px; text-transform: uppercase;',
+				                fieldLabel: 'Ricerca container',
+				                name: 'flt_num_container'
+				 		}
+				    ]
+				 }
+				 
+				 ,  {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
+				 			handler: function(event, toolEl, panel){ 
+				 
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    header_form_values = header_form.getValues();
+
+				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
+				 				this.up('grid').getStore().load();}}
+				 ]
+			  }
+			],
+        	           	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: <%= raw t('forms.damageds.sequence').to_json -%>,
+			        width: 50,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: <%= raw t('forms.damageds.container').to_json -%>,
+			        width: 220,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '<h1>' + rec.get('handling_header').container_number + '</h1>';
+			          ret += '<h5>Movim #' + rec.get('id') + '&nbsp;';
+			            ret += ' ' + pb_get_image_status(rec.get('handling_header').handling_status);
+			            ret += ' ' + pb_get_image_in_terminal(rec.get('handling_header').container_in_terminal);			            
+			            ret += ' ' + pb_get_image_FE(rec.get('handling_header').container_FE);
+			            ret += ' ' + pb_get_image_with_booking(rec.get('handling_header').booking_id);
+			            ret += ' ' + pb_get_image_lock(rec.get('handling_header').lock_type);
+			          ret += '</h5>';
+			          return ret;			         
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: <%= raw t('forms.damageds.details').to_json -%>,
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';
+			         ret += '<tr><th>Compagnia</th><td>' + rec.get('handling_header').shipowner.name + '</td></tr>';
+			         ret += '<tr><th>Equipment</th><td>' + rec.get('handling_header').equipment.equipment_type + '</td></tr>';			         			         
+			         ret += '</table>';
+			         return ret;
+			         
+			        }			        	        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: <%= raw t('forms.damageds.date').to_json -%>,
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';			         
+					 ret += '<tr><th>Segnalato il</th><td>' + Ext.util.Format.date(rec.get('created_at'), 'd-m-Y H:i') + '</td></tr>';			         
+					 ret += '<tr><th>Autorizzato il</th><td>' + Ext.util.Format.date(rec.get('estimate_authorized_at'), 'd-m-Y H:i') + '</td></tr>';
+			         ret += '</table>';
+			         return ret;
+			         
+			        }			        	        
+			    }  
+			    
+			    
+			    <% if filtered_type == 'TO_OUT_GARAGE' %>
+			    <% #bottone %>
+			    , {
+			        text: <%= raw t('forms.std.actions').to_json -%>, width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        	var loc_grid = this;		
+			        		        			        				        
+			            var id = Ext.id();
+			            setTimeout(function() {			            
+				
+			                var buttonRotto = Ext.create('Ext.button.Button', {
+								text: '<i class="fa fa-cubes fa-3x"></i>',
+								cls: loc_grid.get_cls_button(rec),
+		                		scale: 'large',			                    
+			                        //handler: function(grid, rowIndex, colIndex, a, b) {
+			                        handler: function(button, b, c, d, e) {
+
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();
+
+											Ext.Ajax.request({
+											   method: 'POST',
+											   url: '<%= url_for(:controller=>'repair_handling_items', :action=>'set_out_garage') -%>',
+											   jsonData: {
+											   	rec_id: rec.get('id')
+											   },
+											   success: function(response, opts) {
+											      store.remove(rec);
+											      store.load();
+											   },
+											   failure: function(response, opts) {
+											      console.log('server-side failure with status code ' + response.status);
+											   }
+											});	
+										  return false;												             
+
+
+			                        }, scope: rec
+
+			                });			                
+			                if (Ext.get(id)) {
+			                    buttonRotto.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }
+			 <% end %>   
+			    
+			    
+			    
+			    
+			          
+        ],
+			    
+			    
+				get_cls_button(rec){				
+		        	cls_button = 'btn-warning';
+		        	if (Ext.isEmpty(rec.get('estimate_authorized_at')) == false)
+		        		cls_button = 'btn-ok';				
+				
+					return cls_button;
+				},
+			    
+			    listeners: {
+					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
+					        if (columnIndex == 1) { //doppio click sul num_container... apro il movimento aperto
+							  //rec.get('id') e' id di RepairHandlingItem
+							  acs_show_panel_std(myApp, '<%= url_for(:controller=>'repair_handling_items', :action=>'rhi_edit') -%>', {rec_id: rec.get('id')}, 'Modifica');	    
+					        }
+					    }
+					}
+
+				    
+
+                        	    
+        	}    
+   
+   
+   
+  ]
+ }
+ ]
+}

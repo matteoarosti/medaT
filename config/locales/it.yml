@@ -77,6 +77,10 @@ it:
       provider_material_price: "Costo materiale (fornitore)"
       
   forms:
+    std:
+      cancel: "Annulla"
+      cancel_confirm: "Confermi annullamento"
+      actions: 'Azioni'
     mov_search:
       insert_n: "inserisci il numero di container/booking:"
       open: "aperto"
@@ -315,3 +319,10 @@ it:
       user_manager: "Gesione utenti"
       users: "Utenti"
       logout: "Uscita"
+    repairs:
+      all: "Tutti"
+      to_estimate: "Da preventivare"
+      to_sent: "Da inviare a comp."
+      to_authorized: "Da autorizzare"
+      to_repair: "Da riparare"
+      to_out_garage: "Da rientrare"

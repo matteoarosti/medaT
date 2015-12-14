@@ -48,7 +48,15 @@
                 ],
         	    xtype: 'gridpanel',
 				autoScroll: true,  
-				scroll: true,      	    
+				scroll: true,
+				
+				viewConfig: {
+				    	getRowClass: function(record, rowIndex, rowParams, store){
+				        	if (record.get('confirmed') == 0)
+				        	  return 'canceled';
+				    	}
+				},				
+				
         	    store: new Ext.data.Store({
         	    	autoLoad: true,
         	    	fields: [],
@@ -102,6 +110,12 @@
 					 	ret += '<tr><th width=100>Note</th><td>' + rec.get('provider_notes') + '&nbsp;</td></tr>';
 					 	ret += '</table>';					 
 			         }
+			         
+			         if (Ext.isEmpty(rec.get('authorization_notes')) == false){
+					 	ret += '<table>';				         
+					 	ret += '<tr><th width=100>Note Autorizzazione</th><td>' + rec.get('authorization_notes') + '&nbsp;</td></tr>';
+					 	ret += '</table>';					 
+			         }
 			         			         
 			         return ret;
 			        }			        			     
@@ -120,7 +134,113 @@
 					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
 								        }			     
-			     },
+			     }
+			     
+			     
+			     <% if params[:authorizing] == 'Y' %>
+			     
+			     
+				  , {
+			        text: <%= raw t('forms.std.cancel').to_json -%>, width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
+			        	var loc_grid = this;
+			        	
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            			          
+			                ok_img = 'fa-close';
+			                
+			                if (rec.get('confirmed') == 0)
+			                	return '';
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+		                		scale: 'large',
+		                		cls: 'btn-del',	                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();
+			                        
+			                           //costruisco una form
+			                           
+			                           loc_form = Ext.create('Ext.form.Panel', {
+										    title: '',
+										    bodyPadding: 10,
+										    defaultType: 'textfield',
+										    	layout: {
+												    type: 'vbox',
+												    align : 'stretch',
+												    pack  : 'start',
+												},
+										    items: [
+										      {xtype: 'hiddenfield', name: 'rhi_id', value: rec.get('id')},
+										      {xtype: 'textareafield', name: 'authorization_notes', fieldLabel: 'Notes', flex: 1}										    										    										    
+										    ]
+										    , 	buttons:
+											        [{
+											            text: <%= raw t('forms.to_be_handled.confirm').to_json -%>,
+											            cls: 'btn-del',
+											            handler: function (btn, evt) {
+											             btn.disable();
+											                           
+											             form = this.up('form').getForm();
+											             tmp_win  = this.up('window');
+											             if (form.isValid()) {
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'repair_handling_items', :action=>'estimate_cancel_row') -%>',
+															   jsonData: {
+															   	data: form.getValues()
+															   },
+															   success: function(response, opts) {
+															      store.remove(rec);
+															      store.load();
+															      tmp_win.close();
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+															   }
+															});	
+														  return false;												             
+											             }
+											            }
+											          }
+											         ]
+  
+										});
+										
+										
+			                           loc_win = Ext.create('Ext.window.Window',{
+										    layout: 'fit',
+										    items: loc_form,
+										    title: <%= raw t('forms.std.cancel_confirm').to_json -%>,
+										    width: 500,
+										    height: 300,
+										    id: 'myWindow'
+										}).show();
+													                           			                           
+			                           return false;
+
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }
+			     
+			     			     
+			     
+			     
+			     
+			     <% end %>
+			     
 			     
 			    ]
 			    

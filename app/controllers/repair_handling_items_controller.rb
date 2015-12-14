@@ -10,7 +10,7 @@ class RepairHandlingItemsController < ApplicationController
   end
   
   
-  #imposto data di invio preventivo (estimate)
+  #imposto data di redazione preventivo (estimate)
   def set_estimate
     item = RepairHandlingItem.find(params[:rec_id])
      item.estimate_at = Time.zone.now
@@ -18,6 +18,14 @@ class RepairHandlingItemsController < ApplicationController
     exe_save(item)
   end
 
+
+  #imposto data di invio preventivo compagnia
+  def set_estimate_sent
+    item = RepairHandlingItem.find(params[:rec_id])
+     item.estimate_sent_at = Time.zone.now
+     item.estimate_sent_user_id = current_user.id
+    exe_save(item)
+  end
   
   
 #richiedo modifica a preventivo (annullo data di estimate)
@@ -76,6 +84,20 @@ def estimate_new_row
       )
   )
 end
+
+
+  def estimate_cancel_row
+    ret = {}
+    @rhi = RepairEstimateItem.find(params[:data][:rhi_id])
+    @rhi.confirmed = false
+    @rhi.authorization_notes = params[:data][:authorization_notes] unless params[:data][:authorization_notes].to_s.empty? 
+    @rhi.save!
+    ret[:data] = @rhi
+    ret[:success] = true
+    render json: ret    
+  end
+
+
 
 def save_rei
   ret = {}  
@@ -161,4 +183,74 @@ def exe_save(item)
   end #transaction        
 end
     
+
+
+
+#VISTE PERSONALIZZATE  
+   
+
+#note
+def edit_notes
+  @item = RepairHandlingItem.find(params['rec_id'])
+  @note_field = params['note_field']
+end
+
+################################################
+def edit_notes_save
+################################################
+  item = RepairHandlingItem.find(params[:data][:id])
+  params[:data].permit!
+  #filtro solo gli attributi presenti nel model e salvo
+  item.update(params[:data])
+  item.save!()
+ 
+  render json: {:success => true, :message => '', :rhi=>[item.as_json(RepairHandlingItem.as_json_prop)]}    
+    
+end
+
+
+
+##################################################
+ def repairs_list
+##################################################  
+   render :partial=>"repairs_list", :locals => {:filtered_type => params[:filtered_type] }
+ end
+
+##################################################
+ def get_row_by_filtered_type
+##################################################
+   
+   items = RepairHandlingItem.where('repair_status=?', 'OPEN')
+   items = items.joins(:handling_header)
+        
+   case params[:filtered_type]
+          
+     
+     when 'TO_ESTIMATE'
+       items = items.where('estimate_at IS NULL')
+     when 'TO_SENT'
+       items = items.where('estimate_at IS NOT NULL AND estimate_sent_at IS NULL')
+     when 'TO_AUTHORIZED'
+            items = items.where('estimate_sent_at IS NOT NULL AND estimate_authorized_at IS NULL')
+     when 'TO_REPAIR'
+                 items = items.where('estimate_authorized_at IS NOT NULL AND repair_completed_at IS NULL')
+     when 'TO_OUT_GARAGE'
+                      items = items.where('repair_completed_at IS NOT NULL AND out_garage_at IS NULL')
+
+       
+            
+   end #case
+   
+   if !params[:form_user][:flt_num_container].to_s.empty?
+     items = items.where("handling_headers.container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%")
+   end
+
+   
+   
+   render json: items.limit(2000).as_json(RepairHandlingItem.as_json_prop)
+ 
+ end 
+ 
+
+
 end

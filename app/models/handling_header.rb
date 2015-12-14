@@ -121,6 +121,14 @@ class HandlingHeader < ActiveRecord::Base
   hh = self.handling_items.where("handling_item_type = ?", "O_LOAD").first
  end
  
+ def last_dett_by_item_type(handling_item_type)
+  hh = self.handling_items.where("handling_item_type = ?", handling_item_type).order('datetime_op desc, id desc').first
+ end 
+
+def last_dett_by_lock_type(lock_type)
+ hh = self.handling_items.where("lock_type = ?", lock_type).order('datetime_op desc, id desc').first
+end 
+ 
 
 #COSTANTI (DA NON USARE PIU')
  TYPES = {

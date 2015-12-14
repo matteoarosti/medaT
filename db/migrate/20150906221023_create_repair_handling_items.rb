@@ -13,6 +13,10 @@ class CreateRepairHandlingItems < ActiveRecord::Migration
       t.datetime    :estimate_at
       t.integer     :estimate_user_id
             
+      #timestamp preventivo inviato a compagnia (caricato su sito web)
+      t.datetime    :estimate_sent_at
+      t.integer     :estimate_sent_user_id
+      
       #timestamp preventivo autorizzato (da shipowner)
       t.datetime    :estimate_authorized_at
       t.integer     :estimate_authorized_user_id     
@@ -24,6 +28,14 @@ class CreateRepairHandlingItems < ActiveRecord::Migration
       #container riportato in terminal dall'officina
       t.datetime    :out_garage_at
       t.integer     :out_garage_user_id
+      
+      t.text    :in_garage_notes,           :limit => 64.kilobytes
+      t.text    :estimate_notes,            :limit => 64.kilobytes
+      t.text    :estimate_sent_notes,       :limit => 64.kilobytes
+      t.text    :estimate_authorized_notes, :limit => 64.kilobytes
+      t.text    :repair_completed_notes,    :limit => 64.kilobytes
+      t.text    :out_garage_notes,          :limit => 64.kilobytes
+      
       
       
       t.timestamps            

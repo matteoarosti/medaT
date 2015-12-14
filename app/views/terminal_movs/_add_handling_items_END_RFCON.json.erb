@@ -26,7 +26,7 @@
        <%= raw extjs_std_textfield('driver', @new_rec, :allowBlank => true) -%>,
        <%= raw extjs_std_textfield('seal_shipowner', @new_rec, :allowBlank => true) -%>,
        <%= raw extjs_std_textfield('seal_others', @new_rec, :allowBlank => true) -%>,
-       
+       <%= raw extjs_to_be_moved('to_be_moved', @hh, @new_rec) -%>,
        <%= raw extjs_notes('notes', @hh, @new_rec) -%>       
 
    ],

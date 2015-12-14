@@ -103,7 +103,7 @@
 			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h1>' + rec.get('handling_header').container_number + '</h1>';
-			          ret += '<h5>Movim #' + rec.get('id') + '&nbsp;';
+			          ret += '<h5>Movim #' + rec.get('handling_item_id') + '&nbsp;';
 			            ret += ' ' + pb_get_image_status(rec.get('handling_header').handling_status);
 			            ret += ' ' + pb_get_image_in_terminal(rec.get('handling_header').container_in_terminal);			            
 			            ret += ' ' + pb_get_image_FE(rec.get('handling_header').container_FE);

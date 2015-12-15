@@ -109,7 +109,7 @@ def add_handling_items_select_type
 #############################################################
  @rec_id = params[:rec_id]
  hh = HandlingHeader.find(@rec_id)
- @operations = hh.get_operations()  #elenco operazioni ammesse (per tipo, stato, ...)
+ @operations = hh.get_operations('FOR_SELECT')  #elenco operazioni ammesse (per tipo, stato, ...)
 end
 
   

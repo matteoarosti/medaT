@@ -232,7 +232,7 @@ end
  #in base allo stato, al tipo e all'ultima operazione
  # ritorno le operazioni ammesse su un handling header
 ################################################################
- def get_operations()
+ def get_operations(view_type = '')
 ################################################################
   operatios_config = load_op_config
   ret = []      
@@ -258,6 +258,8 @@ end
    when 'OPEN'
     for op_id, op_config in h_type_config
       next if op_id == 'initial_handling'
+      next if view_type == 'FOR_SELECT' && op_config['hide_for_select'] == 'Y'
+      
       
       hi.handling_item_type = op_id
       op_valid = self.validate_insert_item(hi, 'get_operations')

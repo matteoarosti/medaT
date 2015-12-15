@@ -193,6 +193,7 @@ TMOV:
  REPAIR:
   label: Repair
   icon: '<i class="fa fa-thumbs-o-up fa-2x" style="color:green;"></i>'
+  hide_for_select: Y
   check:
    lock_type: DAMAGED
   set:

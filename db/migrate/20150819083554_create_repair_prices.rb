@@ -12,6 +12,9 @@ class CreateRepairPrices < ActiveRecord::Migration
       t.decimal :provider_time,            precision: 10, scale: 2
       t.decimal :provider_material_price,  precision: 10, scale: 2
       
+      t.string  :code1,   limit: 20
+      t.string  :code2,   limit: 20
+      
       t.timestamps            
       t.integer :created_user_id      
       t.integer :updated_user_id

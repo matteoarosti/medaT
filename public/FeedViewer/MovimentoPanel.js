@@ -789,6 +789,12 @@ Ext.define('FeedViewer.MovimentoPanel', {
      			                		 600, 300, null, null, null, null, {mov_panel: gridView.up('panel').up('panel').up('panel')});
 					        	
 					        } //column notes
+					        
+					        if (columnIndex == 13) { //doppio click su lock type
+					        	if (rec.get('lock_type') == 'DAMAGED'){
+					        		acs_show_panel_std(myApp, myApp.railsBaseUri + 'repair_handling_items/rhi_edit', {handling_item_id: rec.get('id')}, 'Modifica');
+					        	}
+					        }
 					    },
 	        		
 	        		

@@ -6,7 +6,11 @@ class RepairHandlingItemsController < ApplicationController
   
   #tab gestione riparazione
   def rhi_edit
-    @item = RepairHandlingItem.find(params[:rec_id])
+    if !params[:rec_id].nil? && !params[:rec_id].to_s.empty?
+      @item = RepairHandlingItem.find(params[:rec_id])
+    else
+      @item = RepairHandlingItem.find_by_handling_item_id(params[:handling_item_id])
+    end
   end
   
   

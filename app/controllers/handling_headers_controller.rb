@@ -163,14 +163,13 @@ def hitems_sc_create
      
      #se provengo da "Da movimentare" oltre a creare il movimento (inspect) chiudo la movimentazione
      if ret_status == true && !params[:handling_item_to_be_moved_close].to_s.empty?
-       logger.info "Chiudo to_be_moved"
-       hi = HandlingItem.find(params[:handling_item_to_be_moved_close])
-       hi.to_be_moved = false
-       hi.moved_by_user_id = current_user.id
-       hi.moved_at = Time.zone.now
-       hi.save!     
+       hi_moved = HandlingItem.find(params[:handling_item_to_be_moved_close])
+       hi_moved.to_be_moved = false
+       hi_moved.moved_by_user_id = current_user.id
+       hi_moved.moved_at = Time.zone.now
+       hi_moved.save!     
      end 
-       
+     
       #apro eventuale item in RepairHandlingItem
       if hi.lock_type == 'DAMAGED'
         rhi = RepairHandlingItem.create_from_hi(hi)

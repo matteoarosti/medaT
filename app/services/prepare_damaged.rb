@@ -2,13 +2,19 @@ class PrepareDamaged
   def call
     #recupero tutti gli hi di cui ancora devo inviare la email (se necessario)
     HandlingHeader.where('handling_status=?', 'OPEN').where('lock_type IN(\'DAMAGED\', \'DAMAGED_AU\')').limit(3000).each do |hh|
-      print "\n----------------------------\n"
-      print "id: #{hh.id}, container_number: #{hh.container_number}"
-      
-      n = RepairHandlingItem.new
-      
+            
       #item con lock_type = 'DAMAGED'
       hi_damaged = hh.last_dett_by_lock_type('DAMAGED')
+      
+      #verifico che non esista gia' il record in repair
+      rpi = RepairHandlingItem.find_by_handling_item_id(hi_damaged.id)      
+      next if !rpi.nil?      
+      
+      print "\n----------------------------\n"
+      print "id: #{hh.id}, container_number: #{hh.container_number}"      
+
+      n = RepairHandlingItem.new      
+      
       n.handling_item_id = hi_damaged.id
       n.repair_status = 'OPEN'
       n.in_garage_at = hi_damaged.datetime_op
@@ -37,8 +43,9 @@ class PrepareDamaged
 
       end
       
-      n.save!
-
+      
+      ####n.save!
+      print "\nDovrei creare per container_number #{hh.container_number.to_s}"
     end
   end #call
 end #class

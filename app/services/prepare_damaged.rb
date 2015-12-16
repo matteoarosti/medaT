@@ -43,9 +43,7 @@ class PrepareDamaged
 
       end
       
-      
-      ####n.save!
-      print "\nDovrei creare per container_number #{hh.container_number.to_s}"
+      n.save!
     end
   end #call
 end #class

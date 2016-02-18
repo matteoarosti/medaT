@@ -6,7 +6,7 @@ class SendCodeco
   end
 
   
-  def set_all_sent_codeco(shipowner, shipwowner_list, container_fe, from_hi_id)
+  def set_all_sent_codeco(shipowner, shipwowner_list, container_fe, to_hi_id)
     #legge tutti gli hi di una data e di una compagnia
     his = HandlingItem.where({handling_headers: {shipowner_id: shipowner} })
     his = his.joins(:handling_header)
@@ -14,7 +14,7 @@ class SendCodeco
     his = his.where({container_FE: container_fe})
     his = his.where({operation_type: 'MT'}) #devono essere inviati solo i movimenti terminal
     his = his.where({ship_id: nil}) #devono essere inviati solo i movimenti terminal
-    his = his.where('handling_items.id < 73500')
+    his = his.where("handling_items.id < #{to_hi_id}")
     
     c = 0
     his.each do |hi|

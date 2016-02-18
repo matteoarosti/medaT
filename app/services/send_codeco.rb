@@ -6,6 +6,25 @@ class SendCodeco
   end
 
   
+  def set_all_sent_codeco(shipowner, shipwowner_list, container_fe, from_hi_id)
+    #legge tutti gli hi di una data e di una compagnia
+    his = HandlingItem.where({handling_headers: {shipowner_id: shipowner} })
+    his = his.joins(:handling_header)
+    his = his.where({codeco_send: nil})
+    his = his.where({container_FE: container_fe})
+    his = his.where({operation_type: 'MT'}) #devono essere inviati solo i movimenti terminal
+    his = his.where({ship_id: nil}) #devono essere inviati solo i movimenti terminal
+    his = his.where('handling_items.id < 73500')
+    
+    c = 0
+    his.each do |hi|
+      c = c+1
+    end
+    
+    print "\nTotale da resettare: " + c.to_s
+  end  
+  
+  
   def send_codeco(shipowner, shipwowner_list, container_fe, email_to)
     #legge tutti gli hi di una data e di una compagnia
     his = HandlingItem.where({handling_headers: {shipowner_id: shipowner} })

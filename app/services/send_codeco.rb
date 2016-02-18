@@ -46,6 +46,10 @@ class SendCodeco
         content_file = prepare_file_cma(shipowner, his, cs, container_fe)
         file_name = prepare_file_name_cma(shipowner, container_fe)
         subject = prepare_subject_cma(shipowner, container_fe)
+      when 2 #MAERSK - TODO
+        content_file = prepare_file_cma(shipowner, his, cs, container_fe)
+        file_name = prepare_file_name_cma(shipowner, container_fe)
+        subject = prepare_subject_cma(shipowner, container_fe)        
     end
 
 

@@ -19,9 +19,11 @@ class SendCodeco
     c = 0
     his.each do |hi|
       c = c+1
+      hi.codeco_send = 1
+      hi.save!
     end
     
-    print "\nTotale da resettare: " + c.to_s
+    print "\nTotale resettati: " + c.to_s
   end  
   
   

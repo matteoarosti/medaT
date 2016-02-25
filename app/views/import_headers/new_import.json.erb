@@ -32,7 +32,7 @@
                     	         {cod: 'D', descr: 'Discharge'}
                     	  ]
                     	}
-                }, {
+                }, <%= raw extjs_std_combo('handling_type', @item, {:fieldLabel => 'Tipologia', :store => extjs_std_store_data(HandlingHeader.new.handling_type_get_data_json)}) -%>, {
 		            xtype: 'filefield',
 		            emptyText: 'Seleziona un file dal tuo archivio',
 		            fieldLabel: 'File',

@@ -31,7 +31,7 @@ end
 
 every 2.hours do
   runner "SendCodeco.new.call(3, [3], 'app.editr@edi.cma-cgm.com')"
-  runner "SendCodeco.new.call(2, [2], 'matteo.arosti@gmail.com')"
+  #runner "SendCodeco.new.call(2, [2], 'matteo.arosti@gmail.com')"
 end
 
 

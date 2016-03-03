@@ -561,12 +561,18 @@ def sincro_set_start_reefer_connection(value, hi)
   #verifico che l'equipment sia di tipo freeze e se necessario genero il movimento allaccio frigo
   if self.equipment.reefer == true
     if (value == true || (value == 'IF_FULL' && hi.container_FE == 'F') || (value == 'IF_EMPTY' && hi.container_FE == 'E'))
-      logger.info "Creao allaccio frigo"
+      logger.info "Creo allaccio frigo (automatico)"
       hi_reefer = self.handling_items.new()
       hi_reefer.datetime_op = hi.datetime_op
       hi_reefer.operation_type = 'AF'
       hi_reefer.handling_item_type = 'FRCON'
       hi_reefer.save!
+      logger.info "Allaccio frigo creato (automatico) hi_id: #{hi_reefer.id.to_s} hh_id: #{self.id.to_s} -> verifico esistenza record"
+      logger.info "hi_reefer::: #{hi_reefer.to_yaml}"
+      if hi_reefer.id.nil?
+        logger.info "ERRORE:::: Allaccio frigo: movimento non creato (automatico)"
+        raise ActiveRecord::RecordNotSaved
+      end
     end
   end 
 end

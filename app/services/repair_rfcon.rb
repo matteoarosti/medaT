@@ -70,7 +70,7 @@ class RepairRfcon
                        hi_reefer.datetime_op_end = hi_end.datetime_op
                        hi_reefer.operation_type = 'AF'
                        hi_reefer.handling_item_type = 'FRCON'
-                       hi_reefer.save!            
+                       #####hi_reefer.save!            
             
             
             #resetto stato

@@ -2,7 +2,7 @@ class RepairRfcon
   
   
   ########################################################## 
-  def call_all
+  def call_all(p = {})
   ##########################################################
     cont_hh = 0
     cont_rfcon = 0
@@ -17,15 +17,15 @@ class RepairRfcon
       hi_start = nil
       hi_end = nil      
 
-      print "\n-----------------------------------------------------------"
-      print "\nId: #{hh.id}, container: #{hh.container_number}"      
+      #print "\n-----------------------------------------------------------"
+      #print "\nId: #{hh.id}, container: #{hh.container_number}"      
                  
       #scorro i movimenti in ordine
       hh.handling_items.order('datetime_op, id').each do |hi|
 
         #INGRESSO PIENO
         if hi.handling_type == 'I' && hi.container_FE == 'F'
-          print "\n(ingresso pieno con id #{hi.id})"
+          #print "\n(ingresso pieno con id #{hi.id})"
           if hh_status != 0
             print "\nErrore hh_status (#{hh_status})"
             return 
@@ -38,7 +38,7 @@ class RepairRfcon
                 
         #USCITA PIENO
         if hi.handling_type == 'O' && hi.container_FE == 'F'
-          print "\n(uscita pieno con id #{hi.id})"
+          #print "\n(uscita pieno con id #{hi.id})"
           if hh_status < 1
             print "\n*************Errore hh_status (#{hh_status})************"
             return unless hi.handling_item_type == 'O_LOAD'
@@ -57,7 +57,7 @@ class RepairRfcon
             hh_status = 1
             hi_end = hi          
             
-            print "\nCreo RFCON con data #{hi_start.datetime_op.to_s} - #{hi_end.datetime_op.to_s}"
+            print "\nDevo creare RFCON per #{hh.container_number} con data #{hi_start.datetime_op.to_s} - #{hi_end.datetime_op.to_s}"
             
             if hi_start.datetime_op == hi_end.datetime_op
               print "\nDate hi_start e hi_end coincidenti. "
@@ -70,7 +70,7 @@ class RepairRfcon
                        hi_reefer.datetime_op_end = hi_end.datetime_op
                        hi_reefer.operation_type = 'AF'
                        hi_reefer.handling_item_type = 'FRCON'
-                       hi_reefer.save!            
+                       hi_reefer.save! if p[:with_save] == 'Y'            
             
             
             #resetto stato
@@ -86,7 +86,7 @@ class RepairRfcon
         
         #Allaccio frigo
         if hi.handling_item_type == 'FRCON'
-          print "\nTrovato allaccio frigo"
+          #print "\nTrovato allaccio frigo"
           hh_status = 2
         end
         

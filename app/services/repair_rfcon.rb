@@ -46,7 +46,7 @@ class RepairRfcon
           
           
           if hh_status == 2 #con RFCON
-            print "\nRFCON gia' presente"
+            #print "\nRFCON gia' presente"
             #resetto stato
             hh_status = 0
             hi_start = nil

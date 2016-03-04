@@ -40,7 +40,7 @@ class RepairRfcon
         if hi.handling_type == 'O' && hi.container_FE == 'F'
           #print "\n(uscita pieno con id #{hi.id})"
           if hh_status < 1
-            print "\n*************Errore hh_status (#{hh_status})************"
+            print "\n*************Errore hh_status (#{hh_status}) in #{hh.container_number} ************"
             return unless hi.handling_item_type == 'O_LOAD'
           end
           

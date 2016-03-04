@@ -197,7 +197,8 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
  			<tr>
  				<td><%= row.datetime_op.strftime("%d/%m/%y %H:%M") -%></td>
  				<td><%= row.datetime_op_end.strftime("%d/%m/%y %H:%M") unless row.datetime_op_end.nil? -%></td>
- 				<td><%= "#{(((((row.datetime_op_end - row.datetime_op).to_i / 3600).to_i + 1)/24).to_i + 1)}" unless row.datetime_op_end.nil? %></td>
+ 				<!-- <td><%= "#{(((((row.datetime_op_end - row.datetime_op).to_i / 3600).to_i + 1)/24).to_i + 1)}" unless row.datetime_op_end.nil? %></td> -->
+ 				<td><%= row.rfcon_calculate_dd -%></td>
 				<td><%= eq.equipment_type -%></td>				
 				<td><%= row.handling_header.container_number.to_s -%></td>
 			</tr>

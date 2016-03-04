@@ -116,6 +116,15 @@ def is_import_export()
 end
 
  
+def rfcon_calculate_dd
+  d = (self.datetime_op_end - self.datetime_op).to_f / 60 #diff date in minuti
+  d = d - 97  #la prima 1h e 26' sono abbuonati
+  d = d / 60  #in ore
+  d = d / 24  #diff in giorni
+  d = d.to_i
+  d+1
+end
+
  
 #valori per combo
 def container_FE_get_data_json

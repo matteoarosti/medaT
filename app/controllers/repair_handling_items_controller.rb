@@ -90,7 +90,16 @@ def estimate_new_row
 end
 
 
-  def estimate_cancel_row
+  def estimate_edit_row  
+    @rhi = RepairHandlingItem.find(params[:rhi_id])
+    @rei = @rhi.repair_estimate_items.find(params[:rhi_row_id])
+    @edit_row = true
+    render "estimate_new_row"
+  end
+
+
+ #in autorizzazione: annulla riga
+ def estimate_cancel_row
     ret = {}
     @rhi = RepairEstimateItem.find(params[:data][:rhi_id])
     @rhi.confirmed = false
@@ -106,8 +115,14 @@ end
 def save_rei
   ret = {}  
   @rhi = RepairHandlingItem.find(params[:repair_handling_item_id])
-  repair_price = RepairPrice.where("repair_processing_id=?", params[:repair_processing_id]).where("shipowner_id=?", @rhi.handling_item.handling_header.shipowner_id).first  
-  n = @rhi.repair_estimate_items.new
+  repair_price = RepairPrice.where("repair_processing_id=?", params[:repair_processing_id]).where("shipowner_id=?", @rhi.handling_item.handling_header.shipowner_id).first
+  
+  if params[:id].empty?      
+    n = @rhi.repair_estimate_items.new
+  else
+    n = @rhi.repair_estimate_items.find(params[:id])
+  end
+    
    n.repair_processing_id = params[:repair_processing_id]
    n.quantity = params[:quantity].to_s.gsub(',', '.').to_f
    n.side = params[:side]
@@ -119,6 +134,17 @@ def save_rei
   ret[:success] = true
   render json: ret
 end
+
+
+
+  def destroy_rei
+    ret = {}  
+    @rhi = RepairHandlingItem.find(params[:repair_handling_item_id])
+    n = @rhi.repair_estimate_items.find(params[:id]).destroy
+    ret[:success] = true
+    render json: ret
+  end
+
 
 
 #in base a rhi (da cui prendo shipowner) mostro l'elenco dei positions (con almeno un record a listino)

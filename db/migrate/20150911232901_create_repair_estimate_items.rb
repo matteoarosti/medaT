@@ -5,18 +5,19 @@ class CreateRepairEstimateItems < ActiveRecord::Migration
       t.belongs_to  :repair_handling_item #rappresenta la testata preventivo
 
       t.belongs_to  :repair_processing    #lavorazione
+      
+      t.decimal :quantity,                 precision: 10, scale: 2
 
       #costo da fornitore
       t.decimal :provider_time,            precision: 10, scale: 2
       t.decimal :provider_hourly_cost,     precision: 10, scale: 2      
       t.decimal :provider_material_price,  precision: 10, scale: 2
+            
 
       #costo per cliente
       t.decimal :customer_time,            precision: 10, scale: 2
       t.decimal :customer_hourly_cost,     precision: 10, scale: 2      
       t.decimal :customer_material_price,  precision: 10, scale: 2
-
-      t.decimal :quantity,                 precision: 10, scale: 2
             
       t.string  :preparation_time_type,    :limit => 50 #ID: Impact Damage, WT: Wear Time, CL: Cleaning (le operazioni CL non vanno sommate nel preparation_time del preventivo)
       

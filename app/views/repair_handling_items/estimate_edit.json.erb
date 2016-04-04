@@ -44,6 +44,9 @@
 				flex: 1,
 				layout: 'fit',
         	    title: '',
+        	    features: [{
+        			ftype: 'summary'
+    			}],
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
@@ -59,7 +62,31 @@
 				
         	    store: new Ext.data.Store({
         	    	autoLoad: true,
-        	    	fields: [],
+        	    	fields: [
+        	    		//definisco altrimenti non funziona correttamente summary
+        	    		{name: 'provider_time', 			type: 'float'},
+        	    		{name: 'provider_material_price', 	type: 'float'},
+        	    		{name: 'customer_time', 			type: 'float'},
+        	    		{name: 'customer_material_price', 	type: 'float'},
+        	    		
+						{name: 't_row_provider_time', type: 'float',
+						    			convert: function(val,row) {
+						    				return row.data.quantity * row.data.provider_time;
+						    			}	        	    		
+        	    		}, {name: 't_row_provider_material_price', type: 'float',
+						    			convert: function(val,row) {
+						    				return row.data.quantity * row.data.provider_material_price;
+						    			}	        	    		
+        	    		}, {name: 't_row_customer_time', type: 'float',
+						    			convert: function(val,row) {
+						    				return row.data.quantity * row.data.customer_time;
+						    			}	        	    		
+        	    		}, {name: 't_row_customer_material_price', type: 'float',
+						    			convert: function(val,row) {
+						    				return row.data.quantity * row.data.customer_material_price;
+						    			}	        	    		
+        	    		}
+        	    	],
         	    	proxy: {
         	            url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'get_estimate_items').to_json -%>,
         	            extraParams: {        	            	
@@ -96,7 +123,13 @@
 			     {text: "<%= t('tables.repair_prices.repair_processing') -%>",  "dataIndex":"repair_processing_name",  flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
-			         ret += '<h3>' + value + '</h3>';
+			         ret += '<h3>'
+			         ret += value
+<% if User.current.admin_can?(:repair, :table) %>			         
+			         ret += '<br/>[ ' + rec.get('code1_code2') + ' ]'
+<% end %>			         			         
+			         ret += '</h3>';
+
 			        
 
 			         if (Ext.isEmpty(rec.get('side')) == false){
@@ -125,16 +158,56 @@
 								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
 								        }			     
 			     },
-			     {text: "<%= t('tables.std.time') -%>",  "dataIndex":"provider_time",  width: 80, align: 'right',
-					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			     
+			     //costo da fornitore
+			     {text: 'Da fornitore',
+			      columns: [
+			     	{text: "<%= t('tables.std.time') -%>",  "dataIndex":"t_row_provider_time",  width: 80, align: 'right',
+			     	    summaryType: 'sum',
+			     	    summaryRenderer: function(value, summaryData, dataIndex) {
+                			return '<h2>' + Ext.util.Format.number(value, "0,000.00h") + '</h2>';
+            			},
+						renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+								         return '<h3>' + Ext.util.Format.number(value, "0,000.00h") + '</h3>';
+								        }			     
+			     	},
+			     	{text: "<%= t('tables.std.material_price_short') -%>",  "dataIndex":"t_row_provider_material_price",  width: 80, align: 'right',
+			     	    summaryType: 'sum',
+			     	    summaryRenderer: function(value, summaryData, dataIndex) {
+                			return '<h2>' + Ext.util.Format.number(value, "0,000.00") + '</h2>';
+            			},			     	
+						renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
 								        }			     
+			     	}]
 			     },
-			     {text: "<%= t('tables.std.material_price') -%>",  "dataIndex":"provider_material_price",  width: 80, align: 'right',
-					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			     
+<% if User.current.admin_can?(:repair, :table) %>			     
+			     //costo per cliente
+			     {text: 'A compagnia',
+			      columns: [			     
+			     	{text: "<%= t('tables.std.time') -%>",  "dataIndex":"t_row_customer_time",  width: 80, align: 'right',
+			     	    summaryType: 'sum',
+			     	    summaryRenderer: function(value, summaryData, dataIndex) {
+                			return '<h2>' + Ext.util.Format.number(value, "0,000.00h") + '</h2>';
+            			},			     	
+						renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+								         return '<h3>' + Ext.util.Format.number(value, "0,000.00h") + '</h3>';
+								        }			     
+			     	},
+			     	{text: "<%= t('tables.std.material_price_short') -%>",  "dataIndex":"t_row_customer_material_price",  width: 80, align: 'right',
+			     	    summaryType: 'sum',
+			     	    summaryRenderer: function(value, summaryData, dataIndex) {
+                			return '<h2>' + Ext.util.Format.number(value, "0,000.00") + '</h2>';
+            			},			     	
+						renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
 								        }			     
+			     	}]
 			     }
+<% end %>			     
+			     
+			     
 			     
 			     
 			     <% if params[:authorizing] == 'Y' %>
@@ -293,9 +366,23 @@
 			  }
 			 ]
 
-		<% end %>	    
+		, listeners : {
+		    itemdblclick: function(dv, rec, item, index, e) {						    	
+ 				my_listeners = {
+            		onClose: function(fromWindow){
+            			dv.up('grid').store.load();
+            		}, scope: this		                		
+            	};
+			    
+			     new_win = acs_show_win_std('Riga preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_edit_row').to_json -%>,
+	     	 		{rhi_id: <%= @item.id -%>, rhi_row_id: rec.get('id')},
+	     	 		500, 400, my_listeners);										
 
-				    
+		    }, scope: this
+		} //listeners
+
+
+		<% end %>	    
 
                         	    
         	}    

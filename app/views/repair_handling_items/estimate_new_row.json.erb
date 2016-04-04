@@ -20,7 +20,7 @@
      	{xtype: 'hidden', name: 'id', value: '<%= @rei.id %>'},
 		{xtype: 'hidden', name: 'repair_handling_item_id', value: '<%= @rei.repair_handling_item.id %>'},
 		
-		<%= raw extjs_std_combo('description_it', @rei.repair_processing.repair_position,
+		<%= raw extjs_std_combo('id', @rei.repair_processing.repair_position,
 				:fieldLabel => 'Posizione',
 				:input_name => 'flt_repair_position',
 				:valueField => 'id',
@@ -32,12 +32,13 @@
 			)				
 				 -%>,
 
-		<%= raw extjs_std_combo('description_it', @rei.repair_processing.repair_component,
+		<%= raw extjs_std_combo('id', @rei.repair_processing.repair_component,
 				:fieldLabel => 'Componente',
 				:input_name => 'flt_repair_component',		
 				:valueField => 'id',
 				:displayField => 'description_it',
-				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_components_by_rhi', :rhi_id => @rhi.id)),
+				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_components_by_rhi', 
+						:rhi_id => @rhi.id, :flt_repair_position => @rei.repair_processing.repair_position_id)),
 				:listeners => "change: function(combo, record, index) {
 								  this.up('form').do_refresh_on_change_component();			  
 							    }"
@@ -49,7 +50,9 @@
 				:fieldLabel => 'Lavorazione',
 				:valueField => 'repair_processing_id',
 				:displayField => 'repair_processing_description',
-				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_processings_by_rhi', :rhi_id => @rhi.id)),
+				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_processings_by_rhi', 
+						:rhi_id => @rhi.id, :flt_repair_position  => @rei.repair_processing.repair_position_id,
+											:flt_repair_component => @rei.repair_processing.repair_component_id)),
 				:listeners => "change: function(combo, record, index) {
 								  this.up('form').do_refresh_on_change_processing();			  
 							    }"
@@ -76,8 +79,49 @@
 	],
     
    buttons: [
+   
+
+<% if @edit_row == true %>
     {
-        text: '<i class="fa fa-navicon fa"></i> Aggiungi',
+        text: '<i class="fa fa-navicon fa"></i> Elimina', cls: 'btn-del',
+        handler: function(btn, evt) {
+        	 m_win = this.up('window');
+        	 form = this.up('form').getForm();
+
+			  Ext.MessageBox.confirm('Richieta conferma', 'Confermi eliminazione riga?', function(btn){
+			   if(btn === 'yes'){
+
+						form.submit({
+	                        url: '<%= url_for(:controller => 'repair_handling_items', :action=>'destroy_rei') -%>', 
+	                        success: function(fp, o) {
+	                        	m_win.fireEvent('onClose');
+	                            m_win.close();
+	                        },
+							failure: function(fp, op) {
+								var result = Ext.JSON.decode(op.response.responseText);
+								Ext.MessageBox.show({
+			                        title: 'Errore',
+			                        msg: result.message,
+			                        buttons: Ext.Msg.OK
+		                    	});                                
+								btn.enable();
+	                        }	                        
+	                    });             	
+             	}
+              });
+        	
+        } //handler Aggiungi
+    },  //Aggiungi
+<% end %>    
+   
+   
+   
+ <%
+  button_text = 'Aggiungi'
+  button_text = 'Modifica' if @edit_row == true
+ %>  
+    {
+        text: '<i class="fa fa-navicon fa"></i> <%= button_text -%>',
         handler: function(btn, evt) {
         	 m_win = this.up('window');
         	 form = this.up('form').getForm();
@@ -103,7 +147,8 @@
 			 }
         	
         } //handler Aggiungi
-    }    
+    } //Aggiungi
+    
    ] 
    
    

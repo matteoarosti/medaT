@@ -15,6 +15,47 @@ class RepairEstimateItem < ActiveRecord::Base
   end
  
   
+  def code1
+    if self.repair_processing.nil?
+      return '#PROC_DELETE#'
+    else
+      price_row = RepairPrice.where(:repair_processing_id => self.id).where(:shipowner_id => self.repair_handling_item.handling_item.handling_header.shipowner_id).first
+      if price_row.nil?
+        return 'not found'
+      else
+        return price_row.code1.to_s 
+      end
+    end
+  end
+  
+  def code2
+    if self.repair_processing.nil?
+      return '#PROC_DELETE#'
+    else
+      price_row = RepairPrice.where(:repair_processing_id => self.id).where(:shipowner_id => self.repair_handling_item.handling_item.handling_header.shipowner_id).first
+      if price_row.nil?
+        return 'not found'
+      else
+        return price_row.code2.to_s 
+      end
+    end
+  end  
+
+  
+    
+  def code1_code2
+    if self.repair_processing.nil?
+      return '#PROC_DELETE#'
+    else
+      price_row = RepairPrice.where(:repair_processing_id => self.id).where(:shipowner_id => self.repair_handling_item.handling_item.handling_header.shipowner_id).first
+      if price_row.nil?
+        return 'not found'
+      else
+        return price_row.code1.to_s + " - " + price_row.code2.to_s 
+      end
+    end
+  end
+
   
   #ricopio i dati contabili da processing e compagnia
   def set_auto_data(repair_price)
@@ -32,7 +73,7 @@ class RepairEstimateItem < ActiveRecord::Base
          :include=>{
             :repair_processing => {},
             },
-         :methods=>[:repair_processing_name]
+         :methods=>[:repair_processing_name, :code1_code2]
          }
   end
   

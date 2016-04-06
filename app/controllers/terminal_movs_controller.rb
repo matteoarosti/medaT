@@ -20,7 +20,13 @@ class TerminalMovsController < ApplicationController
       render "index_agenzia"
       return
     end    
-        
+
+    
+    if User.current.officina?
+      render "index_officina"
+      return
+    end    
+    
     
     #se sono qui: role non definito
     render "index_not_defined"

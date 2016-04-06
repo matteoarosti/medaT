@@ -45,6 +45,15 @@
                 initAjaxSim();
             }
 
+/*
+// define a custom summary function
+Ext.ux.grid.GroupSummary.Calculations['totalCost'] = function(v, record, field){
+    //return v + (record.data.estimate * record.data.rate);
+    return 3;
+};
+*/
+
+
 
 // ****** PER BUG UPDATE PROXY SU BUFFERED STORE
 Ext.define('Ext.ux.fixed.BufferedStore', {

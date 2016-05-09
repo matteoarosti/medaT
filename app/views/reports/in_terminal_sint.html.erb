@@ -40,6 +40,16 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
  		#separo anche in base al lock
  		k[:lock_type] = d.lock_type
  		
+ 		#se un 'DAMAGED' verifico se e' un autorizzato
+ 		if d.lock_type == 'DAMAGED'
+ 			rhi = d.get_open_repair_handling_item
+ 			if !rhi.nil?
+ 			 if !rhi.estimate_authorized_at.nil?
+ 			  k[:lock_type] = 'DAMAGED_AU'
+ 			 end
+ 			end
+ 		end
+ 		
  		#i pieni vengono divisi tra fase di import e export (se hanno booking) 		
  		if d.container_FE == 'F'
  		 ie = d.with_booking == true ? 'E' : 'I'

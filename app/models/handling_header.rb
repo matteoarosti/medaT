@@ -219,8 +219,6 @@ end
        data << {:field => "lock_type", :old_value => self.lock_type, :new_value => 'DAMAGED'}
        data << {:field => "lock_fl",   :old_value => self.lock_fl,   :new_value => true}         
      end
-     
-       
         
    return {:success => success, :data => data}
    
@@ -654,6 +652,13 @@ def load_op_config
  YAML.load_file("config/operations_config.yml")
 end
  
+
+
+################################################################
+def get_open_repair_handling_item
+################################################################
+  RepairHandlingItem.joins(:handling_item).where({handling_items: {handling_header_id: self.id}}).where("repair_status = 'OPEN'").first
+end
 
 
 

@@ -17,7 +17,10 @@
    items: [
     {xtype: 'hiddenfield', name: 'id', value: '<%= @item.id -%>'}   
     
-     , <%= raw extjs_std_textareafield(@note_field, @item) -%>    
+     , <%= raw extjs_std_textareafield(@note_field, @item) -%>
+ <% if User.current.admin_can?(:repair, :table) %>    
+     , <%= raw extjs_std_datetimefield(@datetime_field, @item, :allowBlank=>true) -%>
+ <% end %>        
    ]
    
    , buttons: [	

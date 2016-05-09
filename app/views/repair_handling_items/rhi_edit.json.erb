@@ -159,7 +159,7 @@
 				 		},{scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_in_garage}'},
 					 		handler: function(event, toolEl, panel){
                             	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
-     			                		 {rec_id: <%= @item.id -%>, note_field: 'in_garage_notes'},
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'in_garage_notes', datetime_field: 'in_garage_at'},
      			                		 600, 300);
 					 			 
 					 		}
@@ -186,6 +186,7 @@
         	    defaults: {scale: 'medium'},        	   
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
+        	            	    
 						{iconCls: '',  text: 'Crea/modifica', bind: {disabled: '{!enable_operations.estimate_modify}'},
 						
 						    handler: function(event, toolEl, panel){
@@ -259,7 +260,7 @@
 				 		},{scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_estimate}'},
 					 		handler: function(event, toolEl, panel){
                             	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
-     			                		 {rec_id: <%= @item.id -%>, note_field: 'estimate_notes'},
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'estimate_notes', datetime_field: 'estimate_at'},
      			                		 600, 300);					 			 
 					 		}				 		
 				 		}
@@ -340,7 +341,7 @@
 				 		},{scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_estimate_sent}'},
 					 		handler: function(event, toolEl, panel){
                             	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
-     			                		 {rec_id: <%= @item.id -%>, note_field: 'estimate_sent_notes'},
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'estimate_sent_notes', datetime_field: 'estimate_sent_at'},
      			                		 600, 300);					 			 
 					 		}				 		
 				 		}
@@ -436,7 +437,7 @@
 				 		}, {scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_estimate_authorized}'},
 					 		handler: function(event, toolEl, panel){
                             	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
-     			                		 {rec_id: <%= @item.id -%>, note_field: 'estimate_authorized_notes'},
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'estimate_authorized_notes', datetime_field: 'estimate_authorized_at'},
      			                		 600, 300);					 			 
 					 		}				 		
 				 		}        	    
@@ -515,7 +516,7 @@
 				 		}, {scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_repair_completed}'},
 					 		handler: function(event, toolEl, panel){
                             	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
-     			                		 {rec_id: <%= @item.id -%>, note_field: 'repair_completed_notes'},
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'repair_completed_notes', datetime_field: 'repair_completed_at'},
      			                		 600, 300);					 			 
 					 		}				 		
 				 		}        	    
@@ -593,7 +594,7 @@
 				 		}, {scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_out_garage}'},
 					 		handler: function(event, toolEl, panel){
                             	acs_show_win_std('Modifica nota', myApp.railsBaseUri + 'repair_handling_items/edit_notes',
-     			                		 {rec_id: <%= @item.id -%>, note_field: 'out_garage_notes'},
+     			                		 {rec_id: <%= @item.id -%>, note_field: 'out_garage_notes', datetime_field: 'out_garage_at'},
      			                		 600, 300);					 			 
 					 		}				 		
 				 		}

@@ -185,7 +185,7 @@ module ApplicationHelper
   ret = "{xtype: 'textareafield', name: #{name.to_json}, value: #{item.send(name).to_json}, fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json}, anchor: '100%', grow: true #{add_attr} }"
  end
 
- def extjs_std_datetimefield(name, item) 
+ def extjs_std_datetimefield(name, item, p = {}) 
   name_date = name + "_date"
   name_time = name + "_time"
   ret = "
@@ -200,12 +200,27 @@ module ApplicationHelper
                     hideLabel: true
                 },                
                 items: ["  
-  ret += " {xtype: 'datefield', name: #{name_date.to_json}, value: #{item.send(name).to_date.to_json}, allowBlank: false}"
-  ret += ",{xtype: 'timefield', name: #{name_time.to_json}, value: #{item.send(name).to_s(:time).to_json}, allowBlank: false}"  
+  ret += " {xtype: 'datefield', name: #{name_date.to_json}, value: #{set_date_value(item.send(name)).to_json}, allowBlank: #{p[:allowBlank] || false}}"
+  ret += ",{xtype: 'timefield', name: #{name_time.to_json}, value: #{set_time_value(item.send(name)).to_json}, allowBlank: #{p[:allowBlank] || false}}"  
   ret += "]}" 
  end
 
-
+ 
+ def set_date_value(v)
+   if !v.nil?
+     return v.to_date
+   end
+  return nil 
+ end
+ 
+  def set_time_value(v)
+     if !v.nil?
+       return v.to_s(:time)
+     end
+    return nil 
+   end
+   
+ 
 
  def extjs_std_store_model(model)
   ret = "Ext.create('Ext.data.Store', {

@@ -223,6 +223,7 @@ end
 def edit_notes
   @item = RepairHandlingItem.find(params['rec_id'])
   @note_field = params['note_field']
+  @datetime_field = params['datetime_field']
 end
 
 ################################################
@@ -230,6 +231,70 @@ def edit_notes_save
 ################################################
   item = RepairHandlingItem.find(params[:data][:id])
   params[:data].permit!
+
+
+  if params[:data].has_key?(:in_garage_at_date)
+    if params[:data][:in_garage_at_date].empty?
+     params[:data][:in_garage_at] = nil 
+    else       
+     params[:data][:in_garage_at] = generate_datetime(params[:data][:in_garage_at_date], params[:data][:in_garage_at_time])
+    end 
+    params[:data].delete(:in_garage_at_date)
+    params[:data].delete(:in_garage_at_time)
+  end    
+
+        
+  if params[:data].has_key?(:estimate_at_date)
+    if params[:data][:estimate_at_date].empty?
+     params[:data][:estimate_at] = nil 
+    else       
+     params[:data][:estimate_at] = generate_datetime(params[:data][:estimate_at_date], params[:data][:estimate_at_time])
+    end 
+    params[:data].delete(:estimate_at_date)
+    params[:data].delete(:estimate_at_time)
+  end    
+
+  if params[:data].has_key?(:estimate_sent_at_date)
+    if params[:data][:estimate_sent_at_date].empty?
+     params[:data][:estimate_sent_at] = nil 
+    else       
+     params[:data][:estimate_sent_at] = generate_datetime(params[:data][:estimate_sent_at_date], params[:data][:estimate_sent_at_time])
+    end 
+    params[:data].delete(:estimate_sent_at_date)
+    params[:data].delete(:estimate_sent_at_time)
+  end    
+
+  if params[:data].has_key?(:estimate_authorized_at_date)
+    if params[:data][:estimate_authorized_at_date].empty?
+     params[:data][:estimate_authorized_at] = nil 
+    else       
+     params[:data][:estimate_authorized_at] = generate_datetime(params[:data][:estimate_authorized_at_date], params[:data][:estimate_authorized_at_time])
+    end 
+    params[:data].delete(:estimate_authorized_at_date)
+    params[:data].delete(:estimate_authorized_at_time)
+  end    
+
+  if params[:data].has_key?(:repair_completed_at_date)
+    if params[:data][:repair_completed_at_date].empty?
+     params[:data][:repair_completed_at] = nil 
+    else       
+     params[:data][:repair_completed_at] = generate_datetime(params[:data][:repair_completed_at_date], params[:data][:repair_completed_at_time])
+    end 
+    params[:data].delete(:repair_completed_at_date)
+    params[:data].delete(:repair_completed_at_time)
+  end    
+
+  if params[:data].has_key?(:out_garage_at_date)
+    if params[:data][:out_garage_at_date].empty?
+     params[:data][:out_garage_at] = nil 
+    else       
+     params[:data][:out_garage_at] = generate_datetime(params[:data][:out_garage_at_date], params[:data][:out_garage_at_time])
+    end 
+    params[:data].delete(:out_garage_at_date)
+    params[:data].delete(:out_garage_at_time)
+  end    
+  
+        
   #filtro solo gli attributi presenti nel model e salvo
   item.update(params[:data])
   item.save!()
@@ -237,6 +302,8 @@ def edit_notes_save
   render json: {:success => true, :message => '', :rhi=>[item.as_json(RepairHandlingItem.as_json_prop)]}    
     
 end
+
+
 
 
 

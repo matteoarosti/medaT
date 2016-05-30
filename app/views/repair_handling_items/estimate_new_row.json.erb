@@ -59,7 +59,7 @@
 				
 			) -%>,
 		
-		<%= raw extjs_std_numberfield('quantity', @rei, {:allowBlank => false}) -%>,		
+		<%= raw extjs_std_numberfield('quantity', @rei, {:allowBlank => false, :minValue => 1}) -%>,		
 		<%= raw extjs_std_textfield('side', @rei, {:allowBlank => true}, {:maxLength => 20}) -%>,
 		
 		<%= raw extjs_std_textareafield('provider_notes', @rei, {:fieldLabel => "Note"}, {:width => "100%"}) -%>,

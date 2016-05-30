@@ -149,7 +149,8 @@ module ApplicationHelper
   def extjs_std_numberfield(name, item, p = {}, attr = {})
    input_name = p[:input_name] || p[:input_prefix].to_s + name
    add_attr = extsj_create_attr_str(attr)
-   ret = "{xtype: 'numberfield', fieldLabel: #{name.humanize.to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false} #{add_attr}}" 
+   logger.info p.to_yaml
+   ret = "{xtype: 'numberfield', fieldLabel: #{name.humanize.to_json}, name: #{input_name.to_json}, value: #{item.send(name).to_json}, maxLength: #{item.class.columns_hash[name].limit}, allowBlank: #{p[:allowBlank] || false}, minValue: #{p[:minValue] || 'Number.NEGATIVE_INFINITY'} #{add_attr}}" 
   end
 
   def extjs_std_numberfield_bind(name, item, p = {}, attr = {})

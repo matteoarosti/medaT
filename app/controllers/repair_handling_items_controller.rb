@@ -334,7 +334,7 @@ end
      when 'TO_AUTHORIZED'
             items = items.where('estimate_sent_at IS NOT NULL AND estimate_authorized_at IS NULL')
      when 'TO_REPAIR'
-                 items = items.where('estimate_authorized_at IS NOT NULL AND repair_completed_at IS NULL')
+                 items = items.where('estimate_at IS NOT NULL AND repair_completed_at IS NULL')
      when 'TO_OUT_GARAGE'
                       items = items.where('repair_completed_at IS NOT NULL AND out_garage_at IS NULL')
 

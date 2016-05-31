@@ -225,7 +225,11 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
 	                                op: 'new_tab'
 	                            }
                             ]
-                    },{
+                    }
+                    
+                    
+<% if User.current.admin_can?(:repair, :table) %>                    
+                    ,{
                         task:<%= raw t("menu.repairs.repairs").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,
@@ -275,7 +279,14 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                     height: 500
                                 }
                             ]
-                    }, {
+                    }
+<% end %>                    
+                    
+                    
+                    
+                    
+                    
+                    , {
                         task:<%= raw t("menu.import.import").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,
@@ -369,7 +380,8 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
             	voci_menu: voci_menu,
             	railsBaseUri: '<%= root_path -%>',
             	railsUser: <%= raw User.current.to_json -%>,
-            	canModifyHandling: <%= raw User.current.can?(:handling_header, :all).to_json -%>
+            	canModifyHandling: <%= raw User.current.can?(:handling_header, :all).to_json -%>,
+            	canRepairTable: <%= User.current.admin_can?(:repair, :table).to_json -%>
             });
             
             

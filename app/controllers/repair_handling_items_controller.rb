@@ -119,6 +119,10 @@ def save_rei
   
   if params[:id].empty?      
     n = @rhi.repair_estimate_items.new
+    
+    #memorizzo i costo orari
+    n.provider_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost
+    n.customer_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost    
   else
     n = @rhi.repair_estimate_items.find(params[:id])
   end

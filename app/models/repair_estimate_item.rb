@@ -68,12 +68,16 @@ class RepairEstimateItem < ActiveRecord::Base
   
   
   
+  def shipowner
+    self.repair_handling_item.handling_item.handling_header.shipowner
+  end
+  
   def self.as_json_prop()
       return {
          :include=>{
             :repair_processing => {},
             },
-         :methods=>[:repair_processing_name, :code1_code2]
+         :methods=>[:repair_processing_name, :code1_code2, :shipowner]
          }
   end
   

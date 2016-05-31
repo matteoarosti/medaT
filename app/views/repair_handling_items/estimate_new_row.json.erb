@@ -92,12 +92,15 @@
 			   if(btn === 'yes'){
 
 						form.submit({
+							clientValidation: false, //without validation
 	                        url: '<%= url_for(:controller => 'repair_handling_items', :action=>'destroy_rei') -%>', 
 	                        success: function(fp, o) {
 	                        	m_win.fireEvent('onClose');
 	                            m_win.close();
 	                        },
 							failure: function(fp, op) {
+								console.log(fp);
+								console.log(op);
 								var result = Ext.JSON.decode(op.response.responseText);
 								Ext.MessageBox.show({
 			                        title: 'Errore',

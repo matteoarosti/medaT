@@ -73,6 +73,10 @@
 						    			convert: function(val,row) {
 						    				return row.data.quantity * row.data.provider_time;
 						    			}	        	    		
+        	    		}, {name: 't_row_provider_time_cost', type: 'float',
+						    			convert: function(val,row) {
+						    				return row.data.quantity * row.data.provider_time * row.data.provider_hourly_cost;
+						    			}	        	    		
         	    		}, {name: 't_row_provider_material_price', type: 'float',
 						    			convert: function(val,row) {
 						    				return row.data.quantity * row.data.provider_material_price;
@@ -80,6 +84,10 @@
         	    		}, {name: 't_row_customer_time', type: 'float',
 						    			convert: function(val,row) {
 						    				return row.data.quantity * row.data.customer_time;
+						    			}	        	    		
+        	    		}, {name: 't_row_customer_time_cost', type: 'float',
+						    			convert: function(val,row) {
+						    				return row.data.quantity * row.data.customer_time * row.data.customer_hourly_cost;
 						    			}	        	    		
         	    		}, {name: 't_row_customer_material_price', type: 'float',
 						    			convert: function(val,row) {
@@ -162,24 +170,29 @@
 			     //costo da fornitore
 			     {text: 'Da fornitore',
 			      columns: [
+			        {text: 'Tar.Oraria', dataIndex: "provider_hourly_cost", align: 'right', renderer: function(value, metaData, rec){
+			        		return '<h4>' + Ext.util.Format.number(value, "0,000.00") + '</h4>';
+			        	}
+			        }, 
 			     	{text: "<%= t('tables.std.time') -%>",  "dataIndex":"t_row_provider_time",  width: 80, align: 'right',
-			     	    //summaryType: 'sum',
 			     	    summaryType: function(records, values){
 
 								ret = 0;							    
 							    Ext.each(records || [], function(rec) {
 							      if (rec.get('confirmed') != false)
-						            ret = ret + rec.get('t_row_provider_time');
+						            ret = ret + rec.get('t_row_provider_time_cost');
 						        }, this);
 							    
 							    return ret;
 
 							},
 			     	    summaryRenderer: function(value, summaryData, dataIndex) {
-                			return '<h2>' + Ext.util.Format.number(value, "0,000.00h") + '</h2>';
+                			return '<h2>' + Ext.util.Format.number(value, "0,000.00") + '</h2>';
             			},
 						renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-								         return '<h3>' + Ext.util.Format.number(value, "0,000.00h") + '</h3>';
+								         ret = '<h3>' + Ext.util.Format.number(rec.get('t_row_provider_time_cost'), "0,000.00") + '</h3>';
+								         ret = ret + '<span>' + Ext.util.Format.number(value, "0,000.00h") + '</span>';
+								         return ret;
 								        }			     
 			     	},
 			     	{text: "<%= t('tables.std.material_price_short') -%>",  "dataIndex":"t_row_provider_material_price",  width: 80, align: 'right',
@@ -207,7 +220,11 @@
 <% if User.current.admin_can?(:repair, :table) %>			     
 			     //costo per cliente
 			     {text: 'A compagnia',
-			      columns: [			     
+			      columns: [			 
+			        {text: 'Tar.Oraria', dataIndex: "customer_hourly_cost", align: 'right', renderer: function(value, metaData, rec){
+			        		return '<h4>' + Ext.util.Format.number(value, "0,000.00") + '</h4>';
+			        	}
+			        },
 			     	{text: "<%= t('tables.std.time') -%>",  "dataIndex":"t_row_customer_time",  width: 80, align: 'right',
 			     	    //summaryType: 'sum',
 			     	    summaryType: function(records, values){
@@ -215,17 +232,19 @@
 								ret = 0;							    
 							    Ext.each(records || [], function(rec) {
 							      if (rec.get('confirmed') != false)
-						            ret = ret + rec.get('t_row_customer_time');
+						            ret = ret + rec.get('t_row_customer_time_cost');
 						        }, this);
 							    
 							    return ret;
 
 							},
 			     	    summaryRenderer: function(value, summaryData, dataIndex) {
-                			return '<h2>' + Ext.util.Format.number(value, "0,000.00h") + '</h2>';
+                			return '<h2>' + Ext.util.Format.number(value, "0,000.00") + '</h2>';
             			},			     	
 						renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-								         return '<h3>' + Ext.util.Format.number(value, "0,000.00h") + '</h3>';
+								         ret = '<h3>' + Ext.util.Format.number(rec.get('t_row_customer_time_cost'), "0,000.00") + '</h3>';
+								         ret = ret + '<span>' + Ext.util.Format.number(value, "0,000.00h") + '</span>';
+								         return ret;
 								        }			     
 			     	},
 			     	{text: "<%= t('tables.std.material_price_short') -%>",  "dataIndex":"t_row_customer_material_price",  width: 80, align: 'right',

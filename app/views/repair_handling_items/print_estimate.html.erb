@@ -98,15 +98,15 @@ formValues = JSON.parse params['formValues']
   <td class="n bl"><%= r.quantity -%></td>
   
   <!-- da provider -->
-  <td class="n bl"><%= r.provider_hourly_cost -%></td>
-  <td class=n><%= r.quantity * r.provider_time * r.provider_hourly_cost -%></td>
-  <td class=n><%= r.quantity * r.provider_material_price -%></td>
+  <td class="n bl"><%= r.provider_hourly_cost.to_f -%></td>
+  <td class=n><%= r.quantity.to_f * r.provider_time.to_f * r.provider_hourly_cost.to_f -%></td>
+  <td class=n><%= r.quantity.to_f * r.provider_material_price.to_f -%></td>
   
 <% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true%>
   <!-- a customer (compagnia) -->
-  <td class="n bl"><%= r.customer_hourly_cost -%></td>
-  <td class=n><%= r.quantity * r.customer_time * r.customer_hourly_cost -%></td>
-  <td class=n><%= r.quantity * r.customer_material_price.to_f -%></td>
+  <td class="n bl"><%= r.customer_hourly_cost.to_f -%></td>
+  <td class=n><%= r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f -%></td>
+  <td class=n><%= r.quantity.to_f * r.customer_material_price.to_f -%></td>
 <% end %>
   
  </tr>

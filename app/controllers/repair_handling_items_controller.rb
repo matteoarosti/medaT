@@ -1,5 +1,7 @@
 class RepairHandlingItemsController < ApplicationController
   
+  layout "application_report", only: [:print_estimate]
+        
   def extjs_sc_model
    'RepairHandlingItem'
   end 
@@ -345,13 +347,22 @@ end
    if !params[:form_user][:flt_num_container].to_s.empty?
      items = items.where("handling_headers.container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%")
    end
-
-   
    
    render json: items.limit(2000).as_json(RepairHandlingItem.as_json_prop)
  
  end 
  
 
+
+ def print_estimate_open_params
+   @item = RepairHandlingItem.find(params[:rhi_id])
+ end 
+
+ def print_estimate
+  @item = RepairHandlingItem.find(params[:rhi_id])
+ end 
+ 
+ 
+ 
 
 end

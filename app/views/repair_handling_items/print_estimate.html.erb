@@ -1,0 +1,129 @@
+<%
+formValues = JSON.parse params['formValues']
+%>
+
+<style type="text/css">
+<!--
+@page { size:auto; margin: 1cm }
+-->
+ table.row_details {width: 100%}
+ table.row_details tr td{padding-top: 15px; padding-bottom: 15px; border-bottom: 1px solid gray; border-top: 1px solid gray; vertical-align: top;}
+ span.processing_name {font-weight: bold;}
+ th.n, td.n {text-align: right;}
+ th.bl, td.bl {border-left: 1px solid gray;}
+ th.th_header {text-align: center; border: 1px solid gray;}
+ tr.canceled td {text-decoration: line-through;}
+ tr.details_totals td{font-size: 14px; font-weight: bold;}
+</style>
+
+<style media="print">
+ h1.medaT-report{padding: 0px 0px; margin: 0px 0px; font-size: 13px;}
+ table.medaT-report tr td, table.medaT-report tr th{font-size: 9px; padding: 0px 2px}
+</style>
+
+
+<h1 class=medaT-report>Riparazione container [ <%= @item.handling_header.container_number -%> ]</h1>
+<br/>Data ingresso in officina: <%= @item.in_garage_at.strftime("%d/%m/%y %H:%M") -%>
+<br/>Data redazione preventivo: <%= @item.estimate_at.strftime("%d/%m/%y %H:%M") -%>
+<br/>Data autorizzazione: <%= @item.estimate_authorized_at.strftime("%d/%m/%y %H:%M") -%>
+
+<table class="row_details medaT-report">
+
+ <tr>
+  <th colspan=2>
+  <th class="th_header" colspan=3>Da fornitore</th>
+  <% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true%> %>
+   <th class="th_header" colspan=3>A compagnia</th>
+  <% end %>
+ </tr>
+
+ <tr>
+  <th>Dettaglio lavorazione</th>
+  <th class="n bl">Q.t&agrave;</th>
+
+  <th class="n bl">&euro;/h</th>
+  <th class=n>Tempo</th>
+  <th class=n>Pr.Mat.</th>
+  
+<% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true%>		  
+  <th class="n bl">&euro;/h</th>
+  <th class=n>Tempo</th>
+  <th class=n>Pr.Mat.</th>  
+<% end %>
+ </tr>
+
+<% t_provider_time_cost = t_provider_material_cost = t_customer_time_cost = t_customer_material_cost = 0 %>
+
+<% @item.repair_estimate_items.select{|n| 
+		n.confirmed!=false || formValues['show_deleted_row']==true
+	}.each do |r| %>
+
+ <%
+ if r.confirmed != false
+  class_row = ""
+  t_provider_time_cost += r.quantity.to_f * r.provider_time.to_f * r.provider_hourly_cost.to_f
+  t_provider_material_cost += r.quantity.to_f * r.provider_material_price.to_f
+  t_customer_time_cost += r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f
+  t_customer_material_cost += r.quantity.to_f * r.customer_material_price.to_f
+ else
+  class_row = "canceled"
+ end  
+ %>
+
+ <tr class="<%= class_row.to_s -%>">
+  <td>
+    <% if r.confirmed==false %>
+     <span class=canceled>[ RIGA ELIMINATA ]<br/></span>
+    <% end %>
+  	<span class="processing_name"><%= r.repair_processing_name -%></span>
+	<% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true %>
+	 <% if !r.code1_code2.to_s.empty? %>			         
+		<br/><%= r.code1_code2.to_s -%>
+	 <% end %>
+	<% end %>
+
+	<% if !r.side.to_s.empty? %>			         
+		<br/><%= r.side.to_s -%>
+	 <% end %>			         			         
+
+	<% if !r.provider_notes.to_s.empty? %>			         
+		<br/><%= r.provider_notes.to_s -%>
+	 <% end %>			         			         
+  	
+	<% if !r.authorization_notes.to_s.empty? %>			         
+		<br/><%= r.authorization_notes.to_s -%>
+	 <% end %>			         			           	 	
+  </td>
+  
+  <td class="n bl"><%= r.quantity -%></td>
+  
+  <!-- da provider -->
+  <td class="n bl"><%= r.provider_hourly_cost -%></td>
+  <td class=n><%= r.quantity * r.provider_time * r.provider_hourly_cost -%></td>
+  <td class=n><%= r.quantity * r.provider_material_price -%></td>
+  
+<% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true%>
+  <!-- a customer (compagnia) -->
+  <td class="n bl"><%= r.customer_hourly_cost -%></td>
+  <td class=n><%= r.quantity * r.customer_time * r.customer_hourly_cost -%></td>
+  <td class=n><%= r.quantity * r.customer_material_price.to_f -%></td>
+<% end %>
+  
+ </tr>
+<% end %>
+
+  <tr class="details_totals">
+   <td colspan=2 align=right>Totali</td>
+   <td>&nbsp;</td>
+   <td class=n><%= number_to_currency(t_provider_time_cost.to_f) -%></td>
+   <td class=n><%= number_to_currency(t_provider_material_cost.to_f) -%></td>
+   
+   <% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true %>
+   	   <td>&nbsp;</td>
+	   <td class=n><%= number_to_currency(t_customer_time_cost.to_f) -%></td>
+	   <td class=n><%= number_to_currency(t_customer_material_cost.to_f) -%></td>   
+   <% end %>
+  </tr>
+
+
+<table>

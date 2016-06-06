@@ -187,7 +187,7 @@
         	    xtype: 'toolbar', dock: 'bottom',
         	    items: [
         	            	    
-						{iconCls: '',  text: 'Crea/modifica', bind: {disabled: '{!enable_operations.estimate_modify}'},
+						{iconCls: '',  text: 'Inserisci', bind: {disabled: '{!enable_operations.estimate_modify}'},
 						
 						    handler: function(event, toolEl, panel){
 
@@ -253,6 +253,15 @@
 						     new_win = acs_show_win_std('Dettaglio Preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_edit').to_json -%>,
 				     	 		{rhi_id: <%= @item.id -%>, only_view: 'Y'},
 				     	 		900, 650, my_listeners);										
+							  
+				 			}
+				 		}, {scale: 'medium', cls: '', iconCls: 'fa fa-2x fa-print', text: '', 
+				 			bind: {visible: '{rec.estimate_at}'},
+				 			handler: function(event, toolEl, panel){
+							 my_listeners = {}
+						     new_win = acs_show_win_std('Parametri di stampa', <%= raw url_for(:controller=>'repair_handling_items', :action=>'print_estimate_open_params').to_json -%>,
+				     	 		{rhi_id: <%= @item.id -%>},
+				     	 		400, 400, my_listeners);										
 							  
 				 			}
 				 		}, {xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 

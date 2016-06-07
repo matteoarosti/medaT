@@ -1,0 +1,67 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   title: '', closable: false,
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	
+     
+    items: [       
+     	{xtype: 'hidden', name: 'authenticity_token', value: '<%= form_authenticity_token %>'},
+     	
+     	<%= raw extjs_std_combo_model('shipowner', @hh, {:allowBlank=>true}, {:multiSelect => false}) -%>,
+     	
+
+		{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Riparato dal/al',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [ 	
+    	
+     		<%= raw extjs_std_datefield('datetime_op', @hi, {:allowBlank=>true, :fieldLabel => 'Da data', :name => 'date_op_from'}) -%>,
+     		<%= raw extjs_std_datefield('datetime_op', @hi, {:allowBlank=>true, :fieldLabel => 'A data', :name => 'date_op_to'}) -%>,
+     		
+     		]
+     	},
+
+     	
+<% if User.current.admin_can?(:repair, :table) %>
+     	{xtype: 'checkbox', value: false, name: 'show_customer_prices', fieldLabel: 'Mostra prezzi a compagnia', inputValue: true, uncheckedValue: false},
+<% end %>     	
+	],
+    
+   buttons: [
+    {
+        text: '<i class="fa fa-navicon fa"></i> Stampa',
+        handler: function(){
+        	fp = this.up('form');
+            if(fp.getForm().isValid()){
+                fp.getForm().submit({
+                    method: 'POST',
+                    url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repair_report_analytic') -%>',             
+                    params: {formValues: Ext.encode(fp.getValues())},
+                    method: 'POST',
+                    standardSubmit: true,
+                    target: '_blank'
+                });
+            }
+        }
+    }    
+   ] 
+    
+  }
+ ]
+}

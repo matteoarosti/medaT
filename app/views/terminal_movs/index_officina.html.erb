@@ -90,7 +90,14 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                     op: 'new_tab',
                                     width: 700,
                                     height: 500
-                                }
+                                },
+                             {
+                                task:<%= raw t("menu.report.reports").to_json %>,
+                                url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repair_report_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }                                
+                                
                             ]
                     }, {
                         task:<%= raw t("menu.user_manager.users").to_json %>,

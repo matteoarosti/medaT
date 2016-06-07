@@ -36,6 +36,11 @@ class CreateRepairHandlingItems < ActiveRecord::Migration
       t.text    :repair_completed_notes,    :limit => 64.kilobytes
       t.text    :out_garage_notes,          :limit => 64.kilobytes
       
+      #totale costi
+      t.decimal :total_cost_provider_estimate,        precision: 10, scale: 2
+      t.decimal :total_cost_provider_authorized,      precision: 10, scale: 2
+      t.decimal :total_cost_customer_estimate,        precision: 10, scale: 2
+      t.decimal :total_cost_customer_authorized,      precision: 10, scale: 2
       
       
       t.timestamps            

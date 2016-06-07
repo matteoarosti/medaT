@@ -86,7 +86,36 @@ class RepairHandlingItem < ActiveRecord::Base
   end
 
   
+  def calculate_total_on_estimate
+    tot_provider = tot_customer = 0
+    self.repair_estimate_items.each do |r|
+      if r.confirmed != false
+        tot_provider += r.quantity.to_f * r.provider_time.to_f * r.provider_hourly_cost.to_f
+        tot_provider += r.quantity.to_f * r.provider_material_price.to_f
+        tot_customer += r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f
+        tot_customer += r.quantity.to_f * r.customer_material_price.to_f
+      end
+    end
+    self.total_cost_provider_estimate = tot_provider
+    self.total_cost_customer_estimate = tot_customer
+  end
   
+
+  def calculate_total_on_authorized
+    tot_provider = tot_customer = 0
+    self.repair_estimate_items.each do |r|
+      if r.confirmed != false
+        tot_provider += r.quantity.to_f * r.provider_time.to_f * r.provider_hourly_cost.to_f
+        tot_provider += r.quantity.to_f * r.provider_material_price.to_f
+        tot_customer += r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f
+        tot_customer += r.quantity.to_f * r.customer_material_price.to_f
+      end
+    end
+    self.total_cost_provider_authorized = tot_provider
+    self.total_cost_customer_authorized = tot_customer
+  end
+
+    
   
   def self.as_json_prop()
       return {

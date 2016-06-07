@@ -1,6 +1,6 @@
 class RepairHandlingItemsController < ApplicationController
   
-  layout "application_report", only: [:print_estimate]
+  layout "application_report", only: [:print_estimate, :repair_report_analytic]
         
   def extjs_sc_model
    'RepairHandlingItem'
@@ -21,6 +21,9 @@ class RepairHandlingItemsController < ApplicationController
     item = RepairHandlingItem.find(params[:rec_id])
      item.estimate_at = Time.zone.now
      item.estimate_user_id = current_user.id
+     
+     item.calculate_total_on_estimate
+     
     exe_save(item)
   end
 
@@ -48,6 +51,9 @@ def set_authorized
      item = RepairHandlingItem.find(params[:rec_id])
       item.estimate_authorized_at = Time.zone.now
       item.estimate_authorized_user_id = current_user.id
+      
+      item.calculate_total_on_authorized      
+      
      exe_save(item)
 end
 
@@ -362,7 +368,10 @@ end
   @item = RepairHandlingItem.find(params[:rhi_id])
  end 
  
- 
+ def repair_report_parameters
+  @hh = HandlingHeader.new
+  @hi = HandlingItem.new
+ end
  
 
 end

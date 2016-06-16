@@ -84,7 +84,9 @@ TMOV:
    seal_exp_copy: true   
    operation_type: 'MT'
    lock_INSPECT: IF_EMPTY
-   start_reefer_connection: IF_FULL   
+   start_reefer_connection: IF_FULL
+   save_in_hi_weight_exp: true
+   to_weigh: true
  I_RETURN:
   label: 'In From Return'
   icon: '<i class="fa fa-download fa-2x" style="color:green;"></i>'

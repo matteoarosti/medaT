@@ -1,0 +1,70 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [    	
+    	<%= raw extjs_std_combo_model('terminal', @item, {fieldLabel: 'Terminal'}) -%>,
+		<%= raw extjs_std_textfield('container_number', @item, {fieldLabel: 'Container'}) -%>,    	
+    	<%= raw extjs_std_textfield('driver', @item, {fieldLabel: 'Autista'}) -%>,
+    	<%= raw extjs_std_textfield('plate', @item, {fieldLabel: 'Targa'}) -%>,
+    	<%= raw extjs_std_textfield('plate_trailer', @item, {fieldLabel: 'Targa rimorchio'}) -%>,
+    	{name: 'no_CD', inputValue: 'Y', labelWidth: 280, labelAlign: 'right', fieldLabel: 'Disabilita controllo su numero container', xtype: 'checkbox'}    	
+	], 
+	
+	
+	buttons: [
+		{
+            text: 'Salva',
+            handler: function (btn, evt) {
+             m_win = this.up('window');              
+             form = this.up('form').getForm();
+             if (form.isValid()) {
+             	btn.disable();
+             	
+						form.submit({
+	                        url: '<%= url_for(:controller => 'weighs', :action=>'new_request', :exe_save => 'Y') -%>',
+	                        //waitMsg: 'Importazione in corso....',
+	                        success: function(fp, o) {
+	                            Ext.MessageBox.show({
+			                        title: 'Successo',
+			                        msg: 'Prenotazione caricata con successo',
+			                        buttons: Ext.Msg.OK
+		                    	});
+	                            m_win.close();
+	                        },
+							failure: function(fp, op) {
+								var result = Ext.JSON.decode(op.response.responseText);
+	                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                                //Ext.Msg.alert('Errore in fase di creazione della prenotazione');
+								Ext.MessageBox.show({
+			                        title: 'Errore',
+			                        msg: result.message,
+			                        buttons: Ext.Msg.OK
+		                    	});                                
+								btn.enable();
+	                        }	                        
+	                    });             	
+             	
+             	
+             	
+             	
+			 }
+			}
+	     }	
+	]
+	
+  }
+ ]
+}	

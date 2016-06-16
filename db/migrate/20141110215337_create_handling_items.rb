@@ -12,6 +12,7 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.string      :voyage,                :limit => 15
       t.string      :driver,                :limit => 50
       t.string      :plate,                 :limit => 15 #targa mezzo
+      t.string      :plate_trailer,         :limit => 15  #targa rimorchio
       t.boolean     :export
       t.string      :seal_shipowner,        :limit => 15
       t.string      :seal_others,           :limit => 15
@@ -40,7 +41,13 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.boolean    :fl_send_email_shipper,      :default => nil #true=inviato, false=errore
       t.integer    :codeco_send,                :defualt => nil
       
+      #peso dichiarato da camionista (attualmente viene copiato weight_exp in ingresso da riempimento)
+      t.decimal    :weight,                     :precision => 5, :scale => 2
       
+      #pesa
+      t.boolean    :to_weigh,                   :default => nil #true=da pesare
+      t.belongs_to :weigh
+            
       t.timestamps
       t.integer :created_user_id
       t.integer :updated_user_id                   

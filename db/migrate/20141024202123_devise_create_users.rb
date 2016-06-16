@@ -32,7 +32,8 @@ class DeviseCreateUsers < ActiveRecord::Migration
 
       
       #medaT
-      t.string     :shipowner_flt #indico le compagnie di cui puo' gestire container/booking (separate da ;)
+      t.string     :shipowner_flt #indico le compagnie di cui puo' gestire container/booking (separate da ,)
+      t.string     :terminal_flt #indico i terminal di cui puo' gestire ad esempio le pesate (separate da ,)
       ### medaT
 
       t.timestamps

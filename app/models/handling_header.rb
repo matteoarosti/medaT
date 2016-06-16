@@ -457,6 +457,14 @@ end
 
 
 ################################################################
+def sincro_set_to_weigh(value, hi)
+################################################################
+  hi.to_weigh = value
+  hi.save!
+end
+
+
+################################################################
 def sincro_set_container_in_terminal(value, hi)
 ################################################################
  self.container_in_terminal = value
@@ -501,6 +509,16 @@ def sincro_set_seal_exp_copy(value, hi)
  self.seal_exp_shipowner  = hi.seal_shipowner unless hi.seal_shipowner.blank?
  self.seal_exp_others     = hi.seal_others unless hi.seal_others.blank?
 end
+
+################################################################
+def sincro_set_save_in_hi_weight_exp(value, hi)
+################################################################
+  if value == true
+    hi.weight = self.weight_exp
+    hi.save!
+  end
+end
+
 
 ################################################################
 def sincro_set_with_booking(value, hi)

@@ -337,3 +337,9 @@ it:
       to_authorized: "Da autorizzare"
       to_repair: "Da riparare"
       to_out_garage: "Da rientrare"
+    weighs:
+      weighs: "Pesate"
+      new_request: "Nuova prenotazione"
+      to_weigh: "Inserisci pesata"
+      list: "Elenco"
+      

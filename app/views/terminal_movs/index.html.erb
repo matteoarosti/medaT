@@ -290,6 +290,35 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
 <% end %>                    
                     
                     
+
+// ---- PESATE ---------------------
+                    ,{
+                        task:<%= raw t("menu.weighs.weighs").to_json %>,
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children: [
+                                {
+                                    task:<%= raw t("menu.weighs.new_request").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'weighs', :action=>'new_request') -%>',                                    
+                                    op: 'new_win',
+                                    width: 700,
+                                    height: 500
+                                }, {
+                                    task:<%= raw t("menu.weighs.to_weigh").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'weighs', :action=>'weighs_list', :filtered_type => 'TO_WEIGH') -%>',                                    
+                                    op: 'new_tab'
+								}, {
+                                    task:<%= raw t("menu.weighs.list").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'weighs', :action=>'weighs_list', :filtered_type => 'LIST') -%>',                                    
+                                    op: 'new_tab'
+								}
+                        ]
+                    }
+
+
                     
                     
                     

@@ -42,6 +42,8 @@ it:
       email: "email"
       email_daily: "email daily"
       estimate_hourly_cost: "costo orario preventivi"
+      estimate_hourly_cost_provider: "costo orario preventivi (da fornitore)"
+      estimate_hourly_cost_customer: "costo orario preventivi (a compagnia)"
     ports:
       ports: "Porti"
       port_code: "codice"

@@ -129,8 +129,8 @@ def save_rei
     n = @rhi.repair_estimate_items.new
     
     #memorizzo i costo orari
-    n.provider_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost
-    n.customer_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost    
+    n.provider_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost_provider
+    n.customer_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost_customer
   else
     n = @rhi.repair_estimate_items.find(params[:id])
   end

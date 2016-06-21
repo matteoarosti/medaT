@@ -180,7 +180,7 @@
 
 
 
-<% if User.current.admin_can?(:weigh, :ins_weigh) %>			    
+<% if User.current.can?(:weigh, :ins_weigh) %>			    
 				, {
 			        text: 'Registra peso', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        

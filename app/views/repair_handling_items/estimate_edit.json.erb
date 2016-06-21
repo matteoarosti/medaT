@@ -161,7 +161,7 @@
 			         return ret;
 			        }			        			     
 			     },
-			     {text: "<%= t('tables.std.quantity') -%>",  "dataIndex":"quantity",  width: 80, align: 'right',
+			     {text: "<%= t('tables.std.quantity') -%>",  "dataIndex":"quantity",  width: 70, align: 'right',
 					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 								         return '<h3>' + Ext.util.Format.number(value, "0,000.00") + '</h3>';
 								        }			     
@@ -170,11 +170,11 @@
 			     //costo da fornitore
 			     {text: 'Da fornitore',
 			      columns: [
-			        {text: 'Tar.Oraria', dataIndex: "provider_hourly_cost", align: 'right', renderer: function(value, metaData, rec){
+			        {text: 'Tar.Oraria', dataIndex: "provider_hourly_cost", width: 70, align: 'right', renderer: function(value, metaData, rec){
 			        		return '<h4>' + Ext.util.Format.number(value, "0,000.00") + '</h4>';
 			        	}
 			        }, 
-			     	{text: "<%= t('tables.std.time') -%>",  "dataIndex":"t_row_provider_time",  width: 80, align: 'right',
+			     	{text: "<%= t('tables.std.time') -%>",  "dataIndex":"t_row_provider_time",  width: 70, align: 'right',
 			     	    summaryType: function(records, values){
 
 								ret = 0;							    
@@ -195,7 +195,7 @@
 								         return ret;
 								        }			     
 			     	},
-			     	{text: "<%= t('tables.std.material_price_short') -%>",  "dataIndex":"t_row_provider_material_price",  width: 80, align: 'right',
+			     	{text: "<%= t('tables.std.material_price_short') -%>",  "dataIndex":"t_row_provider_material_price",  width: 70, align: 'right',
 			     	    //summaryType: 'sum',
 			     	    summaryType: function(records, values){
 
@@ -221,11 +221,11 @@
 			     //costo per cliente
 			     {text: 'A compagnia',
 			      columns: [			 
-			        {text: 'Tar.Oraria', dataIndex: "customer_hourly_cost", align: 'right', renderer: function(value, metaData, rec){
+			        {text: 'Tar.Oraria', dataIndex: "customer_hourly_cost", align: 'right', width: 70, renderer: function(value, metaData, rec){
 			        		return '<h4>' + Ext.util.Format.number(value, "0,000.00") + '</h4>';
 			        	}
 			        },
-			     	{text: "<%= t('tables.std.time') -%>",  "dataIndex":"t_row_customer_time",  width: 80, align: 'right',
+			     	{text: "<%= t('tables.std.time') -%>",  "dataIndex":"t_row_customer_time",  width: 70, align: 'right',
 			     	    //summaryType: 'sum',
 			     	    summaryType: function(records, values){
 
@@ -247,7 +247,7 @@
 								         return ret;
 								        }			     
 			     	},
-			     	{text: "<%= t('tables.std.material_price_short') -%>",  "dataIndex":"t_row_customer_material_price",  width: 80, align: 'right',
+			     	{text: "<%= t('tables.std.material_price_short') -%>",  "dataIndex":"t_row_customer_material_price",  width: 70, align: 'right',
 			     	    //summaryType: 'sum',
 			     	    summaryType: function(records, values){
 

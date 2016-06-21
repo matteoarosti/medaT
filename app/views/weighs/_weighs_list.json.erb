@@ -121,8 +121,8 @@
         	    
 			    columns: [{
 			        dataIndex: 'container_number',
-			        text: <%= raw t('forms.damageds.sequence').to_json -%>,
-			        width: 50,
+			        text: '',
+			        width: 30,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         return '<h5>' + (rowIndex + 1) + '</h5>';
 			        }			        
@@ -170,14 +170,20 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';			         
-					 ret += '<tr><th>Registrato il</th><td>' + Ext.util.Format.date(rec.get('created_at'), 'd-m-Y H:i') + '</td></tr>';			         
-					 ret += '<tr><th>Pesato il</th><td>' + Ext.util.Format.date(rec.get('weighed_at'), 'd-m-Y H:i') + '</td></tr>';
+					 ret += '<tr><th>Reg. il</th><td>' + Ext.util.Format.date(rec.get('created_at'), 'd-m-Y H:i') + '</td></tr>';			         
+					 ret += '<tr><th>Pes. il</th><td>' + Ext.util.Format.date(rec.get('weighed_at'), 'd-m-Y H:i') + '</td></tr>';
 			         ret += '</table>';
 			         return ret;
-			         
 			        }			        	        
 			    }			        	        
 
+<% if filtered_type != 'TO_WEIGH' -%>
+			, {
+			        text: 'Kg',
+			        width: 60, dataIndex: 'weight', align: 'right',
+			        xtype: 'numbercolumn', format:'0,000'       	        
+			    }
+<% end %>
 
 
 <% if User.current.admin_can?(:weigh, :ins_weigh) %>			    
@@ -317,6 +323,7 @@
 
 
 		// -------------------------------- view image cedolino ---------------------------------
+<% if filtered_type != 'TO_WEIGH' -%>		
 				, {
 			        text: 'Visualizza', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
@@ -349,7 +356,7 @@
 			            return '<div id="' + id + '"></div>';
 			        }
 			     }
-		
+<% end %>
 
 
 			    

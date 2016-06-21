@@ -47,7 +47,7 @@ class RepairEstimateItem < ActiveRecord::Base
     if self.repair_processing.nil?
       return '#PROC_DELETE#'
     else
-      price_row = RepairPrice.where(:repair_processing_id => self.id).where(:shipowner_id => self.repair_handling_item.handling_item.handling_header.shipowner_id).first
+      price_row = RepairPrice.where(:repair_processing_id => self.repair_processing_id).where(:shipowner_id => self.repair_handling_item.handling_item.handling_header.shipowner_id).first
       if price_row.nil?
         return 'not found'
       else

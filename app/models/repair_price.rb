@@ -5,6 +5,11 @@ class RepairPrice < ActiveRecord::Base
   
   scope :extjs_default_scope, -> {}
     
+  def self.extjs_sc_list_add_default_join_on_my_filters(rel)
+      rel.joins(:repair_processing)
+  end  
+    
+    
   def self.as_json_prop()
       return {
          :include=>{

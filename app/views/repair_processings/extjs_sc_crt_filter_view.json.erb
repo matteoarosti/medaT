@@ -15,14 +15,9 @@
      	 margin: '10 10 0 10',
      },	
      
-<%
- item_repair_processing = RepairProcessing.new
-%>     
-     
     items: [       
-    <%= raw extjs_std_combo_model('shipowner', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>,
-    <%= raw extjs_std_combo_model('repair_position', item_repair_processing, {:input_name => 'repair_processings.repair_position_id', :allowBlank=>true}, {:multiSelect => false}) -%>,
-    <%= raw extjs_std_combo_model('repair_component', item_repair_processing, {:input_name => 'repair_processings.repair_component_id', :allowBlank=>true}, {:multiSelect => false}) -%>
+    <%= raw extjs_std_combo_model('repair_position', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>,
+    <%= raw extjs_std_combo_model('repair_component', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>
     ],
     
    buttons: [

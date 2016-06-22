@@ -42,9 +42,20 @@
      return {}
  end
 
+ 
+ def self.extjs_sc_list_add_default_join_on_my_filters(rel)
+     return rel
+ end  
+
+ 
 end #ActiveRecord::Base
 
  
+#class ActiveRecord::Relation
+#  def extjs_sc_list_add_default_join_on_my_filters()
+#    return self
+#  end  
+#end
  
  
  ####################################### 

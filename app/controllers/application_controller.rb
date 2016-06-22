@@ -62,6 +62,7 @@ class ApplicationController < ActionController::Base
       
     #gestione eventuali filtri
     unless params[:my_filters].nil?
+      ret[:items] = model_class.constantize.extjs_sc_list_add_default_join_on_my_filters(ret[:items])
       params[:my_filters].each do |kp, p|
         ret[:items] = ret[:items].where("#{kp} = ?", p) unless p.blank?
       end

@@ -109,7 +109,12 @@
 						          {header: 'Stato', dataIndex: 'status', width: 80},
 						          {header: 'Compagnia', dataIndex: 'shipowner_id_Name', width: 120},
 						          {header: 'Viaggio', dataIndex: 'voyage', width: 120},
-						          {header: 'Quantit&agrave;', dataIndex: 'quantity', width: 70},
+						          {header: 'Pesa', dataIndex: 'to_weigh_in_terminal', width: 70,
+						          	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+						          		if (value == true) return 'X';
+						          		return '';
+						          	} 
+						          },
 						          ],
 						
 						

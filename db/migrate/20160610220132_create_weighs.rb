@@ -18,7 +18,10 @@ class CreateWeighs < ActiveRecord::Migration
       t.string      :plate_trailer,         :limit => 15  #targa rimorchio
                   
       t.datetime    :weighed_at
-      t.decimal     :weight,                :precision => 15, :scale => 2      
+      t.decimal     :weight,                :precision => 15, :scale => 2 #peso merce + container
+      
+      t.decimal     :weight_container,      :precision => 15, :scale => 2 #peso tara container
+      t.decimal     :weight_goods,          :precision => 15, :scale => 2 #peso merce 
       
       t.attachment  :scan_file
       

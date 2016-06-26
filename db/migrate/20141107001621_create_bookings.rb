@@ -13,6 +13,9 @@ class CreateBookings < ActiveRecord::Migration
       t.date        :expiration                                     #dat limite di utilizzo del booking (per assegnazione)
       t.boolean     :to_check,              :default => true
       
+      #richiedi pesa in terminal o il camionista ha gia' la pesa
+      t.boolean    :to_weigh_in_terminal,  :default => nil #true=da pesare
+      
       t.timestamps
       t.integer :created_user_id
       t.integer :updated_user_id      

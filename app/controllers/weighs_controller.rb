@@ -87,6 +87,7 @@ class WeighsController < ApplicationController
                :plate  => hi.plate,
                :plate_trailer => '', #ToDo
                :created_at => hi.created_at,
+               :to_weigh_in_terminal => hi.handling_header.booking.to_weigh_in_terminal,
                :terminal => {
                   :id => terminal.id,
                   :code => terminal.code,
@@ -125,13 +126,23 @@ class WeighsController < ApplicationController
        begin
                  
         hi = HandlingItem.find(params[:rec_id])
-         
         item = Weigh.new
+        
+         item.external = params[:external]
+         if (!params[:weight].blank?)  
+          item.weight = params[:weight].to_s.gsub(',', '.').to_f
+         else
+           item.weight_container = params[:weight_container].to_s.gsub(',', '.').to_f
+           item.weight_goods = params[:weight_goods].to_s.gsub(',', '.').to_f
+           item.weight = item.weight_container + item.weight_goods
+         end
+        
+        
         item.weigh_status = 'CLOSE'
         item.terminal_id = 3 #ToDo: parametrizzare
         item.container_number = hi.handling_header.container_number 
         item.handling_item_id = params[:rec_id]
-        item.weight = params[:weight].to_s.gsub(',', '.').to_f
+        
         item.scan_file = params[:file]
         item.weighed_at = Time.zone.now
         item.driver = params[:driver]
@@ -154,8 +165,17 @@ class WeighsController < ApplicationController
      end #transaction      
     else                                    #inserimento pesa da prenotazione
       item = Weigh.find(params[:rec_id])
+        
+       item.external = params[:external]
+       if (!params[:weight].blank?)  
+        item.weight = params[:weight].to_s.gsub(',', '.').to_f
+       else
+         item.weight_container = params[:weight_container].to_s.gsub(',', '.').to_f
+         item.weight_goods = params[:weight_goods].to_s.gsub(',', '.').to_f
+         item.weight = item.weight_container + item.weight_goods
+       end        
+        
       item.weigh_status = 'CLOSE'
-      item.weight = params[:weight].to_s.gsub(',', '.').to_f
       item.scan_file = params[:file]
       item.weighed_at = Time.zone.now
       item.driver = params[:driver]

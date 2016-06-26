@@ -197,11 +197,26 @@
 			            var id = Ext.id();
 			            setTimeout(function() {
 			            			          
-			                ok_img = 'fa-truck';
+			                ok_img = 'fa-user';
+			                var set_external = true;
+			                var btn_cls = 'btn-warning';
+			                
+			                if (rec.get('type') == 'FROM_HI' && rec.get('to_weigh_in_terminal') == true) {
+			                	ok_img = 'fa-truck';
+			                	set_external = false;
+			                	btn_cls = 'btn-ok';
+			                }
+			                if (rec.get('type') != 'FROM_HI') {
+			                	ok_img = 'fa-truck';
+			                	set_external = false;
+			                	btn_cls = 'btn-ok';
+			                }
+			                	
 			            
 			                var buttonOK = Ext.create('Ext.button.Button', {
-			                	
+			                				                	
 								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+								cls: btn_cls,								
 		                		scale: 'large',			                    
 			                        handler: function(button, b, c, d, e) {
 			                        
@@ -223,8 +238,11 @@
 													},
 											    items: [
 											      {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},
+											      {xtype: 'hiddenfield', name: 'external'},
 											      {xtype: 'hiddenfield', name: 'type', value: rec.get('type')},
 											      {xtype: 'numberfield', name: 'weight', allowBlank: false, fieldLabel: 'Peso (Kg)', fieldStyle: 'font-size: 32px; text-transform: uppercase;'},
+											      {xtype: 'numberfield', name: 'weight_container', allowBlank: false, fieldLabel: 'Kg container', fieldStyle: 'font-size: 20px; text-transform: uppercase;'},
+											      {xtype: 'numberfield', name: 'weight_goods', allowBlank: false, fieldLabel: 'Kg merce', fieldStyle: 'font-size: 20px; text-transform: uppercase;'},
 								 					{
 											            xtype: 'filefield',
 											            allowBlank: false,
@@ -291,10 +309,50 @@
 												            	tmp_win  = this.up('window');
 												            	tmp_win.close();
 												            }
+												          }, {xtype: 'tbfill'}, {
+												            text: '<i class="fa fa-truck fa-2x"></i> Pesa',												            
+												            scale: 'medium',
+												            handler: function (btn, evt) {
+												            	this.up('form').render_form(false)
+												            }
+												          }, {
+												            text: '<i class="fa fa-user fa-2x"></i> Da autista',												            
+												            scale: 'medium',
+												            handler: function (btn, evt) {
+												            	this.up('form').render_form(true)
+												            }
 												          }
 												          
 												         ]
-	  												}]
+	  												}], 
+	  												
+	  											listeners: {	
+   													afterrender: function(comp){
+   														console.log(set_external);
+   														this.render_form(set_external);
+   													}
+   												},
+   												
+   												render_form: function(external) {
+   													f = this.getForm();
+   													
+   													f.findField('external').setValue(external);
+   													console.log(f.findField('weight'));
+   													if (external == true) {
+   														//il camionista ha gia' il proprio cedolino
+   														f.findField('weight').disable();   			f.findField('weight').hide();
+   														f.findField('weight_container').enable();	f.findField('weight_container').show();
+   														f.findField('weight_goods').enable();		f.findField('weight_goods').show();
+   													} else {
+   														//pesa eseguita in terminal
+   														f.findField('weight').enable();				f.findField('weight').show();
+   														f.findField('weight_container').disable();	f.findField('weight_container').hide();
+   														f.findField('weight_goods').disable();		f.findField('weight_goods').hide();
+   													}
+   												}
+   												
+   												
+   														  												
 											});		
 											
 				                           loc_win = Ext.create('Ext.window.Window',{
@@ -302,7 +360,7 @@
 											    items: loc_form,
 											    title: 'Registra peso',
 											    width: 500,
-											    height: 300,
+											    height: 350,
 											    id: 'myWindow'
 											}).show();
 														                             
@@ -325,18 +383,27 @@
 		// -------------------------------- view image cedolino ---------------------------------
 <% if filtered_type != 'TO_WEIGH' -%>		
 				, {
-			        text: 'Visualizza', width: 100, hidden: false, sortable: false,
+			        text: 'Visualizza', width: 105, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
 			        	var loc_grid = this;
 			        	
 			        	if (rec.get('weigh_status') != 'CLOSE') return '';
+			        	if (rec.get('external') == true) {
+			        		var btn_cls = 'btn-warning';
+			        		var icon_btn = 'fa-user';
+			        	}
+			        	else {
+			        		var btn_cls = 'btn-ok';
+			        		var icon_btn = 'fa-truck';
+			        	}
 			        	
 			            var id = Ext.id();
 			            setTimeout(function() {
 			            
 			                var buttonOK = Ext.create('Ext.button.Button', {
 			                	
-								text: '<i class="fa fa-search fa-3x"></i>',
+								text: '<i class="fa fa-search fa-3x"></i> <i class="fa ' + icon_btn + '"></i>',
+								cls: btn_cls,
 		                		scale: 'large',			                    
 			                        handler: function(button, b, c, d, e) {
 			                        				

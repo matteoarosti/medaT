@@ -202,6 +202,25 @@ class WeighsController < ApplicationController
                  :type => @item.scan_file_content_type  
       
    end   
-  
+
+   
+##################################################
+ def modify_record
+##################################################
+  @item = Weigh.find(params[:rec_id])    
+  @from_component_id = params[:from_grid_id]
+ end   
+   
+##################################################
+ def exe_modify_record
+##################################################
+  item = Weigh.find(params[:data][:id])    
+  params[:data].permit!
+  item.update(params[:data])
+  ret = item.save!  
+  render json: {success: ret}
+ end   
+
+      
    
 end

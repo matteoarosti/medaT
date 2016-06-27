@@ -328,7 +328,6 @@
 	  												
 	  											listeners: {	
    													afterrender: function(comp){
-   														console.log(set_external);
    														this.render_form(set_external);
    													}
    												},
@@ -442,12 +441,23 @@
 				},
 			    
 			    listeners: {
-					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
-					        if (columnIndex == 1) { //doppio click sul num_container... apro il movimento aperto
-							  //rec.get('id') e' id di RepairHandlingItem
-							  acs_show_panel_std(myApp, '<%= url_for(:controller=>'repair_handling_items', :action=>'rhi_edit') -%>', {rec_id: rec.get('id')}, 'Modifica');	    
-					        }
-					    }
+	                	itemcontextmenu : function(item, record, index, e, eOpts){
+	                		eOpts.stopEvent();
+                            var xy = eOpts.getXY();	                	
+                            new Ext.menu.Menu({
+                                items : [
+                                         {
+                                            text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
+                                            handler: function(){
+									     	 	new_win = acs_show_win_std('Modifica', <%= raw url_for(:controller=>'weighs', 
+									     	 				:action=>'modify_record').to_json -%>,
+									     	 				{rec_id: record.get('id'), from_grid_id: this.id}, 800, 400);										                                                    
+                                            }, scope: this
+                                          }
+                                         ]
+                               }).showAt(xy);
+	                	
+	                	}			    					    
 					}
 
 				    

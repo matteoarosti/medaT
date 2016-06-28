@@ -13,24 +13,32 @@
      	 xtype: 'textfield',
      	 margin: '10 10 0 10',
      },	  
-   autoScroll: true,  
-   items: [    	
+   autoScroll: true,
+   
+      items: [    	
     	    {
-     			xtype: 'panel',
-     			//flex: 1,
+     			xtype: 'container',
+     			flex: 1,
      			autoScroll: true,
-     			html: '<img src=<%= raw @item.scan_file.url(:original).to_json %> style="max-height: 900px; width: auto;">',
-     			//src: <%= raw @item.scan_file.url(:original).to_json %>,
-     			mode : 'image'
+     			items: [
+		    	    {
+		     			xtype: 'panel',
+		     			//flex: 1,
+		     			html: '<img src=<%= raw @item.scan_file.url(:original).to_json %> style="max-height: 900px; width: auto;">',
+		     			//src: <%= raw @item.scan_file.url(:original).to_json %>,
+		     			mode : 'image'
+		    		}     			
+     			]
     		}
 	], 
-	
+   
+   
 	
 	buttons: [
 		{
             text : '<i class="fa fa-print" style="color:white;"></i> Stampa',            
             handler: function (btn, evt) {
-            	tmp_win = this.up('window').down('panel').down('panel');
+            	tmp_win = this.up('window').down('panel').down('container').down('panel');
             	console.log(tmp_win);
             	tmp_html = Ext.dom.Query.selectNode('#' + tmp_win.id);
 				plugin.Printer.print(tmp_html, true);

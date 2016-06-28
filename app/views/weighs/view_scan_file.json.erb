@@ -4,11 +4,7 @@
   {
    xtype: 'panel',
    flex: 1,
-   layout: {
-	    type: 'vbox',
-	    align : 'stretch',
-	    pack  : 'start',
-   }, 
+   layout: 'fit',
      defaults: {
      	 xtype: 'textfield',
      	 margin: '10 10 0 10',
@@ -19,6 +15,7 @@
     	    {
      			xtype: 'container',
      			flex: 1,
+     			height: '100%',
      			autoScroll: true,
      			items: [
 		    	    {

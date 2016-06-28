@@ -31,7 +31,7 @@
             handler: function (btn, evt) {
             	tmp_win = this.up('window').down('panel').down('panel');
             	tmp_html = Ext.dom.Query.selectNode('#' + tmp_win.id);
-				plugin.Printer.print(tmp_html, false);
+				plugin.Printer.print(tmp_html, true);
     		}
 	     }, {
             text: 'Chiudi',

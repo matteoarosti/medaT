@@ -17,7 +17,7 @@
    items: [    	
     	    {
      			xtype: 'panel',
-     			flex: 1,
+     			//flex: 1,
      			autoScroll: true,
      			html: '<img src=<%= raw @item.scan_file.url(:original).to_json %> style="max-height: 900px; width: auto;">',
      			//src: <%= raw @item.scan_file.url(:original).to_json %>,
@@ -31,6 +31,7 @@
             text : '<i class="fa fa-print" style="color:white;"></i> Stampa',            
             handler: function (btn, evt) {
             	tmp_win = this.up('window').down('panel').down('panel');
+            	console.log(tmp_win);
             	tmp_html = Ext.dom.Query.selectNode('#' + tmp_win.id);
 				plugin.Printer.print(tmp_html, true);
     		}

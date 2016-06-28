@@ -25,6 +25,13 @@
 	
 	buttons: [
 		{
+            text : '<i class="fa fa-print" style="color:white;"></i> Stampa',            
+            handler: function (btn, evt) {
+            	tmp_win = this.up('window').down('image');
+            	tmp_html = Ext.dom.Query.selectNode('#' + tmp_win.id);
+				plugin.Printer.print(tmp_html, true);
+    		}
+	     }, {
             text: 'Chiudi',
             handler: function (btn, evt) {
             	this.up('window').close();

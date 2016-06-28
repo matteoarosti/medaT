@@ -55,6 +55,32 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
 });
 
 
+Ext.define("plugin.Printer", {
+ statics: {
+	print: function(htmlElement,printAutomatically) {
+		var win = window.open('', 'Print Panel');
+	 
+		win.document.open();
+		win.document.write(htmlElement.outerHTML);
+		win.document.close();
+	 
+		if (printAutomatically){
+			win.print();
+		}
+	 
+		if (1==1 || this.closeAutomaticallyAfterPrint){
+			if(Ext.isIE){
+				window.close();
+			} else {
+				win.close();
+			}
+		}
+	 } 
+  }
+});
+
+
+
  		voci_menu = [
     // ---- PESATE ---------------------
                     {

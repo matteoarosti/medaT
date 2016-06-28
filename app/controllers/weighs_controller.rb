@@ -140,6 +140,7 @@ class WeighsController < ApplicationController
         
         item.weigh_status = 'CLOSE'
         item.terminal_id = 3 #ToDo: parametrizzare
+        item.shipowner_id = hi.handling_header.shipowner_id
         item.container_number = hi.handling_header.container_number 
         item.handling_item_id = params[:rec_id]
         

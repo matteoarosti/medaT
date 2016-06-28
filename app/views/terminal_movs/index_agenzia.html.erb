@@ -55,6 +55,34 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
 });
 
 
+
+
+Ext.define("plugin.Printer", {
+ statics: {
+	print: function(htmlElement,printAutomatically) {
+		var win = window.open('', 'Print Panel');
+	 
+		win.document.open();
+		win.document.write(htmlElement.outerHTML);
+		win.document.close();
+	 
+		if (printAutomatically){
+			win.print();
+		}
+	 
+		if (1==1 || this.closeAutomaticallyAfterPrint){
+			if(Ext.isIE){
+				window.close();
+			} else {
+				win.close();
+			}
+		}
+	 } 
+  }
+});
+
+
+
  		voci_menu = [
     		           {
                         task:<%= raw t("menu.movements.movements").to_json %>,
@@ -89,7 +117,30 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
 	                                op: 'new_tab'
 	                            }
                             ]
-                    }, {
+                    }
+                    
+                    
+                    
+                    
+// ---- PESATE ---------------------
+                    , {
+                        task:<%= raw t("menu.weighs.weighs").to_json %>,
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children: [
+                                {
+                                    task:<%= raw t("menu.weighs.list").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'weighs', :action=>'weighs_list', :filtered_type => 'LIST') -%>',                                    
+                                    op: 'new_tab'
+								}
+                        ]
+                    }
+                    
+                    
+                    
+                    
+                    , {
                         task:<%= raw t("menu.report.reports").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,

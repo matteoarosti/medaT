@@ -108,6 +108,7 @@ module ApplicationHelper
    ret = "
      {
        xtype: 'combobox',  
+       name: #{name.to_json},
        fieldLabel: #{name.humanize.to_json},
        displayField: #{model_class.combo_displayField.to_json},
        valueField: 'id',

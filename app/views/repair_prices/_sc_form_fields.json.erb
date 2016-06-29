@@ -1,6 +1,60 @@
 [
 	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
-	<%= raw extjs_std_combo_model_bind('repair_processing', @new_rec) -%>,
+	
+	
+		<%
+		 tmp_repair_price = RepairPrice.new
+		 tmp_repair_price.repair_processing = RepairProcessing.new
+		 tmp_repair_price.repair_processing.repair_position = RepairPosition.new
+		 tmp_repair_price.repair_processing.repair_component = RepairComponent.new
+		%>
+	
+		<%= raw extjs_std_combo('id', tmp_repair_price.repair_processing.repair_position,
+				:fieldLabel => 'Posizione',
+				:allowBlank => true,
+				:input_name => 'flt_repair_position',
+				:valueField => 'id',
+				:displayField => 'description_it',
+				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_positions_for_combo_flt')),
+				:listeners => "change: function(combo, record, index) {
+								  form = this.up('form').getForm();
+								  f = form.findField('flt_repair_component');
+		      					  f.getStore().proxy.extraParams =  form.getValues();
+		      					  f.getStore().load();			  
+							    }"
+			)				
+				 -%>,
+				 
+				 
+		<%= raw extjs_std_combo('id', tmp_repair_price.repair_processing.repair_component,
+				:fieldLabel => 'Componente',
+				:allowBlank => true,
+				:input_name => 'flt_repair_component',		
+				:valueField => 'id',
+				:displayField => 'description_it',
+				:store => extjs_std_store_url(url_for(:controller=>'repair_handling_items', :action=>'get_components_for_combo_flt', 
+						:flt_repair_position => nil)),
+				:listeners => "change: function(combo, record, index) {
+								  form = this.up('form').getForm();
+								  f = form.findField('repair_processing');
+		      					  f.getStore().proxy.extraParams =  form.getValues();
+		      					  f.getStore().load();			  
+							    } 
+							    "
+				
+			) -%>,
+				 
+	
+	
+	<%= raw extjs_std_combo_model_bind('repair_processing', @new_rec, {
+				:listeners => "afterrender: function(comp) {
+								  form = this.up('form').getForm();
+		      					  comp.getStore().proxy.extraParams =  form.getValues();				
+							      comp.getStore().load();
+							    } 
+							    "
+		
+	}) -%>,
 	<%= raw extjs_std_combo_model_bind('shipowner', @new_rec) -%>,
 	<%= raw extjs_std_numberfield_bind('customer_time', @new_rec) -%>,
 	<%= raw extjs_std_numberfield_bind('customer_material_price', @new_rec) -%>,

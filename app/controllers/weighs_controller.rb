@@ -76,6 +76,10 @@ class WeighsController < ApplicationController
            
            
            to_do_items = to_do_items.limit(1000).each do |hi|
+             
+             #potrei non avere il booking (ad esempio su rientro da altro terminal)
+             m_booking = hi.handling_header.booking
+             to_weigh_in_terminal = !m_booking.nil? ? m_booking.to_weigh_in_terminal : false
 
              items << {
                :type => 'FROM_HI',             
@@ -87,7 +91,7 @@ class WeighsController < ApplicationController
                :plate  => hi.plate,
                :plate_trailer => '', #ToDo
                :created_at => hi.created_at,
-               :to_weigh_in_terminal => hi.handling_header.booking.to_weigh_in_terminal,
+               :to_weigh_in_terminal => to_weigh_in_terminal,
                :terminal => {
                   :id => terminal.id,
                   :code => terminal.code,

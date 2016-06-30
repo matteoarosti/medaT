@@ -459,8 +459,10 @@ end
 ################################################################
 def sincro_set_to_weigh(value, hi)
 ################################################################
-  hi.to_weigh = value
-  hi.save!
+  if (value == true || (value == 'IF_FULL' && hi.container_FE == 'F') || (value == 'IF_EMPTY' && hi.container_FE == 'E'))  
+    hi.to_weigh = true
+    hi.save!
+  end
 end
 
 

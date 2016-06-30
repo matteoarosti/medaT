@@ -113,7 +113,8 @@ TMOV:
    container_FE_copy: true
    operation_type: 'MT'
    lock_INSPECT: IF_EMPTY
-   start_reefer_connection: IF_FULL      
+   start_reefer_connection: IF_FULL
+   to_weigh: IF_FULL         
  O_LOAD:
   label: Out For Load
   icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'

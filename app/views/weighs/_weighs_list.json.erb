@@ -289,7 +289,12 @@
 											                        success: function(fp, o) {
 																	      loc_grid.store.remove(rec);
 																	      loc_grid.store.load();
-																	      tmp_win.close();											                            
+																	      tmp_win.close();
+																	      
+																	      //mostro subito immagine appena inserita
+																     	 	new_win = acs_show_win_std('Cedolino', <%= raw url_for(:controller=>'weighs', :action=>'view_scan_file').to_json -%>,
+																     	 		{rec_id: o.result.w_id}, 800, 400);										
+																	      											                            
 											                        },
 																	failure: function(fp, o) {
 											                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
@@ -453,7 +458,15 @@
 									     	 				:action=>'modify_record').to_json -%>,
 									     	 				{rec_id: record.get('id'), from_grid_id: this.id}, 800, 400);										                                                    
                                             }, scope: this
+                                          }, {
+                                            text : '<i class="fa fa-picture-o fa-1x"> Sostituisci scansione cedolino</i>',                                                                                                        
+                                            handler: function(){
+									     	 	new_win = acs_show_win_std('Sostituisci scansione cedolino', <%= raw url_for(:controller=>'weighs', 
+									     	 				:action=>'modify_image').to_json -%>,
+									     	 				{rec_id: record.get('id'), from_grid_id: this.id}, 800, 400);										                                                    
+                                            }, scope: this
                                           }
+                                          
                                          ]
                                }).showAt(xy);
 	                	

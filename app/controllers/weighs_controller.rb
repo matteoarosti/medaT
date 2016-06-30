@@ -160,7 +160,7 @@ class WeighsController < ApplicationController
          hi.weigh_id = item.id
          hi.save!
         
-        render json: {success: true}
+        render json: {success: true, w_id: item.id}
       rescue => exception
         to_rollback = true  
         logger.info exception.backtrace
@@ -188,7 +188,7 @@ class WeighsController < ApplicationController
       item.plate_trailer = params[:plate_trailer]
       
       ret = item.save!  
-      render json: {success: ret}        
+      render json: {success: ret, w_id: item.id}
     end 
    end   
 
@@ -226,6 +226,24 @@ class WeighsController < ApplicationController
   render json: {success: ret}
  end   
 
-      
+
+ 
+##################################################
+ def modify_image
+##################################################
+  @item = Weigh.find(params[:rec_id])    
+  @from_component_id = params[:from_grid_id]
+ end   
+   
+##################################################
+ def exe_modify_image
+##################################################
+  item = Weigh.find(params[:id])    
+  item.scan_file = params[:file]
+  ret = item.save!  
+  render json: {success: ret}
+ end   
+
+       
    
 end

@@ -208,7 +208,8 @@ end
 #in base a rhi (da cui prendo shipowner) mostro l'elenco dei components (con almeno un record in listino)
 def get_components_for_combo_flt
   ret = {}         
-  rps = RepairComponent.joins({:repair_processings => :repair_prices})
+  #rps = RepairComponent.joins({:repair_processings => :repair_prices})
+  rps = RepairComponent.joins(:repair_processings)
   rps = rps.where({repair_processings: {repair_position_id: params[:flt_repair_position]} })  
    ret[:items] = rps.as_json(RepairComponent.as_json_prop)
    ret[:success] = true
@@ -218,10 +219,11 @@ end
 
 def get_processings_for_combo_flt
   ret = {}
-   rps = RepairPrice.joins(:repair_processing)
+   #rps = RepairPrice.joins(:repair_processing)
+   rps = RepairProcessing.all
    rps = rps.where({repair_processings: {repair_position_id: params[:flt_repair_position]} })
    rps = rps.where({repair_processings: {repair_component_id: params[:flt_repair_component]} })     
-   ret[:items] = rps.as_json(RepairPrice.as_json_prop)
+   ret[:items] = rps.as_json(RepairProcessing.as_json_prop)
    ret[:success] = true
    render json: ret
 end

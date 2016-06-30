@@ -15,9 +15,10 @@
    listeners: {
    	afterrender: function(comp){   	
    		//comp.up('window').maximize();
-   		comp.up('window').doLayout();
+   		comp.down('container').down('panel').setHeight(900);
+   		comp.down('container').down('panel').setWidth('auto');
    		comp.up('window').setHeight(450);
-   		comp.down('container').down('panel').setHeight(700);
+   		comp.up('window').doLayout();   		   		
     }
    },
    

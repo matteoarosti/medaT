@@ -23,9 +23,9 @@ formValues = JSON.parse params['formValues']
 
 
 <h1 class=medaT-report>Riparazione container [ <%= @item.handling_header.container_number -%> ]</h1>
-<br/>Data ingresso in officina: <%= @item.in_garage_at.strftime("%d/%m/%y %H:%M") -%>
-<br/>Data redazione preventivo: <%= @item.estimate_at.strftime("%d/%m/%y %H:%M") -%>
-<br/>Data autorizzazione: <%= @item.estimate_authorized_at.strftime("%d/%m/%y %H:%M") -%>
+<br/>Data ingresso in officina: <%= @item.in_garage_at.strftime("%d/%m/%y %H:%M") unless @item.in_garage_at.nil? -%>
+<br/>Data redazione preventivo: <%= @item.estimate_at.strftime("%d/%m/%y %H:%M") unless @item.estimate_at.nil? -%>
+<br/>Data autorizzazione: <%= @item.estimate_authorized_at.strftime("%d/%m/%y %H:%M") unless @item.estimate_authorized_at.nil? -%>
 
 <table class="row_details medaT-report">
 

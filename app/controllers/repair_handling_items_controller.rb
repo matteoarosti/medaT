@@ -389,7 +389,7 @@ end
      items = items.where("handling_headers.container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%")
    end
    
-   render json: items.limit(2000).as_json(RepairHandlingItem.as_json_prop)
+   render json: items.limit(400).as_json(RepairHandlingItem.as_json_prop)
  
  end 
  

@@ -364,22 +364,22 @@ end
  def get_row_by_filtered_type
 ##################################################
    
-   items = RepairHandlingItem.where('repair_status=?', 'OPEN')
+   items = RepairHandlingItem.all
    items = items.joins(:handling_header)
         
    case params[:filtered_type]
           
      
      when 'TO_ESTIMATE'
-       items = items.where('estimate_at IS NULL')
+       items = items.where('repair_status=?', 'OPEN').where('estimate_at IS NULL')
      when 'TO_SENT'
-       items = items.where('estimate_at IS NOT NULL AND estimate_sent_at IS NULL')
+       items = items.where('repair_status=?', 'OPEN').where('estimate_at IS NOT NULL AND estimate_sent_at IS NULL')
      when 'TO_AUTHORIZED'
-            items = items.where('estimate_sent_at IS NOT NULL AND estimate_authorized_at IS NULL')
+            items = items.where('repair_status=?', 'OPEN').where('estimate_sent_at IS NOT NULL AND estimate_authorized_at IS NULL')
      when 'TO_REPAIR'
-                 items = items.where('estimate_at IS NOT NULL AND repair_completed_at IS NULL')
+                 items = items.where('repair_status=?', 'OPEN').where('estimate_at IS NOT NULL AND repair_completed_at IS NULL')
      when 'TO_OUT_GARAGE'
-                      items = items.where('repair_completed_at IS NOT NULL AND out_garage_at IS NULL')
+                      items = items.where('repair_status=?', 'OPEN').where('repair_completed_at IS NOT NULL AND out_garage_at IS NULL')
 
        
             

@@ -344,4 +344,5 @@ it:
       new_request: "Nuova prenotazione"
       to_weigh: "Inserisci pesata"
       list: "Elenco"
+      export: "Esporta"
       

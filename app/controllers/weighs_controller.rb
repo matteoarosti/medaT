@@ -1,3 +1,4 @@
+# encoding: utf-8
 class WeighsController < ApplicationController
   
   #Prenota pesata
@@ -244,6 +245,47 @@ class WeighsController < ApplicationController
   render json: {success: ret}
  end   
 
-       
+##################################################
+ def export_open_params
+##################################################
+  @item = Weigh.new    
+ end       
+ 
+
+##################################################
+ def export_exe
+##################################################
+   formValues = JSON.parse params['formValues']
+   items = Weigh.where('weigh_status = ?', 'CLOSE')
+   
+   #gestione campi data/ora
+   if !formValues['weighed_at_from'].blank?
+     datetime_from = Time.zone.parse(formValues['weighed_at_from'] + ' ' + (formValues['weighed_at_from_time'] || '00:00') + ':00')
+   end
+   
+   if !formValues['weighed_at_to'].blank?
+     datetime_to = Time.zone.parse(formValues['weighed_at_to'] + ' ' + (formValues['weighed_at_to_time'] || '23:59') + ':59')
+   end
+   
+   items = items.where("weighed_at >= ?", datetime_from) unless datetime_from.nil?
+   items = items.where("weighed_at <= ?", datetime_to) unless datetime_to.nil?
+   items = items.where("terminal_id = ?", formValues['terminal_id']) unless formValues['terminal_id'].blank?
+     
+   items = items.joins(:terminal)
+   items = items.select('weighs.*, terminals.code as terminal_code')  
+   
+   File.open("output.xls", "wb") do |f|
+     f.write(
+       items.to_xls(
+         :columns => [:terminal_code, :container_number, :weighed_at, :weight, :external, :driver, :plate, :plate_trailer],
+         :headers => ["Terminal", "Container", "Data/ora pesata", "Peso", "Pesata esterna", "Autista", "Targa", "Targa rimorchio"]
+       )
+     )
+   end    
+   send_file("output.xls")
+   return
+ end       
+ 
+ 
    
 end

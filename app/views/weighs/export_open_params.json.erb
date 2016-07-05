@@ -1,0 +1,86 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   title: '', closable: false,
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	
+     
+    items: [
+       
+     {xtype: 'hidden', name: 'authenticity_token', value: '<%= form_authenticity_token %>'},
+     <%= raw extjs_std_combo_model('terminal', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>,
+
+     
+         	
+    	
+   					{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'Da data/ora',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [ 	
+    	
+     		<%= raw extjs_std_datefield('weighed_at', @item, {:allowBlank=>false, :fieldLabel => 'Da data', :name => 'weighed_at_from'}) -%>,
+     		{xtype: 'timefield', name: 'weighed_at_from_time', width:  70},
+     		
+     		]
+     	},
+
+   		{
+			                xtype: 'fieldcontainer',
+			                fieldLabel: 'A data/ora',
+			                combineErrors: true,
+			                msgTarget : 'side',
+			                layout: 'hbox',
+			                anchor: '100%',
+			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+			                items: [ 	
+    	
+     		<%= raw extjs_std_datefield('weighed_at', @item, {:allowBlank=>true, :fieldLabel => 'Da data', :name => 'weighed_at_to'}) -%>,
+     		{xtype: 'timefield', name: 'weighed_at_to_time', width:  70},
+     		
+     		]
+     	},
+
+     	
+   
+        	
+     	
+     	
+    ],
+    
+   buttons: [
+	  {
+        text: '<i class="fa fa-navicon fa"></i> Esporta',
+        handler: function(){
+        	fp = this.up('form');
+            if(fp.getForm().isValid()){
+                fp.getForm().submit({
+                    method: 'POST',
+                    url: '<%= url_for(:controller=>'weighs', :action=>'export_exe') -%>',             
+                    params: {formValues: Ext.encode(fp.getValues())},
+                    method: 'POST',
+                    standardSubmit: true,
+                    target: '_blank'
+                });
+            }
+        }
+    }    
+   ] 
+    
+  }
+ ]
+}

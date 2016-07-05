@@ -274,7 +274,7 @@ class WeighsController < ApplicationController
    items = items.joins(:terminal)
    items = items.select('weighs.*, terminals.code as terminal_code')  
    
-   File.open("output.xls", "wb") do |f|
+   File.open(Tempfile.new('medaT_weighs_export.xlsx'), "wb") do |f|
      f.write(
        items.to_xls(
          :columns => [:terminal_code, :container_number, :weighed_at, :weight, :external, :driver, :plate, :plate_trailer],

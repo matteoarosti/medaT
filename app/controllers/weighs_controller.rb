@@ -274,7 +274,7 @@ class WeighsController < ApplicationController
    items = items.joins(:terminal)
    items = items.select('weighs.*, terminals.code as terminal_code')  
    
-   tmp_file = Tempfile.new('medaT_weighs_export') + ".xlsx"
+   tmp_file = Tempfile.new(['medaT_weighs_export', '.xlsx'])
    File.open(tmp_file, "wb") do |f|
      f.write(
        items.to_xls(

@@ -160,6 +160,10 @@ class WeighsController < ApplicationController
          hi.to_weigh = false
          hi.weigh_id = item.id
          hi.save!
+         
+         #riporto il peso su hh
+         hi.handling_header.weight_exp = item.weight
+         hi.handling_header.save!
         
         render json: {success: true, w_id: item.id}
       rescue => exception

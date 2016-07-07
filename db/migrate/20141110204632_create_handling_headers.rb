@@ -30,13 +30,13 @@ class CreateHandlingHeaders < ActiveRecord::Migration
       t.string     :seal_exp_shipowner,        :limit => 15
       t.string     :seal_exp_others,           :limit => 15
       t.decimal    :temperature_exp,           :precision => 5, :scale => 2
-      t.decimal    :weight_exp,                :precision => 5, :scale => 2
+      t.decimal    :weight_exp,                :precision => 15, :scale => 2
       t.string     :imo_exp,                   :limit => 5
       t.string     :bill_of_lading,            :limit => 25
       t.string     :seal_imp_shipowner,        :limit => 15
       t.string     :seal_imp_others,           :limit => 15
       t.decimal    :temperature_imp,           :precision => 5, :scale => 2
-      t.decimal    :weight_imp,                :precision => 5, :scale => 2
+      t.decimal    :weight_imp,                :precision => 15, :scale => 2
       t.string     :imo_imp,                   :limit => 5
             
       #fila (stiva), blocco, tiro

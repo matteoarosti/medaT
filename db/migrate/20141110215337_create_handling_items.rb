@@ -42,7 +42,7 @@ class CreateHandlingItems < ActiveRecord::Migration
       t.integer    :codeco_send,                :defualt => nil
       
       #peso dichiarato da camionista (attualmente viene copiato weight_exp in ingresso da riempimento)
-      t.decimal    :weight,                     :precision => 5, :scale => 2
+      t.decimal    :weight,                     :precision => 15, :scale => 2
       
       #pesa
       t.boolean    :to_weigh,                   :default => nil #true=da pesare

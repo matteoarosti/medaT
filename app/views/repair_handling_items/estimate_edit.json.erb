@@ -168,7 +168,7 @@
 			     },
 			     
 			     //costo da fornitore
-			     {text: 'Da fornitore',
+			     {text: 'Violini riparazioni',
 			      columns: [
 			        {text: 'Tar.Oraria', dataIndex: "provider_hourly_cost", width: 70, align: 'right', renderer: function(value, metaData, rec){
 			        		return '<h4>' + Ext.util.Format.number(value, "0,000.00") + '</h4>';
@@ -219,7 +219,7 @@
 			     
 <% if User.current.admin_can?(:repair, :table) %>			     
 			     //costo per cliente
-			     {text: 'A compagnia',
+			     {text: 'Icop',
 			      columns: [			 
 			        {text: 'Tar.Oraria', dataIndex: "customer_hourly_cost", align: 'right', width: 70, renderer: function(value, metaData, rec){
 			        		return '<h4>' + Ext.util.Format.number(value, "0,000.00") + '</h4>';

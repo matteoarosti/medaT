@@ -29,6 +29,8 @@ formValues = JSON.parse params['formValues']
 
 <table class="row_details medaT-report">
 
+
+<% if formValues['hide_prices']==false %>
  <tr>
   <th colspan=2>
   <th class="th_header" colspan=3>Da fornitore</th>
@@ -36,16 +38,19 @@ formValues = JSON.parse params['formValues']
    <th class="th_header" colspan=3>A compagnia</th>
   <% end %>
  </tr>
+<% end %> 
 
  <tr>
   <th>Dettaglio lavorazione</th>
   <th class="n bl">Q.t&agrave;</th>
 
+<% if formValues['hide_prices']==false %>
   <th class="n bl">&euro;/h</th>
   <th class=n>Tempo</th>
   <th class=n>Pr.Mat.</th>
+<% end %>  
   
-<% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true%>		  
+<% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true && formValues['hide_prices']==false %>		  
   <th class="n bl">&euro;/h</th>
   <th class=n>Tempo</th>
   <th class=n>Pr.Mat.</th>  
@@ -97,21 +102,25 @@ formValues = JSON.parse params['formValues']
   
   <td class="n bl"><%= r.quantity -%></td>
   
+<% if formValues['hide_prices']==false %>  
   <!-- da provider -->
-  <td class="n bl"><%= r.provider_hourly_cost.to_f -%></td>
-  <td class=n><%= r.quantity.to_f * r.provider_time.to_f * r.provider_hourly_cost.to_f -%></td>
-  <td class=n><%= r.quantity.to_f * r.provider_material_price.to_f -%></td>
+  <td class="n bl"><%= number_to_currency(r.provider_hourly_cost.to_f) -%></td>
+  <td class=n><%= number_to_currency(r.quantity.to_f * r.provider_time.to_f * r.provider_hourly_cost.to_f) -%></td>
+  <td class=n><%= number_to_currency(r.quantity.to_f * r.provider_material_price.to_f) -%></td>
+<% end %>  
   
-<% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true%>
+<% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true && formValues['hide_prices']==false %>
   <!-- a customer (compagnia) -->
-  <td class="n bl"><%= r.customer_hourly_cost.to_f -%></td>
-  <td class=n><%= r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f -%></td>
-  <td class=n><%= r.quantity.to_f * r.customer_material_price.to_f -%></td>
+  <td class="n bl"><%= number_to_currency(r.customer_hourly_cost.to_f) -%></td>
+  <td class=n><%= number_to_currency(r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f) -%></td>
+  <td class=n><%= number_to_currency(r.quantity.to_f * r.customer_material_price.to_f) -%></td>
 <% end %>
   
  </tr>
 <% end %>
 
+
+<% if formValues['hide_prices']==false %>
   <tr class="details_totals">
    <td colspan=2 align=right>Totali</td>
    <td>&nbsp;</td>
@@ -124,6 +133,7 @@ formValues = JSON.parse params['formValues']
 	   <td class=n><%= number_to_currency(t_customer_material_cost.to_f) -%></td>   
    <% end %>
   </tr>
+<% end %>  
 
 
 <table>

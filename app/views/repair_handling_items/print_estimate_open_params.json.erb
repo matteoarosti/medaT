@@ -19,8 +19,10 @@
      	{xtype: 'hidden', name: 'authenticity_token', value: '<%= form_authenticity_token %>'},
      	{xtype: 'hidden', name: 'rhi_id', value: '<%= @item.id %>'},
      	
+     	{xtype: 'checkbox', value: false, name: 'hide_prices', fieldLabel: 'Nascondi prezzi', inputValue: true, uncheckedValue: false},
+     	
 <% if User.current.admin_can?(:repair, :table) %>
-     	{xtype: 'checkbox', value: false, name: 'show_customer_prices', fieldLabel: 'Mostra prezzi a compagnia', inputValue: true, uncheckedValue: false},
+     	{xtype: 'checkbox', value: false, name: 'show_customer_prices', fieldLabel: 'Mostra dati a compagnia', inputValue: true, uncheckedValue: false},
 <% end %>     	
      	{xtype: 'checkbox', value: false, name: 'show_deleted_row', fieldLabel: 'Mostra righe annullate', inputValue: true, uncheckedValue: false}
 	],

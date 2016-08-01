@@ -10,6 +10,7 @@ it:
         strip_insignificant_zeros: false
         unit: "&euro;"
   search: "Ricerca"
+  create_new: "Crea nuovo"
   tables:
     std:
       description_it: "Descrizione (it)"
@@ -88,6 +89,8 @@ it:
       customer_material_price: "Costo materiale (cliente)"
       provider_time: "Tempo (fornitorie)"
       provider_material_price: "Costo materiale (fornitore)"
+    customers:
+      name: "Denominazione"
       
   forms:
     std:
@@ -345,4 +348,11 @@ it:
       to_weigh: "Inserisci pesata"
       list: "Elenco"
       export: "Esporta"
+    activities:
+      menu: "Attivit&agrave;"
+      new: "Crea nuova attivit&agrave;"
+      customers: "Anag. Clienti"
+      list: "Elenco"
+      open: "In corso"
+      all: "Tutti"
       

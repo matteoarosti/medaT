@@ -60,6 +60,10 @@ table.import_item_detail td{padding: 0px 30px 3px 20px;}
 table.import_item_detail td{font-weight: bold; font-size: 18px;}
 table.import_item_detail th{font-weight: normal;}
 
+table.import_item_detail td.normal{font-weight: bold; font-size: 12px;}
+table.import_item_detail td.ok{color: green;}
+table.import_item_detail td.error{color: red;}
+
 
 /*
 input[disabled]{

@@ -170,16 +170,16 @@
 			        xtype: 'numbercolumn',
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			        	if (value == 1)
-			        		return '<i class="fa fa-check fa-2x"></i>';
+			        		return '<i class="fa fa-check fa-1x"></i>';
 			        	return '';
 					}
 			    }
 
 
 
-<% if User.current.can?(:weigh, :ins_weigh) %>			    
+			    
 				, {
-			        text: 'Registra peso', width: 100, hidden: false, sortable: false,
+			        text: 'Chiudi', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
 			        	var loc_grid = this;
 			        	
@@ -188,12 +188,11 @@
 			            var id = Ext.id();
 			            setTimeout(function() {
 			            			          
-			                ok_img = 'fa-edit';
+			                ok_img = 'fa-check-square-o';
 			                var set_external = true;
-			                var btn_cls = 'btn-warning';
-			                
-		                	set_external = false;
-		                	btn_cls = 'btn-ok';
+		                	btn_cls = 'btn-used';
+		                	if (Ext.isEmpty(rec.get('execution_date')) == true)
+		                	 btn_cls = 'btn-ok';
 			            
 			                var buttonOK = Ext.create('Ext.button.Button', {
 			                				                	
@@ -208,8 +207,6 @@
 			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
 			                           header_form_values = header_form.getValues();
 			                             
-			                            console.log(rec); 
-			                             
            								loc_form = Ext.create('Ext.form.Panel', {
 											    title: '',
 											    frame: true,
@@ -223,6 +220,7 @@
 											    items: [
 											        {xtype: 'hiddenfield',   name: 'id', value: rec.get('id')},
 											        {xtype: 'textareafield', name: 'execution_notes', allowBlank: true, fieldLabel: 'Note di chiusura', labelAlign: 'top', value: rec.get('execution_notes')},
+											        {xtype: 'datefield',     name: 'execution_date',  allowBlank: true, fieldLabel: 'Data chiusura', labelAlign: 'top', value: rec.get('execution_date')}
 											        											      
 											      										    										    										    
 											    ]
@@ -348,7 +346,194 @@
 			            return '<div id="' + id + '"></div>';
 			        }
 			     }
-<% end %>
+
+<% if User.current.admin_can?(:activity, :amount) %>
+			 , {
+			        dataIndex: 'amount',
+			        text: 'Importo',
+			        width: 80, align: 'right',
+			        renderer: function (value, metaData) {
+		                 return Ext.util.Format.number(value, "0,000.00");
+		             }
+			    }
+			    
+			    
+			    
+			    
+				, {
+			        text: 'Imposta', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
+			        	var loc_grid = this;
+			        	
+			        	//if (rec.get('weigh_status') == 'CLOSE') return '';
+			        	
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            			          
+			                ok_img = 'fa-eur';
+			                var set_external = true;
+			                var btn_cls = 'btn-warning';
+			                
+		                	set_external = false;
+		                	btn_cls = 'btn-used';
+		                	if (Ext.isEmpty(rec.get('amount')) == true)
+		                	 btn_cls = 'btn-ok';
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                				                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+								cls: btn_cls,								
+		                		scale: 'large',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();
+				                			                             
+			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+			                           header_form_values = header_form.getValues();
+			                              
+			                             
+           								loc_form = Ext.create('Ext.form.Panel', {
+											    title: '',
+											    frame: true,
+											    bodyPadding: 10,
+											    defaultType: 'textfield',
+											    	layout: {
+													    type: 'vbox',
+													    align : 'stretch',
+													    pack  : 'start',
+													},
+											    items: [
+											        {xtype: 'hiddenfield',   name: 'id', value: rec.get('id')},
+											        {xtype: 'numberfield',   name: 'amount', allowBlank: false, fieldLabel: 'Importo', labelAlign: 'left', value: rec.get('amount')},
+											        											      
+											      										    										    										    
+											    ]
+											    ,
+								    			dockedItems: [{
+												    xtype: 'toolbar',
+												    dock: 'right',
+												    width: 135,
+													defaults: {
+												        xtype: 'button', scale: 'medium', textAlign: 'left'
+									                },			    
+												    margin: '5 5 5 5',
+											    
+											     	items:
+												        [{
+												            text: 'Conferma',
+												            scale: 'large', cls: 'btn-confirm',
+												            handler: function (btn, evt) {
+												                           
+												             form = this.up('form').getForm();
+												             tmp_win  = this.up('window');
+												             if (form.isValid()) {
+												                btn.disable();
+												                
+																	  Ext.Ajax.request({
+														                    url: <%= raw url_for(:controller=>'activities', :action=>'set_amount').to_json -%>,
+														                    waitMsg: 'Salvataggio in corso....',
+																			method:'POST',                    
+														                    jsonData: {data: form.getValues()},	
+														             	
+																			success: function(result, request) {					
+																				var returnData = Ext.JSON.decode(result.responseText);
+																				
+																				//error
+																				if (returnData.success == false){
+																					Ext.MessageBox.show({
+																                        title: 'EXCEPTION',
+																                        msg: returnData.message,
+																                        icon: Ext.MessageBox.ERROR,
+																                        buttons: Ext.Msg.OK
+															                    	})
+															                      return false;										
+																				}								
+																 							
+																 				//ok
+																 				  tmp_win.close();
+																 				  loc_grid.store.load();
+																 							
+																			}, scope: this,
+																			
+																			failure: function(rec, op) {
+																				var result = Ext.JSON.decode(op.getResponse().responseText);
+																				Ext.MessageBox.show({
+															                        title: 'EXCEPTION',
+															                        msg: result.message,
+															                        //icon: Ext.MessageBox.ERROR,
+															                        buttons: Ext.Msg.OK
+														                    	})					
+																			}, scope: this,						
+																							 
+																    	});	    											                    
+											                    
+											                    return false;
+												             }
+												            }
+												          }, 
+												          
+												          {
+												            text: 'Chiudi',												            
+												            scale: 'large',
+												            handler: function (btn, evt) {
+												            	tmp_win  = this.up('window');
+												            	tmp_win.close();
+												            }
+												          }
+												          
+												          
+												          /*
+												          , {xtype: 'tbfill'}, {
+												            text: '<i class="fa fa-truck fa-2x"></i> Pesa',												            
+												            scale: 'medium',
+												            handler: function (btn, evt) {
+												            	this.up('form').render_form(false)
+												            }
+												          }, {
+												            text: '<i class="fa fa-user fa-2x"></i> Da autista',												            
+												            scale: 'medium',
+												            handler: function (btn, evt) {
+												            	this.up('form').render_form(true)
+												            }
+												          }
+												          */
+												          
+												          
+												         ]
+	  												}] 
+	  												
+	  											
+   												
+   												
+   														  												
+											});		
+											
+				                           loc_win = Ext.create('Ext.window.Window',{
+											    layout: 'fit',
+											    items: loc_form,
+											    title: 'Registra peso',
+											    width: 500,
+											    height: 350,
+											    id: 'myWindow'
+											}).show();
+														                             
+			                           	return false;
+
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }
+			    
+			    
+<% end %>			    
 
 			    
 			    
@@ -373,15 +558,8 @@
                                          {
                                             text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
                                             handler: function(){
-									     	 	new_win = acs_show_win_std('Modifica', <%= raw url_for(:controller=>'weighs', 
+									     	 	new_win = acs_show_win_std('Modifica', <%= raw url_for(:controller=>'activities', 
 									     	 				:action=>'modify_record').to_json -%>,
-									     	 				{rec_id: record.get('id'), from_grid_id: this.id}, 800, 400);										                                                    
-                                            }, scope: this
-                                          }, {
-                                            text : '<i class="fa fa-picture-o fa-1x"> Sostituisci scansione cedolino</i>',                                                                                                        
-                                            handler: function(){
-									     	 	new_win = acs_show_win_std('Sostituisci scansione cedolino', <%= raw url_for(:controller=>'weighs', 
-									     	 				:action=>'modify_image').to_json -%>,
 									     	 				{rec_id: record.get('id'), from_grid_id: this.id}, 800, 400);										                                                    
                                             }, scope: this
                                           }

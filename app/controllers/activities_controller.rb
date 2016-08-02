@@ -17,14 +17,21 @@ class ActivitiesController < ApplicationController
     item = Activity.find(params[:data][:id])
     params[:data].permit!
     item.update(params[:data])
-    item.execution_date = Time.zone.now
+    item.execution_date = Time.zone.now if item.execution_date.nil?
     item.execution_at   = Time.zone.now
     item.execution_user_id = current_user.id
     item.save!()
     render json: {:success => true, :data=>[item.as_json(Activity.as_json_prop)]}    
   end
   
-  
+  def set_amount
+    item = Activity.find(params[:data][:id])
+    params[:data].permit!
+    item.update(params[:data])
+    item.save!()
+    render json: {:success => true, :data=>[item.as_json(Activity.as_json_prop)]}    
+  end
+    
   
   
   
@@ -53,6 +60,9 @@ class ActivitiesController < ApplicationController
      
      when 'OPEN'
        items = items.where('execution_date IS NULL')
+
+     when 'SET_AMOUNT'
+       items = items.where('amount IS NULL')
        
    end #case
 
@@ -62,6 +72,25 @@ class ActivitiesController < ApplicationController
  
  end 
    
+ 
+ 
+##################################################
+ def modify_record
+##################################################
+  @item = Activity.find(params[:rec_id])    
+  @from_component_id = params[:from_grid_id]
+ end   
+   
+##################################################
+ def exe_modify_record
+##################################################
+  item = Activity.find(params[:data][:id])    
+  params[:data].permit!
+  item.update(params[:data])
+  ret = item.save!  
+  render json: {success: ret}
+ end   
+ 
   
   
 end

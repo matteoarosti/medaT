@@ -44,7 +44,9 @@
 	    <%= raw extjs_fieldcontainer('', {}, [
 	    								extjs_std_combo('status', @item.booking, :store => extjs_std_store_data(@item.booking.status_get_data_json)),
 	    								extjs_std_datefield('expiration', @item.booking, {:allowBlank => true}, fcR {}),
-	    								extjs_std_booleanfield('to_check', @item.booking, {}, fcR)]) -%>
+	    								extjs_std_booleanfield('to_check', @item.booking, {}, fcR),
+	    								extjs_std_booleanfield('to_weigh_in_terminal', @item, {:fieldLabel => 'Richiedi pesa'}, fcR)
+	    								]) -%>
 	   ],
 	  }	 
 	 

@@ -54,8 +54,65 @@
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
         	    items: [
-        	    '->', {
-				    xtype: 'form',	
+        	    
+				{
+				    xtype: 'form', itemId: 'search_in_medaT',	
+				    height: 50,
+				    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+				    padding: '10 10 10 10',
+				    
+				    defaults: {
+				    	xtype: 'textfield',
+				    	labelAlign: 'right',
+				    	width: 150, labelWidth: 70, padding: '0 0 0 10',
+				    	fieldStyle: 'font-size: 16px; text-transform: uppercase;',
+		                enableKeyEvents: true,
+		                listeners: {                   
+			                'keypress': function(field,event){
+			                    if (event.getKey() == event.ENTER){
+			                        this.up('form').search_in_medaT();
+			                    }
+			                }                                   
+			            }
+			        },
+			        
+			        search_in_medaT: function() {
+			                    //header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').getComponent('search_in_medaT').getForm();			                    
+			                    header_form_values = header_form.getValues();
+
+				    			acs_show_win_std('Info container', <%= raw url_for(:controller=>'weighs', 
+									     	 				:action=>'search_in_medaT').to_json -%>,
+									     	 				{form_values: header_form_values}, 800, 400);			        
+			        },
+			        
+			        
+				    items: [
+				 		{	
+								width: 140, labelWidth: 10, padding: '0 0 0 10',
+				                fieldLabel: '', name: 'medaT_search_num_container'
+				 		}
+				    ]
+				 }
+				 
+					,  {iconCls: 'fa fa-search fa-2x', text: 'container<br/>in medaT', scale: 'large', 
+				 			handler: function(event, toolEl, panel){ 
+				 
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').getComponent('search_in_medaT');
+			                    header_form.search_in_medaT();				 			}
+				 	}				 
+				 
+			        
+        	    
+        	    
+        	    
+        	    
+        	    , '->', {
+				    xtype: 'form', itemId: 'filter_in_weighs',
 				    height: 50,
 				    layout: {
 					    type: 'hbox',
@@ -80,7 +137,8 @@
 			        },
 			        
 			        start_refresh: function() {
-			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    //header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').getComponent('filter_in_weighs').getForm();			                    
 			                    header_form_values = header_form.getValues();
 
 				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
@@ -88,10 +146,12 @@
 			        },
 
 				    items: [
-						{									
+						/*{									
 								xtype: 'label', width: 100, labelWidth: 120, padding: '0 0 0 10',
 				                text: 'Ricerca per: '
-				 		}, {	
+				 		},*/ 
+				 		
+				 		{	
 								width: 200, labelWidth: 120, padding: '0 0 0 10',
 				                fieldLabel: 'Container', name: 'flt_num_container'
 				 		}, {	
@@ -107,7 +167,7 @@
 				 ,  {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
 				 			handler: function(event, toolEl, panel){ 
 				 
-			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').getComponent('filter_in_weighs').getForm();
 			                    header_form_values = header_form.getValues();
 
 				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 

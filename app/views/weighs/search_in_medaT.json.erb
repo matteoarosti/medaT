@@ -1,0 +1,63 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'panel',
+   flex: 1,
+   layout: 'fit',
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+   autoScroll: true,      
+   
+      items: [    	
+    	    {
+     			xtype: 'form',
+     			flex: 1,
+     			height: '100%',
+     			autoScroll: true,
+     			defaults: {xtype: 'displayfield'},
+     			items: [
+		    	    
+		    	    <% if @item.nil? %>
+		    	     {xtype: 'panel', html: 'Nessun movimento aperto per il container ricercato'}
+		    	    <% else %>
+		    	     {fieldLabel: 'Container', value: <%= raw @item.container_number.to_json -%>}
+		    	     , {fieldLabel: 'Compagnia', value: <%= raw @item.shipowner.name.to_json -%>}
+		    	     , {fieldLabel: 'Booking', value: <%= raw @item.num_booking.to_json -%>}
+		    	     
+		    	     <% if @item.booking_id.nil? %>
+		    	      , {xtype: 'panel', html: 'ATTENZIONE: booking non ancora associato'}
+		    	     <% else %>
+		    	      <% if @item.booking.to_weigh_in_terminal == true %>
+		    	       , {xtype: 'button', text: '<i class="fa fa-truck fa-3x"></i>', scale: 'large', cls: 'btn-ok'}
+		    	       , {xtype: 'panel', html: 'Effettuare pesa in terminal'}
+		    	      <% else %>
+		    	       , {xtype: 'button', text: '<i class="fa fa-user fa-3x"></i>', scale: 'large', cls: 'btn-warning'}
+		    	       , {xtype: 'panel', html: 'Richiedere cedolino ad autista'}
+		    	      <% end %>
+		    	     <% end %>
+		    	     
+		    	    <% end %>
+		    	    
+		    	    
+		    	         			
+     			]
+    		}
+	], 
+   
+   
+	
+	buttons: [
+		{
+            text: 'Chiudi',
+            handler: function (btn, evt) {
+            	this.up('window').close();
+    		}
+	     }	
+	]
+	
+  }
+ ]
+}	

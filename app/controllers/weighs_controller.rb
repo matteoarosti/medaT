@@ -292,5 +292,11 @@ class WeighsController < ApplicationController
  end       
  
  
+ 
+ def search_in_medaT
+   #cerco eventuale movimento aperto per container
+   @item = HandlingHeader.not_closed.container(params[:form_values][:medaT_search_num_container]).first
+   logger.info @item.to_yaml
+ end
    
 end

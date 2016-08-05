@@ -56,7 +56,7 @@ class RepairHandlingItem < ActiveRecord::Base
   def enable_operations_list
     ret = {}
     ret[:in_garage_modify] = self.estimate_at.nil? ? true : false      
-    ret[:estimate_modify] = self.estimate_at.nil? ? true : false      
+    ret[:estimate_modify] = self.estimate_at.nil? || User.current.admin_can?(:repair, :always_modify) ? true : false      
     ret[:estimate_request_modify] = !self.estimate_at.nil? && self.estimate_authorized_at.nil? ? true : false
     ret[:estimate_sent_modify] = !self.estimate_at.nil? && (self.estimate_sent_at.nil? ? true : false) && User.current.admin_can?(:repair, :table)    
     ret[:estimate_authorized_modify] = self.estimate_authorized_at.nil? && !self.estimate_at.nil? && (!self.estimate_sent_at.nil? ? true : false) && User.current.admin_can?(:repair, :table)

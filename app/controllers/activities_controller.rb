@@ -63,6 +63,7 @@ class ActivitiesController < ApplicationController
 
      when 'SET_AMOUNT'
        items = items.where('amount IS NULL')
+       items = items.where('execution_date IS NOT NULL')
        
    end #case
 

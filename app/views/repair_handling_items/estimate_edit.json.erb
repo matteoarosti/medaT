@@ -239,7 +239,7 @@
 
 							},
 			     	    summaryRenderer: function(value, summaryData, dataIndex) {
-                			return '<h2>' + Ext.util.Format.number(value, "0,000.00") + '</h2>';
+                			return '<h2 style=\'align: right;\'>' + Ext.util.Format.number(value, "0,000.00") + '</h2>';
             			},			     	
 						renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 								         ret = '<h3>' + Ext.util.Format.number(rec.get('t_row_customer_time_cost'), "0,000.00") + '</h3>';

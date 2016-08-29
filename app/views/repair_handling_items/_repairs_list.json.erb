@@ -84,7 +84,26 @@
 			                    header_form_values = header_form.getValues();
 
 				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
-				 				this.up('grid').getStore().load();}}
+				 				this.up('grid').getStore().load();
+				 			}
+				 	}
+				 				
+				 ,  {iconCls: 'fa fa-print fa-2x', text: '', scale: 'large', 
+				 			handler: function(event, toolEl, panel){ 
+					        	fp = this.up('grid').getDockedComponent('toptoolbar').down('form');
+					            if(fp.getForm().isValid()){
+					                fp.getForm().submit({
+					                    method: 'POST',
+					                    url: '<%= url_for(:controller=>'repair_handling_items', :action=>'print_list', :filtered_type => filtered_type, :authenticity_token => form_authenticity_token) -%>',             
+					                    params: {formValues: Ext.encode(fp.getValues())},
+					                    method: 'POST',
+					                    standardSubmit: true,
+					                    target: '_blank'
+					                });
+					            }				 			                    
+				 			}
+				 	}
+				 				
 				 ]
 			  }
 			],

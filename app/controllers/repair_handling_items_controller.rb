@@ -364,11 +364,23 @@ end
  def get_row_by_filtered_type
 ##################################################
    
+   items = items_by_filtered_type(params)
+
+   if !params[:form_user][:flt_num_container].to_s.empty?
+     items = items.where("handling_headers.container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%")
+   end
+   
+   render json: items.limit(900).as_json(RepairHandlingItem.as_json_prop)
+ 
+ end 
+ 
+
+ 
+ def items_by_filtered_type(params)
    items = RepairHandlingItem.all
    items = items.joins(:handling_header)
         
    case params[:filtered_type]
-          
      
      when 'TO_ESTIMATE'
        items = items.where('repair_status=?', 'OPEN').where('estimate_at IS NULL')
@@ -378,22 +390,21 @@ end
             items = items.where('repair_status=?', 'OPEN').where('estimate_sent_at IS NOT NULL AND estimate_authorized_at IS NULL')
      when 'TO_REPAIR'
                  items = items.where('repair_status=?', 'OPEN').where('estimate_at IS NOT NULL AND repair_completed_at IS NULL')
+     when 'TO_REPAIR_AUTH'
+                 items = items.where('repair_status=?', 'OPEN').where('estimate_at IS NOT NULL AND repair_completed_at IS NULL AND estimate_authorized_at IS NOT NULL')                 
      when 'TO_OUT_GARAGE'
                       items = items.where('repair_status=?', 'OPEN').where('repair_completed_at IS NOT NULL AND out_garage_at IS NULL')
-
-       
             
    end #case
-   
-   if !params[:form_user][:flt_num_container].to_s.empty?
-     items = items.where("handling_headers.container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%")
-   end
-   
-   render json: items.limit(400).as_json(RepairHandlingItem.as_json_prop)
+   return items   
+ end
  
- end 
  
-
+ def print_list
+   @items = items_by_filtered_type(params)
+   @filtered_type = params[:filtered_type]
+ end
+ 
 
  def print_estimate_open_params
    @item = RepairHandlingItem.find(params[:rhi_id])

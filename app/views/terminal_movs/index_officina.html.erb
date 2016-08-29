@@ -84,6 +84,13 @@ Ext.define('Ext.ux.fixed.BufferedStore', {
                                     width: 700,
                                     height: 500
                                 }, {
+                                    task:<%= raw t("menu.repairs.to_repair_auth").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repairs_list', :filtered_type => 'TO_REPAIR_AUTH') -%>',                                    
+                                    op: 'new_tab',
+                                    width: 700,
+                                    height: 500
+                                }, {
                                     task:<%= raw t("menu.repairs.to_out_garage").to_json %>,
                                     leaf:true,
                                  	url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repairs_list', :filtered_type => 'TO_OUT_GARAGE') -%>',                                    

@@ -341,6 +341,7 @@ it:
       to_sent: "Da inviare a comp."
       to_authorized: "Da autorizzare"
       to_repair: "Da riparare"
+      to_repair_auth: "Da riparare (autoriz.)"
       to_out_garage: "Da rientrare"
     weighs:
       weighs: "Pesate"

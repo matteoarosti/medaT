@@ -208,7 +208,7 @@ class SendCodecoStd
 
 
   def prepare_file_name(shipowner, container_fe)
-    filename = 'CODECO_DEPOT_' + Time.now.strftime("%Y%m%d_%H%M") + ".txt"
+    filename = 'codeco - depot - ' + Time.now.strftime("%Y%m%d%H%M%S") + ".txt"
     return filename
   end
 

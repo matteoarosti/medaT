@@ -29,12 +29,15 @@ every 3.minute do
   runner "SendEmailHiNotify.new.call"
 end
 
-every 2.hours do
+
+every 2.hours do  
+  #Codeco COSCO  
   runner "SendCodeco.new.call(3, [3], 'app.editr@edi.cma-cgm.com')"
-  #runner "SendCodeco.new.call(2, [2], 'matteo.arosti@gmail.com')"
   
-  #runner "SendCodecoStd.new.call(3, [3], ['E'], 'matteo.arosti@gmail.com', 'ITAOIY3', 'COSCO', 1000000, 2000000, 'CODECO COSCO')"
+  #Codeco COSCO
+  runner "SendCodecoStd.new.call(12, [12], ['E'], 'edifact@fmg.eu;matteo.arosti@gmail.com', 'ITAOIY3', 'COSCO', 1000000, 2000000, 'CODECO COSCO')"
 end
+
 
 
 #riavvio ambiente spring (sembra ogni tanto bloccare le chiamate rails schedulate

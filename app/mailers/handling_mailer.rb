@@ -109,7 +109,7 @@ class HandlingMailer < ActionMailer::Base
   #**************************************************************
   def send_codeco_email(email_to, subject, content_file, file_name)
     attachments[file_name] = content_file
-    mail(:to => email_to, :subject => subject)
+    mail(:to => email_to, :subject => subject, :body => nil)
   end
   
   

@@ -138,7 +138,8 @@ class SendCodecoStd
       else
         c_peso = hi.handling_header.weight_exp.to_s
       end
-      c_tipo = hi.handling_header.equipment.equipment_type.to_s
+      #c_tipo = hi.handling_header.equipment.equipment_type.to_s
+      c_tipo = hi.handling_header.equipment.iso.to_s
       c_container = hi.handling_header.container_number
       c_booking = hi.handling_header.num_booking.to_s
       c_data = hi.datetime_op.to_s

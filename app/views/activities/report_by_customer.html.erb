@@ -1,0 +1,80 @@
+<style type="text/css">
+<!--
+@page { size:auto; margin: 1cm }
+-->
+ td.tot {font-weight: bold;}
+</style>
+
+<style media="print">
+ h1.medaT-report{padding: 0px 0px; margin: 0px 0px; font-size: 13px;}
+ table.medaT-report tr td, table.medaT-report tr th{font-size: 9px; padding: 0px 2px}
+ span.parametri{font-size: 14px;}
+</style>
+
+
+<%
+#Recupero elenco movimenti in base ai parametri
+
+formValues = JSON.parse params['formValues']
+
+items = Activity.where('1=1').joins(:customer)
+items = items.where({customer_id: formValues['customer_id']}) unless formValues['customer_id'].blank?
+items = items.where("execution_date >= ?", Date.parse(formValues['execution_date_from'])) unless formValues['execution_date_from'].blank?
+items = items.where("execution_date <= ?", Date.parse(formValues['execution_date_to'])) unless formValues['execution_date_to'].blank?
+
+items = items.where("amount is not null") if formValues['fl_valutato'] == 'Y'
+items = items.where("amount is null") if formValues['fl_valutato'] == 'N'
+
+items = items.order('customers.name')
+group_customer = items.group_by { |d| d.customer_id }
+%>
+
+<h1>Stampa attivit&agrave; per cliente<br/><span class=parametri>[<%= formValues['execution_date_from'] -%> - <%= formValues['execution_date_to'].to_s -%>]</span></h1>
+
+<%
+ ######################################################
+ #Customer
+ ###################################################### 
+%>
+<% group_customer.each do |so_id, op_val| %>
+	<%
+	 customer = Customer.find(so_id)
+	 customer_amount = 0
+	%>
+    <p class="bg-primary" style="padding: 10px; margin-bottom: 1px;"><%= customer.name -%> [Totale attivit&agrave;: <%= op_val.count -%>]</p>
+ 
+		<%
+ 		######################################################
+ 		#Attivita'
+ 		###################################################### 
+		%>
+		<table class="table table-striped table-bordered table-condensed medaT-report">
+		 <tr>
+		  <th width=80>Data</th>
+		  <th>Descrizione</th>
+		  <th width=80 align=right>Importo</th>
+		 </tr>
+
+			<% op_val.sort_by{|a| [a.execution_date]}.each do |row| %>
+				<% customer_amount += row.amount %>
+	 			<tr>
+	 				<td><%= row.execution_date.strftime("%d/%m/%y") -%></td>
+					<td>
+						<%= row.notes -%>
+						<% unless row.execution_notes.blank? -%>
+							<br>[<%= row.execution_notes -%>]
+						<% end %> 
+					</td>				
+					<td align=right><%= number_to_currency(row.amount) -%></td>
+				</tr>
+			<% end %>					
+			
+			<!-- tot cliente -->
+				<tr>
+	 				<td class=trasp>&nbsp;</td>
+					<td class=tot align=right>Totale</td>				
+					<td class=tot align=right><%= number_to_currency(customer_amount) -%></td>
+				</tr>
+		</table>
+
+<% end %>

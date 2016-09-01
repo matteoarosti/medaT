@@ -1,5 +1,7 @@
 class ActivitiesController < ApplicationController
   
+  layout "application_report", only: [:report_by_customer]
+  
   def create_new
     @item = Activity.new
   end
@@ -93,5 +95,15 @@ class ActivitiesController < ApplicationController
  end   
  
   
+ 
+ 
+##################################################
+ def report_parameters
+##################################################
+   @item = Activity.new
+ end   
+ 
+ def report_by_customer
+ end
   
 end

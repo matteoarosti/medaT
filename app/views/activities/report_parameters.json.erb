@@ -1,0 +1,85 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   title: '', closable: false,
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	
+     
+    items: [
+       
+     {xtype: 'hidden', name: 'authenticity_token', value: '<%= form_authenticity_token %>'},
+     
+     
+     		<%= raw extjs_std_combo_model('customer', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>
+     		
+	   		, {
+                xtype: 'fieldcontainer',
+                fieldLabel: 'Eseguito da/a',
+                combineErrors: true,
+                msgTarget : 'side',
+                layout: 'hbox',
+                anchor: '100%',
+                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
+                items: [ 	
+    	
+		     		<%= raw extjs_std_datefield('execution_at', @item, {:allowBlank=>false, :fieldLabel => 'Da data', :name => 'execution_date_from'}) -%>,
+		     		<%= raw extjs_std_datefield('execution_at', @item, {:allowBlank=>false, :fieldLabel => 'A data', :name => 'execution_date_to'}) -%>
+				]
+			}
+		
+				  , {
+			            xtype: 'radiogroup',
+			            fieldLabel: 'Filtra',
+			            layout: 'hbox',
+			            defaults: {width: 150},
+			            items: [{
+			                boxLabel: 'Con valutazione',
+			                name: 'fl_valutato',
+			                inputValue: 'Y',
+			                checked: true            
+			            }, {
+			                boxLabel: 'Senza valutazione',
+			                name: 'fl_valutato',
+			                inputValue: 'N'
+			            }, {
+			                boxLabel: 'Entrambi',
+			                name: 'fl_valutato',
+			                inputValue: 'E'
+			            }]
+			        }
+
+								           
+	],
+    
+   buttons: [
+	{
+        text: '<i class="fa fa-th-large"></i> Visualizza',
+        handler: function(){
+        	fp = this.up('form');
+            if(fp.getForm().isValid()){
+                fp.getForm().submit({
+                    method: 'POST',
+                    url: '<%= url_for(:controller=>'activities', :action=>'report_by_customer') -%>',             
+                    params: {formValues: Ext.encode(fp.getValues())},
+                    method: 'POST',
+                    standardSubmit: true,
+                    target: '_blank'
+                });
+            }
+        }
+    }    
+   ] 
+    
+  }
+ ]
+}

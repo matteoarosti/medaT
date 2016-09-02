@@ -78,3 +78,7 @@ pickle-email-*.html
 .env
 .powenv
 Gemfile.lock
+
+#Matteo
+.project
+/record_images/

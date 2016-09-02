@@ -78,9 +78,9 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 		 <tr>
 		  <th width=100>Container</th>
 		  <th width=80>Data riparazione</th>
-		  <th width=80 align=right>Costo da fornitore</th>
+		  <th width=80 style="text-align: right;">Costo da fornitore</th>
    <% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true %>		  
-		  <th width=80 align=right>Costo a compagnia</th>
+		  <th width=80 style="text-align: right;">Costo a compagnia</th>
    <% end %>		  
 		 </tr>
 

@@ -73,8 +73,8 @@ formValues = JSON.parse params['formValues']
   t_customer_time_cost += r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f
   t_customer_material_cost += r.quantity.to_f * r.customer_material_price.to_f
   
-  t_provider_time_hours += r.quantity.to_f * r.provider_time
-  t_customer_time_hours += r.quantity.to_f * r.customer_time
+  t_provider_time_hours += r.quantity.to_f * r.provider_time.to_f
+  t_customer_time_hours += r.quantity.to_f * r.customer_time.to_f
  else
   class_row = "canceled"
  end  
@@ -123,7 +123,7 @@ formValues = JSON.parse params['formValues']
   <td class="n bl"><%= number_to_currency(r.customer_hourly_cost.to_f) -%></td>
   <td class=n>
   	<%= number_to_currency(r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f) -%>
-    <br/><%= number_with_precision(r.quantity.to_f * r.customer_time, :precision => 2, :delimiter => ',') -%>h  	
+    <br/><%= number_with_precision(r.quantity.to_f * r.customer_time.to_f, :precision => 2, :delimiter => ',') -%>h  	
   </td>
   <td class=n><%= number_to_currency(r.quantity.to_f * r.customer_material_price.to_f) -%></td>
   <td class=n><%= number_to_currency(r.quantity.to_f * (r.customer_material_price.to_f + r.customer_time.to_f * r.customer_hourly_cost.to_f)  ) -%></td>  

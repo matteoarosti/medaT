@@ -84,9 +84,11 @@ function acs_show_panel_std(app, url, jsonData, tab_id, listeners, loadBodyMask)
 		mp = app;
 	else
 		mp = app.feedInfo;
+
+	mp_tab = false;
 	
-	
-	mp_tab = Ext.getCmp(tab_id);
+	if (Ext.isEmpty(tab_id) == false)	
+		mp_tab = Ext.getCmp(tab_id);
 
 	if (mp_tab){
 		mp_tab.show();		    	

@@ -3,6 +3,9 @@
  items: [
  {
   xtype: 'container',
+  <% unless on_open_tab_id.nil? %>
+  	id: <%= raw on_open_tab_id.to_json -%>,
+  <% end %>
   closable: true,
   title: <%= raw "Activity [#{filtered_type}]".to_json -%>,
     layout: {

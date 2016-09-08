@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
   # EXTJS SCAFFOLD
   ###################################################################
   def extjs_sc_crt_tab
+    logger.info params.to_yaml
     model_class = extjs_sc_model.to_s  
     sc_columns = model_class.constantize.extjs_sc_columns        
     sc_form_fields = model_class.constantize.extjs_sc_form_fields
@@ -32,7 +33,8 @@ class ApplicationController < ActionController::Base
         :sc_model_class => model_class,
         :sc_columns     => sc_columns, 
         :sc_form_fields => sc_form_fields, 
-        :sc_store       => sc_crt_store()
+        :sc_store       => sc_crt_store(),
+        :on_open_tab_id => params[:on_open_tab_id]
     }  
   end
   

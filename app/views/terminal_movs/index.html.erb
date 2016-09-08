@@ -433,17 +433,21 @@ Ext.define("plugin.Printer", {
                              {
                                 task:<%= raw t("menu.activities.customers").to_json %>,
                                 url: '<%= url_for(:controller=>'customers', :action=>'extjs_sc_crt_tab') -%>',                                
-                                leaf:true
+                                leaf:true,
+                                tab_id: 'activities_customers_list'
+                                
                            	 }, {
                                 task:<%= raw t("menu.activities.new").to_json %>,
                                 url: '<%= url_for(:controller=>'activities', :action=>'create_new') -%>',
                                 leaf:true,
-                                op: 'new_tab'
+                                op: 'new_tab',
+                                tab_id: 'activities_new'
                            	 }, {
                                 task:<%= raw t("menu.activities.open").to_json %>,
                                 url: '<%= url_for(:controller=>'activities', :action=>'list', :filtered_type => 'OPEN') -%>',
                                 leaf:true,
-                                op: 'new_tab'
+                                op: 'new_tab',
+                                tab_id: 'activities_OPEN'
                            	 }
                            	 
 <% if User.current.admin_can?(:activity, :amount) %>                           	 
@@ -451,7 +455,8 @@ Ext.define("plugin.Printer", {
                                 task:<%= raw t("menu.activities.set_amount").to_json %>,
                                 url: '<%= url_for(:controller=>'activities', :action=>'list', :filtered_type => 'SET_AMOUNT') -%>',
                                 leaf:true,
-                                op: 'new_tab'
+                                op: 'new_tab',
+                                tab_id: 'activities_SET_AMOUNT'
                            	 }
 <% end %>                           	 
                            	 
@@ -459,7 +464,8 @@ Ext.define("plugin.Printer", {
                                 task:<%= raw t("menu.activities.all").to_json %>,
                                 url: '<%= url_for(:controller=>'activities', :action=>'list', :filtered_type => 'ALL') -%>',
                                 leaf:true,
-                                op: 'new_tab'
+                                op: 'new_tab',
+                                tab_id: 'activities_ALL'
                            	 }
                            	 
 <% if User.current.admin_can?(:activity, :amount) %>

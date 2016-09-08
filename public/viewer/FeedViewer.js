@@ -165,7 +165,7 @@ Ext.define('FeedViewer.App', {
 			else if (rec.get('op') == 'new_page')
 				window.open(rec.get('url'), "_blank")
 			else				
-    			acs_show_panel_std(this, rec.get('url'), {}, 'tttt');
+    			acs_show_panel_std(this, rec.get('url'), {on_open_tab_id: rec.get('tab_id')}, rec.get('tab_id'));
 			
 			return;
 		}	

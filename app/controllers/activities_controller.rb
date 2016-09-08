@@ -45,7 +45,7 @@ class ActivitiesController < ApplicationController
   ##################################################
    def list
   ##################################################  
-     render :partial=>"list", :locals => {:filtered_type => params[:filtered_type] }
+     render :partial=>"list", :locals => {:filtered_type => params[:filtered_type] , :on_open_tab_id => params[:on_open_tab_id]}
    end
 
    

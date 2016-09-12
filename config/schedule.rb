@@ -31,12 +31,16 @@ end
 
 
 every 2.hours do  
-  #Codeco COSCO  
-  runner "SendCodeco.new.call(3, [3], 'app.editr@edi.cma-cgm.com')"
-  
+  #Codeco CMA  
+  runner "SendCodeco.new.call(3, [3], 'app.editr@edi.cma-cgm.com')"  
+end
+
+every 2.hours, at: 30 do
   #Codeco COSCO
   runner "SendCodecoStd.new.call(12, [12], ['E'], 'edifact@fmg.eu;matteo.arosti@gmail.com', 'ITAOIY3', 'COSCO', 1000000, 2000000, 'CODECO COSCO')"
 end
+
+
 
 
 

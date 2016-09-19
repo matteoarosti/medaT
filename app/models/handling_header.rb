@@ -73,7 +73,7 @@ class HandlingHeader < ActiveRecord::Base
    
    hh = HandlingHeader.new
    hh.container_number = rec.container_number
-   hh.handling_type = "TMOV"
+   hh.handling_type = rec.import_header.handling_type || "TMOV"
    hh.shipowner_id = rec.shipowner_id
    hh.equipment_id = rec.equipment_id
    hh.handling_status = "NEW"

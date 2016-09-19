@@ -103,9 +103,17 @@ class ImportItemsController < ApplicationController
       hi.datetime_op = generate_datetime(params[:check_form][:datetime_op_date], params[:check_form][:datetime_op_time])      
     end
     hi.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
-    hi.handling_item_type = "I_DISCHARGE"
-    hi.handling_type = "I"
-    hi.container_FE = rec.container_status
+    
+    logger.info "handling_type: #{rec.import_header.handling_type}"
+    case rec.import_header.handling_type
+      when 'FRCON'
+        hi.handling_item_type = "START_RFCON"
+      else #TMOV
+        hi.handling_item_type = "I_DISCHARGE"
+        hi.handling_type = "I"
+        hi.container_FE = rec.container_status            
+    end    
+    
     hi.ship_id = rec.import_header.ship_id
     hi.voyage = rec.import_header.voyage
     

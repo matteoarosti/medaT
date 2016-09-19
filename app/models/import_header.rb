@@ -27,13 +27,14 @@ class ImportHeader < ActiveRecord::Base
  end
 
   #Aggiunge un record alla tabella
-  def self.add_record(ship_id, voyage, import_type)
+  def self.add_record(ship_id, voyage, import_type, handling_type)
 
     import_header = ImportHeader.new
     import_header.import_status = 'OPEN'
     import_header.ship_id = ship_id
     import_header.voyage = voyage
     import_header.import_type = import_type
+    import_header.handling_type = handling_type
     import_header.save!
 
     return import_header.id

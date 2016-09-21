@@ -567,6 +567,61 @@
                                             }, scope: this
                                           }
                                           
+<% if User.current.admin_can?(:activity, :amount) %>                                          
+                                          , {
+                                            text : '<i class="fa fa-trash-o fa-1x"> Elimina</i>',                                                                                                        
+                                            handler: function(){
+                                            
+                                            	tmp_grid = this;									     	 	
+
+												Ext.MessageBox.confirm('Richieta conferma', 'Eliminare l\'attivit&agrave; corrente?', function(btn){
+												
+													if(btn === 'yes'){
+													
+														Ext.Ajax.request({
+										                    url: <%= raw url_for(:controller=>'activities', :action=>'exe_delete_activity').to_json -%>,
+										                    waitMsg: 'Eliminazione in corso....',
+															method:'POST',                     
+										                    jsonData: {rec_id: record.get('id')},	
+										             	
+															success: function(result, request) {
+																	var returnData = Ext.JSON.decode(result.responseText);
+																	if (returnData.success == false){
+																		Ext.MessageBox.show({
+													                        title: 'EXCEPTION',
+													                        msg: returnData.message,
+													                        icon: Ext.MessageBox.ERROR,
+													                        buttons: Ext.Msg.OK
+												                    	})
+												                      return false;										
+																	}																							
+															
+																tmp_grid.store.load();																						 						
+															}, scope: this,
+															
+															failure: function(rec, op) {
+																var result = Ext.JSON.decode(op.getResponse().responseText);
+																Ext.MessageBox.show({
+											                        title: 'EXCEPTION',
+											                        msg: result.message,
+											                        icon: Ext.MessageBox.ERROR,
+											                        buttons: Ext.Msg.OK
+										                    	})					
+															}, scope: this,						
+																			 
+												    	});													
+													
+													} //yes
+													
+												}); //confirm
+
+
+										                                                    
+                                            }, scope: this
+                                          }
+<% end %>                                          
+                                          
+                                          
                                          ]
                                }).showAt(xy);
 	                	

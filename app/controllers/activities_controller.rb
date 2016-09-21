@@ -95,6 +95,15 @@ class ActivitiesController < ApplicationController
  end   
  
   
+##################################################
+ def exe_delete_activity
+##################################################
+  item = Activity.find(params[:rec_id])    
+  ret = item.destroy!
+  ret = true
+  render json: {success: ret}
+ end   
+ 
  
  
 ##################################################

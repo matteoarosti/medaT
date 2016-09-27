@@ -5,7 +5,7 @@ class SendCsvStd
   end
 
   #esamples:
-  #rails runner "SendCsvStd.new.send_TMOV(11, [11], 'matteo.arosti@gmail.com', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day)
+  #rails runner "SendCsvStd.new.send_TMOV(12, [12], 'matteo.arosti@gmail.com', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day)"
   
 
   def send_TMOV(shipowner, shipwowner_list, email_to, datetime_from, datetime_to)
@@ -15,7 +15,8 @@ class SendCsvStd
     his = his.where({operation_type: 'MT'}) #devono essere inviati solo i movimenti terminal
     
     his = his.where("datetime_op >= ?", datetime_from)
-    his = his.where("datetime_op <= ?", datetime_to)    
+    his = his.where("datetime_op <= ?", datetime_to)
+    his = his.order("datetime_op")    
     
     content_file = prepare_file_content_TMOV(his)
     file_name = 'TMOV_' + Time.now.strftime("%Y%m%d%H%M%S") + ".csv"

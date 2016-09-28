@@ -58,7 +58,7 @@ TMOV:
    end_reefer_connection: true
    handling_header_status_by_config:
     :new_status: CLOSE
-    :shipowner_id: 3
+    :shipowner_id: 3,12
     :reefer: false
  O_RETURN:
   label: Out for Return

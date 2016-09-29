@@ -544,6 +544,7 @@ def sincro_set_handling_header_status_by_config(value, hi)
   if !value[:shipowner_id].nil? 
     if !value[:shipowner_id].to_s.split(',').include? self.shipowner_id.to_s
       logger.info "Esco perche' la compagnia non e' di quelle elencate"
+      logger.info value.to_json
       return false #esco perche' la shipwowner non e' di quelle elencate
     end
   end
@@ -564,6 +565,65 @@ def sincro_set_handling_header_status_by_config(value, hi)
   
   self.handling_status = value[:new_status]
 end
+
+
+
+
+
+
+################################################################
+def sincro_set_auto_O_OTHER(value, hi)
+################################################################
+ #chiudo in base ai parametri indicati sulla compagnia e in base al tipo di equipment (frigo o no) 
+ #value contiene elenco parametri
+ 
+  #se e' stato indicato shipowner_id verifico di essere in una compagnia di quelle elencate
+  if !value[:shipowner_id].nil? 
+    if !value[:shipowner_id].to_s.split(',').include? self.shipowner_id.to_s
+      logger.info "[auto_O_OTHER] Esco perche' la compagnia non e' di quelle elencate"
+      logger.info "self.shipwoner_id: #{self.shipowner_id.to_s}"
+      logger.info "list shipwoner_id:"
+      logger.info value.to_json
+      return false #esco perche' la shipwowner non e' di quelle elencate
+    end
+  end
+    
+  if !value[:reefer].nil?
+    if self.equipment.reefer != value[:reefer]
+      logger.info "[auto_O_OTHER] Non combacia reefer/non reefer"
+      return false #esco perche' non combacia reefer/non reefer
+    end 
+  end
+
+  if !value[:container_FE].nil?
+    if self.container_FE.to_s != value[:container_FE]
+      logger.info "[auto_O_OTHER] Non combacia container_FE"
+      return false #esco perche' non combacia container_FE
+    end 
+  end  
+  
+  #creo in automatico l'uscita per altro terminal (in particolare per i pieni non gestiti)
+  hi_O_OTHER = self.handling_items.new()
+  hi_O_OTHER.handling_item_type = "O_OTHER"
+  hi_O_OTHER.datetime_op = Time.now
+  hi_O_OTHER.handling_type = "O"
+  hi_O_OTHER.container_FE = hi.container_FE
+  validate_insert_item = self.validate_insert_item(hi_O_OTHER)
+  if validate_insert_item[:is_valid]    
+    hi_O_OTHER.save!()
+    r = self.sincro_save_header(hi_O_OTHER)
+          
+    ret_status  = r[:success]
+    message     = r[:message]
+  else
+    ret_status  = validate_insert_item[:is_valid]
+    message     = validate_insert_item[:message]
+    raise ActiveRecord::RecordNotSaved
+  end
+end
+
+
+
 
 
 ################################################################

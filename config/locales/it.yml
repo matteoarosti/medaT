@@ -218,6 +218,9 @@ it:
     I_DISCHARGE:
       long: "Sbarco da nave"
       short: "Sbarco"
+    O_OTHER:
+      long: "Gestito da altro terminal"
+      short: "Gest. altro term."      
     O_EMPTYING:
       long: "Uscita PIENO per svuotamento"
       short: "Out Empting"

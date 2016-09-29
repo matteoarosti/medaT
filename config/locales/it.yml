@@ -220,7 +220,7 @@ it:
       short: "Sbarco"
     O_OTHER:
       long: "Gestito da altro terminal"
-      short: "Gest. altro term."      
+      short: "Altro term."      
     O_EMPTYING:
       long: "Uscita PIENO per svuotamento"
       short: "Out Empting"

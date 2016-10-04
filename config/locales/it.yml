@@ -11,6 +11,7 @@ it:
         unit: "&euro;"
   search: "Ricerca"
   create_new: "Crea nuovo"
+  total: 'Totale'
   tables:
     std:
       description_it: "Descrizione (it)"

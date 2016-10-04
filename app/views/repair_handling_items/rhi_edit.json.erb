@@ -252,7 +252,7 @@
 							 my_listeners = {}
 						     new_win = acs_show_win_std('Dettaglio Preventivo', <%= raw url_for(:controller=>'repair_handling_items', :action=>'estimate_edit').to_json -%>,
 				     	 		{rhi_id: <%= @item.id -%>, only_view: 'Y'},
-				     	 		900, 650, my_listeners);										
+				     	 		900, 650, my_listeners, null, 'Y');										
 							  
 				 			}
 				 		}, {scale: 'medium', cls: '', iconCls: 'fa fa-2x fa-print', text: '', 

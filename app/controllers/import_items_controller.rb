@@ -146,11 +146,13 @@ class ImportItemsController < ApplicationController
         return {:success => ret_status, :message => message}
      end 
      
-     #errore se FE non coincide tra la lista di imbarco e il movimento aperto
-     if rec.container_status != hh.container_FE
-       ret_status  = false
-       message     = "Il valore Full/Empty indicato nella lista non coincide con lo stato attuale del movimento"
-       return {:success => ret_status, :message => message}       
+     unless rec.import_header.handling_type == 'FRCON'
+       #errore se FE non coincide tra la lista di imbarco e il movimento aperto
+       if rec.container_status != hh.container_FE
+         ret_status  = false
+         message     = "Il valore Full/Empty indicato nella lista non coincide con lo stato attuale del movimento"
+         return {:success => ret_status, :message => message}       
+       end
      end
      
      

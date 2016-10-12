@@ -162,12 +162,18 @@ class ImportItemsController < ApplicationController
       hi.datetime_op = generate_datetime(params[:check_form][:datetime_op_date], params[:check_form][:datetime_op_time])      
      end
      hi.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
-     hi.handling_item_type = "O_LOAD"
-     hi.handling_type = "O"
-     hi.container_FE = rec.container_status
+       
+     case rec.import_header.handling_type
+      when 'FRCON'
+        hi.handling_item_type = "END_RFCON"
+      else #TMOV
+        hi.handling_item_type = "O_LOAD"
+        hi.handling_type = "O"
+        hi.container_FE = rec.container_status            
+     end    
+              
      hi.ship_id = rec.import_header.ship_id
-     hi.voyage = rec.import_header.voyage
-     
+     hi.voyage = rec.import_header.voyage     
      
      #se e' impostato num_booking, provo a decodificarlo
     #se ho ricevuto "num_booking", lo vado a decodificare in BookingItem

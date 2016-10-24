@@ -16,7 +16,7 @@ class UtilitiesBase
 
   def repair_total_cost_recalc
     items = RepairHandlingItem.where('estimate_authorized_at is not null')
-    items.each.do |item|
+    items.each do |item|
      item.calculate_total_on_estimate
      item.calculate_total_on_authorized
      item.save!

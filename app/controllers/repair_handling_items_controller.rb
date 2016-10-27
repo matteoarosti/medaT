@@ -55,6 +55,18 @@ def set_authorized
       item.calculate_total_on_authorized      
       
      exe_save(item)
+     
+     #invio email a officina
+     logger.info "Testo invio email a officina"
+     if !Rails.configuration.medaT_installation_config.fetch(:repairs, {})[:send_email_on_authorized].empty?
+       logger.info "Invio email a #{Rails.configuration.medaT_installation_config[:repairs][:send_email_on_authorized]}"      
+       HandlingMailer.send_simple(Rails.configuration.medaT_installation_config[:repairs][:send_email_on_authorized], 
+                                  "Icop medaT Notify: riparazione autorizzata: container #{item.handling_header.container_number}", 
+                                  "Notifica generata automaticamnete tramite sistema informativo medaT: 
+                                  \n\nContainer autorizzato per riparazione: #{item.handling_header.container_number}
+                                  \n\nMittente: Icop srl").deliver!
+          
+     end
 end
 
 #riparato

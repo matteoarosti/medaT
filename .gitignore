@@ -82,3 +82,4 @@ Gemfile.lock
 #Matteo
 .project
 /record_images/
+/config/medaT_installation.yml

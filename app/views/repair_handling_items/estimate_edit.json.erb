@@ -461,17 +461,32 @@
 			    		handler: function(){
 				    		this.up('window').close();			    			
 			    		}
-			    	}, 
-			    	{text: 'Conferma', iconCls: 'fa fa-plus fa-2x', cls: 'btn-ok',			    	
+			    	} 
+			    	
+			     <% if params[:authorizing] == 'Y' %>			    	
+			    	, {text: 'Conferma (no email)', iconCls: 'fa fa-plus fa-2x', cls: 'btn-ok',			    	
+				    		handler: function(){
+							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi la chiusura e l\'invio del preventivo?', function(btn){
+							   if(btn === 'yes'){				    		
+					    		this.up('window').fireEvent('onConfirm', this.up('window'), 'N');
+					    		}
+					    	  }, this);			    			
+				    		}
+			    	}			    	
+			     <% end %>	
+
+			    	, {text: 'Conferma', iconCls: 'fa fa-plus fa-2x', cls: 'btn-ok',			    	
 				    		handler: function(){
 							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi la chiusura e l\'invio del preventivo?', function(btn){
 							   if(btn === 'yes'){				    		
 					    		this.up('window').fireEvent('onConfirm', this.up('window'));
 					    		}
 					    	  }, this);			    			
-				    		}
-				    	
-			    	}			    	
+				    		}				    	
+			    	}
+			     
+			     
+			    	
 			    ]
 			  }
 			 ]

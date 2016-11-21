@@ -386,13 +386,21 @@
 						    handler: function(event, toolEl, panel){
 
 			 				my_listeners = {
-		                		onConfirm: function(fromWindow){
+		                		onConfirm: function(fromWindow, send_email){
+
+									if (send_email == 'N') 
+										fl_send_email = 'N' 
+									else 
+										fl_send_email = 'Y';
 
 									Ext.Ajax.request({
 					                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_authorized').to_json -%>,
 					                    waitMsg: 'Salvataggio in corso....',
 										method:'POST',                     
-					                    jsonData: {rec_id: <%= @item.id -%>},	
+					                    jsonData: {
+					                    	rec_id: <%= @item.id -%>,
+					                    	fl_send_email: fl_send_email
+					                    },	
 					             	
 										success: function(result, request) {					
 											var returnData = Ext.JSON.decode(result.responseText);

@@ -19,7 +19,8 @@ class SendCsvStd
     his = his.order("datetime_op")    
     
     content_file = prepare_file_content_TMOV(his)
-    file_name = 'TMOV_' + Time.now.strftime("%Y%m%d%H%M%S") + ".csv"
+    content_file = content_file.to_xls
+    file_name = 'TMOV_' + Time.now.strftime("%Y%m%d%H%M%S") + ".xls"
     subject = 'export_TMOV_csv_' + Time.now.strftime("%Y%m%d%H%M%S")
 
     if content_file != ""
@@ -41,7 +42,7 @@ class SendCsvStd
     
     ret = ''
     print "\nInserisco riga di testata csv\n"
-    ret << ['data_ora_movimento', 'tipo_movimento', 'tipo_container', 'container', 'pieno_vuoto', 'booking', 'nave', 'viaggio', 'vettore', 'autista', 'sigillo', 'peso'].to_csv
+    ret << ['data_ora_movimento', 'tipo_movimento', 'tipo_container', 'container', 'pieno_vuoto', 'booking', 'nave', 'viaggio', 'vettore', 'autista', 'sigillo', 'peso']#.to_csv
 
     his.each do |row|
       
@@ -101,7 +102,7 @@ class SendCsvStd
         row.driver.to_s,
         out_seal,
         out_weight 
-      ].to_csv
+      ]#.to_csv
 
     end #his.each
    ret

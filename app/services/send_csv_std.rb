@@ -40,7 +40,7 @@ class SendCsvStd
 
   def prepare_file_content_TMOV(his)
     
-    ret = ''
+    ret = []#''
     print "\nInserisco riga di testata csv\n"
     ret << ['data_ora_movimento', 'tipo_movimento', 'tipo_container', 'container', 'pieno_vuoto', 'booking', 'nave', 'viaggio', 'vettore', 'autista', 'sigillo', 'peso']#.to_csv
 

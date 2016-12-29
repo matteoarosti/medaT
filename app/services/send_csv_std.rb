@@ -18,10 +18,23 @@ class SendCsvStd
     his = his.where("datetime_op <= ?", datetime_to)
     his = his.order("datetime_op")    
     
-    content_file = prepare_file_content_TMOV(his)
-    content_file = content_file.to_xls
+    rows_array = prepare_file_content_TMOV(his)
+    
+    #preparo contenuto per xls
+    book = Spreadsheet::Workbook.new
+    sheet1 = book.create_worksheet
+    cr = 0
+    rows_array.each do |r|
+      sheet1.row(cr).concat r
+      cr = cr+1
+    end
+    xls_content = StringIO.new
+    book.write xls_content
+    
+    #content_file = content_file.to_xls
+    content_file = xls_content.string.force_encoding('binary')
     file_name = 'TMOV_' + Time.now.strftime("%Y%m%d%H%M%S") + ".xls"
-    subject = 'export_TMOV_csv_' + Time.now.strftime("%Y%m%d%H%M%S")
+    subject = 'export_TMOV_xls_' + Time.now.strftime("%Y%m%d%H%M%S")
 
     if content_file != ""
       begin

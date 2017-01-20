@@ -114,12 +114,20 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 
  		<p class="bg-success" style="padding: 5px 10px">
  			<b><%= t("handling_type.#{op_id[:handling_type]}.long") -%></b>
+
  			<% if op_id[:handling_type] == 'TMOV' %>
  			 <% out_fase_di = op_id[:is_import_export]=='I' ? 'SBARCO' : 'IMBARCO' %>
  			 <span>
  			 	Nave: <b><%= op_id[:ship]-%></b>, Viaggio: <b><%= op_id[:voyage] -%></b>, Fase di <b><%= out_fase_di -%></b>
  			 </span>
- 			<% end %> 
+ 			<% end %>
+
+ 			<% if op_id[:handling_type] == 'RFCON' %>
+ 			 <span>
+ 			 	Nave: <b><%= op_id[:ship]-%></b>, Viaggio: <b><%= op_id[:voyage] -%></b>
+ 			 </span>
+ 			<% end %>
+ 			 
  		</p>
 
 		<%

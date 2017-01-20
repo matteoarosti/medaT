@@ -95,8 +95,8 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 		  if k[:handling_type] == 'FRCON'
 		  		hi_start_rfcon = d.handling_header.last_dett_by_item_type('START_RFCON')
 			    if !hi_start_rfcon.nil?
-			  	 k[:ship] 	= hi_start_rfcon.ship.name.to_s
-			  	 k[:voyage] = hi_start_rfcon.voyage.to_s
+			  	 k[:ship] 	= hi_start_rfcon.ship.name.to_s unless hi_start_rfcon.ship.nil? 
+			  	 k[:voyage] = hi_start_rfcon.voyage.to_s unless hi_start_rfcon.voyage.nil? 
 			  	end		  		
 		  end
 		  

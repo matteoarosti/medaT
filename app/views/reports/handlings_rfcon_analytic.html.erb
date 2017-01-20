@@ -122,7 +122,7 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
  			 </span>
  			<% end %>
 
- 			<% if op_id[:handling_type] == 'RFCON' %>
+ 			<% if op_id[:handling_type] == 'FRCON' %>
  			 <span>
  			 	Nave: <b><%= op_id[:ship]-%></b>, Viaggio: <b><%= op_id[:voyage] -%></b>
  			 </span>

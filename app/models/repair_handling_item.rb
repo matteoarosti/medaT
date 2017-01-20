@@ -43,13 +43,15 @@ class RepairHandlingItem < ActiveRecord::Base
   end
   
   def self.create_from_hi(hi)
-    rhi = RepairHandlingItem.new
-     rhi.handling_item_id = hi.id
-     rhi.repair_status = 'OPEN'
-     rhi.in_garage_at      = hi.datetime_op
-     rhi.in_garage_user_id = hi.created_user_id     
-    rhi.save!
-    rhi
+    if hi.handling_header.shipowner.repair_active == true 
+      rhi = RepairHandlingItem.new
+       rhi.handling_item_id = hi.id
+       rhi.repair_status = 'OPEN'
+       rhi.in_garage_at      = hi.datetime_op
+       rhi.in_garage_user_id = hi.created_user_id     
+      rhi.save!
+      rhi
+    end
   end
   
   #elenco operazione ammesse/non ammesse

@@ -43,7 +43,9 @@ class RepairHandlingItem < ActiveRecord::Base
   end
   
   def self.create_from_hi(hi)
-    if hi.handling_header.shipowner.repair_active == true 
+#    if hi.handling_header.shipowner.repair_active == true
+      #al monento non serve, perche' per le ditte non richieste non vengono proprio dichiarati i dannieggiati.
+      #Se poi cressero i danneggiati come farebbero a metterli riparati? 
       rhi = RepairHandlingItem.new
        rhi.handling_item_id = hi.id
        rhi.repair_status = 'OPEN'
@@ -51,7 +53,7 @@ class RepairHandlingItem < ActiveRecord::Base
        rhi.in_garage_user_id = hi.created_user_id     
       rhi.save!
       rhi
-    end
+#    end
   end
   
   #elenco operazione ammesse/non ammesse

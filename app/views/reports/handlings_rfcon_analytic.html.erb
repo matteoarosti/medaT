@@ -69,7 +69,7 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
  		
 
 		  if k[:handling_type] == 'TMOV'			 
-			  if k[:is_import_export] == 'E'
+			 if k[:is_import_export] == 'E'
 			  	#Export: provo a recuperare nave/viaggio da booking
 			  	  hi_O_LOAD = d.handling_header.get_O_LOAD			 			 
 			  	  if !hi_O_LOAD.nil?
@@ -81,18 +81,26 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 				    k[:voyage]	= "[#{bk.voyage.to_s}]"
 				   end
 				  end 
-			  else
+			 else
 			     #Import: provo a recuperare nave/viaggio dal movimento di sbarco
 			       hi_discharge = d.handling_header.get_I_DISCHARGE
 			       if !hi_discharge.nil?
 			  	    k[:ship] 	= hi_discharge.ship.name.to_s
 			  	    k[:voyage] 	= hi_discharge.voyage.to_s
 			  	   end
-			  end
-		   end  
+			 end
+		  end
+		  
+		  #allaccio frigo
+		  if k[:handling_type] == 'FRCON'
+		  		hi_start_rfcon = d.last_dett_by_item_type('START_RFCON')
+			    if !hi_start_rfcon.nil?
+			  	 k[:ship] 	= hi_start_rfcon.ship.name.to_s
+			  	 k[:voyage] = hi_start_rfcon.voyage.to_s
+			  	end		  		
+		  end
+		  
 		k
-
- 		 
     } %>
 	<% group_op.sort_by{|a| 
 		[		

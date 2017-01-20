@@ -168,8 +168,9 @@ TMOV:
  CUST_INSPECTION:
   icon: '<i class="fa fa-tasks fa-2x" style="color:white;"></i>' 
   label: Custom Inspections
-  check:
-   container_in_terminal: true
+# tolto questo controllo perche' fanno visite doganali anche per container gia' trasferiti ad altro terminal  
+#  check:
+#   container_in_terminal: true
   set:
    operation_type: 'CI'
  LOCK:

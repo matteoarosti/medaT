@@ -84,6 +84,7 @@
 			        
 			        start_refresh: function() {
 			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    console.log(header_form);
 			                    header_form_values = header_form.getValues();
 
 				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
@@ -91,6 +92,16 @@
 			        },
 
 				    items: [
+				    
+				       {	
+								xtype: 'datefield',
+								width: 200, labelWidth: 80, padding: '0 0 0 10',
+				                fieldLabel: 'Da data', name: 'flt_date_from'
+				 		}, {	
+								xtype: 'datefield',
+								width: 200, labelWidth: 80, padding: '0 0 0 10',
+				                fieldLabel: 'A data', name: 'flt_date_to'
+				 		}
 				    
 					/*				    
 						{									
@@ -115,9 +126,9 @@
 				 
 				 ,  {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
 				 			handler: function(event, toolEl, panel){ 
-				 
 			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
 			                    header_form_values = header_form.getValues();
+			                    console.log(header_form_values);
 
 				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
 				 				this.up('grid').getStore().load();

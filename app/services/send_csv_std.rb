@@ -7,6 +7,70 @@ class SendCsvStd
   #esamples:
   #rails runner "SendCsvStd.new.send_TMOV(12, [12], 'matteo.arosti@gmail.com', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day)"
   
+  
+  
+  def send_GIAC(shipowner_id, shiponwer_list, email_to, only_E = true)
+    items = HandlingHeader.is_in_terminal().not_closed()
+    items = items.where(shipowner_id: shipowner_id)
+    items = items.where(container_FE: 'E') #per adesso servono solo i vuoti
+        
+    ret = []
+    ret << ['tipo', 'container', 'data_ingresso', 'stato']
+    items.each do |row|
+      data_ingresso = row.last_IN().datetime_op.strftime("%d/%m/%y %H:%M") unless row.last_IN.nil?
+      #stato
+      lock_type = row.lock_type
+      
+      #se un 'DAMAGED' verifico se e' un autorizzato
+      if row.lock_type == 'DAMAGED'
+        rhi = row.get_open_repair_handling_item
+        if !rhi.nil?
+         if !rhi.estimate_authorized_at.nil?
+          ock_type = 'DAMAGED_AU'
+         end
+        end
+      end
+
+      lock_type = 'BUONO' if lock_type.nil?     
+       
+      ret << [
+          row.equipment.equipment_type,
+          row.container_number.to_s,
+          data_ingresso,
+          lock_type
+        ]
+    end
+    
+    #preparo contenuto per xls
+    book = Spreadsheet::Workbook.new
+    sheet1 = book.create_worksheet
+    cr = 0
+    ret.each do |r|
+      sheet1.row(cr).concat r
+      cr = cr+1
+    end
+    xls_content = StringIO.new
+    book.write xls_content
+    
+    #content_file = content_file.to_xls
+    content_file = xls_content.string.force_encoding('binary')
+    file_name = 'GIACENZE_VUOTI_' + Time.now.strftime("%Y%m%d%H%M%S") + ".xls"
+    subject = 'export_GIACENZE_VUORI_xls_' + Time.now.strftime("%Y%m%d%H%M%S")
+
+    if content_file != ""
+      begin
+        print "\n -> Invio email a #{email_to}\n"
+        mm = HandlingMailer.send_codeco_email(email_to, subject, content_file, file_name).deliver!
+      rescue Exception => e
+        #gestire l'errore
+        print "ERRORE: #{e.message}"
+      end
+    end
+    
+    
+        
+  end
+  
 
   def send_TMOV(shipowner, shipwowner_list, email_to, datetime_from, datetime_to)
     #legge tutti gli hi di una data e di una compagnia

@@ -22,6 +22,7 @@ end
 #Cosco .xls
 every 1.day, :at => '8:00 am' do
   runner "SendCsvStd.new.send_TMOV(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day)"
+  runner "SendCsvStd.new.send_GIAC(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com')"
 end
 every 1.day, :at => '10:00 am' do
   runner "SendCsvStd.new.send_TMOV(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com', Time.zone.today.at_beginning_of_day, Time.zone.now)"

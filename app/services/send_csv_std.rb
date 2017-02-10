@@ -55,7 +55,7 @@ class SendCsvStd
     #content_file = content_file.to_xls
     content_file = xls_content.string.force_encoding('binary')
     file_name = 'GIACENZE_VUOTI_' + Time.now.strftime("%Y%m%d%H%M%S") + ".xls"
-    subject = 'export_GIACENZE_VUORI_xls_' + Time.now.strftime("%Y%m%d%H%M%S")
+    subject = 'export_GIACENZE_VUOTI_xls_' + Time.now.strftime("%Y%m%d%H%M%S")
 
     if content_file != ""
       begin

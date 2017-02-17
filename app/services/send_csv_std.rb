@@ -6,7 +6,84 @@ class SendCsvStd
 
   #esamples:
   #rails runner "SendCsvStd.new.send_TMOV(12, [12], 'matteo.arosti@gmail.com', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day)"
+  #rails runner "SendCsvStd.new.send_GIAC_sint(12, [12], 'matteo.arosti@gmail.com')"
   
+  
+  def send_GIAC_sint(shipowner_id, shiponwer_list, email_to, only_E = true)
+    items = HandlingHeader.is_in_terminal().not_closed()
+    items = items.where(shipowner_id: shipowner_id)
+    items = items.where(container_FE: 'E') #per adesso servono solo i vuoti
+        
+    ret = []
+    ret << ['Full/Empty', 'tipo', 'stato', 'nr']
+    items.group_by { |d|       
+      #gestisco raggruppamento con un array
+      k = {}
+      k[:container_FE] = d.container_FE
+      k[:equipment_id] = d.equipment.id
+      
+      #separo anche in base al lock
+      k[:lock_type] = d.lock_type
+      
+      #se un 'DAMAGED' verifico se e' un autorizzato
+      if d.lock_type == 'DAMAGED'
+        rhi = d.get_open_repair_handling_item
+        if !rhi.nil?
+         if !rhi.estimate_authorized_at.nil?
+          k[:lock_type] = 'DAMAGED_AU'
+         end
+        end
+      end
+      
+      #i pieni vengono divisi tra fase di import e export (se hanno booking)    
+      if d.container_FE == 'F'
+       ie = d.with_booking == true ? 'E' : 'I'
+       k[:in_import_export] = ie
+      end  
+    
+      k   
+    }.each do |krow, row|
+       
+      ret << [
+          krow[:container_FE],
+          Equipment.find(krow[:equipment_id]).equipment_type,
+          krow[:lock_type],
+          row.count()
+        ]
+    end
+    
+    #preparo contenuto per xls
+    book = Spreadsheet::Workbook.new
+    sheet1 = book.create_worksheet
+    cr = 0
+    ret.each do |r|
+      sheet1.row(cr).concat r
+      cr = cr+1
+    end
+    xls_content = StringIO.new
+    book.write xls_content
+    
+    #content_file = content_file.to_xls
+    content_file = xls_content.string.force_encoding('binary')
+    file_name = 'GIACENZE_VUOTI_' + Time.now.strftime("%Y%m%d%H%M%S") + ".xls"
+    subject = 'export_GIACENZE_VUOTI_xls_' + Time.now.strftime("%Y%m%d%H%M%S")
+
+    if content_file != ""
+      begin
+        print "\n -> Invio email a #{email_to}\n"
+        mm = HandlingMailer.send_codeco_email(email_to, subject, content_file, file_name).deliver!
+      rescue Exception => e
+        #gestire l'errore
+        print "ERRORE: #{e.message}"
+      end
+    end
+        
+  end
+  
+  
+  
+  
+    
   
   
   def send_GIAC(shipowner_id, shiponwer_list, email_to, only_E = true)
@@ -66,10 +143,10 @@ class SendCsvStd
         print "ERRORE: #{e.message}"
       end
     end
-    
-    
         
   end
+  
+  
   
 
   def send_TMOV(shipowner, shipwowner_list, email_to, datetime_from, datetime_to)

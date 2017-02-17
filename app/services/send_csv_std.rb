@@ -15,7 +15,7 @@ class SendCsvStd
     items = items.where(container_FE: 'E') #per adesso servono solo i vuoti
         
     ret = []
-    ret << ['Full/Empty', 'tipo', 'stato', 'nr']
+    ret << ['Full/Empty', 'dimensione', 'tipo', 'stato', 'nr']
     items.group_by { |d|       
       #gestisco raggruppamento con un array
       k = {}
@@ -46,6 +46,7 @@ class SendCsvStd
        
       ret << [
           krow[:container_FE],
+          Equipment.find(krow[:equipment_id]).sizetype,
           Equipment.find(krow[:equipment_id]).equipment_type,
           krow[:lock_type],
           row.count()
@@ -65,8 +66,8 @@ class SendCsvStd
     
     #content_file = content_file.to_xls
     content_file = xls_content.string.force_encoding('binary')
-    file_name = 'GIACENZE_VUOTI_' + Time.now.strftime("%Y%m%d%H%M%S") + ".xls"
-    subject = 'export_GIACENZE_VUOTI_xls_' + Time.now.strftime("%Y%m%d%H%M%S")
+    file_name = 'GIACENZE_VUOTI_SINT_' + Time.now.strftime("%Y%m%d%H%M%S") + ".xls"
+    subject = 'export_GIACENZE_VUOTI_SINT_xls_' + Time.now.strftime("%Y%m%d%H%M%S")
 
     if content_file != ""
       begin

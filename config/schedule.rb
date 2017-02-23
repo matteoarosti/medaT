@@ -21,12 +21,12 @@ end
 
 #Cosco .xls
 every 1.day, :at => '8:00 am' do
-  runner "SendCsvStd.new.send_TMOV(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day)"
+  runner "SendCsvStd.new.send_TMOV(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day, true)"
   runner "SendCsvStd.new.send_GIAC(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu')"
   runner "SendCsvStd.new.send_GIAC_sint(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu')"
 end
 every 1.day, :at => '10:00 am' do
-  runner "SendCsvStd.new.send_TMOV(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu', Time.zone.today.at_beginning_of_day, Time.zone.now)"
+  runner "SendCsvStd.new.send_TMOV(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu', Time.zone.today.at_beginning_of_day, Time.zone.now, true)"
   runner "SendCsvStd.new.send_GIAC(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu')"
   runner "SendCsvStd.new.send_GIAC_sint(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu')"
 end

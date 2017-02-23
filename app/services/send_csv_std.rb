@@ -5,7 +5,7 @@ class SendCsvStd
   end
 
   #esamples:
-  #rails runner "SendCsvStd.new.send_TMOV(12, [12], 'matteo.arosti@gmail.com', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day)"
+  #rails runner "SendCsvStd.new.send_TMOV(12, [12], 'matteo.arosti@gmail.com', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day, true)"
   #rails runner "SendCsvStd.new.send_GIAC_sint(12, [12], 'matteo.arosti@gmail.com')"
   
   
@@ -150,11 +150,12 @@ class SendCsvStd
   
   
 
-  def send_TMOV(shipowner, shipwowner_list, email_to, datetime_from, datetime_to)
+  def send_TMOV(shipowner, shipwowner_list, email_to, datetime_from, datetime_to, only_E = false)
     #legge tutti gli hi di una data e di una compagnia
     his = HandlingItem.where({handling_headers: {shipowner_id: shipowner} })
     his = his.joins(:handling_header)
     his = his.where({operation_type: 'MT'}) #devono essere inviati solo i movimenti terminal
+    his = his.where({container_FE: 'E'}) if only_E == true
     
     his = his.where("datetime_op >= ?", datetime_from)
     his = his.where("datetime_op <= ?", datetime_to)

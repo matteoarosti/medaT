@@ -1,0 +1,603 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  <% unless on_open_tab_id.nil? %>
+  	id: <%= raw on_open_tab_id.to_json -%>,
+  <% end %>
+  closable: true,
+  title: <%= raw "ShipPrepare [#{filtered_type}]".to_json -%>,
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},  	
+
+  items: [
+       
+   // grid con righe import
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'ship_prepares/get_row_by_filtered_type').to_json -%>,
+        	            extraParams: {
+        	            	filtered_type: <%= raw filtered_type.to_json -%>,
+        	            	form_user: {}
+        	            },
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	   dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
+        	    items: [
+        	    '->', {
+				    xtype: 'form',	
+				    height: 50,
+				    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+				    padding: '10 10 10 10',
+				    
+				    defaults: {
+				    	xtype: 'textfield',
+				    	labelAlign: 'right',
+				    	width: 150, labelWidth: 70, padding: '0 0 0 10',
+				    	fieldStyle: 'font-size: 16px; text-transform: uppercase;',
+		                enableKeyEvents: true,
+		                listeners: {                   
+			                'keypress': function(field,event){
+			                    if (event.getKey() == event.ENTER){
+			                        this.up('form').start_refresh();
+			                    }
+			                }                                   
+			            }
+			        },
+			        
+			        start_refresh: function() {
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    console.log(header_form);
+			                    header_form_values = header_form.getValues();
+
+				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
+				 				this.up('grid').getStore().load();			        
+			        },
+
+				    items: [
+				    
+				       {	
+								xtype: 'datefield',
+								width: 200, labelWidth: 80, padding: '0 0 0 10',
+				                fieldLabel: 'Da data', name: 'flt_date_from'
+				 		}, {	
+								xtype: 'datefield',
+								width: 200, labelWidth: 80, padding: '0 0 0 10',
+				                fieldLabel: 'A data', name: 'flt_date_to'
+				 		}
+				 		
+				    ]
+				 }
+				 
+				 ,  {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
+				 			handler: function(event, toolEl, panel){ 
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    header_form_values = header_form.getValues();
+			                    console.log(header_form_values);
+
+				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
+				 				this.up('grid').getStore().load();
+				 			}
+				 	}
+				 ]
+			  }
+			],
+        	           	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: '',
+			        width: 30,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'customer_id',
+			        text: 'Cliente',
+			        width: 200,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '<h3>' + rec.get('customer').name + '</h3>';
+			     	 ret += '<h5>Tipo carico: ' + rec.get('load_type') + '</h5>';
+			          return ret;			         
+			        }			        
+			    }, {
+			        dataIndex: 'ship_id',
+			        text: 'Nave',
+			        width: 200,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '<h3>' + rec.get('ship').name + '</h3>';
+			         ret += '<h5>Viaggio: ' + rec.get('voyage') + '</h5>';
+			          return ret;			         
+			        }			        
+			    }			    
+			    
+			    , {
+			        text: 'Data',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';			         
+					 ret += '<tr><th>Reg. il</th><td class=normal>' + Ext.util.Format.date(rec.get('created_at'), 'd-m-Y') + '</td></tr>';			         
+					 ret += '<tr><th>Data viaggio</th><td>' + Ext.util.Format.date(rec.get('departure_date'), 'd-m-Y') + '</td></tr>';
+					 ret += '<tr><th>Eseguito</th><td class=ok>' + Ext.util.Format.date(rec.get('execution_date'), 'd-m-Y') + '</td></tr>';
+			         ret += '</table>';
+			         return ret;
+			        }			        	        
+			    }			        	        
+
+
+			    , {
+			        text: 'Nr container',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';			         
+					 ret += '<tr><th>ICOP</th><td>' + rec.get('nr_container_01') + '</td></tr>';			         
+					 ret += '<tr><th>IP</th><td>' + rec.get('nr_container_02') + '</td></tr>';
+					 ret += '<tr><th>ACT</th><td>' + rec.get('nr_container_03') + '</td></tr>';
+			         ret += '</table>';
+			         return ret;
+			        }			        	        
+			    }			        	        
+
+			    
+				, {
+			        text: 'Chiudi', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
+			        	var loc_grid = this;
+			        	
+			        	//if (rec.get('weigh_status') == 'CLOSE') return '';
+			        	
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            			          
+			                ok_img = 'fa-check-square-o';
+			                var set_external = true;
+		                	btn_cls = 'btn-used';
+		                	if (Ext.isEmpty(rec.get('execution_date')) == true)
+		                	 btn_cls = 'btn-ok';
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                				                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+								cls: btn_cls,								
+		                		scale: 'large',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();
+				                			                             
+			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+			                           header_form_values = header_form.getValues();
+			                             
+           								loc_form = Ext.create('Ext.form.Panel', {
+											    title: '',
+											    frame: true,
+											    bodyPadding: 10,
+											    defaultType: 'textfield',
+											    	layout: {
+													    type: 'vbox',
+													    align : 'stretch',
+													    pack  : 'start',
+													},
+											    items: [
+											        {xtype: 'hiddenfield',   name: 'id', value: rec.get('id')},
+											        {xtype: 'textareafield', name: 'execution_notes', allowBlank: true, fieldLabel: 'Note di chiusura', labelAlign: 'top', value: rec.get('execution_notes')},
+											        {xtype: 'datefield',     name: 'execution_date',  allowBlank: true, fieldLabel: 'Data chiusura', labelAlign: 'top', value: rec.get('execution_date')}
+											        											      
+											      										    										    										    
+											    ]
+											    ,
+								    			dockedItems: [{
+												    xtype: 'toolbar',
+												    dock: 'right',
+												    width: 135,
+													defaults: {
+												        xtype: 'button', scale: 'medium', textAlign: 'left'
+									                },			    
+												    margin: '5 5 5 5',
+											    
+											     	items:
+												        [{
+												            text: 'Conferma',
+												            scale: 'large', cls: 'btn-confirm',
+												            handler: function (btn, evt) {
+												                           
+												             form = this.up('form').getForm();
+												             tmp_win  = this.up('window');
+												             if (form.isValid()) {
+												                btn.disable();
+												                
+																	  Ext.Ajax.request({
+														                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'set_execution').to_json -%>,
+														                    waitMsg: 'Salvataggio in corso....',
+																			method:'POST',                    
+														                    jsonData: {data: form.getValues()},	
+														             	
+																			success: function(result, request) {					
+																				var returnData = Ext.JSON.decode(result.responseText);
+																				
+																				//error
+																				if (returnData.success == false){
+																					Ext.MessageBox.show({
+																                        title: 'EXCEPTION',
+																                        msg: returnData.message,
+																                        icon: Ext.MessageBox.ERROR,
+																                        buttons: Ext.Msg.OK
+															                    	})
+															                      return false;										
+																				}								
+																 							
+																 				//ok
+																 				  tmp_win.close();
+																 				  loc_grid.store.load();
+																 							
+																			}, scope: this,
+																			
+																			failure: function(rec, op) {
+																				var result = Ext.JSON.decode(op.getResponse().responseText);
+																				Ext.MessageBox.show({
+															                        title: 'EXCEPTION',
+															                        msg: result.message,
+															                        //icon: Ext.MessageBox.ERROR,
+															                        buttons: Ext.Msg.OK
+														                    	})					
+																			}, scope: this,						
+																							 
+																    	});	    											                    
+											                    
+											                    return false;
+												             }
+												            }
+												          }, 
+												          
+												          {
+												            text: 'Chiudi',												            
+												            scale: 'large',
+												            handler: function (btn, evt) {
+												            	tmp_win  = this.up('window');
+												            	tmp_win.close();
+												            }
+												          }
+												          
+												         ]
+	  												}] 
+	  												
+	  											
+   												
+   												
+   														  												
+											});		
+											
+				                           loc_win = Ext.create('Ext.window.Window',{
+											    layout: 'fit',
+											    items: loc_form,
+											    title: 'Registra peso',
+											    width: 500,
+											    height: 350,
+											    id: 'myWindow'
+											}).show();
+														                             
+			                           	return false;
+
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }
+
+<% if User.current.admin_can?(:ship_prepares, :amount) %>
+			 , {
+			        dataIndex: 'amount',
+			        text: 'Importo',
+			        width: 80, align: 'right',
+			        renderer: function (value, metaData) {
+		                 return Ext.util.Format.number(value, "0,000.00");
+		             }
+			    }
+			    
+			    
+			    
+			    
+				, {
+			        text: 'Imposta', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
+			        	var loc_grid = this;
+			        	
+			        	//if (rec.get('weigh_status') == 'CLOSE') return '';
+			        	
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            			          
+			                ok_img = 'fa-eur';
+			                var set_external = true;
+			                var btn_cls = 'btn-warning';
+			                
+		                	set_external = false;
+		                	btn_cls = 'btn-used';
+		                	if (Ext.isEmpty(rec.get('amount')) == true)
+		                	 btn_cls = 'btn-ok';
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                				                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+								cls: btn_cls,								
+		                		scale: 'large',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();
+				                			                             
+			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+			                           header_form_values = header_form.getValues();
+			                              
+			                             
+           								loc_form = Ext.create('Ext.form.Panel', {
+											    title: '',
+											    frame: true,
+											    bodyPadding: 10,
+											    defaultType: 'textfield',
+											    	layout: {
+													    type: 'vbox',
+													    align : 'stretch',
+													    pack  : 'start',
+													},
+											    items: [
+											        {xtype: 'hiddenfield',   name: 'id', value: rec.get('id')},
+											        {xtype: 'numberfield',   name: 'amount', allowBlank: false, fieldLabel: 'Importo', labelAlign: 'left', value: rec.get('amount')},
+											        											      
+											      										    										    										    
+											    ]
+											    ,
+								    			dockedItems: [{
+												    xtype: 'toolbar',
+												    dock: 'right',
+												    width: 135,
+													defaults: {
+												        xtype: 'button', scale: 'medium', textAlign: 'left'
+									                },			    
+												    margin: '5 5 5 5',
+											    
+											     	items:
+												        [{
+												            text: 'Conferma',
+												            scale: 'large', cls: 'btn-confirm',
+												            handler: function (btn, evt) {
+												                           
+												             form = this.up('form').getForm();
+												             tmp_win  = this.up('window');
+												             if (form.isValid()) {
+												                btn.disable();
+												                
+																	  Ext.Ajax.request({
+														                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'set_amount').to_json -%>,
+														                    waitMsg: 'Salvataggio in corso....',
+																			method:'POST',                    
+														                    jsonData: {data: form.getValues()},	
+														             	
+																			success: function(result, request) {					
+																				var returnData = Ext.JSON.decode(result.responseText);
+																				
+																				//error
+																				if (returnData.success == false){
+																					Ext.MessageBox.show({
+																                        title: 'EXCEPTION',
+																                        msg: returnData.message,
+																                        icon: Ext.MessageBox.ERROR,
+																                        buttons: Ext.Msg.OK
+															                    	})
+															                      return false;										
+																				}								
+																 							
+																 				//ok
+																 				  tmp_win.close();
+																 				  loc_grid.store.load();
+																 							
+																			}, scope: this,
+																			
+																			failure: function(rec, op) {
+																				var result = Ext.JSON.decode(op.getResponse().responseText);
+																				Ext.MessageBox.show({
+															                        title: 'EXCEPTION',
+															                        msg: result.message,
+															                        //icon: Ext.MessageBox.ERROR,
+															                        buttons: Ext.Msg.OK
+														                    	})					
+																			}, scope: this,						
+																							 
+																    	});	    											                    
+											                    
+											                    return false;
+												             }
+												            }
+												          }, 
+												          
+												          {
+												            text: 'Chiudi',												            
+												            scale: 'large',
+												            handler: function (btn, evt) {
+												            	tmp_win  = this.up('window');
+												            	tmp_win.close();
+												            }
+												          }
+												          
+												          
+												         ]
+	  												}] 
+	  												
+	  											
+   												
+   												
+   														  												
+											});		
+											
+				                           loc_win = Ext.create('Ext.window.Window',{
+											    layout: 'fit',
+											    items: loc_form,
+											    title: 'Registra peso',
+											    width: 500,
+											    height: 350,
+											    id: 'myWindow'
+											}).show();
+														                             
+			                           	return false;
+
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }
+			    
+			    
+<% end %>			    
+
+			    
+			    
+			          
+        ], //columns
+			    
+			    
+				get_cls_button(rec){				
+		        	cls_button = 'btn-warning';
+		        	if (Ext.isEmpty(rec.get('estimate_authorized_at')) == false)
+		        		cls_button = 'btn-ok';				
+				
+					return cls_button;
+				},
+			    
+			    listeners: {
+	                	itemcontextmenu : function(item, record, index, e, eOpts){
+	                		eOpts.stopEvent();
+                            var xy = eOpts.getXY();	                	
+                            new Ext.menu.Menu({
+                                items : [
+                                         {
+                                            text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
+                                            handler: function(){
+									     	 	new_win = acs_show_win_std('Modifica', <%= raw url_for(:controller=>'ship_prepares', 
+									     	 				:action=>'modify_record').to_json -%>,
+									     	 				{rec_id: record.get('id'), from_grid_id: this.id}, 800, 400);										                                                    
+                                            }, scope: this
+                                          }
+                                          
+<% if User.current.admin_can?(:ship_prepares, :amount) %>                                          
+                                          , {
+                                            text : '<i class="fa fa-trash-o fa-1x"> Elimina</i>',                                                                                                        
+                                            handler: function(){
+                                            
+                                            	tmp_grid = this;									     	 	
+
+												Ext.MessageBox.confirm('Richieta conferma', 'Eliminare l\'attivit&agrave; corrente?', function(btn){
+												
+													if(btn === 'yes'){
+													
+														Ext.Ajax.request({
+										                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'exe_delete_record').to_json -%>,
+										                    waitMsg: 'Eliminazione in corso....',
+															method:'POST',                     
+										                    jsonData: {rec_id: record.get('id')},	
+										             	
+															success: function(result, request) {
+																	var returnData = Ext.JSON.decode(result.responseText);
+																	if (returnData.success == false){
+																		Ext.MessageBox.show({
+													                        title: 'EXCEPTION',
+													                        msg: returnData.message,
+													                        icon: Ext.MessageBox.ERROR,
+													                        buttons: Ext.Msg.OK
+												                    	})
+												                      return false;										
+																	}																							
+															
+																tmp_grid.store.load();																						 						
+															}, scope: this,
+															
+															failure: function(rec, op) {
+																var result = Ext.JSON.decode(op.getResponse().responseText);
+																Ext.MessageBox.show({
+											                        title: 'EXCEPTION',
+											                        msg: result.message,
+											                        icon: Ext.MessageBox.ERROR,
+											                        buttons: Ext.Msg.OK
+										                    	})					
+															}, scope: this,						
+																			 
+												    	});													
+													
+													} //yes
+													
+												}); //confirm
+
+
+										                                                    
+                                            }, scope: this
+                                          }
+<% end %>                                          
+                                          
+                                          
+                                         ]
+                               }).showAt(xy);
+	                	
+	                	}			    					    
+					}
+
+				    
+
+                        	    
+        	}    
+   
+   
+   
+  ]
+ }
+ ]
+}

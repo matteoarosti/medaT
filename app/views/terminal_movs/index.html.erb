@@ -480,6 +480,61 @@ Ext.define("plugin.Printer", {
                            	 
                             ]
                     }, {
+                        task:<%= raw t("menu.ship_prepares.menu").to_json %>,
+                        iconCls:'task-folder',
+                        expanded: true,
+                        children:
+                            [
+                             {
+                                task:<%= raw t("menu.ship_prepares.customers").to_json %>,
+                                url: '<%= url_for(:controller=>'customers', :action=>'extjs_sc_crt_tab') -%>',                                
+                                leaf:true,
+                                tab_id: 'activities_customers_list'
+                                
+                           	 }, {
+                                task:<%= raw t("menu.ship_prepares.new").to_json %>,
+                                url: '<%= url_for(:controller=>'ship_prepares', :action=>'create_new') -%>',
+                                leaf:true,
+                                op: 'new_tab',
+                                tab_id: 'ship_prepares_new'
+                           	 }, {
+                                task:<%= raw t("menu.ship_prepares.open").to_json %>,
+                                url: '<%= url_for(:controller=>'ship_prepares', :action=>'list', :filtered_type => 'OPEN') -%>',
+                                leaf:true,
+                                op: 'new_tab',
+                                tab_id: 'customers_OPEN'
+                           	 }
+                           	 
+<% if User.current.admin_can?(:ship_prepares, :amount) %>                           	 
+                           	 , {
+                                task:<%= raw t("menu.ship_prepares.set_amount").to_json %>,
+                                url: '<%= url_for(:controller=>'ship_prepares', :action=>'list', :filtered_type => 'SET_AMOUNT') -%>',
+                                leaf:true,
+                                op: 'new_tab',
+                                tab_id: 'ship_prepares_SET_AMOUNT'
+                           	 }
+<% end %>                           	 
+                           	 
+                           	 , {
+                                task:<%= raw t("menu.ship_prepares.all").to_json %>,
+                                url: '<%= url_for(:controller=>'ship_prepares', :action=>'list', :filtered_type => 'ALL') -%>',
+                                leaf:true,
+                                op: 'new_tab',
+                                tab_id: 'activities_ALL'
+                           	 }
+                           	 
+<% if 1==2 && User.current.admin_can?(:activity, :amount) %>
+							 , {
+                                task:<%= raw t("menu.report.reports").to_json %>,
+                                url: '<%= url_for(:controller=>'ship_prepares', :action=>'report_parameters') -%>',                                
+                                op: 'new_win',
+                                leaf:true
+                           	 }
+<% end %>                           	 
+                           	 
+                           	 
+                            ]
+                    }, {
                         task:<%= raw t("menu.user_manager.users").to_json %>,
                         iconCls:'task-folder',
                         expanded: true,

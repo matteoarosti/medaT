@@ -1,0 +1,103 @@
+{
+ "success": true,
+	 "items": [
+	 	{
+	 	 xtype: "panel",
+	 	 id: 'ship_prepares_new',
+	 	 title: "New ShipPrepare",
+	 	 closable: true,
+		 layout: {
+		    type: 'vbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		 }, 
+	 	 items: [ 
+			  {
+			   xtype: 'form',
+			   flex: 1,	      	
+			   
+			   flex: 1,
+				layout: {
+				    type: 'vbox',
+				    align : 'stretch',
+				    pack  : 'start',
+				}, 
+			     defaults: {
+			     	 xtype: 'textfield',
+			     	 margin: '10 10 0 10',
+			     },	  
+			     
+			   items: [
+			   
+			    	<%= raw extjs_std_hiddenfield('id', @item) -%>
+			      , <%= raw extjs_std_combo_model('customer', @item) -%>
+			      , <%= raw extjs_std_combo_model('ship', @item) -%>
+			      , <%= raw extjs_std_textfield('load_type', @item, {fieldLabel: 'Tipo carico'}) -%>
+			      , <%= raw extjs_std_textfield('voyage', @item) -%>
+			      , <%= raw extjs_std_datefield('departure_date', @item, {:allowBlank=>true, :fieldLabel => 'Data partenza'}) -%>
+			      
+			      , <%= raw extjs_std_numberfield('nr_container_01', @item, {fieldLabel: 'Nr cont. ICOP'}) -%>
+			      , <%= raw extjs_std_numberfield('nr_container_02', @item, {fieldLabel: 'Nr cont. IP'}) -%>
+			      , <%= raw extjs_std_numberfield('nr_container_03', @item, {fieldLabel: 'Nr cont. ACT'}) -%>
+			      
+			      , <%= raw extjs_std_textareafield('notes', @item) -%>			      
+			    ]
+			    
+			    
+				, buttons: [
+					{
+			            text: 'Salva',
+			            handler: function (btn, evt) {              
+			             form = this.up('form').getForm();
+			             if (form.isValid()) {
+			             
+			             
+							  Ext.Ajax.request({
+				                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'create_new_exe').to_json -%>,
+				                    waitMsg: 'Salvataggio in corso....',
+									method:'POST',                    
+				                    jsonData: {data: form.getValues()},	
+				             	
+									success: function(result, request) {					
+										var returnData = Ext.JSON.decode(result.responseText);
+										
+										//error
+										if (returnData.success == false){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: returnData.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})
+					                      return false;										
+										}								
+						 							
+						 				//ok
+						 				  Ext.Msg.alert('Message', 'Registrazione avvenuta con successo');
+						 				  form.reset();
+						 							
+									}, scope: this,
+									
+									failure: function(rec, op) {
+										var result = Ext.JSON.decode(op.getResponse().responseText);
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: result.message,
+					                        //icon: Ext.MessageBox.ERROR,
+					                        buttons: Ext.Msg.OK
+				                    	})					
+									}, scope: this,						
+													 
+						    	});	    
+			             
+			             }             
+			           }
+			        }					
+				] //buttons
+			    
+			    
+			   }
+		 ]
+		}	   
+	 ]
+}

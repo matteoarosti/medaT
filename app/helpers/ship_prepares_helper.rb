@@ -1,0 +1,2 @@
+module ShipPreparesHelper
+end

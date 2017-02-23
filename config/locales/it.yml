@@ -362,4 +362,12 @@ it:
       open: "In corso"
       set_amount: "Da valutare"
       all: "Tutti"
+    ship_prepares:
+      menu: "Carico Navi"
+      new: "Crea nuovo"
+      customers: "Anag. Clienti"
+      list: "Elenco"
+      open: "In corso"
+      set_amount: "Da valutare"
+      all: "Tutti"
       

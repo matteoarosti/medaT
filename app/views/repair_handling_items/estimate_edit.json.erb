@@ -456,7 +456,18 @@
 				     	 		500, 400, my_listeners);										
 			    			
 			    		}
-			    	},{xtype: 'tbfill'}, 
+			    	},{xtype: 'tbfill'},
+			    	
+			    	{text: 'Anteprima', iconCls: 'fa fa-search fa-2x',			    	
+				    		handler: function(){
+							  acs_show_win_std('Parametri di stampa', <%= raw url_for(:controller=>'repair_handling_items', :action=>'print_estimate_open_params').to_json -%>,
+				     	 		{rhi_id: <%= @item.id -%>},
+				     	 		400, 400);										
+							  
+				    		}				    	
+			    	},
+			    	
+			    	 
 			    	{text: 'Chiudi', iconCls: 'fa fa-plus fa-2x', cls: 'btn-close', 
 			    		handler: function(){
 				    		this.up('window').close();			    			

@@ -428,7 +428,7 @@
 			    ]
 			    
 			    
-		<% unless params[:only_view] == 'Y' %>	    
+	    
 			    
 			, dockedItems: [
 			  {
@@ -440,6 +440,10 @@
                 },			    
 			    margin: '40 10 10 10',
 			    items: [
+			    
+			    
+		<% unless params[:only_view] == 'Y' %>			    
+			    
 			    	{text: 'Nuova riga', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add', 
 			    		handler: function(){
 			    			//apro la form per una nuova riga di dettaglio
@@ -456,7 +460,11 @@
 				     	 		500, 400, my_listeners);										
 			    			
 			    		}
-			    	},{xtype: 'tbfill'},
+			    	},
+		<% end %>
+			    	
+			    	
+			    	{xtype: 'tbfill'},
 			    	
 			    	{text: 'Anteprima', iconCls: 'fa fa-search fa-2x',			    	
 				    		handler: function(){
@@ -474,6 +482,7 @@
 			    		}
 			    	} 
 			    	
+		<% unless params[:only_view] == 'Y' %>			    	
 			     <% if params[:authorizing] == 'Y' %>			    	
 			    	, {text: 'Conferma (no email)', iconCls: 'fa fa-plus fa-2x', cls: 'btn-ok',			    	
 				    		handler: function(){
@@ -484,7 +493,7 @@
 					    	  }, this);			    			
 				    		}
 			    	}			    	
-			     <% end %>	
+	
 
 			    	, {text: 'Conferma', iconCls: 'fa fa-plus fa-2x', cls: 'btn-ok',			    	
 				    		handler: function(){
@@ -495,13 +504,16 @@
 					    	  }, this);			    			
 				    		}				    	
 			    	}
+		  <% end %>
 			     
-			     
+		 <% end %>			     
 			    	
 			    ]
 			  }
 			 ]
 
+
+<% unless params[:only_view] == 'Y' %>
 		, listeners : {
 		    itemdblclick: function(dv, rec, item, index, e) {						    	
  				my_listeners = {
@@ -516,9 +528,9 @@
 
 		    }, scope: this
 		} //listeners
+<% end %>
 
-
-		<% end %>	    
+	    
 
                         	    
         	}    

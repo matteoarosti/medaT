@@ -118,11 +118,11 @@ def open_import
 end
 
 def get_import_row
- logger.info params.to_yaml
  @ih = ImportHeader.find(params[:import_header_id])
  ret = {}
    items = @ih.import_items
    items = items.where("status IS NULL") unless params[:show_imported].to_i == 1
+   items = items.where("container_number LIKE ?", "%#{params[:flt_num_container].upcase}%") if !params[:flt_num_container].to_s.empty?
    ret[:items] = items.order(:container_number).as_json(ImportItem.as_json_prop)
    ret[:success] = true
    render json: ret 

@@ -76,12 +76,20 @@
 					 , {	
 							flex: 1,
 							xtype: 'checkboxfield',
-			                boxLabel: 'Mostra anche gi&agrave; importati',
+			                boxLabel: 'Anche importati',
 			                itemId: 'show_imported',
 			                name: 'show_imported',
 			                inputValue: '1'
 					      }
 				          
+				     
+				     , {	
+								width: 180, labelWidth: 100, padding: '0 0 0 10', margin: '0 0 0 30',
+								xtype: 'textfield',
+								fieldStyle: 'font-size: 16px; text-transform: uppercase;',
+				                fieldLabel: 'Ricerca cont.',
+				                name: 'flt_num_container'
+				      }
 				     
 				    ]
 				 }
@@ -89,7 +97,8 @@
 				 , '->'
 				 
 				 
-				 , {iconCls: 'fa fa-check-circle', text: 'Importa tutti', cls: 'btn-ok',
+				 , {iconCls: 'fa fa-check-circle fa-2x', scale: 'large',
+				 		text: 'Importa tutti', cls: 'btn-ok',
 						handler: function(event, toolEl, panel){
 											form = this.up('panel').down('form').getForm();
 											grid = this.up('grid');
@@ -147,9 +156,8 @@
 				 		}
 				 	},
 				 
-				    {iconCls: 'fa fa-refresh', handler: function(event, toolEl, panel){
-				    
-			                    
+				    {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
+				    	handler: function(event, toolEl, panel){
 			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
 			                    header_form_values = header_form.getValues();
 
@@ -158,8 +166,11 @@
 				    			 show_imported_out = 1;
 				    			else
 				    			 show_imported_out = 0;
-				    			this.up('grid').store.proxy.extraParams.show_imported = show_imported_out;								    					 
-				 				this.up('grid').getStore().load();}}
+				    			this.up('grid').store.proxy.extraParams.show_imported = show_imported_out;
+				    			this.up('grid').store.proxy.extraParams.flt_num_container = header_form.findField('flt_num_container').getValue();								    					 
+				 				this.up('grid').getStore().load();
+				 		}
+				 	}
 				 ]
 			  }
 			],

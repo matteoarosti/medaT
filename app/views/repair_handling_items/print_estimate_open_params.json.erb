@@ -25,7 +25,7 @@
 		{xtype: 'checkbox', value: false, name: 'show_customer_prices', fieldLabel: 'Mostra importi a compagnia', inputValue: true, uncheckedValue: false},
      	{xtype: 'checkbox', value: true, name: 'show_provider_prices', fieldLabel: 'Mostra importi da fornitore', inputValue: true, uncheckedValue: false},
 <% else %>
-		{xtype: 'hidden', value: true, name: 'show_provider_prices'},     	
+		{xtype: 'checkbox', value: true, name: 'show_provider_prices', fieldLabel: 'Mostra importi da fornitore', inputValue: true, uncheckedValue: false},     	
 <% end %>     	
      	{xtype: 'checkbox', value: false, name: 'show_deleted_row', fieldLabel: 'Mostra righe annullate', inputValue: true, uncheckedValue: false}
 	],

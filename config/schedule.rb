@@ -37,11 +37,9 @@ end
 
 
 #CMA .xls
-every 1.day, :at => '10:22 pm' do
+every 1.day, :at => '00:02 am' do
  runner_file "lib/send_xls_CMA.rb"
 end
-
-
 
 
 #riavvio ambiente spring (sembra ogni tanto bloccare le chiamate rails schedulate

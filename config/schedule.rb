@@ -3,6 +3,8 @@
 # Istruzioni per rigenerare /etc/crontab
 # $ whenever -w
 
+job_type :runner_file,  "cd :path && bin/rails runner -e :environment :task :output"
+
 set :environment, "development"
 
 every 3.minute do
@@ -35,8 +37,8 @@ end
 
 
 #CMA .xls
-every 1.day, :at => '10:10 pm' do
- runner "lib/senx_xls_CMA.rb"
+every 1.day, :at => '10:18 pm' do
+ runner_file "lib/senx_xls_CMA.rb"
 end
 
 

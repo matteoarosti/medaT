@@ -19,6 +19,8 @@ every 2.hours, at: 30 do
   runner "SendCodecoStd.new.call(12, [12], ['E'], 'edifact@fmg.eu;matteo.arosti@gmail.com', 'ITAOIY3', 'COSCO', 1000000, 2000000, 'CODECO COSCO')"
 end
 
+
+
 #Cosco .xls
 every 1.day, :at => '8:00 am' do
   runner "SendCsvStd.new.send_TMOV(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu', Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day, true)"
@@ -30,6 +32,14 @@ every 1.day, :at => '10:00 am' do
 #  runner "SendCsvStd.new.send_GIAC(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu')"
   runner "SendCsvStd.new.send_GIAC_sint(12, [12], 'r.carbonari@fmg.eu;matteo.arosti@gmail.com;c.parrella@fmg.eu')"
 end
+
+
+#CMA .xls
+every 1.day, :at => '10:10 pm' do
+ runner lib/senx_xls_CMA.rb
+end
+
+
 
 
 #riavvio ambiente spring (sembra ogni tanto bloccare le chiamate rails schedulate

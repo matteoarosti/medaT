@@ -36,7 +36,7 @@ end
 
 #CMA .xls
 every 1.day, :at => '10:10 pm' do
- runner lib/senx_xls_CMA.rb
+ runner "lib/senx_xls_CMA.rb"
 end
 
 

@@ -95,6 +95,13 @@
 			    columns: [{
 			        dataIndex: 'voyage',
 			        text: 'Viaggio',
+			        flex: 0.6,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h3>' + value + '</h3>';
+			        }			        
+			    }, {
+			        dataIndex: 'hh_type_descr',
+			        text: 'Tipologia',
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         return '<h3>' + value + '</h3>';

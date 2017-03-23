@@ -259,4 +259,17 @@ INSPE:
    operation_type: 'CI'  
    handling_header_status: CLOSE
   
+########################################################################
+#ONLY LOADING (IMBARCO CONTAINER NON GESTITI A TERMINAL)
+OLOAD:
+########################################################################
+ initial_handling: O_LOAD
+ O_LOAD:
+  label: Out For Load
+  icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
+  set:
+   container_in_terminal: false
+   container_FE_copy: true
+   handling_header_status: CLOSE
+   operation_type: 'OT'   
   

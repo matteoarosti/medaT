@@ -75,10 +75,10 @@ group_sottobordo = items.group_by { |d| d.created_user_id }
 				 </tr>
 		 		<% ###group_eq = op_val.group_by { |d| d.equipment_id } %>
 				<% op_val.each do |row| %>
-					<% eq = Equipment.find(row.equipment_id) %>
+					<% eq = Equipment.find(row.equipment_id) unless row.equipment_id.nil? %>
 		 			<tr>
-						<td><%= eq.sizetype -%></td>
-						<td><%= eq.equipment_type -%></td>				
+						<td><%= eq.sizetype unless eq.nil? -%></td>
+						<td><%= eq.equipment_type unless eq.nil? -%></td>				
 						<td align=right><%= row.C_ROW -%></td>
 					</tr>
 				<% end %>

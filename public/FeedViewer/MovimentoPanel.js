@@ -204,9 +204,10 @@ Ext.define('FeedViewer.MovimentoPanel', {
 		                        	store: {
 		                        	  fields: ['cod', 'descr'],
 		                        	  data: [ 
-		                        	         {cod: 'TMOV', descr: 'Movimento terminal'},
+		                        	         {cod: 'TMOV', descr: 'Mov. terminal'},
 		                        	         {cod: 'FRCON', descr: 'Allaccio frigo'},
-		                        	         {cod: 'INSPE', descr: 'Visita doganale'}
+		                        	         {cod: 'INSPE', descr: 'Visita doganale'},
+		                        	         {cod: 'OLOAD', descr: 'Imb. c/o altro term.'}
 		                        	  ]
 		                        	}
 		                        }		                        

@@ -81,17 +81,20 @@ group_sottobordo = items.group_by { |d| d.created_user_id }
 
 		<% op_val.sort_by{|a| 
 		
+			eq_type = "_"
+			eq_type = a.handling_header.equipment.equipment_type unless a.handling_header.equipment.nil?
+		
 			if formValues['seq_ord'] == 'date_tipo'
-				[a.datetime_op, a.handling_header.equipment.equipment_type]
+				[a.datetime_op, eq_type]
 			else
-				[a.handling_header.equipment.equipment_type, a.datetime_op]
+				[eq_type, a.datetime_op]
 			end
 		
 		
-			}.each do |row| %>
-			<% eq = Equipment.find(row.handling_header.equipment_id) %>
+			}.each do |row|
 			
-			<%
+			 eq = Equipment.find(row.handling_header.equipment_id) unless row.handling_header.equipment_id.nil? 
+			
 			 out_ship 		= ""
 			 out_voyage		= ""
 			 out_booking 	= ""
@@ -147,7 +150,7 @@ group_sottobordo = items.group_by { |d| d.created_user_id }
 						
  			<tr>
  				<td><%= row.datetime_op.strftime("%d/%m/%y %H:%M") -%></td>
-				<td><%= eq.equipment_type -%></td>				
+				<td><%= eq.equipment_type unless eq.nil? -%></td>				
 				<td><%= row.handling_header.container_number.to_s -%></td>
 				<td><%= row.container_FE == 'E' ? 'Vuoto' : 'Pieno' -%></td>
 				<td><%= out_booking -%></td>

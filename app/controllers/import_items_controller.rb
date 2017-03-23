@@ -138,6 +138,10 @@ class ImportItemsController < ApplicationController
  #################################################   
      hh = HandlingHeader.find_exist(rec, params)
      
+     #se e' una uscita con container non gestiti, creo al volo l'handling_header
+     if hh==false && rec.import_header.handling_type == 'OLOAD'
+       hh = HandlingHeader.create_new(rec, params)
+     end
      
      #errore se non trovo il movimento aperto per il container
      if hh == false
@@ -146,7 +150,7 @@ class ImportItemsController < ApplicationController
         return {:success => ret_status, :message => message}
      end 
      
-     unless rec.import_header.handling_type == 'FRCON'
+     unless ['FRCON', 'OLOAD'].include?(rec.import_header.handling_type)
        #errore se FE non coincide tra la lista di imbarco e il movimento aperto
        if rec.container_status != hh.container_FE
          ret_status  = false

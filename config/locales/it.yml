@@ -215,7 +215,10 @@ it:
       short: "Allaccio frigo"
     INSPE:
       long: "Visita doganale"
-      short: "Visita doganale"                        
+      short: "Visita doganale"
+    OLOAD:
+      long: "Imbarco c/o altro terminal"
+      short: "Imb. c/o altro terminal"                              
   operations:
     I_DISCHARGE:
       long: "Sbarco da nave"

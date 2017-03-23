@@ -142,7 +142,7 @@ end
 def get_voyage_by_ship
  ret = {}
  ret[:success] = true
- ret[:items] = ImportHeader.where("import_type = ? AND ship_id = ?", params[:import_type], params[:ship_id]).where("import_status = ?", params[:import_status])
+ ret[:items] = ImportHeader.where("import_type = ? AND ship_id = ?", params[:import_type], params[:ship_id]).where("import_status = ?", params[:import_status]).as_json(ImportHeader.as_json_prop)
  render json: ret
 end
 

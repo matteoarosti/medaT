@@ -8,9 +8,18 @@ class ImportHeader < ActiveRecord::Base
   
  def self.as_json_prop()
      return {
-        :methods => [:ship_id_Name, :count_by_status]
+        :methods => [:ship_id_Name, :count_by_status, :hh_type_descr, :combo_descr]
       }
  end   
+ 
+ def combo_descr
+    [self.voyage, "( #{self.hh_type_descr} )"].join('  ')
+ end
+ 
+ def hh_type_descr
+   I18n.t("handling_type.#{self.handling_type}.short")
+ end 
+ 
  
  def ship_id_Name
   self.ship.name if self.ship

@@ -189,7 +189,7 @@
 			        text: 'Container',
 			        width: 220,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         ret = '<h1>' + rec.get('container_number') + '</h1>';
+			         ret = '<h1 style="margin-top: 0px"><span style="font-size: 8px; color: gray">' + rec.get('hh_type_descr') + '</span><br/>' + rec.get('container_number') + '</h1>';
 			         if (Ext.isEmpty(rec.get('open_handling_header_id')) == false){
 			          ret += '<h5>Movim #' + rec.get('open_handling_header_id') + '&nbsp;';
 			            ret += ' ' + pb_get_image_status(rec.get('open_handling_header_rec').handling_status);

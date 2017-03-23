@@ -29,10 +29,14 @@ class ImportItem < ActiveRecord::Base
   
  def self.as_json_prop()
      return {
-        :methods => [:equipment_id_Name, :shipowner_id_Name, :open_handling_header_id, :open_handling_header_rec]
+        :methods => [:equipment_id_Name, :shipowner_id_Name, :open_handling_header_id, :open_handling_header_rec, :hh_type_descr]
       }
  end 
 
+  def hh_type_descr
+    self.import_header.hh_type_descr
+  end
+ 
   def self.AddRecord(import_header_id, shipowner_id, container_number, container_status, equipment_id, weight, temperature, imo, booking)
     ImportItem.create(:import_header_id => import_header_id,
                       :shipowner_id => shipowner_id,

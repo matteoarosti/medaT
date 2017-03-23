@@ -35,9 +35,10 @@ class HandlingHeader < ActiveRecord::Base
   #valori per combo
   def handling_type_get_data_json
    [
-    {:cod=>'TMOV', :descr=>'Movimento terminal'},
-    {:cod=>'FRCON', :descr=>'Allaccio frigo'},
-    {:cod=>'INSPE', :descr=>'Visita doganale'}
+    {:cod=>'TMOV',  :descr=>I18n.t("handling_type.TMOV.short")},
+    {:cod=>'FRCON', :descr=>I18n.t("handling_type.FRCON.short")},
+    {:cod=>'INSPE', :descr=>I18n.t("handling_type.INSPE.short")},
+    {:cod=>'OLOAD', :descr=>I18n.t("handling_type.OLOAD.short")}
    ]
   end
   def container_status_get_data_json

@@ -1,7 +1,7 @@
 r_email_to = %w(
  m.galli@fmg.eu
  gen.alampugnani@cma-cgm.com
- gen.mbaldieri@cma-cgm.com
+ gen.mbalderi@cma-cgm.com
  gen.grossi@cma-cgm.com
  gen.elastraioli@cma-cgm.com
  matteo.arosti@gmail.com

@@ -9,6 +9,63 @@ class SendCsvStd
   #rails runner "SendCsvStd.new.send_GIAC_sint(12, [12], 'matteo.arosti@gmail.com')"
   
   
+  
+  def send_booking_analytics(shipowner_id, shiponwer_list, email_to, only_open = true)
+    ret = []
+    ret << %w(Compagnia Nave Viaggio Booking Tipo Data_prenotazione Scadenza Quantità Usciti)
+    items = Booking.not_closed()
+    items = items.where(shipowner_id: shipowner_id) unless shipowner_id.blank?
+    items = items.order(:shipowner_id)
+    
+    items.each do |row|
+      row.booking_items.each do |bi|
+        ret << [
+          row.shipowner.name,
+          row.ship.name,
+          row.voyage,
+          row.num_booking,
+          bi.equipment.equipment_type,
+          row.created_at.strftime("%d/%m/%y"),
+          !row.expiration.nil? ? row.expiration.strftime("%d/%m/%y") : '',
+          bi.quantity,
+          bi.quantity_used
+        ]
+      end
+    end
+    
+    
+    #preparo contenuto per xls
+    book = Spreadsheet::Workbook.new
+    sheet1 = book.create_worksheet
+    cr = 0
+    ret.each do |r|
+      sheet1.row(cr).concat r
+      cr = cr+1
+    end
+    xls_content = StringIO.new
+    book.write xls_content
+    
+    #content_file = content_file.to_xls
+    content_file = xls_content.string.force_encoding('binary')
+    file_name = 'BOOKING_' + Time.now.strftime("%Y%m%d%H%M%S") + ".xls"
+    subject = 'export_BOOKING_xls_' + Time.now.strftime("%Y%m%d%H%M%S")
+
+    if content_file != ""
+      begin
+        print "\n -> Invio email a #{email_to}\n"
+        mm = HandlingMailer.send_codeco_email(email_to, subject, content_file, file_name).deliver!
+      rescue Exception => e
+        #gestire l'errore
+        print "ERRORE: #{e.message}"
+      end
+    end
+    
+          
+  end #send_booking_analytics
+  
+  
+  
+  
   def send_GIAC_sint(shipowner_id, shiponwer_list, email_to, only_E = true)
     items = HandlingHeader.is_in_terminal().not_closed()
     items = items.where(shipowner_id: shipowner_id)

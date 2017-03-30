@@ -368,6 +368,7 @@ it:
     ship_prepares:
       menu: "Carico Navi"
       new: "Crea nuovo"
+      op: "Merce"
       customers: "Anag. Clienti"
       list: "Elenco"
       open: "In corso"

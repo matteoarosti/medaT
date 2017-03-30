@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170222085416) do
+ActiveRecord::Schema.define(version: 20170329235433) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -350,6 +350,25 @@ ActiveRecord::Schema.define(version: 20170222085416) do
     t.datetime "updated_at"
     t.integer  "created_user_id"
     t.integer  "updated_user_id"
+  end
+
+  create_table "ship_prepare_items", force: true do |t|
+    t.integer  "ship_prepare_id"
+    t.string   "item_status",        limit: 5
+    t.string   "item_type",          limit: 2
+    t.integer  "import_header_id"
+    t.integer  "ship_prepare_op_id"
+    t.boolean  "to_weigh"
+    t.decimal  "qty",                                 precision: 15, scale: 2
+    t.text     "notes",              limit: 16777215
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ship_prepare_ops", force: true do |t|
+    t.string   "name",       limit: 50
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "ship_prepares", force: true do |t|

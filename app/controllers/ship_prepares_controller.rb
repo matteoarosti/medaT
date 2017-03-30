@@ -35,7 +35,13 @@ class ShipPreparesController < ApplicationController
   end
     
   
-  
+  def gest
+    @item = ShipPrepare.find(params[:item_id])
+  end
+
+  def select_import_header
+    @item = ShipPrepare.find(params[:item_id])
+  end
   
   
   #######################################################
@@ -83,6 +89,18 @@ class ShipPreparesController < ApplicationController
  
  
 ##################################################
+ def get_open_voyage_by_ship
+##################################################
+  ret = {}
+  ret[:success] = true   
+  @sp = ShipPrepare.find(params[:id])    
+  ret[:items] = ImportHeader.where("ship_id = ?", @sp.ship_id).where("import_status = ?", 'OPEN').as_json(ImportHeader.as_json_prop)
+  render json: ret
+ end   
+ 
+ 
+ 
+##################################################
  def modify_record
 ##################################################
   @item = ShipPrepare.find(params[:rec_id])    
@@ -116,6 +134,39 @@ class ShipPreparesController < ApplicationController
 ##################################################
    @item = ShipPrepare.new
  end   
+
+ 
+ 
+##################################################
+ def get_gest_items
+##################################################
+   @sp = ShipPrepare.find(params[:item_id])
+   ret = {}
+   ret[:success] = true
+   ret[:items] = @sp.ship_prepare_items.as_json(ShipPrepareItem.as_json_prop)
+   render json: ret
+
+  
+ end   
+  
+ 
+##################################################
+ def add_item_row
+##################################################
+   @sp = ShipPrepare.find(params[:data][:item_id])
+   item = @sp.ship_prepare_items.new
+   params[:data].delete(:item_id)
+   params[:data].permit!
+   item.update(params[:data])
+   ret = item.save!  
+   render json: {success: ret}  
+ end   
+ 
+ 
+ 
+ 
+ 
+ 
  
  def report_by_customer
  end

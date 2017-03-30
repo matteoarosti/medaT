@@ -1,0 +1,302 @@
+{
+ success: true,
+ items: [
+ {
+  id: 'ship_prepares_gest_<%= @item.id -%>',
+  xtype: 'container',
+  closable: true,
+  title: 'ShipGest',
+  flex: 1,
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+
+
+  items: [
+  
+	{
+	  xtype: 'panel',
+	  border: true,
+	    layout: {
+		    type: 'hbox',
+		    pack: 'start',
+		    align: 'stretch'
+		},
+	  bodyStyle: 'background-color: #e0e0e0;',
+		
+      defaults: {
+      	style: 'margin: 10px; padding: 10px;'
+      },
+	
+	  items: [
+	  ]
+	} //INTESTAZIONE
+	
+
+	//GRID ---
+		, {
+				flex: 1,
+				layout: 'fit',
+        	    title: '',
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,
+								
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw url_for(:action=>'get_gest_items').to_json -%>,
+        	            extraParams: {        	            	
+        	            	item_id: <%= @item.id -%>
+        	            },
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	    }),
+        	   
+ 		        	   
+        	           	    
+        	    
+			    columns: [
+			     {
+			        text: 'Seq',
+			        width: 40,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			     }, {
+			     	text: 'Descrizione',
+			     	flex: 1,
+			     	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			     	 if (rec.get('item_type') == 'LS'){
+			     	    if (rec.data.import_header.import_type == 'L') imb_sba = 'Imbarco';
+			     	    if (rec.data.import_header.import_type == 'D') imb_sba = 'Sbarco'
+			         	ret = '<h5>Lista ' + imb_sba + ' [' + rec.data.import_header.handling_type + '] - Viaggio: <b>' + rec.data.import_header.voyage + '</b></h5>';
+			         	return ret;
+			         }
+			     	 if (rec.get('item_type') == 'OP'){
+			         	ret = '<h5>' + rec.data.ship_prepare_op.name +'</h5>';
+			         	return ret;
+			         }	
+			         	
+			        }
+			     }, {
+			     	text: 'Note',
+			     	flex: 1,
+			     	dataIndex: 'notes'
+			     }, {
+			     	text: 'Quantit&agrave;',
+			     	width: 90,
+			     	dataIndex: 'out_qty'
+			     }, {
+			     	text: 'Stato',
+			     	flex: 1,
+			     	dataIndex: 'out_item_status'
+			     }
+			    ]
+			    
+
+			, dockedItems: [
+			  {
+			    xtype: 'toolbar',
+			    dock: 'bottom',
+			    width: 135,
+				defaults: {
+			        xtype: 'button', scale: 'medium', textAlign: 'left'
+                },			    
+			    margin: '40 10 10 10',
+			    items: [
+			    
+			    			    
+			    
+			    	{text: 'Lista imbarco/sbarco', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add', 
+			    		handler: function(){
+
+							m_grid = this.up('grid');
+
+			    			//apro la form per una nuova riga di dettaglio
+			                           loc_form = Ext.create('Ext.form.Panel', {
+										    title: '',
+										    bodyPadding: 10,
+										    defaultType: 'textfield',
+										    	layout: {
+												    type: 'vbox',
+												    align : 'stretch',
+												    pack  : 'start',
+												},
+										    items: [
+										      {xtype: 'hiddenfield', name: 'item_id', value: <%= @item.id -%>},
+										      {xtype: 'hiddenfield', name: 'item_type', value: 'LS'},
+												<%= raw extjs_std_combo('import_header_id', @item.ship_prepare_items.new,
+														:valueField => 'id',
+														:displayField => 'combo_descr',
+														:store => extjs_std_store_url(root_path + "ship_prepares/get_open_voyage_by_ship/#{@item.id}")) -%>
+										      										    										    										    
+										    ]
+										    , 	buttons:
+											        [{
+											            text: 'Aggiungi',
+											            cls: 'btn-ok',
+											            handler: function (btn, evt) {
+											             btn.disable();
+											                           
+											             form = this.up('form').getForm();
+											             tmp_win  = this.up('window');
+											             if (form.isValid()) {
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'ship_prepares', :action=>'add_item_row') -%>',
+															   jsonData: {
+															   	data: form.getValues()
+															   },
+															   success: function(response, opts) {
+															      // store.remove(rec);
+															      m_grid.store.load();
+															      tmp_win.close();
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+															   }
+															});	
+														  return false;												             
+											             }
+											            }
+											          }
+											         ]
+  
+										});
+
+
+	                           loc_win = Ext.create('Ext.window.Window',{
+								    layout: 'fit',
+								    items: loc_form,
+								    title: 'Abbina lista di imbarco/sbarco',
+								    width: 500,
+								    height: 300
+								}).show();
+			    			
+			    		}
+			    	},
+			    	
+
+
+
+
+			    	{text: 'Riga merce', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add', 
+			    		handler: function(){
+
+							m_grid = this.up('grid');
+
+			    			//apro la form per una nuova riga di dettaglio
+			                           loc_form = Ext.create('Ext.form.Panel', {
+										    title: '',
+										    bodyPadding: 10,
+										    defaultType: 'textfield',
+										    	layout: {
+												    type: 'vbox',
+												    align : 'stretch',
+												    pack  : 'start',
+												},
+										    items: [
+										      {xtype: 'hiddenfield', name: 'item_id', value: <%= @item.id -%>}
+										      , {xtype: 'hiddenfield', name: 'item_type', value: 'OP'}
+										      , <%= raw extjs_std_combo_model('ship_prepare_op', @item.ship_prepare_items.new) -%>
+										      , <%= raw extjs_std_numberfield('qty', @item.ship_prepare_items.new) -%>
+										      , <%= raw extjs_std_booleanfield('to_weigh', @item.ship_prepare_items.new) -%>
+										      , <%= raw extjs_std_textareafield('notes', @item.ship_prepare_items.new) -%>
+										    ]
+										    , 	buttons:
+											        [{
+											            text: 'Aggiungi',
+											            cls: 'btn-ok',
+											            handler: function (btn, evt) {
+											             btn.disable();
+											                           
+											             form = this.up('form').getForm();
+											             tmp_win  = this.up('window');
+											             if (form.isValid()) {
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'ship_prepares', :action=>'add_item_row') -%>',
+															   jsonData: {
+															   	data: form.getValues()
+															   },
+															   success: function(response, opts) {
+															      // store.remove(rec);
+															      m_grid.store.load();
+															      tmp_win.close();
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+															   }
+															});	
+														  return false;												             
+											             }
+											            }
+											          }
+											         ]
+  
+										});
+
+
+	                           loc_win = Ext.create('Ext.window.Window',{
+								    layout: 'fit',
+								    items: loc_form,
+								    title: 'Nuova riga imbarco/sbarco merce',
+								    width: 500,
+								    height: 300
+								}).show();
+			    			
+			    		}
+			    	},
+
+
+			    	
+			    	
+			    	
+			    	{xtype: 'tbfill'},
+			    	
+			    	{text: 'Refresh', iconCls: 'fa fa-refresh fa-2x', cls: 'btn-close', 
+			    		handler: function(){
+				    		this.up('grid').store.load();			    			
+			    		}
+			    	} 
+			    	
+			    				    	
+/* e' un tab			    	 
+			    	{text: 'Chiudi', iconCls: 'fa fa-plus fa-2x', cls: 'btn-close', 
+			    		handler: function(){
+				    		this.up('window').close();			    			
+			    		}
+			    	} 
+*/			    	
+			    	
+			    ]
+			  }
+			 ]
+
+
+                        	    
+        	}     	
+	//--- GRID
+     
+  
+  ]
+ }
+ ]
+}

@@ -164,7 +164,7 @@
 
 
 			    , {
-			        text: 'Nr container',
+			        text: 'Stato lavorazione',
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
@@ -177,7 +177,55 @@
 			        }			        	        
 			    }			        	        
 
-			    
+
+
+
+
+				, {
+			        text: 'Gestisci', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
+			        	var loc_grid = this;
+			        	
+			        	//if (rec.get('weigh_status') == 'CLOSE') return '';
+			        	
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            			          
+			                ok_img = 'fa-check-square-o';
+			                var set_external = true;
+		                	btn_cls = 'btn-used';
+		                	if (Ext.isEmpty(rec.get('execution_date')) == true)
+		                	 btn_cls = 'btn-ok';
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                				                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+								cls: btn_cls,								
+		                		scale: 'large',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	//button.disable();	                   
+		                            	acs_show_panel_std(myApp, '<%= url_for(:action=>'gest') -%>', {item_id: rec.get('id')}, 'ship_prepares_gest_' + rec.get('id'));	                   				                			                             														                            
+			                           	return false;
+
+			                        }, scope: rec //handler
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }
+
+
+
+
+
+/*			    
 				, {
 			        text: 'Chiudi', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
@@ -328,8 +376,11 @@
 			            return '<div id="' + id + '"></div>';
 			        }
 			     }
+*/			     
+			     
+			     
 
-<% if User.current.admin_can?(:ship_prepares, :amount) %>
+<% if 1==2 && User.current.admin_can?(:ship_prepares, :amount) %>
 			 , {
 			        dataIndex: 'amount',
 			        text: 'Importo',

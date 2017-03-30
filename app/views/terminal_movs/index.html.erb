@@ -489,9 +489,12 @@ Ext.define("plugin.Printer", {
                                 task:<%= raw t("menu.ship_prepares.customers").to_json %>,
                                 url: '<%= url_for(:controller=>'customers', :action=>'extjs_sc_crt_tab') -%>',                                
                                 leaf:true,
-                                tab_id: 'activities_customers_list'
-                                
-                           	 }, {
+                                tab_id: 'activities_customers_list'                                
+                           	 }, { 
+                                 task:<%= raw t("menu.ship_prepares.op").to_json %>,
+                                 url: '<%= url_for(:controller=>'ship_prepare_ops', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 leaf:true 
+                             }, {
                                 task:<%= raw t("menu.ship_prepares.new").to_json %>,
                                 url: '<%= url_for(:controller=>'ship_prepares', :action=>'create_new') -%>',
                                 leaf:true,
@@ -502,7 +505,7 @@ Ext.define("plugin.Printer", {
                                 url: '<%= url_for(:controller=>'ship_prepares', :action=>'list', :filtered_type => 'OPEN') -%>',
                                 leaf:true,
                                 op: 'new_tab',
-                                tab_id: 'customers_OPEN'
+                                tab_id: 'ship_prepares_OPEN'
                            	 }
                            	 
 <% if User.current.admin_can?(:ship_prepares, :amount) %>                           	 
@@ -520,7 +523,7 @@ Ext.define("plugin.Printer", {
                                 url: '<%= url_for(:controller=>'ship_prepares', :action=>'list', :filtered_type => 'ALL') -%>',
                                 leaf:true,
                                 op: 'new_tab',
-                                tab_id: 'activities_ALL'
+                                tab_id: 'ship_prepares_ALL'
                            	 }
                            	 
 <% if 1==2 && User.current.admin_can?(:activity, :amount) %>

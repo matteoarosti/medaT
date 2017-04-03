@@ -1,0 +1,91 @@
+{
+ success: true,
+
+   items: [
+   	{
+   		xtype: 'form',
+	    title: '',
+	    frame: true,
+	    bodyPadding: 10,
+	    defaultType: 'textfield',
+	    	layout: {
+			    type: 'vbox',
+			    align : 'stretch',
+			    pack  : 'start',
+			},
+	    items: [
+			      <%= raw extjs_std_hiddenfield('id', @item) -%>,
+			      , <%= raw extjs_std_combo_model('ship_prepare_op', @item) -%>
+			      , <%= raw extjs_std_numberfield('qty', @item) -%>
+			      , <%= raw extjs_std_booleanfield('to_weigh', @item) -%>
+			      , <%= raw extjs_std_textareafield('notes', @item) -%>
+	    ],
+	    
+	
+		dockedItems: [{
+		    xtype: 'toolbar',
+		    dock: 'right',
+		    width: 135,
+			defaults: {
+		        xtype: 'button', scale: 'medium', textAlign: 'left'
+	        },			    
+		    margin: '5 5 5 5',
+	    
+	     	items:
+		        [
+		         {
+		            text: 'Salva',
+		            scale: 'large', cls: 'btn-confirm',
+		            handler: function (btn, evt) {
+		                           
+		             form = this.up('form').getForm();
+		             tmp_win  = this.up('window');
+		             if (form.isValid()) {
+		                btn.disable();
+		                
+		                
+						Ext.Ajax.request({
+		                    url: '<%= url_for(:action=>'exe_modify_item_record') -%>',
+		                    waitMsg: 'Salvataggio in corso....',
+							method:'POST',                     
+		                    jsonData: {data: form.getValues()},	
+		             	
+							success: function(op, opts) {					
+								tmp_win.close();
+							    loc_grid = Ext.getCmp(<%= raw @from_component_id.to_json -%>);								  
+								loc_grid.store.load();						 							
+							}, scope: this,
+							
+							failure: function(rec, op) {
+								var result = Ext.JSON.decode(op.getResponse().responseText);
+								Ext.MessageBox.show({
+			                        title: 'EXCEPTION',
+			                        msg: result.message,
+			                        icon: Ext.MessageBox.ERROR,
+			                        buttons: Ext.Msg.OK
+		                    	})					
+							}, scope: this,																	 
+				    	});	             
+		                
+	                    return false;
+		             }
+		            }
+		          }, 
+		          
+		          {
+		            text: 'Chiudi',												            
+		            scale: 'large',
+		            handler: function (btn, evt) {
+		            	tmp_win  = this.up('window');
+		            	tmp_win.close();
+		            }
+		          }
+		          
+		         ]
+			}] 
+	    
+	    
+	
+   	}
+   ]
+}

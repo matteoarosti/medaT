@@ -360,6 +360,8 @@ ActiveRecord::Schema.define(version: 20170329235433) do
     t.integer  "ship_prepare_op_id"
     t.boolean  "to_weigh"
     t.decimal  "qty",                                 precision: 15, scale: 2
+    t.integer  "moved_by_user_id"
+    t.datetime "moved_at"
     t.text     "notes",              limit: 16777215
     t.datetime "created_at"
     t.datetime "updated_at"

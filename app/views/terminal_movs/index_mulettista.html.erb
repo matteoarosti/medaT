@@ -187,6 +187,11 @@ s = Ext.create('Ext.container.Viewport',{
 					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'import_headers', :action=>'find_import_simple', :import_type => 'L') -%>', {}, 'tttt');}
 					      }, {xtype : "button",
 					      	scale: 'large',					       
+					    	text : '<i class="fa fa-ship fa-3x" style="color:brown;"></i><span style="margin-left: 20px;">Lavorazione nave</span>', 
+					    	height: 60,
+					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'ship_prepares', :action=>'select_to_open', :import_type => '') -%>', {}, 'tttt');}
+					      }, {xtype : "button",
+					      	scale: 'large',					       
 					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Rientro da officina</span>', 
 					    	height: 60,
 					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'repair_handling_items', :action=>'repairs_list', :filtered_type => 'TO_OUT_GARAGE') -%>', {}, 'tttt');}

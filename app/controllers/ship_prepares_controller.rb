@@ -65,7 +65,7 @@ class ShipPreparesController < ApplicationController
 #   items = items.where("container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%") if !params[:form_user][:flt_num_container].to_s.empty?
         
 
-   
+   params[:form_user] = {} if params[:form_user].nil?
    items = items.where("created_at >= ?", Time.zone.parse(params[:form_user]['flt_date_from']).beginning_of_day) unless params[:form_user]['flt_date_from'].blank?
    items = items.where("created_at <= ?", Time.zone.parse(params[:form_user]['flt_date_to']).end_of_day) unless params[:form_user]['flt_date_to'].blank?
    
@@ -164,6 +164,45 @@ class ShipPreparesController < ApplicationController
  
  
  
+ 
+ 
+##################################################
+ def modify_record_item
+##################################################
+  @item = ShipPrepareItem.find(params[:rec_id])    
+  @from_component_id = params[:from_grid_id]
+ end   
+
+ 
+##################################################
+ def exe_modify_item_record
+##################################################
+  item = ShipPrepareItem.find(params[:data][:id])    
+  params[:data].permit!
+  item.update(params[:data])
+  ret = item.save!  
+  render json: {success: ret}
+ end   
+
+##################################################
+ def exe_delete_item_record
+##################################################
+   item = ShipPrepareItem.find(params[:rec_id])    
+   ret = item.destroy!
+   ret = true
+   render json: {success: ret}
+ end   
+ 
+#azzero il flag to_be_moved (eseguito dal mulettista dopo aver movimentato il container)
+##################################################
+def items_close_to_be_moved
+##################################################
+  hi = ShipPrepareItem.find(params[:rec_id])
+  hi.moved_by_user_id = current_user.id
+  hi.moved_at = Time.zone.now
+  hi.save!
+  render json: {:success => true, :message => nil}      
+end
  
  
  

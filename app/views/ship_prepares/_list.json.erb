@@ -206,7 +206,7 @@
 			                        
 			                        	//disabilito per prevenire doppia esecuizione
 			                        	//button.disable();	                   
-		                            	acs_show_panel_std(myApp, '<%= url_for(:action=>'gest') -%>', {item_id: rec.get('id')}, 'ship_prepares_gest_' + rec.get('id'));	                   				                			                             														                            
+		                            	acs_show_panel_std(myApp, '<%= url_for(:action=>'gest') -%>', {item_id: rec.get('id'), op='EDIT'}, 'ship_prepares_gest_' + rec.get('id'));	                   				                			                             														                            
 			                           	return false;
 
 			                        }, scope: rec //handler

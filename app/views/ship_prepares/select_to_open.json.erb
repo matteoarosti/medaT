@@ -1,0 +1,84 @@
+{
+ success: true,
+ items: [
+
+   
+   //grid navi
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Ricerca nave',
+        	    closable: true,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            type: 'ajax',
+        	            url: <%= raw  (root_path + 'ship_prepares/get_row_by_filtered_type').to_json -%>,
+        	            extraParams: {filtered_type: 'OPEN', form_user: {}},
+        	            reader: {
+        	                type: 'json',
+        	                rootProperty: 'items'
+        	            }
+        	        }
+        	    }), 
+        	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: '',
+			        width: 30,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'customer_id',
+			        text: 'Cliente',
+			        width: 200,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '<h3>' + rec.get('customer').name + '</h3>';
+			     	 ret += '<h5>Tipo carico: ' + rec.get('load_type') + '</h5>';
+			          return ret;			         
+			        }			        
+			    }, {
+			        dataIndex: 'ship_id',
+			        text: 'Nave',
+			        width: 200,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '<h3>' + rec.get('ship').name + '</h3>';
+			         ret += '<h5>Viaggio: ' + rec.get('voyage') + '</h5>';
+			          return ret;			         
+			        }			        
+			    }			    
+			    
+			    , {
+			        text: 'Data',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';
+			         ret += '<table class=import_item_detail>';			         
+					 ret += '<tr><th>Reg. il</th><td class=normal>' + Ext.util.Format.date(rec.get('created_at'), 'd-m-Y') + '</td></tr>';			         
+					 ret += '<tr><th>Data viaggio</th><td>' + Ext.util.Format.date(rec.get('departure_date'), 'd-m-Y') + '</td></tr>';
+					 ret += '<tr><th>Eseguito</th><td class=ok>' + Ext.util.Format.date(rec.get('execution_date'), 'd-m-Y') + '</td></tr>';
+			         ret += '</table>';
+			         return ret;
+			        }			        	        
+			    }			        	        
+			],
+		
+			listeners: {
+			  itemclick: function(dv, rec, item, index, e) {
+			  		acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:action=>'gest') -%>', {item_id: rec.get('id')}, 'ship_prepares_gest_' + rec.get('id'));
+				}
+			}
+				    
+		}	    
+   
+
+ ]
+}

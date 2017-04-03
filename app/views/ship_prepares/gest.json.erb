@@ -86,11 +86,11 @@
 			     	 if (rec.get('item_type') == 'LS'){
 			     	    if (rec.data.import_header.import_type == 'L') imb_sba = 'Imbarco';
 			     	    if (rec.data.import_header.import_type == 'D') imb_sba = 'Sbarco'
-			         	ret = '<h5>Lista ' + imb_sba + ' [' + rec.data.import_header.handling_type + '] - Viaggio: <b>' + rec.data.import_header.voyage + '</b></h5>';
+			         	ret = '<h3>Lista ' + imb_sba + ' [' + rec.data.import_header.handling_type + '] - Viaggio: <b>' + rec.data.import_header.voyage + '</b></h3>';
 			         	return ret;
 			         }
 			     	 if (rec.get('item_type') == 'OP'){
-			         	ret = '<h5>' + rec.data.ship_prepare_op.name +'</h5>';
+			         	ret = '<h3>' + rec.data.ship_prepare_op.name +'</h3>';
 			         	return ret;
 			         }	
 			         	
@@ -98,15 +98,96 @@
 			     }, {
 			     	text: 'Note',
 			     	flex: 1,
-			     	dataIndex: 'notes'
+			     	dataIndex: 'notes',
+			     	renderer: function(value) { return '<p>' + value +'</p>';}
 			     }, {
-			     	text: 'Quantit&agrave;',
-			     	width: 90,
-			     	dataIndex: 'out_qty'
+			     	text: 'Qt&agrave; / Kg / Nr.',
+			     	width: 100, align: 'right',
+			     	dataIndex: 'out_qty',
+			     	renderer: function(value) { return '<h3>' + Ext.util.Format.number(value, "0,000") + '</h3>'; }
 			     }, {
-			     	text: 'Stato',
+			     	text: 'Pesare?',
+			     	width: 70,
+			     	dataIndex: 'to_weigh',
+			     	renderer: function(value, medaData, rec) {
+			     		if (rec.get('to_weigh') == true)
+			     			return '<p><i class="fa fa-balance-scale fa-2x" style="color:green;"></i></p>';
+					}
+
+			     }, {
+			     	text: 'Stato / Eseguito il',
 			     	flex: 1,
-			     	dataIndex: 'out_item_status'
+			     	dataIndex: 'out_item_status',
+			     	renderer: function(value) { return '<p>' + value +'</p>';}
+			     }, {
+			        text: 'Ok', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        	var loc_grid = this;
+
+			        	if (rec.get('item_type') != 'OP') return '';
+			        	if (Ext.isEmpty(rec.get('moved_at')) == false) return '';
+			        	if (rec.get('to_weigh') == true) return '';
+			        	
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            
+			                ok_img = 'fa-check-circle';
+			                				            
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+								cls: 'btn-ok',
+		                		scale: 'large',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+			                        	//disabilito per prevenire doppia esecuizione
+			                        	button.disable();			                        
+			                        
+											Ext.Ajax.request({
+											   method: 'POST',
+											   url: '<%= url_for(:controller=>'ship_prepares', :action=>'items_close_to_be_moved') -%>',
+											   jsonData: {
+											    rec_id: rec.get('id'),
+											   },
+															   success: function(result, request) {
+															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  
+															   	  } else {
+																      store.remove(rec);
+																	  store.load();
+															   	  }															   	 
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  															      
+															   }
+
+											});
+										  		
+										  return false;										
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
 			     }
 			    ]
 			    
@@ -122,7 +203,8 @@
 			    margin: '40 10 10 10',
 			    items: [
 			    
-			    			    
+
+<% if params[:op] == 'EDIT' %>			    			    
 			    
 			    	{text: 'Lista imbarco/sbarco', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add', 
 			    		handler: function(){
@@ -266,6 +348,7 @@
 			    	},
 
 
+<% end %>
 			    	
 			    	
 			    	
@@ -277,18 +360,95 @@
 			    		}
 			    	} 
 			    	
-			    				    	
-/* e' un tab			    	 
-			    	{text: 'Chiudi', iconCls: 'fa fa-plus fa-2x', cls: 'btn-close', 
-			    		handler: function(){
-				    		this.up('window').close();			    			
-			    		}
-			    	} 
-*/			    	
-			    	
 			    ]
 			  }
 			 ]
+			 
+			 
+			 
+			 
+			  ,  listeners: {
+	                	itemcontextmenu : function(item, record, index, e, eOpts){
+	                		eOpts.stopEvent();
+                            var xy = eOpts.getXY();	                	
+                            new Ext.menu.Menu({
+                                items : [
+                                
+                                
+                                         {
+                                            text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
+                                            handler: function(){
+                                            	
+                                            	if (record.get('item_type') == 'OP')
+									     	 		new_win = acs_show_win_std('Modifica', <%= raw url_for(:controller=>'ship_prepares', 
+									     	 				:action=>'modify_record_item').to_json -%>,
+									     	 				{rec_id: record.get('id'), from_grid_id: this.id}, 800, 400);
+									     	 	else
+									     	 		Ext.Msg.alert('Opeazione non ammessa', '');										                                                    
+                                            }, scope: this
+                                          }
+                                          
+<% if User.current.admin_can?(:ship_prepare, :gest) %>                                          
+                                          , {
+                                            text : '<i class="fa fa-trash-o fa-1x"> Elimina</i>',                                                                                                        
+                                            handler: function(){
+                                            
+                                            	tmp_grid = this;									     	 	
+
+												Ext.MessageBox.confirm('Richieta conferma', 'Eliminare l\'attivit&agrave; corrente?', function(btn){
+												
+													if(btn === 'yes'){
+													
+														Ext.Ajax.request({
+										                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'exe_delete_item_record').to_json -%>,
+										                    waitMsg: 'Eliminazione in corso....',
+															method:'POST',                     
+										                    jsonData: {rec_id: record.get('id')},	
+										             	
+															success: function(result, request) {
+																	var returnData = Ext.JSON.decode(result.responseText);
+																	if (returnData.success == false){
+																		Ext.MessageBox.show({
+													                        title: 'EXCEPTION',
+													                        msg: returnData.message,
+													                        icon: Ext.MessageBox.ERROR,
+													                        buttons: Ext.Msg.OK
+												                    	})
+												                      return false;										
+																	}																							
+															
+																tmp_grid.store.load();																						 						
+															}, scope: this,
+															
+															failure: function(rec, op) {
+																var result = Ext.JSON.decode(op.getResponse().responseText);
+																Ext.MessageBox.show({
+											                        title: 'EXCEPTION',
+											                        msg: result.message,
+											                        icon: Ext.MessageBox.ERROR,
+											                        buttons: Ext.Msg.OK
+										                    	})					
+															}, scope: this,						
+																			 
+												    	});													
+													
+													} //yes
+													
+												}); //confirm
+
+
+										                                                    
+                                            }, scope: this
+                                          }
+<% end %>                                          
+                                          
+                                          
+                                         ]
+                               }).showAt(xy);
+	                	
+	                	}			    					    
+					}			 
+			 
 
 
                         	    

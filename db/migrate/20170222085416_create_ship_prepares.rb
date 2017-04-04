@@ -5,6 +5,7 @@ class CreateShipPrepares < ActiveRecord::Migration
       t.belongs_to :customer
       t.belongs_to :ship
 
+      t.string     :ship_prepare_status, :limit => 5
       t.date       :departure_date
       t.string     :voyage,          :limit => 15
       t.string     :load_type,       :limit => 50   #tipologia di carico (Ferro, nichel, ...) Potrebbe diventare PickList            
@@ -27,6 +28,8 @@ class CreateShipPrepares < ActiveRecord::Migration
       
       t.boolean    :request_received      #e' stata ricevuta email "ufficiale" di richiesta lavoro
 
+      t.integer :created_user_id
+      t.integer :updated_user_id
       t.timestamps
     end
   end

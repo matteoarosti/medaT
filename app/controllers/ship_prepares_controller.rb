@@ -72,11 +72,11 @@ class ShipPreparesController < ApplicationController
    case params[:filtered_type]           
      
      when 'OPEN'
-       items = items.where('execution_date IS NULL')
+       items = items.not_closed
 
      when 'SET_AMOUNT'
        items = items.where('amount IS NULL')
-       items = items.where('execution_date IS NOT NULL')
+       items = items.not_closed
        
    end #case
 
@@ -158,7 +158,11 @@ class ShipPreparesController < ApplicationController
    params[:data].delete(:item_id)
    params[:data].permit!
    item.update(params[:data])
+
+   item.in_out_type = item.import_header.import_type if item.item_type == 'LS'     
+     
    ret = item.save!  
+   
    render json: {success: ret}  
  end   
  
@@ -204,6 +208,20 @@ def items_close_to_be_moved
   render json: {:success => true, :message => nil}      
 end
  
+#azzero il flag to_be_moved (eseguito dal mulettista dopo aver movimentato il container)
+##################################################
+def save_item_weight
+##################################################
+  spi = ShipPrepareItem.find(params[:rec_id])
+  item = spi.ship_prepare_item_weighs.new
+  params.permit!
+    
+  item.weight_goods = params[:weight_goods].to_s.gsub(',', '.').to_f
+  item.driver = params[:driver]  
+    
+  ret = item.save!  
+  render json: {:success => true, :message => nil}      
+end
  
  
  

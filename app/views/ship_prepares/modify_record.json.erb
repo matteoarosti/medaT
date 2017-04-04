@@ -15,17 +15,16 @@
 			},
 	    items: [
 			      <%= raw extjs_std_hiddenfield('id', @item) -%>,
+			      
+				  , <%= raw extjs_std_combo('ship_prepare_status', @item,
+					    	{:store => extjs_std_store_data(@item.status_get_data_json), :allowBlank=>false}) -%>									      			      			      
+			      
 			      , <%= raw extjs_std_combo_model('customer', @item) -%>
 			      , <%= raw extjs_std_combo_model('ship', @item) -%>
 			      , <%= raw extjs_std_textfield('load_type', @item, {fieldLabel: 'Tipo carico'}) -%>
 			      , <%= raw extjs_std_textfield('voyage', @item) -%>
 			      , <%= raw extjs_std_datefield('departure_date', @item, {:allowBlank=>true, :fieldLabel => 'Data viaggio'}) -%>
-			      
-			      , <%= raw extjs_std_numberfield('nr_container_01', @item, {fieldLabel: 'Nr cont. ICOP'}) -%>
-			      , <%= raw extjs_std_numberfield('nr_container_02', @item, {fieldLabel: 'Nr cont. IP'}) -%>
-			      , <%= raw extjs_std_numberfield('nr_container_03', @item, {fieldLabel: 'Nr cont. ACT'}) -%>
-			      
-			      
+			      			      
 			      , <%= raw extjs_std_textareafield('notes', @item) -%>
 	    ],
 	    

@@ -80,13 +80,21 @@
 			         return '<h5>' + (rowIndex + 1) + '</h5>';
 			        }			        
 			     }, {
+			     	text: 'L/D',
+			     	width:60,
+			     	dataIndex: 'in_out_type',
+			     	renderer: function(val){
+						if (val == 'D') return '<i class="fa fa-download fa-3x" style="color:green;"></i>';
+						if (val == 'L') return '<i class="fa fa-upload fa-3x" style="color:red;"></i>';			     	
+			     	}
+			     }, {
 			     	text: 'Descrizione',
 			     	flex: 1,
 			     	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			     	 if (rec.get('item_type') == 'LS'){
 			     	    if (rec.data.import_header.import_type == 'L') imb_sba = 'Imbarco';
 			     	    if (rec.data.import_header.import_type == 'D') imb_sba = 'Sbarco'
-			         	ret = '<h3>Lista ' + imb_sba + ' [' + rec.data.import_header.handling_type + '] - Viaggio: <b>' + rec.data.import_header.voyage + '</b></h3>';
+			         	ret = '<h3>Lista ' + imb_sba + ' [' + rec.data.import_header.handling_type + '] <br/>Viaggio: <b>' + rec.data.import_header.voyage + '</b></h3>';
 			         	return ret;
 			         }
 			     	 if (rec.get('item_type') == 'OP'){
@@ -99,7 +107,7 @@
 			     	text: 'Note',
 			     	flex: 1,
 			     	dataIndex: 'notes',
-			     	renderer: function(value) { return '<p>' + value +'</p>';}
+			     	renderer: function(value) { return '<p>' + (value || "") +'</p>';}
 			     }, {
 			     	text: 'Qt&agrave; / Kg / Nr.',
 			     	width: 100, align: 'right',
@@ -119,8 +127,12 @@
 			     	flex: 1,
 			     	dataIndex: 'out_item_status',
 			     	renderer: function(value) { return '<p>' + value +'</p>';}
-			     }, {
-			        text: 'Ok', width: 100, hidden: false, sortable: false,
+			     }
+			     
+			     
+<% if params[:op] == 'MOVE' #muletto: spunta voce imbarcata/sbarcata %>			     
+			     , {
+			        text: '', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			        	var loc_grid = this;
 
@@ -189,6 +201,129 @@
 			            return '<div id="' + id + '"></div>';
 			        }
 			     }
+<% end %>			     
+
+
+
+
+<% if params[:op] == 'WEIGH' #peso %>			     
+			     , {
+			        text: '', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        	var loc_grid = this;
+
+			        	if (rec.get('item_type') != 'OP') return '';
+			        	if (rec.get('to_weigh') != true) return '';
+			        	
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            
+			                ok_img = 'fa-truck';
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+								cls: 'btn-ok',
+		                		scale: 'large',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+           								loc_form = Ext.create('Ext.form.Panel', {
+											    title: '',
+											    frame: true,
+											    bodyPadding: 10,
+											    defaultType: 'textfield',
+											    	layout: {
+													    type: 'vbox',
+													    align : 'stretch',
+													    pack  : 'start',
+													},
+											    items: [
+											      {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},
+											      {xtype: 'numberfield', name: 'weight_goods', allowBlank: false, fieldLabel: 'Kg merce', fieldStyle: 'font-size: 32px; text-transform: uppercase;'},
+											      {xtype: 'textfield', name: 'driver', value: rec.get('driver'), fieldLabel: 'Autista'},
+											        
+											      {xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}											      
+											      										    										    										    
+											    ]
+											    ,
+								    			dockedItems: [{
+												    xtype: 'toolbar',
+												    dock: 'right',
+												    width: 135,
+													defaults: {
+												        xtype: 'button', scale: 'medium', textAlign: 'left'
+									                },			    
+												    margin: '5 5 5 5',
+											    
+											     	items:
+												        [{
+												            text: 'Conferma',
+												            scale: 'large', cls: 'btn-confirm',
+												            handler: function (btn, evt) {
+												                           
+												             form = this.up('form').getForm();
+												             tmp_win  = this.up('window');
+												             if (form.isValid()) {
+												                btn.disable();
+												                
+											                    form.submit({
+											                        url: '<%= url_for(:controller=>'ship_prepares', :action=>'save_item_weight') -%>',
+											                        waitMsg: 'Salvataggio in corso....',
+											                        success: function(fp, o) {
+																	      loc_grid.store.remove(rec);
+																	      loc_grid.store.load();
+																	      tmp_win.close();
+											                        },
+																	failure: function(fp, o) {
+											                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+										                                Ext.Msg.alert('Import non eseguito. ', o.result.message);	                            
+											                        }	                        
+											                    });
+											                    return false;
+												             }
+												            }
+												          }, 
+												          
+												          {
+												            text: 'Chiudi',												            
+												            scale: 'large',
+												            handler: function (btn, evt) {
+												            	tmp_win  = this.up('window');
+												            	tmp_win.close();
+												            }
+												          }
+												          
+												         ]
+	  												}]	  												   											   											
+   														  												
+											});		
+											
+				                           loc_win = Ext.create('Ext.window.Window',{
+											    layout: 'fit',
+											    items: loc_form,
+											    title: 'Registra peso',
+											    width: 500,
+											    height: 350,
+											    id: 'myWindow'
+											}).show();
+														                             
+			                           	return false;
+			                           								
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     }
+<% end %>			     
+
+
+			     
 			    ]
 			    
 
@@ -297,6 +432,10 @@
 										    items: [
 										      {xtype: 'hiddenfield', name: 'item_id', value: <%= @item.id -%>}
 										      , {xtype: 'hiddenfield', name: 'item_type', value: 'OP'}
+										      
+											  , <%= raw extjs_std_combo('in_out_type', @item.ship_prepare_items.new,
+												    	{:store => extjs_std_store_data(HandlingItem.new.load_dischage_get_data_json), :allowBlank=>false}) -%>									      
+										      
 										      , <%= raw extjs_std_combo_model('ship_prepare_op', @item.ship_prepare_items.new) -%>
 										      , <%= raw extjs_std_numberfield('qty', @item.ship_prepare_items.new) -%>
 										      , <%= raw extjs_std_booleanfield('to_weigh', @item.ship_prepare_items.new) -%>

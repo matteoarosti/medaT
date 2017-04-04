@@ -357,6 +357,7 @@ it:
       to_weigh: "Inserisci pesata"
       list: "Elenco"
       export: "Esporta"
+      to_weigh_ship_prepare: "Lavorazione nave"
     activities:
       menu: "Attivit&agrave;"
       new: "Crea nuova attivit&agrave;"

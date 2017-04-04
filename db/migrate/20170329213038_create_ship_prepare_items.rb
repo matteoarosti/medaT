@@ -4,6 +4,7 @@ class CreateShipPrepareItems < ActiveRecord::Migration
       t.belongs_to  :ship_prepare
       t.string      :item_status,       limit: 5  #OPEN/CLOSE
       t.string      :item_type,         limit: 2  #LS (lista imbarco/sbarco), OP (carico/scarico merce)
+      t.string      :in_out_type,       limit: 1  #IN or OUT
 
       
       #LS - lista imbarco/sbarco
@@ -19,6 +20,8 @@ class CreateShipPrepareItems < ActiveRecord::Migration
 
       t.text        :notes,             :limit => 64.kilobytes
 
+      t.integer :created_user_id
+      t.integer :updated_user_id      
       t.timestamps
     end
   end

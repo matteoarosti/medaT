@@ -343,6 +343,11 @@ Ext.define("plugin.Printer", {
                                  	url: '<%= url_for(:controller=>'weighs', :action=>'weighs_list', :filtered_type => 'TO_WEIGH') -%>',                                    
                                     op: 'new_tab'
 								}, {
+                                    task:<%= raw t("menu.weighs.to_weigh_ship_prepare").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'ship_prepares', :action=>'select_to_open', :op=>'WEIGH') -%>',                                    
+                                    op: 'new_tab'
+								}, {
                                     task:<%= raw t("menu.weighs.list").to_json %>,
                                     leaf:true,
                                  	url: '<%= url_for(:controller=>'weighs', :action=>'weighs_list', :filtered_type => 'LIST') -%>',                                    

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170329235433) do
+ActiveRecord::Schema.define(version: 20170404204138) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -352,10 +352,23 @@ ActiveRecord::Schema.define(version: 20170329235433) do
     t.integer  "updated_user_id"
   end
 
+  create_table "ship_prepare_item_weighs", force: true do |t|
+    t.integer  "ship_prepare_item_id"
+    t.decimal  "weight",                          precision: 15, scale: 2
+    t.decimal  "weight_container",                precision: 15, scale: 2
+    t.decimal  "weight_goods",                    precision: 15, scale: 2
+    t.string   "driver",               limit: 50
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "ship_prepare_items", force: true do |t|
     t.integer  "ship_prepare_id"
     t.string   "item_status",        limit: 5
     t.string   "item_type",          limit: 2
+    t.string   "in_out_type",        limit: 1
     t.integer  "import_header_id"
     t.integer  "ship_prepare_op_id"
     t.boolean  "to_weigh"
@@ -363,12 +376,16 @@ ActiveRecord::Schema.define(version: 20170329235433) do
     t.integer  "moved_by_user_id"
     t.datetime "moved_at"
     t.text     "notes",              limit: 16777215
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "ship_prepare_ops", force: true do |t|
-    t.string   "name",       limit: 50
+    t.string   "name",            limit: 50
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -376,6 +393,7 @@ ActiveRecord::Schema.define(version: 20170329235433) do
   create_table "ship_prepares", force: true do |t|
     t.integer  "customer_id"
     t.integer  "ship_id"
+    t.string   "handling_status",   limit: 5
     t.date     "departure_date"
     t.string   "voyage",            limit: 15
     t.string   "load_type",         limit: 50
@@ -392,6 +410,8 @@ ActiveRecord::Schema.define(version: 20170329235433) do
     t.decimal  "weight",                             precision: 15, scale: 2
     t.decimal  "amount",                             precision: 10, scale: 2
     t.boolean  "request_received"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

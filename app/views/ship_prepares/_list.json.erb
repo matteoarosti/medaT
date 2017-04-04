@@ -129,6 +129,15 @@
 			         return '<h5>' + (rowIndex + 1) + '</h5>';
 			        }			        
 			    }, {
+			     	text: 'Stato',
+			     	width:60,
+			     	dataIndex: 'ship_prepare_status',
+			     	renderer: function(val){
+						if (val == 'OPEN') return '<i class="fa fa-circle-o fa-3x" style="color:green;"></i>';
+						if (val == 'CLOSE') return '<i class="fa fa-times fa-3x" style="color:gray;"></i>';
+						return '<i class="fa fa-plus fa-3x" style="color:yellow;"></i>';			     	
+			     	}
+			     }, {
 			        dataIndex: 'customer_id',
 			        text: 'Cliente',
 			        width: 200,
@@ -143,8 +152,15 @@
 			        width: 200,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h3>' + rec.get('ship').name + '</h3>';
-			         ret += '<h5>Viaggio: ' + rec.get('voyage') + '</h5>';
 			          return ret;			         
+			        }			        
+			    }, {
+			        dataIndex: 'voyage',
+			        text: 'Viaggio',
+			        width: 200,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '<h3>' + rec.get('voyage') + '</h3>';
+			         return ret;			         
 			        }			        
 			    }			    
 			    
@@ -156,29 +172,10 @@
 			         ret += '<table class=import_item_detail>';			         
 					 ret += '<tr><th>Reg. il</th><td class=normal>' + Ext.util.Format.date(rec.get('created_at'), 'd-m-Y') + '</td></tr>';			         
 					 ret += '<tr><th>Data viaggio</th><td>' + Ext.util.Format.date(rec.get('departure_date'), 'd-m-Y') + '</td></tr>';
-					 ret += '<tr><th>Eseguito</th><td class=ok>' + Ext.util.Format.date(rec.get('execution_date'), 'd-m-Y') + '</td></tr>';
 			         ret += '</table>';
 			         return ret;
 			        }			        	        
 			    }			        	        
-
-
-			    , {
-			        text: 'Stato lavorazione',
-			        flex: 1,
-			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         ret = '';
-			         ret += '<table class=import_item_detail>';			         
-					 ret += '<tr><th>ICOP</th><td>' + rec.get('nr_container_01') + '</td></tr>';			         
-					 ret += '<tr><th>IP</th><td>' + rec.get('nr_container_02') + '</td></tr>';
-					 ret += '<tr><th>ACT</th><td>' + rec.get('nr_container_03') + '</td></tr>';
-			         ret += '</table>';
-			         return ret;
-			        }			        	        
-			    }			        	        
-
-
-
 
 
 				, {
@@ -191,7 +188,7 @@
 			            var id = Ext.id();
 			            setTimeout(function() {
 			            			          
-			                ok_img = 'fa-check-square-o';
+			                ok_img = 'fa-edit';
 			                var set_external = true;
 		                	btn_cls = 'btn-used';
 		                	if (Ext.isEmpty(rec.get('execution_date')) == true)
@@ -206,7 +203,7 @@
 			                        
 			                        	//disabilito per prevenire doppia esecuizione
 			                        	//button.disable();	                   
-		                            	acs_show_panel_std(myApp, '<%= url_for(:action=>'gest') -%>', {item_id: rec.get('id'), op='EDIT'}, 'ship_prepares_gest_' + rec.get('id'));	                   				                			                             														                            
+		                            	acs_show_panel_std(myApp, '<%= url_for(:action=>'gest') -%>', {item_id: rec.get('id'), op:'EDIT'}, 'ship_prepares_gest_' + rec.get('id'));	                   				                			                             														                            
 			                           	return false;
 
 			                        }, scope: rec //handler

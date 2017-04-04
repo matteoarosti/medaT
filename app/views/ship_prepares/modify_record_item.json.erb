@@ -15,6 +15,8 @@
 			},
 	    items: [
 			      <%= raw extjs_std_hiddenfield('id', @item) -%>,
+				  , <%= raw extjs_std_combo('in_out_type', @item,
+					    	{:store => extjs_std_store_data(HandlingItem.new.load_dischage_get_data_json), :allowBlank=>false}) -%>									      			      
 			      , <%= raw extjs_std_combo_model('ship_prepare_op', @item) -%>
 			      , <%= raw extjs_std_numberfield('qty', @item) -%>
 			      , <%= raw extjs_std_booleanfield('to_weigh', @item) -%>

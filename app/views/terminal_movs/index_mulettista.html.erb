@@ -189,7 +189,7 @@ s = Ext.create('Ext.container.Viewport',{
 					      	scale: 'large',					       
 					    	text : '<i class="fa fa-ship fa-3x" style="color:brown;"></i><span style="margin-left: 20px;">Lavorazione nave</span>', 
 					    	height: 60,
-					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'ship_prepares', :action=>'select_to_open', :import_type => '') -%>', {}, 'tttt');}
+					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'ship_prepares', :action=>'select_to_open', :op=>'MOVE') -%>', {}, 'tttt');}
 					      }, {xtype : "button",
 					      	scale: 'large',					       
 					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Rientro da officina</span>', 
@@ -206,6 +206,7 @@ s = Ext.create('Ext.container.Viewport',{
     });
 
 
+ myApp = Ext.getCmp('main-panel')
 
       //      acs_show_panel_std(s.down('panel'), '<%= url_for(:controller=>'terminal_movs', :action=>'tab_dashboard') -%>', {}, 'tttt');
 

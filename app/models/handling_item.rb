@@ -142,5 +142,13 @@ def handling_item_type_get_data_json
  ]
 end 
  
+#valori per combo
+def load_dischage_get_data_json
+ [
+  {:cod=>'L',    :descr=>'Imbarco'},
+  {:cod=>'D',    :descr=>'Sbarco'}
+ ]
+end 
+
  
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170404204138) do
+ActiveRecord::Schema.define(version: 20170418211810) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -358,6 +358,7 @@ ActiveRecord::Schema.define(version: 20170404204138) do
     t.decimal  "weight_container",                precision: 15, scale: 2
     t.decimal  "weight_goods",                    precision: 15, scale: 2
     t.string   "driver",               limit: 50
+    t.string   "plate",                limit: 15
     t.integer  "created_user_id"
     t.integer  "updated_user_id"
     t.datetime "created_at"
@@ -372,6 +373,7 @@ ActiveRecord::Schema.define(version: 20170404204138) do
     t.integer  "import_header_id"
     t.integer  "ship_prepare_op_id"
     t.boolean  "to_weigh"
+    t.integer  "um_id"
     t.decimal  "qty",                                 precision: 15, scale: 2
     t.integer  "moved_by_user_id"
     t.datetime "moved_at"
@@ -393,22 +395,22 @@ ActiveRecord::Schema.define(version: 20170404204138) do
   create_table "ship_prepares", force: true do |t|
     t.integer  "customer_id"
     t.integer  "ship_id"
-    t.string   "handling_status",   limit: 5
+    t.string   "ship_prepare_status", limit: 5
     t.date     "departure_date"
-    t.string   "voyage",            limit: 15
-    t.string   "load_type",         limit: 50
-    t.text     "notes",             limit: 16777215
+    t.string   "voyage",              limit: 15
+    t.string   "load_type",           limit: 50
+    t.text     "notes",               limit: 16777215
     t.date     "execution_date"
     t.integer  "execution_user_id"
     t.datetime "execution_at"
-    t.text     "execution_notes",   limit: 16777215
+    t.text     "execution_notes",     limit: 16777215
     t.integer  "nr_container_01"
     t.integer  "nr_container_02"
     t.integer  "nr_container_03"
     t.integer  "nr_container_04"
     t.integer  "nr_container_05"
-    t.decimal  "weight",                             precision: 15, scale: 2
-    t.decimal  "amount",                             precision: 10, scale: 2
+    t.decimal  "weight",                               precision: 15, scale: 2
+    t.decimal  "amount",                               precision: 10, scale: 2
     t.boolean  "request_received"
     t.integer  "created_user_id"
     t.integer  "updated_user_id"
@@ -497,6 +499,13 @@ ActiveRecord::Schema.define(version: 20170404204138) do
     t.datetime "updated_at"
     t.integer  "created_user_id"
     t.integer  "updated_user_id"
+  end
+
+  create_table "ums", force: true do |t|
+    t.string   "code",       limit: 5
+    t.string   "name",       limit: 20
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

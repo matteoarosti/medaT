@@ -2,6 +2,7 @@ class ShipPrepareItem < ActiveRecord::Base
   belongs_to   :ship_prepare
   belongs_to   :import_header
   belongs_to   :ship_prepare_op
+  belongs_to   :um
   has_many     :ship_prepare_item_weighs
   
   def self.as_json_prop()
@@ -9,8 +10,9 @@ class ShipPrepareItem < ActiveRecord::Base
         :include=>{
              :import_header  => {},
              :ship_prepare_op  => {},  
+             :um  => {}
          },
-        :methods => [:out_item_status, :out_qty, :out_to_weigh, :display_moved_info]
+        :methods => [:out_item_status, :out_item_status_ric, :out_qty, :out_to_weigh, :display_moved_info]
        }
   end     
 
@@ -21,9 +23,22 @@ class ShipPrepareItem < ActiveRecord::Base
     return self.weigh_status if self.item_type == 'OP' and self.to_weigh
   end
 
+  def out_item_status_ric
+    return "" if self.import_header
+    return self.display_moved_info_ric if self.item_type == 'OP' and !self.to_weigh
+    return self.weigh_status_ric if self.item_type == 'OP' and self.to_weigh
+  end
+  
+  
   def weigh_status
     ret = ''
-    ret += "<p><span style='font-size:20px; font-weight: bold'>#{ActionController::Base.helpers.number_with_delimiter(ship_prepare_item_weighs.sum(:weight_goods).to_i, delimiter: ".")} kg</span><br/>(#{ship_prepare_item_weighs.count} pesata/e)</p>"
+    ret += "<p><span style='font-size:20px; font-weight: bold'>#{ActionController::Base.helpers.number_with_delimiter(ship_prepare_item_weighs.not_ric.sum(:qty).to_i, delimiter: ".")}</span><br/>(#{ship_prepare_item_weighs.not_ric.count} pesata/e)</p>"
+    return ret
+  end
+
+  def weigh_status_ric
+    ret = ''
+    ret += "<p><span style='font-size:20px; font-weight: bold'>#{ActionController::Base.helpers.number_with_delimiter(ship_prepare_item_weighs.ric.sum(:qty_ric).to_i, delimiter: ".")}</span><br/>(#{ship_prepare_item_weighs.ric.count} pesata/e)</p>"
     return ret
   end
   
@@ -38,14 +53,28 @@ class ShipPrepareItem < ActiveRecord::Base
 
   
   def display_moved_info
-    return '' if self.moved_at.nil?
-    
-    created_user = User.find(self.moved_by_user_id) rescue created_user = User.new    
     ret = ''
-    ret += "#{self.moved_at.strftime("%d/%m/%y %H:%M")} by #{created_user.name.to_s}"   
-    return ret
+    ret += "<p><span style='font-size:20px; font-weight: bold'>#{ActionController::Base.helpers.number_with_delimiter(ship_prepare_item_weighs.sum(:qty).to_i, delimiter: ".")}</span><br/>(#{ship_prepare_item_weighs.not_ric.count} virata/e)</p>"
+    return ret    
+    
+    #return '' if self.moved_at.nil?    
+    #created_user = User.find(self.moved_by_user_id) rescue created_user = User.new    
+    #ret = ''
+    #ret += "#{self.moved_at.strftime("%d/%m/%y %H:%M")} by #{created_user.name.to_s}"   
+    #return ret
   end
   
+  def display_moved_info_ric
+    ret = ''
+    ret += "<p><span style='font-size:20px; font-weight: bold'>#{ActionController::Base.helpers.number_with_delimiter(ship_prepare_item_weighs.sum(:qty_ric).to_i, delimiter: ".")}</span><br/>(#{ship_prepare_item_weighs.ric.count} virata/e)</p>"
+    return ret    
+    
+    #return '' if self.moved_at.nil?    
+    #created_user = User.find(self.moved_by_user_id) rescue created_user = User.new    
+    #ret = ''
+    #ret += "#{self.moved_at.strftime("%d/%m/%y %H:%M")} by #{created_user.name.to_s}"   
+    #return ret
+  end
   
     
 end

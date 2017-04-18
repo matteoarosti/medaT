@@ -499,6 +499,10 @@ Ext.define("plugin.Printer", {
                                  task:<%= raw t("menu.ship_prepares.op").to_json %>,
                                  url: '<%= url_for(:controller=>'ship_prepare_ops', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
+                             }, { 
+                                 task:<%= raw t("menu.ship_prepares.um").to_json %>,
+                                 url: '<%= url_for(:controller=>'ums', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 leaf:true 
                              }, {
                                 task:<%= raw t("menu.ship_prepares.new").to_json %>,
                                 url: '<%= url_for(:controller=>'ship_prepares', :action=>'create_new') -%>',

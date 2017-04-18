@@ -13,6 +13,7 @@ class CreateShipPrepareItems < ActiveRecord::Migration
       #OP - imbarco/sbarco merce
       t.belongs_to  :ship_prepare_op    #operazione/merce da imbarcare/sbarcare
       t.boolean     :to_weigh           #true -> richiesta pesa (es: ferro sfuso)
+      t.belongs_to  :um
       t.decimal     :qty,               :precision => 15, :scale => 2 #qty merce o peso
       t.integer     :moved_by_user_id   #chi ha spuntato l'operazione
       t.datetime    :moved_at      

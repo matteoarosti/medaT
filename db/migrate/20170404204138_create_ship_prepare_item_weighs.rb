@@ -4,12 +4,11 @@ class CreateShipPrepareItemWeighs < ActiveRecord::Migration
 
       t.belongs_to  :ship_prepare_item
       
-      t.decimal     :weight,                :precision => 15, :scale => 2 #peso merce + container
-      
-      t.decimal     :weight_container,      :precision => 15, :scale => 2 #peso tara container
-      t.decimal     :weight_goods,          :precision => 15, :scale => 2 #peso merce       
-      
+      t.decimal     :qty,                   :precision => 15, :scale => 2
+      t.decimal     :qty_ric,               :precision => 15, :scale => 2   #qty ricarica (da piazzale a cliente...)
+            
       t.string      :driver,                :limit => 50
+      t.string      :plate,                 :limit => 15 #targa mezzo
       
       t.integer :created_user_id
       t.integer :updated_user_id

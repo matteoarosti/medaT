@@ -208,7 +208,7 @@ def items_close_to_be_moved
   render json: {:success => true, :message => nil}      
 end
  
-#azzero il flag to_be_moved (eseguito dal mulettista dopo aver movimentato il container)
+#aggiungo le quantita imbarco / sbarco
 ##################################################
 def save_item_weight
 ##################################################
@@ -216,13 +216,28 @@ def save_item_weight
   item = spi.ship_prepare_item_weighs.new
   params.permit!
     
-  item.weight_goods = params[:weight_goods].to_s.gsub(',', '.').to_f
-  item.driver = params[:driver]  
+  item.qty = params[:qty].to_s.gsub(',', '.').to_f
+  item.plate = params[:plate]  
     
   ret = item.save!  
   render json: {:success => true, :message => nil}      
 end
  
+
+#aggiungo le quantita di ricarica
+##################################################
+def save_item_weight_ric
+##################################################
+  spi = ShipPrepareItem.find(params[:rec_id])
+  item = spi.ship_prepare_item_weighs.new
+  params.permit!
+    
+  item.qty_ric = params[:qty].to_s.gsub(',', '.').to_f
+  item.plate = params[:plate]  
+    
+  ret = item.save!  
+  render json: {:success => true, :message => nil}      
+end
  
  
  def report_by_customer

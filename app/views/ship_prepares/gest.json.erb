@@ -109,7 +109,15 @@
 			     	dataIndex: 'notes',
 			     	renderer: function(value) { return '<p>' + (value || "") +'</p>';}
 			     }, {
-			     	text: 'Qt&agrave; / Kg / Nr.',
+			     	text: 'UM',
+			     	width: 60,
+			     	dataIndex: 'notes',
+			     	renderer: function(value, metaData, rec) {
+			     		if (Ext.isEmpty(rec.data.um)) return ""; 
+			     		return '<p>' + (rec.data.um.code || "") +'</p>'; 
+			     	}
+			     }, {
+			     	text: 'Qt&agrave;',
 			     	width: 100, align: 'right',
 			     	dataIndex: 'out_qty',
 			     	renderer: function(value) { return '<h3>' + Ext.util.Format.number(value, "0,000") + '</h3>'; }
@@ -123,9 +131,14 @@
 					}
 
 			     }, {
-			     	text: 'Stato / Eseguito il',
+			     	text: 'Stato',
 			     	flex: 1,
 			     	dataIndex: 'out_item_status',
+			     	renderer: function(value) { return '<p>' + value +'</p>';}
+			     }, {
+			     	text: 'Stato Ricarica',
+			     	flex: 1,
+			     	dataIndex: 'out_item_status_ric',
 			     	renderer: function(value) { return '<p>' + value +'</p>';}
 			     }
 			     
@@ -137,14 +150,12 @@
 			        	var loc_grid = this;
 
 			        	if (rec.get('item_type') != 'OP') return '';
-			        	if (Ext.isEmpty(rec.get('moved_at')) == false) return '';
 			        	if (rec.get('to_weigh') == true) return '';
 			        	
 			            var id = Ext.id();
 			            setTimeout(function() {
 			            
 			                ok_img = 'fa-check-circle';
-			                				            
 			            
 			                var buttonOK = Ext.create('Ext.button.Button', {
 			                	
@@ -153,43 +164,115 @@
 		                		scale: 'large',			                    
 			                        handler: function(button, b, c, d, e) {
 			                        
-			                        	//disabilito per prevenire doppia esecuizione
-			                        	button.disable();			                        
-			                        
-											Ext.Ajax.request({
-											   method: 'POST',
-											   url: '<%= url_for(:controller=>'ship_prepares', :action=>'items_close_to_be_moved') -%>',
-											   jsonData: {
-											    rec_id: rec.get('id'),
-											   },
-															   success: function(result, request) {
-															   	  var jsonData = Ext.JSON.decode(result.responseText);
-															   	  
-															   	  if (jsonData.success == false){
-																	Ext.MessageBox.show({
-												                        title: 'EXCEPTION',
-												                        msg: jsonData.message,
-												                        icon: Ext.MessageBox.ERROR,
-												                        buttons: Ext.Msg.OK
-											                    	})															   	  
-															   	  } else {
-																      store.remove(rec);
-																	  store.load();
-															   	  }															   	 
-															   },
-															   failure: function(response, opts) {
-															      console.log('server-side failure with status code ' + response.status);
-																	Ext.MessageBox.show({
-												                        title: 'EXCEPTION',
-												                        msg: 'Errore sconosciuto',
-												                        icon: Ext.MessageBox.ERROR,
-												                        buttons: Ext.Msg.OK
-											                    	})															   	  															      
-															   }
-
-											});
-										  		
-										  return false;										
+           								loc_form = Ext.create('Ext.form.Panel', {
+											    title: '',
+											    frame: true,
+											    bodyPadding: 10,
+											    defaultType: 'textfield',
+											    	layout: {
+													    type: 'vbox',
+													    align : 'stretch',
+													    pack  : 'start',
+													},
+											    items: [
+											      {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},
+											      {xtype: 'numberfield', name: 'qty', allowBlank: false, fieldLabel: 'Quantit&agrave;', fieldStyle: 'font-size: 32px; text-transform: uppercase;'},
+											        
+											      {xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}											      
+											      										    										    										    
+											    ]
+											    ,
+								    			dockedItems: [{
+												    xtype: 'toolbar',
+												    dock: 'right',
+												    width: 135,
+													defaults: {
+												        xtype: 'button', scale: 'medium', textAlign: 'left'
+									                },			    
+												    margin: '5 5 5 5',
+											    
+											     	items:
+												        [{
+												            text: '<br/>Imbarco / <br/>Sbarco<br/>&nbsp;',
+												            scale: 'large', cls: 'btn-confirm',
+												            handler: function (btn, evt) {
+												                           
+												             form = this.up('form').getForm();
+												             tmp_win  = this.up('window');
+												             if (form.isValid()) {
+												                btn.disable();
+												                
+											                    form.submit({
+											                        url: '<%= url_for(:controller=>'ship_prepares', :action=>'save_item_weight') -%>',
+											                        waitMsg: 'Salvataggio in corso....',
+											                        success: function(fp, o) {
+																	      loc_grid.store.remove(rec);
+																	      loc_grid.store.load();
+																	      tmp_win.close();
+											                        },
+																	failure: function(fp, o) {
+											                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+										                                Ext.Msg.alert('Import non eseguito. ', o.result.message);	                            
+											                        }	                        
+											                    });
+											                    return false;
+												             }
+												            }
+												          }, 
+												          
+														  {
+												            text: '<br/>Ricarica<br/>&nbsp;',
+												            scale: 'large', cls: 'btn-confirm',
+												            handler: function (btn, evt) {
+												                           
+												             form = this.up('form').getForm();
+												             tmp_win  = this.up('window');
+												             if (form.isValid()) {
+												                btn.disable();
+												                
+											                    form.submit({
+											                        url: '<%= url_for(:controller=>'ship_prepares', :action=>'save_item_weight_ric') -%>',
+											                        waitMsg: 'Salvataggio in corso....',
+											                        success: function(fp, o) {
+																	      loc_grid.store.remove(rec);
+																	      loc_grid.store.load();
+																	      tmp_win.close();
+											                        },
+																	failure: function(fp, o) {
+											                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+										                                Ext.Msg.alert('Import non eseguito. ', o.result.message);	                            
+											                        }	                        
+											                    });
+											                    return false;
+												             }
+												            }
+												          },												          
+												          
+												          {
+												            text: 'Chiudi',												            
+												            scale: 'large',
+												            handler: function (btn, evt) {
+												            	tmp_win  = this.up('window');
+												            	tmp_win.close();
+												            }
+												          }
+												          
+												         ]
+	  												}]	  												   											   											
+   														  												
+											});		
+											
+				                           loc_win = Ext.create('Ext.window.Window',{
+											    layout: 'fit',
+											    items: loc_form,
+											    title: 'Registra peso (MOVE)',
+											    width: 500,
+											    height: 350,
+											    id: 'myWindow'
+											}).show();
+														                             
+			                           	return false;
+			                           								
 			                        }, scope: rec
 
 			                });
@@ -197,6 +280,7 @@
 			                if (Ext.get(id)) {
 			                    buttonOK.render(Ext.get(id));
 			                }
+
 			            }, 1);
 			            return '<div id="' + id + '"></div>';
 			        }
@@ -239,8 +323,8 @@
 													},
 											    items: [
 											      {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},
-											      {xtype: 'numberfield', name: 'weight_goods', allowBlank: false, fieldLabel: 'Kg merce', fieldStyle: 'font-size: 32px; text-transform: uppercase;'},
-											      {xtype: 'textfield', name: 'driver', value: rec.get('driver'), fieldLabel: 'Autista'},
+											      {xtype: 'numberfield', name: 'qty', allowBlank: false, fieldLabel: 'Quantit&agrave;', fieldStyle: 'font-size: 32px; text-transform: uppercase;'},
+											      {xtype: 'textfield', name: 'plate', value: rec.get('plate'), fieldLabel: 'Targa'},
 											        
 											      {xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}											      
 											      										    										    										    
@@ -257,7 +341,7 @@
 											    
 											     	items:
 												        [{
-												            text: 'Conferma',
+												            text: '<br/>Imbarco / <br/>Sbarco<br/>&nbsp;',
 												            scale: 'large', cls: 'btn-confirm',
 												            handler: function (btn, evt) {
 												                           
@@ -284,6 +368,35 @@
 												            }
 												          }, 
 												          
+												          
+														  {
+												            text: '<br/>Ricarica<br/>&nbsp;',
+												            scale: 'large', cls: 'btn-confirm',
+												            handler: function (btn, evt) {
+												                           
+												             form = this.up('form').getForm();
+												             tmp_win  = this.up('window');
+												             if (form.isValid()) {
+												                btn.disable();
+												                
+											                    form.submit({
+											                        url: '<%= url_for(:controller=>'ship_prepares', :action=>'save_item_weight_ric') -%>',
+											                        waitMsg: 'Salvataggio in corso....',
+											                        success: function(fp, o) {
+																	      loc_grid.store.remove(rec);
+																	      loc_grid.store.load();
+																	      tmp_win.close();
+											                        },
+																	failure: function(fp, o) {
+											                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+										                                Ext.Msg.alert('Import non eseguito. ', o.result.message);	                            
+											                        }	                        
+											                    });
+											                    return false;
+												             }
+												            }
+												          },												          
+												          
 												          {
 												            text: 'Chiudi',												            
 												            scale: 'large',
@@ -301,7 +414,7 @@
 				                           loc_win = Ext.create('Ext.window.Window',{
 											    layout: 'fit',
 											    items: loc_form,
-											    title: 'Registra peso',
+											    title: 'Registra peso (WEIGH)',
 											    width: 500,
 											    height: 350,
 											    id: 'myWindow'
@@ -437,6 +550,7 @@
 												    	{:store => extjs_std_store_data(HandlingItem.new.load_dischage_get_data_json), :allowBlank=>false}) -%>									      
 										      
 										      , <%= raw extjs_std_combo_model('ship_prepare_op', @item.ship_prepare_items.new) -%>
+										      , <%= raw extjs_std_combo_model('um', @item.ship_prepare_items.new) -%>
 										      , <%= raw extjs_std_numberfield('qty', @item.ship_prepare_items.new) -%>
 										      , <%= raw extjs_std_booleanfield('to_weigh', @item.ship_prepare_items.new) -%>
 										      , <%= raw extjs_std_textareafield('notes', @item.ship_prepare_items.new) -%>

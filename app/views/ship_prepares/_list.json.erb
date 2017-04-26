@@ -144,8 +144,7 @@
 			        width: 200,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h3>' + rec.get('customer').name + '</h3>';
-			     	 ret += '<h5>Tipo carico: ' + rec.get('load_type') + '</h5>';
-			          return ret;			         
+			         return ret;
 			        }			        
 			    }, {
 			        dataIndex: 'ship_id',

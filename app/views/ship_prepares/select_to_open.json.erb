@@ -37,6 +37,17 @@
 			         return '<h5>' + (rowIndex + 1) + '</h5>';
 			        }			        
 			    }, {
+			     	text: 'Stato',
+			     	width:60,
+			     	dataIndex: 'ship_prepare_status',
+			     	renderer: function(val){
+						if (val == 'OPEN') return '<i class="fa fa-circle-o fa-3x" style="color:green;"></i>';
+						if (val == 'CLOSE') return '<i class="fa fa-times fa-3x" style="color:gray;"></i>';
+						if (val == 'RIC') return '<i class="fa fa-adjust fa-3x" style="color:blue;"></i>';
+						if (val == 'PREP') return '<i class="fa fa-pause fa-3x" style="color:yellow;"></i>';												
+						return '<i class="fa fa-plus fa-3x" style="color:yellow;"></i>';			     	
+			     	}
+			     }, {
 			        dataIndex: 'customer_id',
 			        text: 'Cliente',
 			        width: 200,

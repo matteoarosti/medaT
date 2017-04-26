@@ -185,12 +185,39 @@ s = Ext.create('Ext.container.Viewport',{
 					    	text : '<i class="fa fa-upload fa-3x" style="color:red;"></i><span style="margin-left: 20px;">Apri import - IMBARCO</span>', 
 					    	height: 60,
 					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'import_headers', :action=>'find_import_simple', :import_type => 'L') -%>', {}, 'tttt');}
-					      }, {xtype : "button",
-					      	scale: 'large',					       
-					    	text : '<i class="fa fa-ship fa-3x" style="color:brown;"></i><span style="margin-left: 20px;">Lavorazione nave</span>', 
-					    	height: 60,
-					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'ship_prepares', :action=>'select_to_open', :op=>'MOVE') -%>', {}, 'tttt');}
-					      }, {xtype : "button",
+					      }
+					      
+					      
+								, {xtype : "button",
+							      	scale: 'large',					       
+							    	text : '<i class="fa fa-ship fa-3x" style="color:brown;"></i><span style="margin-left: 20px;">Lavorazione nave</span>', 
+							    	height: 60,
+							    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'ship_prepares', :action=>'select_to_open', :op=>'MOVE') -%>', {}, 'tttt');}
+							      }					      
+					      
+/*					      
+					      , {
+					          xtype: "fieldcontainer",
+					          layout: 'hbox',
+					          items: [
+								  {xtype : "button",
+								    margin: '0 10 0 0',
+							      	scale: 'large',					       
+							    	text : '<i class="fa fa-ship fa-3x" style="color:green;"></i><span style="margin-left: 20px;">Lavorazione nave Imb/Sba.</span>', 
+							    	height: 60, flex: 1,
+							    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'ship_prepares', :action=>'select_to_open', :status=>'OPEN', :op=>'MOVE') -%>', {}, 'tttt');}
+							      }, {xtype : "button",
+							      	margin: '0 0 0 0',
+							      	scale: 'large',					       
+							    	text : '<i class="fa fa-ship fa-3x" style="color:brown;"></i><span style="margin-left: 20px;">Lavorazione nave</span>', 
+							    	height: 60, flex: 1,
+							    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'ship_prepares', :action=>'select_to_open', :op=>'MOVE') -%>', {}, 'tttt');}
+							      }
+							  ]
+					      }
+*/					      
+					      
+					      , {xtype : "button",
 					      	scale: 'large',					       
 					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Rientro da officina</span>', 
 					    	height: 60,

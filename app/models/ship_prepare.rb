@@ -4,7 +4,7 @@ class ShipPrepare < ActiveRecord::Base
   belongs_to :ship
   has_many   :ship_prepare_items
   
-  scope :not_closed, -> {where("ship_prepare_status <> ?", 'CLOSE')}
+  scope :not_closed, -> {where("ship_prepare_status NOT IN('CLOSE', 'PREP')")}
   
   def self.as_json_prop()
       return { 
@@ -22,7 +22,8 @@ def status_get_data_json
  [
   {:cod=>'OPEN',     :descr=>'Aperto'},
   {:cod=>'CLOSE',    :descr=>'Chiuso'},
-  {:cod=>'EDIT',     :descr=>'In preparazione'}
+  {:cod=>'PREP',     :descr=>'In preparazione'},
+  {:cod=>'RIC',      :descr=>'In ricarica'}
  ]
 end 
   

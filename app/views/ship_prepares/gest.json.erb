@@ -131,19 +131,19 @@
 					}
 
 			     }, {
-			     	text: 'Stato',
+			     	text: 'Sbarco/Imbarco',
 			     	flex: 1,
 			     	dataIndex: 'out_item_status',
 			     	renderer: function(value) { return '<p>' + value +'</p>';}
 			     }, {
-			     	text: 'Stato Ricarica',
+			     	text: 'Ricarica Imb./Sba.',
 			     	flex: 1,
 			     	dataIndex: 'out_item_status_ric',
 			     	renderer: function(value) { return '<p>' + value +'</p>';}
 			     }
 			     
 			     
-<% if params[:op] == 'MOVE' #muletto: spunta voce imbarcata/sbarcata %>			     
+<% if 1==1 || params[:op] == 'MOVE' #muletto: spunta voce imbarcata/sbarcata %>			     
 			     , {
 			        text: '', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
@@ -547,12 +547,15 @@
 										      , {xtype: 'hiddenfield', name: 'item_type', value: 'OP'}
 										      
 											  , <%= raw extjs_std_combo('in_out_type', @item.ship_prepare_items.new,
-												    	{:store => extjs_std_store_data(HandlingItem.new.load_dischage_get_data_json), :allowBlank=>false}) -%>									      
+												    	{
+												    		:fieldLabel=>'Imbarco/Sbarco',
+												    		:store => extjs_std_store_data(HandlingItem.new.load_dischage_get_data_json), :allowBlank=>false
+												    	}) -%>									      
 										      
-										      , <%= raw extjs_std_combo_model('ship_prepare_op', @item.ship_prepare_items.new) -%>
+										      , <%= raw extjs_std_combo_model('ship_prepare_op', @item.ship_prepare_items.new, {:fieldLabel=>'Merce'}) -%>
 										      , <%= raw extjs_std_combo_model('um', @item.ship_prepare_items.new) -%>
 										      , <%= raw extjs_std_numberfield('qty', @item.ship_prepare_items.new) -%>
-										      , <%= raw extjs_std_booleanfield('to_weigh', @item.ship_prepare_items.new) -%>
+										      , <%= raw extjs_std_booleanfield('to_weigh', @item.ship_prepare_items.new, {:fieldLabel=>'Da pesare'}) -%>
 										      , <%= raw extjs_std_textareafield('notes', @item.ship_prepare_items.new) -%>
 										    ]
 										    , 	buttons:

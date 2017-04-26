@@ -352,6 +352,12 @@
 												             form = this.up('form').getForm();
 												             tmp_win  = this.up('window');
 												             if (form.isValid()) {
+												             
+												             	if(form.findField('qty').getValue() + form.findField('qty_tare').getValue() != form.findField('qty_gross').getValue()){
+												             		alert('Verificare la correttezza dei pesi inseriti');
+												             		return false;
+												             	}												             
+												             
 												                btn.disable();
 												                
 											                    form.submit({
@@ -381,6 +387,12 @@
 												             form = this.up('form').getForm();
 												             tmp_win  = this.up('window');
 												             if (form.isValid()) {
+												             
+												             	if(form.findField('qty').getValue() + form.findField('qty_tare').getValue() != form.findField('qty_gross').getValue()){
+												             		alert('Verificare la correttezza dei pesi inseriti');
+												             		return false;
+												             	}
+												             
 												                btn.disable();
 												                
 											                    form.submit({
@@ -628,6 +640,24 @@
 			 
 			 
 			  ,  listeners: {
+			  
+			  
+			  
+					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
+					    	column_name = gridView.getGridColumns()[columnIndex].dataIndex
+					        if (column_name == 'out_item_status') { //doppio click sul num_container... apro il movimento aperto
+							  acs_show_win_std('Dettaglio', <%= raw url_for(:controller=>'ship_prepares', :action=>'weigh_details').to_json -%>,
+				     	 			{type: 'STD', rec_id: rec.get('id')}, 600, 400);	    
+					        }
+					        if (column_name == 'out_item_status_ric') { //doppio click sul num_container... apro il movimento aperto
+							  acs_show_win_std('Dettaglio', <%= raw url_for(:controller=>'ship_prepares', :action=>'weigh_details').to_json -%>,
+				     	 			{type: 'RIC', rec_id: rec.get('id')}, 600, 400);	    
+					        }
+					        
+					    },
+			  
+			  
+			  
 	                	itemcontextmenu : function(item, record, index, e, eOpts){
 	                		eOpts.stopEvent();
                             var xy = eOpts.getXY();	                	

@@ -1,0 +1,76 @@
+{
+ success: true,
+ items: [
+ 
+    		
+	        		
+	        	//GRID con movimenti per container	        		
+					 {
+						xtype: 'grid',
+						loadMask: true,
+						flex: 1,
+						
+						layout: 'fit',
+						
+						tbar: [{
+            				xtype: 'label',
+            				html: "Dettaglio movimenti"
+        				},'->',
+				        {
+				            xtype:'button',
+				            text:'Refresh',
+				            handler: function(bt){				            					            	
+				            	bt.up('window').down('grid').store.load();
+				            }				            
+				        }],
+									
+						store: {
+							xtype: 'store',
+							autoLoad: true,	
+							proxy: {
+								url: <%= raw url_for(:controller => 'ship_prepares', :action=>'get_item_weight_details').to_json -%>,
+		        	            extraParams: {        	            	
+        			            	type: <%= raw params['type'].to_json -%>,
+        			            	rec_id: <%= raw params['rec_id'].to_json -%>,
+        	    		        },
+ 
+								method: 'POST',
+								type: 'ajax',
+					
+								//Add these two properties
+								actionMethods: {
+									read: 'POST'
+								},
+					
+								reader: {
+									type: 'json',
+									method: 'POST',
+									rootProperty: 'items'
+								}
+							},
+								
+							fields: [] //serve
+						}, //store
+						columns: [
+									{header: 'Data', dataIndex: 'created_at', width: 110, xtype:  'datecolumn', format: 'd/m/y H:i'},
+									{header: 'Netto', dataIndex: 'qty', flex: 1, align: 'right'},
+									{header: 'Netto Ricarica', dataIndex: 'qty_ric', flex: 1, align: 'right'},
+									{header: 'Tara', dataIndex: 'qty_tare', flex: 1, align: 'right'},
+									{header: 'Lordo', dataIndex: 'qty_gross', flex: 1, align: 'right'},
+						            {header: 'Targa', dataIndex: 'plate', flex: 1}
+						          ],
+						
+						
+						listeners : {
+						    itemdblclick: function(dv, rec, item, index, e) {
+							  acs_show_win_std('Dettaglio', <%= raw url_for(:controller=>'ship_prepares', :action=>'edit_item_weight_details').to_json -%>,
+				     	 			{id: rec.get('id')}, 600, 400);						    						    	
+						    }, scope: this
+						}						 
+					}	        		
+	        		
+ 
+ 
+ 
+ ]
+}

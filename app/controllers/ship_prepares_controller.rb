@@ -243,7 +243,38 @@ def save_item_weight_ric
   render json: {:success => true, :message => nil}      
 end
  
+
+ def get_item_weight_details
+   spi = ShipPrepareItem.find(params[:rec_id])
+   ret = {}
+   ret[:success] = true     
+   if (params[:type] == 'RIC')
+    ret[:items] = spi.ship_prepare_item_weighs.ric.as_json(ShipPrepareItemWeigh.as_json_prop)
+   else
+     ret[:items] = spi.ship_prepare_item_weighs.not_ric.as_json(ShipPrepareItemWeigh.as_json_prop)
+   end 
+   render json: ret
+ end
  
+ def edit_item_weight_details
+  @item = ShipPrepareItemWeigh.find(params[:id])
+ end
+ 
+ def exe_edit_item_weight_details
+   item = ShipPrepareItemWeigh.find(params[:data][:id])
+   params.permit!
+   item.update(params[:data])
+   ret = item.save!  
+   render json: {success: ret}
+ end
+
+def exe_delete_item_weight_details
+  item = ShipPrepareItemWeigh.find(params[:data][:id])
+  ret = item.destroy!  
+  render json: {success: ret}
+end
+
+  
  def report_by_customer
  end
   

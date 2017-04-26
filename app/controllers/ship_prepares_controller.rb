@@ -217,6 +217,8 @@ def save_item_weight
   params.permit!
     
   item.qty = params[:qty].to_s.gsub(',', '.').to_f
+  item.qty_tare = params[:qty_tare].to_s.gsub(',', '.').to_f
+  item.qty_gross = params[:qty_gross].to_s.gsub(',', '.').to_f
   item.plate = params[:plate]  
     
   ret = item.save!  
@@ -233,6 +235,8 @@ def save_item_weight_ric
   params.permit!
     
   item.qty_ric = params[:qty].to_s.gsub(',', '.').to_f
+  item.qty_tare = params[:qty_tare].to_s.gsub(',', '.').to_f
+  item.qty_gross = params[:qty_gross].to_s.gsub(',', '.').to_f    
   item.plate = params[:plate]  
     
   ret = item.save!  

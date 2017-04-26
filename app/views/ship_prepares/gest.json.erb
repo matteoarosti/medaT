@@ -324,6 +324,10 @@
 											    items: [
 											      {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},
 											      {xtype: 'numberfield', name: 'qty', allowBlank: false, fieldLabel: 'Quantit&agrave;', fieldStyle: 'font-size: 32px; text-transform: uppercase;'},
+											      
+												  {xtype: 'numberfield', name: 'qty_tare', allowBlank: false, fieldLabel: 'Tara', fieldStyle: 'font-size: 20px; text-transform: uppercase;'},
+												  {xtype: 'numberfield', name: 'qty_gross', allowBlank: false, fieldLabel: 'Lordo', fieldStyle: 'font-size: 20px; text-transform: uppercase;'},
+											      
 											      {xtype: 'textfield', name: 'plate', value: rec.get('plate'), fieldLabel: 'Targa'},
 											        
 											      {xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}											      

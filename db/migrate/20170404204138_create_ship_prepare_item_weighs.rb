@@ -7,6 +7,9 @@ class CreateShipPrepareItemWeighs < ActiveRecord::Migration
       t.decimal     :qty,                   :precision => 15, :scale => 2
       t.decimal     :qty_ric,               :precision => 15, :scale => 2   #qty ricarica (da piazzale a cliente...)
             
+      t.decimal     :qty_tare,                   :precision => 15, :scale => 2   #tara
+      t.decimal     :qty_gross,                   :precision => 15, :scale => 2  #peso lordo
+      
       t.string      :driver,                :limit => 50
       t.string      :plate,                 :limit => 15 #targa mezzo
       

@@ -212,7 +212,7 @@ end
      gcs = HandlingItem.select('DATE(datetime_op) as date_op, handling_items.handling_type, handling_item_type, count(*) as t_cont').where('operation_type=?', 'MT').group('DATE(datetime_op), handling_items.handling_type, handling_item_type')
      ### rallenta troppo e non serve!   gcs = gcs.joins(:handling_header)
      ###gcs = gcs.where('DATE(datetime_op) > NOW() - INTERVAL 35 DAY')
-     gcs = gcs.order('DATE(datetime_op) DESC').limit(35)
+     gcs = gcs.order('DATE(datetime_op) DESC').limit(200)
      gcs.each do |gc|       
        if gc.handling_item_type == 'O_LOAD'
          r["L"]["#{gc.date_op}"] = r["L"]["#{gc.date_op}"].to_i + gc.t_cont;

@@ -210,7 +210,7 @@ end
     
     #raggruppo i movimenti aperti in base al lock
      gcs = HandlingItem.select('DATE(datetime_op) as date_op, handling_items.handling_type, handling_item_type, count(*) as t_cont').where('operation_type=?', 'MT').group('DATE(datetime_op), handling_items.handling_type, handling_item_type').joins(:handling_header)
-     gcs = gcs.where('DATE(datetime_op) > NOW() - INTERVAL 35 DAY')
+     ###gcs = gcs.where('DATE(datetime_op) > NOW() - INTERVAL 35 DAY')
      gcs.each do |gc|       
        if gc.handling_item_type == 'O_LOAD'
          r["L"]["#{gc.date_op}"] = r["L"]["#{gc.date_op}"].to_i + gc.t_cont;

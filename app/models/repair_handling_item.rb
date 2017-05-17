@@ -21,6 +21,10 @@ class RepairHandlingItem < ActiveRecord::Base
     self.repair_status = 'CLOSE'
     self.save!
     
+    if self.disabled_wf_on_close == true
+      return {:success => true}
+    end
+    
     #accodo 'REPAIR' in hh
       hh = self.handling_item.handling_header
       hi = hh.handling_items.new()

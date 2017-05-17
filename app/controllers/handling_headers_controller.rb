@@ -28,6 +28,33 @@ end
 
 
 
+
+
+##################################################
+def hitem_convert_to_damaged
+##################################################      
+    hi = HandlingItem.find(params[:rec_id])    
+    
+    #se non c'e' gia' un repair aperto per per il movimento
+    if (hi.handling_header.get_open_repair_handling_item.nil?)
+      logger.info "Creo preventivo"
+      rhi = RepairHandlingItem.create_from_hi(hi)
+      rhi.disabled_wf_on_close = true
+      rhi.save!
+      
+      hi.lock_type = 'DAMAGED'
+      hi.notes_int = 'Impostato a danneggiato successivamente ' + hi.notes_int.to_s
+      hi.save!      
+    else
+      logger.info "Esiste gia' un preventivo aperto"      
+    end
+      
+    render json: {:success => true}
+end
+
+
+
+
 # Mostro esito cancellazione riga di dettaglio
 ##################################################
 def hitem_delete_preview  

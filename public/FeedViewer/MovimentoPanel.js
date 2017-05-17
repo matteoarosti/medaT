@@ -808,37 +808,95 @@ Ext.define('FeedViewer.MovimentoPanel', {
                             if (myApp.canModifyHandling == false)
                             	return false;
                             
-                            new Ext.menu.Menu({
-                                        items : [
-                                                 {
-                                                    text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
-                                                    handler: function(){
-                                                    	
-                                                    	if (record.get('handling_item_type') == 'FRCON')
-                                                        	acs_show_win_std('Modifica dettaglio allaccio frigo', myApp.railsBaseUri + 'handling_headers/hitems_edit_rfcon',
-                                  			                		 {rec_id: record.get('id')},
-                                  			                		 600, 300, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
-                                                    		
-                                                    	else                                                     	
-	                                                    	acs_show_win_std('Modifica dettaglio', myApp.railsBaseUri + 'handling_headers/hitems_edit_simple',
-	                           			                		 {rec_id: record.get('id')},
-	                           			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
-                                                    }
-                                                   }, {
-                                                       text : '<i class="fa fa-trash fa-1x"> Elimina</i>',                                                                                                        
-                                                       handler: function(){
-                                     					  Ext.MessageBox.confirm('Richieta conferma', 'Confermi eliminazione?', function(btn){
-                                     						   if(btn === 'yes'){
-       	                                                    	acs_show_win_std('Elimina dettaglio', myApp.railsBaseUri + 'handling_headers/hitem_delete_preview',
-       	                           			                		 {rec_id: record.get('id')},
-       	                           			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});                                     							   
-                                     						   }
-                                     					  });
-                                                    	   
-                                                       }
-                                                      }
-                                                 ]
-                            }).showAt(xy); 	                	
+                            ar_menu = [];
+                            ar_menu.push(
+                                {
+                                   text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
+                                   handler: function(){
+                                   	
+                                   	if (record.get('handling_item_type') == 'FRCON')
+                                       	acs_show_win_std('Modifica dettaglio allaccio frigo', myApp.railsBaseUri + 'handling_headers/hitems_edit_rfcon',
+                 			                		 {rec_id: record.get('id')},
+                 			                		 600, 300, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
+                                   		
+                                   	else                                                     	
+                                       	acs_show_win_std('Modifica dettaglio', myApp.railsBaseUri + 'handling_headers/hitems_edit_simple',
+              			                		 {rec_id: record.get('id')},
+              			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});
+                                   }
+                                 }
+                              );
+                            
+                            ar_menu.push(
+                                {
+                                      text : '<i class="fa fa-trash fa-1x"> Elimina</i>',                                                                                                        
+                                      handler: function(){
+                    					  Ext.MessageBox.confirm('Richieta conferma', 'Confermi eliminazione?', function(btn){
+                    						   if(btn === 'yes'){
+                                              	acs_show_win_std('Elimina dettaglio', myApp.railsBaseUri + 'handling_headers/hitem_delete_preview',
+                     			                		 {rec_id: record.get('id')},
+                     			                		 600, 400, null, null, null, null, {mov_panel: item.up('panel').up('panel').up('panel')});                                     							   
+                    						   }
+                    					  });
+                                   	   
+                                      }
+                                 }
+                             );
+                            
+                            
+                            if (record.get('handling_item_type') == 'INSPECT'){
+                                ar_menu.push(
+                                        {
+                                              text : '<i class="fa fa-trash fa-1x"> Converti in danneggiato (crea gestione preventivo) - No cambia stato</i>',                                                                                                        
+                                              handler: function(){
+                            					  Ext.MessageBox.confirm('Richieta conferma', 'Confermi creazione gestione preventivo?', function(btn){
+                            						   if(btn === 'yes'){                                                      	         
+                            							   
+                            							   Ext.Ajax.request({
+                            								url: myApp.railsBaseUri + 'handling_headers/hitem_convert_to_damaged',
+               							                    waitMsg: 'Esecuzione in corso....',
+               												method:'POST',                     
+               							                    jsonData: {rec_id: record.get('id')},	
+               							             	
+               												success: function(result, request) {
+               														var returnData = Ext.JSON.decode(result.responseText);
+               														if (returnData.success == false){
+               															Ext.MessageBox.show({
+               										                        title: 'EXCEPTION',
+               										                        msg: returnData.message,
+               										                        icon: Ext.MessageBox.ERROR,
+               										                        buttons: Ext.Msg.OK
+               									                    	})
+               									                      return false;										
+               														}								
+               												
+               														console.log(item);
+						 							
+               												},
+               												
+               												failure: function(rec, op) {
+               													var result = Ext.JSON.decode(op.getResponse().responseText);
+               													Ext.MessageBox.show({
+               								                        title: 'EXCEPTION',
+               								                        msg: result.message,
+               								                        icon: Ext.MessageBox.ERROR,
+               								                        buttons: Ext.Msg.OK
+               							                    	})					
+               												}, scope: this,						
+               																 
+               									    	});	                                         							   
+                            							   
+                            						   } //if yes
+                            					  });
+                                           	   
+                                              }
+                                         }
+                                     );
+                            	
+                            }
+                            
+                            
+                            new Ext.menu.Menu({items: ar_menu}).showAt(xy); 	                	
 	                }, scope: this
 	            }        	
         	

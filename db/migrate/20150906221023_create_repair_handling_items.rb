@@ -5,6 +5,9 @@ class CreateRepairHandlingItems < ActiveRecord::Migration
       t.belongs_to  :handling_item
       t.string      :repair_status
       
+      t.boolean    :disabled_wf_on_close    #i preventivi richiesti successivamente (era stato spuntato come buono e riparato al volo)
+                                            #disabilito il workflow in chiusura
+      
       #container portato in officina (inizialment combacia con il momento in cui viene indicato "DAMAGE"
       t.datetime    :in_garage_at
       t.integer     :in_garage_user_id

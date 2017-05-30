@@ -637,3 +637,35 @@ Ext.define("Um", { extend: "Ext.data.Model",
         }
     }
 });
+Ext.define("ActivityOp", { extend: "Ext.data.Model",
+    fields: [],    
+    proxy: {
+        type: 'ajax',
+        
+        method: 'POST',
+        
+		//Add these two properties
+		actionMethods: {
+			read: 'POST'
+		},
+        
+        api: {
+            read: root_path + 'activity_ops/sc_read',
+            create: root_path + 'activity_ops/sc_create',
+            update: root_path + 'activity_ops/sc_update',
+            destroy: root_path + 'activity_ops/sc_destroy'
+        },
+        reader: {
+            type: 'json',
+            successProperty: 'success',
+            rootProperty: 'items',
+            messageProperty: 'message',
+            method: 'POST'
+        },
+        writer: {
+            type: 'json',
+            writeAllFields: false,
+            rootProperty: 'data'
+        }
+    }
+});

@@ -442,6 +442,12 @@ Ext.define("plugin.Printer", {
                                 tab_id: 'activities_customers_list'
                                 
                            	 }, {
+                                task:<%= raw t("menu.activities.ops").to_json %>,
+                                url: '<%= url_for(:controller=>'activity_ops', :action=>'extjs_sc_crt_tab') -%>',                                
+                                leaf:true,
+                                tab_id: 'activities_op_list'
+                                
+                           	 }, {
                                 task:<%= raw t("menu.activities.new").to_json %>,
                                 url: '<%= url_for(:controller=>'activities', :action=>'create_new') -%>',
                                 leaf:true,

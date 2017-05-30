@@ -32,6 +32,7 @@
 			    	<%= raw extjs_std_hiddenfield('id', @item) -%>
 			      , <%= raw extjs_std_combo_model('customer', @item) -%>
 			      , <%= raw extjs_std_datefield('expiration_date', @item, {:allowBlank=>true, :fieldLabel => 'Data scadenza'}) -%>
+			      , <%= raw extjs_std_combo_model('activity_op', @item) -%>
 			      , <%= raw extjs_std_textareafield('notes', @item) -%>
 			      , <%= raw extjs_std_booleanfield('request_received', @item) -%>			      
 			    ]

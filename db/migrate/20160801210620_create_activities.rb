@@ -17,6 +17,8 @@ class CreateActivities < ActiveRecord::Migration
       
       t.boolean    :request_received      #e' stata ricevuta email "ufficiale" di richiesta lavoro
       
+      t.belongs_to  :activity_op
+      
       t.timestamps
     end
   end

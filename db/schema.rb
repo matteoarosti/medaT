@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170418211810) do
+ActiveRecord::Schema.define(version: 20170530213610) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 20170418211810) do
     t.text     "execution_notes",   limit: 16777215
     t.decimal  "amount",                             precision: 10, scale: 2
     t.boolean  "request_received"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "activity_ops", force: true do |t|
+    t.string   "name",            limit: 50
+    t.string   "code",            limit: 10
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -286,6 +295,7 @@ ActiveRecord::Schema.define(version: 20170418211810) do
   create_table "repair_handling_items", force: true do |t|
     t.integer  "handling_item_id"
     t.string   "repair_status"
+    t.boolean  "disabled_wf_on_close"
     t.datetime "in_garage_at"
     t.integer  "in_garage_user_id"
     t.datetime "estimate_at"
@@ -354,9 +364,11 @@ ActiveRecord::Schema.define(version: 20170418211810) do
 
   create_table "ship_prepare_item_weighs", force: true do |t|
     t.integer  "ship_prepare_item_id"
-    t.decimal  "weight",                          precision: 15, scale: 2
-    t.decimal  "weight_container",                precision: 15, scale: 2
-    t.decimal  "weight_goods",                    precision: 15, scale: 2
+    t.decimal  "qty",                             precision: 15, scale: 2
+    t.decimal  "qty_ric",                         precision: 15, scale: 2
+    t.decimal  "qty_test",                        precision: 15, scale: 2
+    t.decimal  "qty_tare",                        precision: 15, scale: 2
+    t.decimal  "qty_gross",                       precision: 15, scale: 2
     t.string   "driver",               limit: 50
     t.string   "plate",                limit: 15
     t.integer  "created_user_id"

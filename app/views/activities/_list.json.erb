@@ -161,8 +161,13 @@
 			        dataIndex: 'notes',
 			        text: 'Note',
 			        flex: 1,
-			        renderer: function (value, metaData) {
-		                 return '<div style="white-space:normal">' + value.replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+			        renderer: function (value, metaData, rec) {
+			        	ret = '';
+			        	console.log(rec.get('activity_op_id'));
+			        	if (Ext.isEmpty(rec.get('activity_op_id')) == false)
+			        		ret += '<span style="font-weight: bold;">[ ' + rec.data.activity_op.name + ' ]</span>';
+		                ret += '<div style="white-space:normal">' + value.replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+		                return ret;
 		             }
 			    }, {
 			        text: 'Data',

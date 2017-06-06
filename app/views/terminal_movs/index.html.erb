@@ -206,6 +206,12 @@ Ext.define("plugin.Printer", {
                                     leaf: true,
                                  	url: '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'to_be_moved') -%>',                                    
                                     op: 'new_tab',                                
+                                }, {
+                                    task: <%= raw t("dashboard").to_json %>,
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'terminal_movs', :action=>'tab_dashboard') -%>',                                    
+                                    op: 'new_tab',
+                                    tab_id: 'movs_dashboard'                                
                                 }
                             ]
                     }, {
@@ -590,7 +596,7 @@ Ext.define("plugin.Printer", {
             
             
             //creo il tab con le statistiche
-            acs_show_panel_std(myApp, '<%= url_for(:controller=>'terminal_movs', :action=>'tab_dashboard') -%>', {}, 'tttt');
+            //acs_show_panel_std(myApp, '<%= url_for(:controller=>'terminal_movs', :action=>'tab_dashboard') -%>', {}, 'tttt');
             
         });
     </script>

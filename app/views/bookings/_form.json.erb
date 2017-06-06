@@ -133,6 +133,7 @@
 	            text: 'Salva',
 	            handler: function (btn, evt) {              
 	             form = this.up('form').getForm();
+	             form.findField('num_booking').setValue(Ext.util.Format.trim(form.findField('num_booking').getValue()));
 	             if (form.isValid()) {
 	             	new_rec = Ext.create('Booking', {});
 	             	new_rec.data = form.getValues();

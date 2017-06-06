@@ -56,7 +56,7 @@ group_customer = items.group_by { |d| d.customer_id }
 		 </tr>
 
 			<% op_val.sort_by{|a| [a.execution_date]}.each do |row| %>
-				<% customer_amount += row.amount %>
+				<% customer_amount += row.amount.to_f %>
 	 			<tr>
 	 				<td><%= row.execution_date.strftime("%d/%m/%y") -%></td>
 					<td>

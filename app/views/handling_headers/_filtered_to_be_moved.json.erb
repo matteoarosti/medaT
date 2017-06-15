@@ -44,6 +44,26 @@
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
         	    items: [
+        	    
+						{iconCls: 'fa fa-search fa-2x', text: 'Ricerca movimenti', scale: 'large',				 				 
+				 				handler: function(event, toolEl, panel){
+									//se gia' esiste eseguo la show del tab						
+									if (Ext.getCmp('main_panel_handling_search')){
+										Ext.getCmp('main_panel_handling_search').show();
+										Ext.getCmp('main_panel_handling_search').down('form').getForm().findField('search_number').focus();
+										return;		    	
+									}
+									
+									myApp.m_panel_NewHandlingHeader = Ext.create('FeedViewer.NewHandlingHeaderPanel');
+									myApp.add(myApp.m_panel_NewHandlingHeader);
+									myApp.setActiveTab(myApp.m_panel_NewHandlingHeader);
+									Ext.getCmp('main_panel_handling_search').down('form').getForm().findField('search_number').focus();
+												
+									return;
+				 						
+				 				} //handler
+				 	},
+        	    
         	    '->',
         	    {
 				    xtype: 'form',	
@@ -265,6 +285,25 @@
 																	       form.findField('num_container_verified').setValue(jsonData.num_container_verified);
 																	       btn.setText('Conferma');
 																	       btn.enable();
+																	       																	       
+																	       //se presenti mostro le note
+																	       if (!Ext.isEmpty(jsonData.notes_all)){
+																	       		msg = '';
+
+																				Ext.each(jsonData.notes_all || [], function(item) {
+																					msg += '---- ' + item.op_out + ' -----' + '<br>' + item.notes + '<br>' + item.notes_int + '<br>'																					
+																				}, this);
+
+																				Ext.MessageBox.show({
+															                        title: 'PRESENTI NOTE SU CONTAINER',
+															                        msg: msg,
+															                        icon: Ext.MessageBox.ERROR,
+															                        buttons: Ext.Msg.OK
+														                    	})																	       	
+																	       
+																	       																	       
+																	       }
+																	       
 																	     } 
 																   	  }																   
 																   

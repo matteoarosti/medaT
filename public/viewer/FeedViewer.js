@@ -153,6 +153,7 @@ Ext.define('FeedViewer.App', {
 			this.m_panel_NewHandlingHeader = Ext.create('FeedViewer.NewHandlingHeaderPanel');
 			this.feedInfo.add(this.m_panel_NewHandlingHeader);
 			this.feedInfo.setActiveTab(this.m_panel_NewHandlingHeader);
+			Ext.getCmp('main_panel_handling_search').down('form').getForm().findField('search_number').focus();
 			//this.m_panel_NewHandlingHeader.fireEvent('onShow');
 						
 			return;

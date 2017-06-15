@@ -101,6 +101,14 @@ class HandlingHeader < ActiveRecord::Base
  end     
  
 
+ def get_notes_all
+    ret = []
+    self.handling_items.each do |hi|
+      ret << {:op => hi.handling_item_type, :op_out => I18n.t("operations.#{hi.handling_item_type}.short"),
+              :notes => hi.notes, :notes_int => hi.notes_int} if !hi.notes.blank? || !hi.notes_int.blank?
+    end
+    ret
+ end
 
  def last_dett
   hh = self.handling_items.order('datetime_op desc, id desc').first

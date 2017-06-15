@@ -668,7 +668,20 @@ Ext.define('FeedViewer.MovimentoPanel', {
 									 }); //yes
 				             
 					            }, scope: this
-					        }						 
+					        },	
+						 
+						 
+					        {xtype: 'tbfill', height: '30px'}, 
+						 
+	 						{ xtype : "button", text : 'Chiudi', width: '100%',
+					        	cls: 'btn-used', scale: 'medium',
+	 							
+	 							handler: function(){
+	 								this.close();
+							    }, scope: this
+							}
+						 
+						 
 						 
                                                 
                      ]

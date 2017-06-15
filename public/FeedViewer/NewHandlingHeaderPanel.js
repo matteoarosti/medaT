@@ -167,7 +167,13 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 			    			          l_grid.store.load();				             
 					             	}
 				             	}
-				            }							
+				            }, {
+					            text: 'Chiudi',
+					            cls: 'btn-used',
+					            handler: function (btn, evt) {              
+									this.close();
+					             	}, scope: this //handler
+					            }							
 						]
 			        	}
 			        	

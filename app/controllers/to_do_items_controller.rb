@@ -143,9 +143,15 @@ class ToDoItemsController < ApplicationController
     
 		 #se non avevo verificato il num_container ritorno il num_container verificato
 		  if params[:data][:num_container].to_s.upcase != params[:data][:num_container_verified].to_s.upcase
+		   
+		   #ritorno anche le note per il container selezionato
+		   notes_all = hh.get_notes_all()
+		   
 		   render json: {:success => true,
 		   	 			  :num_container_verified => params[:data][:num_container].to_s.upcase,
-		   				  :message => "Confermare scelta container"}
+		   				  :message => "Confermare scelta container",
+		   				  :notes_all => notes_all,
+		   				  :hh_id => hh.id}
 		   return
 		  end 	    
     

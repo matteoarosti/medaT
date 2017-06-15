@@ -44,7 +44,7 @@
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
         	    items: [
-        	    
+        	    	<% if current_user.mulettista? %>
 						{iconCls: 'fa fa-search fa-2x', text: 'Ricerca movimenti', scale: 'large',				 				 
 				 				handler: function(event, toolEl, panel){
 									//se gia' esiste eseguo la show del tab						
@@ -63,6 +63,7 @@
 				 						
 				 				} //handler
 				 	},
+				   <% end %>	
         	    
         	    '->',
         	    {

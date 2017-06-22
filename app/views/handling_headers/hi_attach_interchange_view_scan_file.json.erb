@@ -45,6 +45,56 @@
 	
 	buttons: [
 		{
+            text: 'Elimina',
+            cls: 'btn-del',
+            handler: function (btn, evt) {
+            	var tmp_win = this.up('window');
+            	
+						Ext.MessageBox.confirm('Richieta conferma', 'Eliminare il file corrente?', function(btn){												
+							if(btn === 'yes'){            	
+            	
+							  Ext.Ajax.request({
+				                    url: <%= raw url_for(:action=>'hi_delete_interchange_exe').to_json -%>,
+				                    waitMsg: 'Salvataggio in corso....',
+									method:'POST',                    
+				                    jsonData: {id: <%= @item.id -%>},	
+				             	
+									success: function(result, request) {					
+										var returnData = Ext.JSON.decode(result.responseText);
+										
+										//error
+										if (returnData.success == false){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: returnData.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})
+					                      return false;										
+										}								
+						 							
+						            	tmp_win.open_vars.mov_panel.down('grid').store.reload();
+						            	tmp_win.close();
+						 							
+									}, scope: this,
+									
+									failure: function(rec, op) {
+										var result = Ext.JSON.decode(op.getResponse().responseText);
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: result.message,
+					                        //icon: Ext.MessageBox.ERROR,
+					                        buttons: Ext.Msg.OK
+				                    	})					
+									}, scope: this,						
+													 
+						    	});
+						    }
+						  }); //confirm  	            	
+            	
+            	
+    		}
+	     }, {xtype: 'tbfill'}, {
             text : '<i class="fa fa-print" style="color:white;"></i> Stampa',            
             handler: function (btn, evt) {
             	tmp_win = this.up('window').down('panel').down('container').down('panel');

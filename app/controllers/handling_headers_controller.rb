@@ -466,15 +466,20 @@ end
    @item = HandlingItem.find(params[:rec_id])
  end
  
-##################################################
  def hi_download_file
-##################################################
   @item = HandlingItem.find(params[:id])
    send_file @item.scan_file.path('original'),
                :type => @item.scan_file_content_type  
     
  end   
  
- 
+ def hi_delete_interchange_exe
+  item = HandlingItem.find(params[:id])
+  item.scan_file = nil
+  ret = item.save!
+  render json: {success: ret, hi_id: item.id}  
+ end
+
+  
 
 end

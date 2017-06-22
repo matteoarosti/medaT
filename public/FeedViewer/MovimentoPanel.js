@@ -819,7 +819,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 					        	} else {
 					        		//mostro immagine
 							     	   acs_show_win_std('Interchange', myApp.railsBaseUri + 'handling_headers/hi_attach_interchange_view_scan_file',
-								     	 		{rec_id: rec.get('id')}, 800, 400);										
+								     	 		{rec_id: rec.get('id')},
+								     	 		800, 400, null, null, null, null, {mov_panel: gridView.up('panel').up('panel').up('panel')});										
 					        		
 					        	}
 					        }					        

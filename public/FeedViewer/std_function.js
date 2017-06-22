@@ -71,9 +71,9 @@
 	
 	pb_get_interchange_icon = function(value, metaData, rec, rowIndex, colIndex, store) {
 		if (Ext.isEmpty(value) || parseInt(value)<=0)
-			return '<i class="fa fa-paperclip fa-2x" style="color:transparent;"></i>';
+			return '<i class="fa fa-paperclip fa-2x" style="color:#dddddd;"></i>';
 		//segnalo presenza note			
-		return '<i class="fa fa-paperclip fa-2x" style="color:red;"></i>';
+			return '<i class="fa fa-paperclip fa-2x" style="color:green;"></i>';
 		
 	}
 

@@ -8,6 +8,19 @@ class HandlingItem < ActiveRecord::Base
  belongs_to :terminal
  belongs_to :inspection_type
  
+ 
+  #interchange relativo al movimento
+  has_attached_file :scan_file, 
+      path: ":rails_root/record_images/:class/:attachment/:id_partition/:style/:filename",
+      url: "handling_headers/hi_download_file/:id"
+  # Validate content type, filename, size
+  validates_attachment_content_type :scan_file, content_type: /\Aimage/
+  validates_attachment_file_name :scan_file, matches: [/pdf\Z/, /png\Z/, /jpe?g\Z/]
+  validates_attachment :scan_file, size: { in: 0..2048.kilobytes }
+
+ 
+ 
+ 
  scope :extjs_default_scope, -> {}
  scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)} 
  scope :locked, -> {where("lock_fl=?", true)}

@@ -1,0 +1,73 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+    {xtype: 'hiddenfield', name: 'id', value: '<%= @item.id -%>'}   
+        , {xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}
+
+		, {
+            xtype: 'filefield',
+            allowBlank: false,
+            emptyText: 'Seleziona file scansione interchange',
+            fieldLabel: 'File',
+            name: 'file',
+            buttonText: '',
+            buttonConfig: {
+                iconCls: 'upload-icon'
+            }
+        }
+        
+   ]
+   
+   , buttons: [	
+   		{
+            text: 'Salva',
+            handler: function (btn, evt) {              
+             var form = this.up('form').getForm();
+             var tmp_win = this.up('window');
+             if (form.isValid()) {
+	                btn.disable();
+	                
+                    form.submit({
+                        url: '<%= url_for(:action=>'hi_attach_interchange_exe') -%>',
+                        waitMsg: 'Salvataggio in corso....',
+                        success: function(fp, o) {
+						      
+						      //ricarico i dettagli del movimento
+						 	  tmp_win.open_vars.mov_panel.down('grid').store.reload();						      
+						      
+						      tmp_win.close();
+						      
+						      //mostro subito immagine appena inserita
+					     	   acs_show_win_std('Interchange', <%= raw url_for(:controller=>'handling_headers', :action=>'hi_attach_interchange_view_scan_file').to_json -%>,
+					     	 		{rec_id: <%= @item.id -%>}, 800, 400);										
+						      											                            
+                        },
+						failure: function(fp, o) {
+                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                            Ext.Msg.alert('Import non eseguito. ', o.result.message);
+                            console.log('Failure!');	                            
+                        }	                        
+                    });
+                    return false;                          
+             } //for isValid             
+            }
+        }
+      ]
+      
+  }
+ ]
+}

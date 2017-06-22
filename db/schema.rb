@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170530213610) do
+ActiveRecord::Schema.define(version: 20170621232450) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20170530213610) do
     t.text     "execution_notes",   limit: 16777215
     t.decimal  "amount",                             precision: 10, scale: 2
     t.boolean  "request_received"
+    t.integer  "activity_op_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -155,30 +156,30 @@ ActiveRecord::Schema.define(version: 20170530213610) do
   end
 
   create_table "handling_items", force: true do |t|
-    t.integer  "handling_header_id",    limit: 8
+    t.integer  "handling_header_id",     limit: 8
     t.datetime "datetime_op"
     t.datetime "datetime_op_end"
-    t.string   "operation_type",        limit: 2
-    t.string   "handling_item_type",    limit: 15
-    t.string   "handling_type",         limit: 1
-    t.string   "container_FE",          limit: 1
-    t.integer  "ship_id",               limit: 8
-    t.string   "voyage",                limit: 15
-    t.integer  "carrier_id",            limit: 8
-    t.string   "driver",                limit: 50
-    t.string   "plate",                 limit: 15
-    t.string   "plate_trailer",         limit: 15
+    t.string   "operation_type",         limit: 2
+    t.string   "handling_item_type",     limit: 15
+    t.string   "handling_type",          limit: 1
+    t.string   "container_FE",           limit: 1
+    t.integer  "ship_id",                limit: 8
+    t.string   "voyage",                 limit: 15
+    t.integer  "carrier_id",             limit: 8
+    t.string   "driver",                 limit: 50
+    t.string   "plate",                  limit: 15
+    t.string   "plate_trailer",          limit: 15
     t.boolean  "export"
-    t.string   "seal_shipowner",        limit: 15
-    t.string   "seal_others",           limit: 15
+    t.string   "seal_shipowner",         limit: 15
+    t.string   "seal_others",            limit: 15
     t.integer  "codeco_send"
-    t.decimal  "weight",                                 precision: 15, scale: 2
-    t.text     "notes",                 limit: 16777215
-    t.text     "notes_int",             limit: 16777215
+    t.decimal  "weight",                                  precision: 15, scale: 2
+    t.text     "notes",                  limit: 16777215
+    t.text     "notes_int",              limit: 16777215
     t.integer  "booking_id"
     t.integer  "booking_item_id"
     t.boolean  "lock_fl"
-    t.string   "lock_type",             limit: 10
+    t.string   "lock_type",              limit: 10
     t.boolean  "to_be_moved"
     t.integer  "moved_by_user_id"
     t.datetime "moved_at"
@@ -193,6 +194,10 @@ ActiveRecord::Schema.define(version: 20170530213610) do
     t.integer  "inspection_type_id"
     t.boolean  "to_weigh"
     t.integer  "weigh_id"
+    t.string   "scan_file_file_name"
+    t.string   "scan_file_content_type"
+    t.integer  "scan_file_file_size"
+    t.datetime "scan_file_updated_at"
   end
 
   add_index "handling_items", ["handling_header_id"], name: "handling_hader", using: :btree

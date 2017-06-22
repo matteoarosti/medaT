@@ -786,8 +786,9 @@ Ext.define('FeedViewer.MovimentoPanel', {
 				   {text: 'Sigillo', width: 80, dataIndex: 'seal'},
 				   {text: 'Spediz.', width: 90, dataIndex: 'shipper_id_Name'},
 				   {text: 'Terminal.', width: 90, dataIndex: 'terminal_id_Code'},
-				   {header: 'Notes', dataIndex: 'notes', width: 50, renderer: pb_get_notes_icon},
-				   {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock}
+				   {header: 'Nt', dataIndex: 'notes', width: 40, renderer: pb_get_notes_icon},
+				   {header: 'Lk', dataIndex: 'lock_type', width: 40, renderer: pb_get_image_lock},
+				   {header: 'I', tooltip: 'Interchange', dataIndex: 'scan_file_file_size', width: 40, renderer: pb_get_interchange_icon},				   
         	       ]
                  
         	
@@ -809,6 +810,19 @@ Ext.define('FeedViewer.MovimentoPanel', {
 					        		acs_show_panel_std(myApp, myApp.railsBaseUri + 'repair_handling_items/rhi_edit', {handling_item_id: rec.get('id')}, 'Modifica');
 					        	}
 					        }
+					        
+					        if (columnIndex == 14) { //doppio click su interchange
+					        	if (Ext.isEmpty(rec.get('scan_file_file_size')) || parseInt(rec.get('scan_file_file_size'))<=0) {
+					        		acs_show_win_std('Allega scansione interchange', myApp.railsBaseUri + 'handling_headers/hi_attach_interchange', 
+					        			{rec_id: rec.get('id')},
+					        			600, 300, null, null, null, null, {mov_panel: gridView.up('panel').up('panel').up('panel')});
+					        	} else {
+					        		//mostro immagine
+							     	   acs_show_win_std('Interchange', myApp.railsBaseUri + 'handling_headers/hi_attach_interchange_view_scan_file',
+								     	 		{rec_id: rec.get('id')}, 800, 400);										
+					        		
+					        	}
+					        }					        
 					    },
 	        		
 	        		

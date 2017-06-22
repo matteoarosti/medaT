@@ -446,5 +446,35 @@ end
    end 
  end
    
+ 
+ 
+ #########################################################
+ # attach interchange file to hi
+ #########################################################
+ def hi_attach_interchange
+   @item = HandlingItem.find(params[:rec_id])
+ end
+ 
+ def hi_attach_interchange_exe
+  item = HandlingItem.find(params[:id])
+  item.scan_file = params[:file]
+  ret = item.save!
+  render json: {success: ret, hi_id: item.id}  
+ end
+ 
+ def hi_attach_interchange_view_scan_file
+   @item = HandlingItem.find(params[:rec_id])
+ end
+ 
+##################################################
+ def hi_download_file
+##################################################
+  @item = HandlingItem.find(params[:id])
+   send_file @item.scan_file.path('original'),
+               :type => @item.scan_file_content_type  
+    
+ end   
+ 
+ 
 
 end

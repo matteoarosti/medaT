@@ -426,5 +426,16 @@ end
     attr
   end 
  
+  
+  def n0(v)
+    number_with_precision(v, precision: 0, separator: ',', delimiter: '.')    
+  end
+  def n1(v)
+    number_with_precision(v, precision: 1, separator: ',', delimiter: '.')    
+  end
+  def n2(v)
+     number_with_precision(v, precision: 2, separator: ',', delimiter: '.')    
+  end
+  
       
 end

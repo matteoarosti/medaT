@@ -625,6 +625,14 @@
 			    	
 			    	
 			    	{xtype: 'tbfill'},
+
+			    	{text: 'Rendiconto', iconCls: 'fa fa-print fa-2x', cls: 'btn-ok', 
+			    		handler: function(){
+							acs_show_win_std('Modifica', <%= raw url_for(:controller=>'ship_prepares', 
+							 	 			  :action=>'r_rendiconto_parameters').to_json -%>,
+									     	  {rec_id: <%= @item.id -%>}, 800, 400);				    					    			
+			    		}
+			    	},
 			    	
 			    	{text: 'Refresh', iconCls: 'fa fa-refresh fa-2x', cls: 'btn-close', 
 			    		handler: function(){

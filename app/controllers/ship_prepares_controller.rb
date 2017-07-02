@@ -274,9 +274,15 @@ def exe_delete_item_weight_details
   render json: {success: ret}
 end
 
-  
- def report_by_customer
+
+ # Report rendiconto singola lavoazione  
+ def r_rendiconto_parameters
+   @item = ShipPrepareItem.find(params[:rec_id])
  end
+ def r_rendiconto_a
+ end
+ 
+ 
   
   
 end

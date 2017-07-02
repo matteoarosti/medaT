@@ -277,7 +277,7 @@ end
 
  # Report rendiconto singola lavoazione  
  def r_rendiconto_parameters
-   @item = ShipPrepareItem.find(params[:rec_id])
+   @item = ShipPrepare.find(params[:rec_id])
  end
  def r_rendiconto_a
  end

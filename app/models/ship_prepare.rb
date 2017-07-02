@@ -3,7 +3,7 @@ class ShipPrepare < ActiveRecord::Base
   belongs_to :customer
   belongs_to :ship
   has_many   :ship_prepare_items
-  has_many   :ship_prepare_items_weighs, through: :ship_prepare_items
+  has_many   :ship_prepare_item_weighs, through: :ship_prepare_items
   
   scope :not_closed, -> {where("ship_prepare_status NOT IN('CLOSE', 'PREP')")}
   

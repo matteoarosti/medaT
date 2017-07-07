@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170621232450) do
+ActiveRecord::Schema.define(version: 20170707215444) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -109,6 +109,14 @@ ActiveRecord::Schema.define(version: 20170621232450) do
     t.string   "sizetype",        limit: 50
     t.string   "iso",             limit: 4
     t.boolean  "reefer",                     default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
+  end
+
+  create_table "grus", force: true do |t|
+    t.string   "name",            limit: 50
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_user_id"

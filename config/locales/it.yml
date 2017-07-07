@@ -309,6 +309,7 @@ it:
       ships: "navi"
       terminals: "Terminal"
       piers: "Banchine"
+      grus: "Gru"
     movements:
       movements: "Movimenti"
       search_insert: "Ricerca / Inserisci"

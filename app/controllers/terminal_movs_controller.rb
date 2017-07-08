@@ -245,6 +245,11 @@ end
   end
   
           
+  
+  #form selezione banchina/gru (in apertura import list)
+  def set_pier_gru
+    @item = HandlingItem.new
+  end  
       
   
 end #class

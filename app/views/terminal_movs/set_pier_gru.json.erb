@@ -1,0 +1,41 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+       <%= raw extjs_std_combo_model('pier', @item, :allowBlank => false) -%>,
+       <%= raw extjs_std_combo_model('gru', @item, :allowBlank => false) -%>
+   ],
+   
+   buttons: [
+		{
+            text: 'Conferma',
+            iconCls: 'fa fa-refresh fa-2x', scale: 'large',
+            handler: function (btn, evt) {              
+             var form = this.up('form').getForm();
+             var m_win = this.up('window');
+             if (form.isValid()) {
+             	var m_form_values = form.getValues();
+             	m_form_values.pier_out = form.findField('pier_id').rawValue;
+             	m_form_values.gru_out  = form.findField('gru_id').rawValue;
+             	m_win.fireEvent('afterSave', m_win, m_form_values);
+             }
+            }
+        }
+   ]
+         
+  }
+ ]
+}

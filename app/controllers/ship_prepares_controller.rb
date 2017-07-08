@@ -91,10 +91,13 @@ class ShipPreparesController < ApplicationController
 ##################################################
  def get_open_voyage_by_ship
 ##################################################
+  logger.info params.to_yaml
   ret = {}
   ret[:success] = true   
   @sp = ShipPrepare.find(params[:id])    
-  ret[:items] = ImportHeader.where("ship_id = ?", @sp.ship_id).where("import_status = ?", 'OPEN').as_json(ImportHeader.as_json_prop)
+  ret[:items] = ImportHeader.where("ship_id = ?", @sp.ship_id)
+  ret[:items] = ret[:items].where("import_status = ?", 'OPEN') unless params[:anche_chiusi] == 'true'
+  ret[:items] = ret[:items].as_json(ImportHeader.as_json_prop)
   render json: ret
  end   
  

@@ -112,7 +112,6 @@
 			listeners: {
 			  itemclick: function(dv, record, item, index, e) {
 			  		mp = Ext.getCmp('main-panel');
-			  		console.log(mp);
 			  		acs_show_panel_std(mp, '<%= url_for(:action=>'open_import') -%>', {import_header_id: record.get('id')}, 'Import');
 				}
 			}

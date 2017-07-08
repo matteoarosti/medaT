@@ -49,7 +49,7 @@ class ImportItemsController < ApplicationController
   
  #################################################  
   def set_ok
- #################################################    
+ #################################################
    rec = ImportItem.find(params[:rec_id])
 
    #Determina la tipologia del movimento da import_headers
@@ -98,13 +98,14 @@ class ImportItemsController < ApplicationController
     end 
     
     hi = hh.handling_items.new()
+    hi.pier_id = params[:check_form][:pier_id]
+    hi.gru_id  = params[:check_form][:gru_id]    
     hi.datetime_op = Time.now
     unless params[:check_form][:datetime_op_date].blank? || params[:check_form][:datetime_op_time].blank?
       hi.datetime_op = generate_datetime(params[:check_form][:datetime_op_date], params[:check_form][:datetime_op_time])      
     end
     hi.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
     
-    logger.info "handling_type: #{rec.import_header.handling_type}"
     case rec.import_header.handling_type
       when 'FRCON'
         hi.handling_item_type = "START_RFCON"
@@ -161,6 +162,8 @@ class ImportItemsController < ApplicationController
      
      
      hi = hh.handling_items.new()
+     hi.pier_id = params[:check_form][:pier_id]
+     hi.gru_id  = params[:check_form][:gru_id]
      hi.datetime_op = Time.now
      unless params[:check_form][:datetime_op_date].blank? || params[:check_form][:datetime_op_time].blank?
       hi.datetime_op = generate_datetime(params[:check_form][:datetime_op_date], params[:check_form][:datetime_op_time])      

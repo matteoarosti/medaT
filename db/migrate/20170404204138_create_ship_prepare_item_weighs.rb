@@ -13,6 +13,10 @@ class CreateShipPrepareItemWeighs < ActiveRecord::Migration
       t.string      :driver,                :limit => 50
       t.string      :plate,                 :limit => 15 #targa mezzo
       
+      #banchina e gru
+      t.belongs_to :pier
+      t.belongs_to :gru      
+      
       t.integer :created_user_id
       t.integer :updated_user_id
       t.timestamps

@@ -495,7 +495,18 @@
 										      										    										    										    
 										    ]
 										    , 	buttons:
-											        [{
+											        [
+													{
+											            text: 'Anche chiusi',
+											            cls: 'btn',
+											            handler: function (btn, evt) {
+											            	form = this.up('form').getForm();
+											            	form.findField('import_header_id').store.proxy.extraParams.anche_chiusi = true;
+											            	form.findField('import_header_id').store.load();
+											            }
+											        },											        
+											        
+											        {
 											            text: 'Aggiungi',
 											            cls: 'btn-ok',
 											            handler: function (btn, evt) {

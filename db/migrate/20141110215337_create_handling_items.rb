@@ -47,7 +47,11 @@ class CreateHandlingItems < ActiveRecord::Migration
       #pesa
       t.boolean    :to_weigh,                   :default => nil #true=da pesare
       t.belongs_to :weigh
-            
+
+      #banchina e gru
+      t.belongs_to :pier
+      t.belongs_to :gru
+                  
       t.timestamps
       t.integer :created_user_id
       t.integer :updated_user_id                   

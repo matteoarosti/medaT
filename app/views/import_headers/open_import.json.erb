@@ -3,6 +3,7 @@
  items: [
  {
   xtype: 'container',
+  itemId: 'panel-import',
   closable: true,
   title: 'Import',
     layout: {
@@ -10,8 +11,6 @@
 	    pack: 'start',
 	    align: 'stretch'
 	},
-	
-  	
 
   items: [
        
@@ -19,14 +18,14 @@
 		 {
 				flex: 1,
 				layout: 'fit',
-        	    title: 'Righe import', flex: 50,
+        	    title: 'Importazione', flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
 				autoScroll: true,  
 				scroll: true,      	    
         	    store: new Ext.data.Store({
-        	    	autoLoad: true,
+        	    	autoLoad: false,
         	    	fields: [],
         	    	proxy: {
         	            type: 'ajax',
@@ -45,7 +44,7 @@
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
         	    items: [{
-				    xtype: 'form',	
+				    xtype: 'form',
 				    height: 50,
 				    layout: {
 					    type: 'hbox',
@@ -54,6 +53,8 @@
 					},
 				    padding: '10 10 10 10',
 				    items: [
+				    	{xtype: 'hiddenfield', name: 'pier_id'},
+				    	{xtype: 'hiddenfield', name: 'gru_id'},
 				    	{
 				    		flex: 1,
 				            xtype: 'fieldcontainer',
@@ -63,35 +64,66 @@
 				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
 				            	{xtype: 'timefield', name: 'datetime_op_time', width:  70},
 				            ]
-				      }, {	
-								flex: 1, padding: '0 0 0 10',
-								xtype: 'checkboxfield',
-				                boxLabel: 'Disabilita richiesta conferma',
-				                name: 'hide_check',
-				                inputValue: '1'
-				      }
+				      	}
 				      
-
 				      
-					 , {	
-							flex: 1,
-							xtype: 'checkboxfield',
-			                boxLabel: 'Anche importati',
-			                itemId: 'show_imported',
-			                name: 'show_imported',
-			                inputValue: '1'
-					      }
+				      ,	{
+				    		flex: 1,
+				            xtype: 'fieldcontainer',				          
+				            layout: 'vbox',
+				            items: [
+						      {	
+										xtype: 'checkboxfield',
+										flex: 1,
+						                boxLabel: 'Dis. richiesta conferma',
+						                name: 'hide_check',
+						                inputValue: '1'
+						      }						      								      
+							 , {	
+									xtype: 'checkboxfield',
+									flex: 1,
+					                boxLabel: 'Anche importati',
+					                itemId: 'show_imported',
+					                name: 'show_imported',
+					                inputValue: '1'
+							      }
+				            
+				            ]
+				        }
+				      
 				          
 				     
-				     , {	
+				     , {
 								width: 180, labelWidth: 100, padding: '0 0 0 10', margin: '0 0 0 30',
 								xtype: 'textfield',
 								fieldStyle: 'font-size: 16px; text-transform: uppercase;',
 				                fieldLabel: 'Ricerca cont.',
 				                name: 'flt_num_container'
 				      }
-				     
+				     									     
 				    ]
+				    
+				    , listeners: {
+				    	afterrender: function(comp){
+				    		comp.up('#panel-import').disable();
+				    	
+				    		//forzo selezione banchina/gru				    		
+				 				var my_listeners = {
+			                		afterSave: function(fromWindow, formValues){
+			                			comp.getForm().findField('pier_id').setValue(formValues.pier_id);
+			                			comp.getForm().findField('gru_id').setValue(formValues.gru_id);
+			                			comp.up('grid').setTitle(comp.up('grid').title + ' - Banchina: ' + formValues.pier_out + ' - Gru: ' + formValues.gru_out);
+			                			comp.up('grid').store.load();
+			                			comp.up('#panel-import').enable();
+			                			fromWindow.close();
+			                		}, scope: this			                				                		
+			                	}				    		
+				    		
+								acs_show_win_std('Seleziona banchina/gru', <%= raw url_for(:controller=>'terminal_movs', 
+									     	 				:action=>'set_pier_gru').to_json -%>,
+									     	 				{}, 800, 400, my_listeners);				    		
+				    	}//afterrender
+				    }
 				 }
 				 
 				 , '->'
@@ -284,6 +316,8 @@
 										                {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},										                 
 										            	{xtype: 'datefield', name: 'datetime_op_date', width: 120, value: header_form_values.datetime_op_date},
 										            	{xtype: 'timefield', name: 'datetime_op_time', width:  70, value: header_form_values.datetime_op_time},
+										            	{xtype: 'hiddenfield', name: 'pier_id', value: header_form_values.pier_id},
+										            	{xtype: 'hiddenfield', name: 'gru_id',  value: header_form_values.gru_id},
 										            ]
 										      }, 
 										      {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes'}										    										    										    
@@ -439,6 +473,8 @@
 										                {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},										                 
 										            	{xtype: 'datefield', name: 'datetime_op_date', width: 120, value: header_form_values.datetime_op_date},
 										            	{xtype: 'timefield', name: 'datetime_op_time', width:  70, value: header_form_values.datetime_op_time},
+										            	{xtype: 'hiddenfield', name: 'pier_id', value: header_form_values.pier_id},
+										            	{xtype: 'hiddenfield', name: 'gru_id',  value: header_form_values.gru_id},										            	
 										            ]
 										      }, 
 										      {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes'}										    										    										    

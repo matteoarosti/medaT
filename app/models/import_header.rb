@@ -27,7 +27,7 @@ class ImportHeader < ActiveRecord::Base
  
  #conto le righe di dettaglio dividendo per stato
  def count_by_status
-   return '' if self.import_status == 'CLOSE'
+   #####return '' if self.import_status == 'CLOSE'
    ret = []
    self.import_items.group_by{|ii| ii.status}.each do |ii_g|
      ret << [ii_g[0].to_s.empty? ? 'ToDo' : ii_g[0].to_s, ii_g[1].count].join('=>')

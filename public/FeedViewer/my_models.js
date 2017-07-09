@@ -81,7 +81,6 @@ Ext.define("Carrier", { extend: "Ext.data.Model",
             rootProperty: 'data',
             getRecordData: function (record)
         		{
-        			console.log('getRecordData');
           			return { 'data': Ext.JSON.encode(record.data) };
         		}
         },        

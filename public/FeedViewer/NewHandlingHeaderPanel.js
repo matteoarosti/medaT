@@ -364,7 +364,6 @@ Ext.define('FeedViewer.NewHandlingHeaderPanel', {
 
         	listeners: {
 			    render: function(panel){
-			    	console.log('aactivateeeeeeee');
 			    }
 			  }
         	

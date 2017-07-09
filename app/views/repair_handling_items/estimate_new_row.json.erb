@@ -99,8 +99,6 @@
 	                            m_win.close();
 	                        },
 							failure: function(fp, op) {
-								console.log(fp);
-								console.log(op);
 								var result = Ext.JSON.decode(op.response.responseText);
 								Ext.MessageBox.show({
 			                        title: 'Errore',

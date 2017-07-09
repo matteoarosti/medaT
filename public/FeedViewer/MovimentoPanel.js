@@ -898,7 +898,6 @@ Ext.define('FeedViewer.MovimentoPanel', {
                									                      return false;										
                														}								
                												
-               														console.log(item);
 						 							
                												},
                												
@@ -939,8 +938,6 @@ Ext.define('FeedViewer.MovimentoPanel', {
     },
 
     onViewReady: function(){
-     console.log('onViewReady');
-     console.log(this);
     },
 
 

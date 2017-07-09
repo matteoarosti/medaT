@@ -197,6 +197,25 @@ class WeighsController < ApplicationController
     end 
    end   
 
+   
+   #annullo la richiesta di peso
+   ##################################################
+   def delete_weight_ric
+   ##################################################
+  
+    if (params[:type] == 'FROM_HI')         #inserimento pesa da movimento
+      hi = HandlingItem.find(params[:rec_id])
+      hi.to_weigh = false
+      hi.save!
+    else                                    #inserimento pesa da prenotazione
+      item = Weigh.find(params[:rec_id])
+      item.weigh_status = 'DEL'
+      ret = item.save! 
+    end
+    render json: {success: true}
+   end
+   
+   
 
   ##################################################
    def view_scan_file

@@ -38,6 +38,7 @@
 			      , <%= raw extjs_std_combo_model('ship', @item) -%>
 			      , <%= raw extjs_std_textfield('voyage', @item) -%>
 			      , <%= raw extjs_std_datefield('departure_date', @item, {:allowBlank=>true, :fieldLabel => 'Data inizio lavorazione'}) -%>
+			      , <%= raw extjs_std_combo_model('pier', @item, {:fieldLabel => 'Banchina'}) -%>
 			      			      
 			      , <%= raw extjs_std_textareafield('notes', @item) -%>			      
 			    ]

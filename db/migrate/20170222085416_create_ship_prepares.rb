@@ -27,6 +27,8 @@ class CreateShipPrepares < ActiveRecord::Migration
       t.decimal    :amount,          precision: 10, scale: 2
       
       t.boolean    :request_received      #e' stata ricevuta email "ufficiale" di richiesta lavoro
+            
+      t.belongs_to :pier                  #banchina
 
       t.integer :created_user_id
       t.integer :updated_user_id

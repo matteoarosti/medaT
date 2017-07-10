@@ -147,18 +147,19 @@
 			        }			        
 			    }, {
 			        dataIndex: 'ship_id',
-			        text: 'Nave',
+			        text: 'Nave/Viaggio',
 			        width: 200,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h3>' + rec.get('ship').name + '</h3>';
+			         ret += '<h3>' + rec.get('voyage') + '</h3>';
 			          return ret;			         
 			        }			        
 			    }, {
 			        dataIndex: 'voyage',
-			        text: 'Viaggio',
+			        text: 'Banchina',
 			        width: 200,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         ret = '<h3>' + rec.get('voyage') + '</h3>';
+			         ret = '<h3>' + value_or_blank(rec.get('pier'), 'name') + '</h3>';
 			         return ret;			         
 			        }			        
 			    }			    

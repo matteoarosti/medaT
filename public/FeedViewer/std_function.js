@@ -1,3 +1,12 @@
+// --------------------------------------------------------------------
+   value_or_blank = function(obj, field){
+	   if (Ext.isEmpty(obj) == true)
+		   return '';
+	   else
+		   return obj[field];
+   }
+
+
 // ---------------------------------------------------------------------
  	pb_get_image_IO = function(val, metaData){
  	   if(typeof(metaData) !== 'undefined'){ 		

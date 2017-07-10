@@ -15,8 +15,8 @@
      },	  
      
    items: [
-       <%= raw extjs_std_combo_model('pier', @item, :allowBlank => false) -%>,
-       <%= raw extjs_std_combo_model('gru', @item, :allowBlank => false) -%>
+       <%= raw extjs_std_combo_model('pier', @item, {:allowBlank => false}, {:fieldStyle => 'font-size: 20px;'}) -%>,
+       <%= raw extjs_std_combo_model('gru',  @item, {:allowBlank => false}, {:fieldStyle => 'font-size: 20px;'}) -%>
    ],
    
    buttons: [

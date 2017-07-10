@@ -2,6 +2,7 @@ class ShipPrepare < ActiveRecord::Base
   
   belongs_to :customer
   belongs_to :ship
+  belongs_to :pier
   has_many   :ship_prepare_items
   has_many   :ship_prepare_item_weighs, through: :ship_prepare_items
   
@@ -11,7 +12,8 @@ class ShipPrepare < ActiveRecord::Base
       return { 
         :include=>{
            :customer  => {},
-           :ship  => {}
+           :ship  => {},
+           :pier  => {}
            }
          }       
   end     

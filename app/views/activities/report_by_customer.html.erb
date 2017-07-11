@@ -65,7 +65,7 @@ total_activity = 0
 	 			<tr>
 	 				<td><%= row.execution_date.strftime("%d/%m/%y") -%></td>
 					<td>
-						<%= "<b>[ #{row.activity_op.name} ]</b>" unless row.activity_op.nil? -%>
+						<%= raw "<b>[ #{row.activity_op.name} ]</b>" unless row.activity_op.nil? -%>
 						<%= row.notes -%>
 						<% unless row.execution_notes.blank? -%>
 							<br>[<%= row.execution_notes -%>]

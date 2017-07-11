@@ -57,7 +57,7 @@ total_activity = 0
 		 <tr>
 		  <th>Descrizione</th>
 		  <th width=80 align=right>Attivit&agrave;</th>
-		  <th width=80 align=right>Importo</th>
+		  <th width=100 align=right>Importo</th>
 		 </tr>
 
 			<% op_val.each do |row| %>
@@ -101,6 +101,6 @@ total_activity = 0
 				<tr>
 					<td class=tot align=right>&nbsp;</td>		
 					<td width=80 class=tot align=right><%= total_activity.to_i -%></td>
-					<td width=80 class=tot align=right><%= number_to_currency(total_amount) -%></td>
+					<td width=100 class=tot align=right><%= number_to_currency(total_amount) -%></td>
 				</tr>
 		</table>

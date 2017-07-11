@@ -56,7 +56,7 @@ total_activity = 0
 		 <tr>
 		  <th width=80>Data</th>
 		  <th>Descrizione</th>
-		  <th width=80 align=right>Importo</th>
+		  <th width=100 align=right>Importo</th>
 		 </tr>
 
 			<% op_val.sort_by{|a| [a.execution_date]}.each do |row| %>
@@ -96,6 +96,6 @@ total_activity = 0
 		<table class="table table-striped table-bordered table-condensed medaT-report">		
 				<tr>
 					<td class=tot align=right colspan=2>Totale</td>				
-					<td width=80 class=tot align=right><%= number_to_currency(total_amount) -%></td>
+					<td width=100 class=tot align=right><%= number_to_currency(total_amount) -%></td>
 				</tr>
 		</table>

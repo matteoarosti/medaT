@@ -81,7 +81,7 @@ def new_mov_search_handling
         #:descr => "##{hh.id.to_s}, #{HandlingHeader::TYPES[hh.handling_type]}",
         :descr => ["##{hh.id.to_s}", I18n.t("handling_type.#{hh.handling_type}.short")].join(', '),      
         :equipment_id_Name => (hh.equipment.send(Equipment.combo_displayField) unless hh.equipment.nil?) ,
-        :shipowner_id_Name => hh.shipowner.send(Shipowner.combo_displayField),
+        :shipowner_id_Name => hh.shipowner.nil? ? '' : hh.shipowner.send(Shipowner.combo_displayField),
         :num_booking => hh.num_booking,
         :container_FE => hh.container_FE,
         :container_in_terminal => hh.container_in_terminal,

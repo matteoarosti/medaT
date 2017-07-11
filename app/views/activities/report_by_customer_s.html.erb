@@ -67,7 +67,7 @@ total_activity = 0
 				<% total_activity += row.c_row.to_f %>
 				<% op = ActivityOp.find(row.activity_op_id) unless row.activity_op_id.nil? %>
 	 			<tr>
-					<td><%= "<b>[ #{op.name} ]</b>" unless op.nil? -%></td>
+					<td><%= raw "<b>[ #{op.name} ]</b>" unless op.nil? -%></td>
 					<td align=right><%= row.c_row.to_i -%></td>				
 					<td align=right><%= number_to_currency(row.s_amount) -%></td>
 				</tr>

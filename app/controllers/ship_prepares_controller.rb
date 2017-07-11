@@ -1,6 +1,6 @@
 class ShipPreparesController < ApplicationController
   
-  layout "application_report", only: [:report_by_customer]
+  layout "application_report", only: [:r_rendiconto_a]
   
   def create_new
     @item = ShipPrepare.new

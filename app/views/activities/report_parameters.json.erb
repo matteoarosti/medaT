@@ -20,7 +20,8 @@
      {xtype: 'hidden', name: 'authenticity_token', value: '<%= form_authenticity_token %>'},
      
      
-     		<%= raw extjs_std_combo_model('customer', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>
+     		  <%= raw extjs_std_combo_model('customer', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>
+     		, <%= raw extjs_std_combo_model('activity_op', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>
      		
 	   		, {
                 xtype: 'fieldcontainer',
@@ -63,7 +64,7 @@
     
    buttons: [
 	{
-        text: '<i class="fa fa-th-large"></i> Visualizza',
+        text: '<i class="fa fa-th-large"></i> Analitica',
         handler: function(){
         	fp = this.up('form');
             if(fp.getForm().isValid()){
@@ -77,7 +78,22 @@
                 });
             }
         }
-    }    
+    }, 	{
+        text: '<i class="fa fa-th-large"></i> Sintetica',
+        handler: function(){
+        	fp = this.up('form');
+            if(fp.getForm().isValid()){
+                fp.getForm().submit({
+                    method: 'POST',
+                    url: '<%= url_for(:controller=>'activities', :action=>'report_by_customer_s') -%>',             
+                    params: {formValues: Ext.encode(fp.getValues())},
+                    method: 'POST',
+                    standardSubmit: true,
+                    target: '_blank'
+                });
+            }
+        }
+    }
    ] 
     
   }

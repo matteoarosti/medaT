@@ -1,6 +1,6 @@
 class ActivitiesController < ApplicationController
   
-  layout "application_report", only: [:report_by_customer]
+  layout "application_report", only: [:report_by_customer, :report_by_customer_s]
   
   def create_new
     @item = Activity.new
@@ -118,6 +118,8 @@ class ActivitiesController < ApplicationController
  end   
  
  def report_by_customer
+ end
+ def report_by_customer_s
  end
   
 end

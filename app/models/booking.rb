@@ -152,6 +152,18 @@ def refresh_status(bi)
       self.save!
       message += "<br>Lo stato del booking e' stato modificato in CLOSE."
     end
+    
+   #verifico se devo riaprire il booking (ad esempio dopo un mancato posizionamento)
+     to_open = false
+     self.booking_items.each do |bi_tmp|
+       to_open = true if bi_tmp.status == 'OPEN'
+     end
+     if to_open && self.status != 'OPEN'
+       self.status = 'OPEN'
+       self.save!
+       message += "<br>Lo stato del booking e' stato modificato in OPEN."
+     end
+    
   
  end
  

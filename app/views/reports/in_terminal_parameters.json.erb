@@ -62,6 +62,14 @@
 								                width: 180
 								            }]
 								        }
+								        
+					, {
+						xtype: 'displayfield',
+						value: '----- ricerca tramite booking -----'
+					}			        
+					, <%= raw extjs_std_combo_model('ship', @hi, {:allowBlank=>true}, {:multiSelect => false}) -%>
+					, <%= raw extjs_std_textfield('voyage', @hi, {:allowBlank => true}) -%>
+					, <%= raw extjs_std_textfield('num_booking', @hh, {:allowBlank => true}) -%>
 								           
 							 ],
     

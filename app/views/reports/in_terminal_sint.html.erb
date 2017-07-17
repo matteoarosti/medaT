@@ -11,6 +11,14 @@ items = HandlingHeader.is_in_terminal().not_closed()
 items = items.where(shipowner_id: formValues['shipowner_id']) unless formValues['shipowner_id'].blank?
 items = items.where(container_FE: formValues['fl_FE']) unless formValues['fl_FE'].to_s.empty?
 
+if !formValues['ship_id'].blank? || !formValues['voyage'].blank? || !formValues['num_booking'].blank?
+ items = items.joins(:booking)
+ items = items.where(bookings: {ship_id: formValues['ship_id']}) unless formValues['ship_id'].to_s.empty?
+ items = items.where(bookings: {voyage:  formValues['voyage']})  unless formValues['voyage'].to_s.empty?
+ items = items.where(bookings: {num_booking:  formValues['num_booking']})  unless formValues['num_booking'].to_s.empty?
+end 
+
+
 group_shipowner = items.group_by { |d| d.shipowner_id }
 %>
 

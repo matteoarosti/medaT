@@ -121,7 +121,7 @@
 						listeners : {
 						    itemdblclick: function(dv, rec, item, index, e) {						    	
 						    	acs_show_panel_std(myApp, '<%= url_for(:action=>'form_edit') -%>', {rec_id: rec.get('id')}, 'Modifica');
-						    	dv.up('window').close();
+						    	//dv.up('window').close();
 						    }, scope: this
 						}						 
 					}	        		

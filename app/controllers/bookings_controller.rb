@@ -145,7 +145,14 @@ def bitems_sc_create
    if item.booking.get_num_impegni(item.id) > params[:data][:quantity].to_i
     render json: {:success => false, :message=>"La quantità indicata è inferiore al numero dei movimenti attualmnete abbinati al booking"}
     return
+   end
+   
+   #se sono gia' usciti dei container non permetto la modifica dell'equipment 
+   if item.booking.get_num_impegni(item.id) > 0 && item.equipment_id != params[:data][:equipment_id].to_i
+    render json: {:success => false, :message=>"Non &egrave; possibile modificare il tipo equipment se ci sono gi&agrave; container associati."}
+    return
    end 
+
        
  end
 
@@ -176,6 +183,15 @@ end
 #TODO: prima di eliminazione verificare che non sia utilizzato
 def bitems_sc_destroy
  @item = BookingItem.find(params[:data][:id])
+
+  #se sono gia' usciti dei container non permetto la modifica dell'equipment 
+  if @item.booking.get_num_impegni(@item.id) > 0
+   render json: {:success => false, :message=>"Non &egrave; possibile eliminare se ci sono gi&agrave; container associati."}
+   return
+  end 
+
+   
+   
  @item.delete
   render json: {:success => true}
 end

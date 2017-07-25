@@ -56,7 +56,17 @@
 						method:'POST',                     
 	                    jsonData: {data: form.getValues()},	
 	             	
-						success: function(op, opts) {					
+						success: function(op, opts) {	
+							var result = Ext.JSON.decode(op.responseText);
+							if (result.success == false){
+								Ext.MessageBox.show({
+			                        title: 'EXCEPTION',
+			                        msg: result.message,
+			                        icon: Ext.MessageBox.ERROR,
+			                        buttons: Ext.Msg.OK
+		                    	})					
+							  return false;								
+							}											
 							this.up('window').fireEvent('afterSave', this.up('window'));						 							
 						}, scope: this,
 						

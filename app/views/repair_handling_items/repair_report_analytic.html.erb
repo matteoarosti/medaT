@@ -78,7 +78,7 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 		 <tr>
 		  <th width=100>Container</th>
 		  <th width=80>Data riparazione</th>
-   <% if User.current.admin_can?(:repair, :price)		  
+   <% if User.current.admin_can?(:repair, :price) %>		  
 		  <th width=80 style="text-align: right;">Costo da fornitore</th>
    <% end %>		  
    <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>		  
@@ -91,7 +91,7 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
  			<tr>
 				<td><%= a.handling_header.container_number -%></td>				
 				<td><%= a.repair_completed_at.strftime("%d/%m/%y %H:%M") unless a.repair_completed_at.nil? -%></td>
-   <% if User.current.admin_can?(:repair, :price)				
+   <% if User.current.admin_can?(:repair, :price) %>
 				<td class=n align=right><%= number_to_currency(a.total_cost_provider_authorized.to_f) -%></td>
    <% end %>			
    <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>				

@@ -167,6 +167,10 @@
 								        }			     
 			     },
 			     
+			     
+			     
+<% if User.current.admin_can?(:repair, :price) %>			     
+			     
 			     //costo da fornitore
 			     {text: 'Da fornitore',
 			      columns: [
@@ -239,8 +243,10 @@
 			     	}
 			       ]
 			     },
+<% end %>			     
 			     
-<% if User.current.admin_can?(:repair, :table) %>			     
+			     
+<% if User.current.admin_can?(:repair, :price) %>			     
 			     //costo per cliente
 			     {text: 'A compagnia',
 			      columns: [			 

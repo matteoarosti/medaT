@@ -51,9 +51,15 @@ class User < ActiveRecord::Base
      end
      
      if (model == :repair and op == :price)
-       return true if [1,2,4].include?(self.id) #solo Gianma
+       return true if [1,2,4].include?(self.id) #solo Gianma/Michela
        return false
      end
+     
+     if (model == :repair and op == :price_provider)
+       return true if [1,2,4,25].include?(self.id) #solo Gianma/Michela/Violini
+       return false
+     end
+     
      
      #solo alcuni possono vedere/manutenere le tabelle repair
      if [1,2,3,4,21,28,29].include?(self.id) 

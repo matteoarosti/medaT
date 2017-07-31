@@ -169,7 +169,7 @@
 			     
 			     
 			     
-<% if User.current.admin_can?(:repair, :price_provider) %>			     
+<% if User.current.can?(:repair, :price_provider) %>			     
 			     
 			     //costo da fornitore
 			     {text: 'Da fornitore',

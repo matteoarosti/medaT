@@ -24,7 +24,7 @@
 <% if User.current.admin_can?(:repair, :price) %>
 		{xtype: 'checkbox', value: false, name: 'show_customer_prices', fieldLabel: 'Mostra importi a compagnia', inputValue: true, uncheckedValue: false},
      	{xtype: 'checkbox', value: true, name: 'show_provider_prices', fieldLabel: 'Mostra importi da fornitore', inputValue: true, uncheckedValue: false},
-<% elsif User.current.admin_can?(:repair, :price_provider) %>
+<% elsif User.current.can?(:repair, :price_provider) %>
 		{xtype: 'checkbox', value: true, name: 'show_provider_prices', fieldLabel: 'Mostra importi', inputValue: true, uncheckedValue: false},     	     	
 <% end %>     	
      	{xtype: 'checkbox', value: false, name: 'show_deleted_row', fieldLabel: 'Mostra righe annullate', inputValue: true, uncheckedValue: false}

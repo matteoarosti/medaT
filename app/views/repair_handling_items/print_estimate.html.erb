@@ -33,7 +33,7 @@ formValues = JSON.parse params['formValues']
 <% if formValues['hide_prices']==false %>
  <tr>
   <th colspan=2>
-  <% if User.current.admin_can?(:repair, :price_provider) && formValues['show_provider_prices']==true %>  
+  <% if User.current.can?(:repair, :price_provider) && formValues['show_provider_prices']==true %>  
   	<th class="th_header" colspan=4>Da fornitore</th>
   <% end %>
   <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>
@@ -46,7 +46,7 @@ formValues = JSON.parse params['formValues']
   <th>Dettaglio lavorazione</th>
   <th class="n bl">Q.t&agrave;</th>
 
-<% if User.current.admin_can?(:repair, :price_provider) && formValues['hide_prices']==false && formValues['show_provider_prices']==true %>
+<% if User.current.can?(:repair, :price_provider) && formValues['hide_prices']==false && formValues['show_provider_prices']==true %>
   <th class="n bl">&euro;/h</th>
   <th class=n>Tempo</th>
   <th class=n>Pr.Mat.</th>
@@ -109,7 +109,7 @@ formValues = JSON.parse params['formValues']
   
   <td class="n bl"><%= r.quantity -%></td>
   
-<% if User.current.admin_can?(:repair, :price_provider) && formValues['hide_prices']==false && formValues['show_provider_prices']==true %>  
+<% if User.current.can?(:repair, :price_provider) && formValues['hide_prices']==false && formValues['show_provider_prices']==true %>  
   <!-- da provider -->
   <td class="n bl"><%= number_to_currency(r.provider_hourly_cost.to_f) -%></td>
   <td class=n>

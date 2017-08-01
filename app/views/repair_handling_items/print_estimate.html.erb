@@ -135,11 +135,11 @@ formValues = JSON.parse params['formValues']
 <% end %>
 
 
-<%  if User.current.admin_can?(:repair, :price) && formValues['hide_prices']==false %>
+<% if formValues['hide_prices']==false %>
   <tr class="details_totals">
    <td colspan=2 align=right>Totali</td>
    
-  <% if formValues['show_provider_prices']==true %>   
+  <% if User.current.can?(:repair, :price_provider) && formValues['show_provider_prices']==true %>   
    <td>&nbsp;</td>
    <td class=n>
    	<%= number_to_currency(t_provider_time_cost.to_f) -%>

@@ -216,6 +216,7 @@
 			                            //e' una preassegnazione di container (es: uscita vuoto per riempimento)
 			                            // apro la maschera perche' e' direttamente il mulettista che sceglie il container e esegue l'operazione sul movimento
 			                            console.log('PRE-ASSEGNAZIONE'); 
+			                            console.log(rec.data);
 				                			                             
 			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
 			                           header_form_values = header_form.getValues();
@@ -234,7 +235,8 @@
 											      {xtype: 'hiddenfield', name: 'num_container_verified'},
 											      {xtype: 'textfield', 	   name: 'num_container', fieldLabel: 'Container', 
 											       fieldStyle: 'font-size: 32px; text-transform: uppercase;'},
-											      {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes'}										    										    										    
+											      {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes'},
+											      {xtype: 'displayfield', name: 'booking_notes', fieldLabel: 'Note Booking', value: Ext.util.Format.nl2br(rec.get('booking_notes'))}
 											    ]
 											    ,
 								    			dockedItems: [{

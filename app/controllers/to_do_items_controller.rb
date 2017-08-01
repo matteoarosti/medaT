@@ -120,7 +120,7 @@ class ToDoItemsController < ApplicationController
     bi = BookingItem.get_by_num_eq(tdi.num_booking, hh.equipment_id)
     if bh.nil? || bi.nil?
       if (bh.nil?)
-        logger.info 'Booking non trovatot'
+        logger.info 'Booking non trovato'
         render json: {:success => false, :message => "Booking inesistente"}
       else
         logger.info 'Booking non trovato per numero/equipment'

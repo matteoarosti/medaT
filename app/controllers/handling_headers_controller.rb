@@ -416,6 +416,7 @@ end
      #recupero tutte le prenotazioni container (uscita per riempimento, in cui e' il mulettista a scegliere il container)
      unless !params[:flt_num_container].to_s.empty?
        to_do_items = ToDoItem.where('1=1').not_closed.prenotazione_container.limit(1000).each do |tdi|
+         b = Booking.get_by_num(tdi.num_booking)
          ret << {
            :to_be_moved_type => tdi.to_do_type,
            :id => tdi.id, #attenzione: se ho lo stesso id di un handling_item potrebbe non essere visualizzato
@@ -425,6 +426,7 @@ end
            :driver => tdi.driver,
            :plate  => tdi.plate,
            :created_at => tdi.created_at,
+           :booking_notes => b.nil? ? 'booking non trovato' : b.notes,
            :handling_header => {
               :container_number => "DA ASSEGNARE",
               :fila => '', :blocco => '', :tiro => '',

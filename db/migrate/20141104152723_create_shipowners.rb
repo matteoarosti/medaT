@@ -8,6 +8,8 @@ class CreateShipowners < ActiveRecord::Migration
       t.decimal     :estimate_hourly_cost_customer,   :precision => 5, :scale => 2 #a compagnia
       t.string      :email_daily,           :limit => 255
       
+      t.string      :name_for_interchange,  :limit => 50  #note utilizzato nelle email di invio degli interchange
+      
       t.timestamps
       t.integer :created_user_id
       t.integer :updated_user_id      

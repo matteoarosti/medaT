@@ -132,7 +132,7 @@ class CarrierMovimPdf < Prawn::Document
     #riga 5
     riga_from = riga_to + 1
     riga_to   = riga_from + 1
-    grid([riga_from,0], [riga_to,10]).bounding_box do write_cell('Remarsk/Annotazioni', '') end
+    grid([riga_from,0], [riga_to,10]).bounding_box do write_cell('Remarsk/Annotazioni', hi.notes.to_s) end
       
     
     #note per VUOTO

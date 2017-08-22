@@ -356,7 +356,8 @@
 															   jsonData: {
 															   		data: {
 															   				handling_header_id: rec.get('id'), 
-															   				handling_item_type: 'INSPECT'
+															   				handling_item_type: 'INSPECT',
+															   				notes: form.findField('notes').getValue()
 															   			},
 															   		set_lock_type: 'DAMAGED'
 															   },

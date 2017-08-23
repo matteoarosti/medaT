@@ -66,7 +66,7 @@ class HandlingHeader < ActiveRecord::Base
 
 
  #Richiamata per la creazione di un nuovo header da import
- def self.create_new(rec, params)
+ def self.create_new(rec, params, only_prepare = false)
    
    #verifico che non ci sia gia' un movimento aperto (non in CLOSE)
    hh_count = HandlingHeader.container(rec.container_number).where("handling_status <> ?", "CLOSE").count
@@ -78,7 +78,7 @@ class HandlingHeader < ActiveRecord::Base
    hh.shipowner_id = rec.shipowner_id
    hh.equipment_id = rec.equipment_id
    hh.handling_status = "NEW"
-   hh.save!
+   hh.save! unless only_prepare = true
    return hh
  end
 

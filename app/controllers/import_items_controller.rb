@@ -9,7 +9,43 @@ class ImportItemsController < ApplicationController
     ImportItem.import(params[:file])
     redirect_to root_url, notice: "Items imported."
   end
+
   
+  
+  #################################################  
+  def test_all
+  #################################################
+    ih = ImportHeader.find(params[:import_header_id])
+      
+    #recupero tutti gli import_item ancora da importare
+    iis = ih.import_items.where('status IS NULL').order(:container_number)
+
+    #Determina la tipologia del movimento da import_headers
+    import_type = ih.import_type
+    
+    message_error = []    
+         
+    #per oguno eseguo l'import
+    iis.each do |ii|
+      if import_type == 'L'
+        ret = import_L(ii, params, nil, true)
+      else
+        ret = import_D(ii, params, nil, true)
+      end      
+      
+      if ret[:success] == false
+        message_error << "#{ii.container_number}: #{ret[:message]}"
+      end
+      
+    end
+
+    global_success = false
+    render json: {:success => global_success, :message => message_error.join('<br/>')}
+  end 
+
+  
+  
+    
   
   #################################################  
   def set_ok_all
@@ -88,7 +124,7 @@ class ImportItemsController < ApplicationController
   end
 
  #SBARCO #########################################
-  def import_D(rec, params, lock_type = nil)
+  def import_D(rec, params, lock_type = nil, only_test = false)
  #################################################    
     hh = HandlingHeader.create_new(rec, params)
     if hh == false
@@ -120,6 +156,7 @@ class ImportItemsController < ApplicationController
     
     #se supera i vari controlli salvo il dettalio e aggiorno la testata
     validate_insert_item = hh.validate_insert_item(hi)
+    return validate_insert_item if only_test == true
     if validate_insert_item[:is_valid]
       hi.set_lock(lock_type) unless lock_type.nil? #eventuale flag DAMAGE
       hi.save!()
@@ -135,7 +172,7 @@ class ImportItemsController < ApplicationController
   end
 
  #IMBARCO ###############################
-  def import_L(rec, params, lock_type = nil)
+  def import_L(rec, params, lock_type = nil, only_test = false)
  #################################################   
      hh = HandlingHeader.find_exist(rec, params)
      
@@ -208,6 +245,7 @@ class ImportItemsController < ApplicationController
           
      #se supera i vari controlli salvo il dettalio e aggiorno la testata
      validate_insert_item = hh.validate_insert_item(hi)
+     return validate_insert_item if only_test == true
      if validate_insert_item[:is_valid]
        hi.set_lock(lock_type) unless lock_type.nil? #eventuale flag DAMAGE
        hi.save!()       

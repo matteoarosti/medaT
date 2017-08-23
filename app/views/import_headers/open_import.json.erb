@@ -187,8 +187,72 @@
 
 				 		}
 				 	},
+				 	
+				 	
+<% if User.current.admin_can?(:import, :verify) %>
+				 , {iconCls: 'fa fa-question-circle-o fa-2x', scale: 'large',
+				 		text: 'Test', 
+				 		//cls: 'btn-ok',
+						handler: function(event, toolEl, panel){
+											form = this.up('panel').down('form').getForm();
+											grid = this.up('grid');
+											
+									Ext.Msg.confirm({
+				                        title: 'Confirm',
+				                        msg: 'Confermi la verifica di tutti i movimenti?',
+				                        icon: Ext.MessageBox.ERROR,
+				                        buttons: Ext.Msg.YESNO,
+										fn: function(btn){                    
+										         if (btn == "no"){ //NO, esco
+										           return false;              
+										        }
+										        if (btn == "yes"){ //YES, proseguo
+
+														Ext.getBody().mask("Loading...");
+											
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'import_items', :action=>'test_all') -%>',
+															   jsonData: {import_header_id: <%= @ih.id -%>, check_form: form.getValues()},
+															   success: function(result, request) {
+															   	  var jsonData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	 	Ext.getBody().unmask();
+															   	  
+															   	  if (jsonData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: jsonData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})		
+											                   		//grid.getStore().load();													   	  
+															   	  } else {
+																    //grid.getStore().load();															   	  
+															   	  }															   	 
+															   },
+															   failure: function(response, opts) {
+															  		Ext.getBody().unmask();
+															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})						
+											                    	grid.getStore().load();									   	  															      
+															   }
+															});	
+												}			
+											}
+										})
+
+				 		}
+				 	},
+<% end %>				 	
+				 	
 				 
-				    {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
+				    {iconCls: 'fa fa-refresh fa-2x', tooltip: 'Refresh', scale: 'large', 
 				    	handler: function(event, toolEl, panel){
 			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
 			                    header_form_values = header_form.getValues();

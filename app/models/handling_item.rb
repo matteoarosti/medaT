@@ -7,6 +7,7 @@ class HandlingItem < ActiveRecord::Base
  belongs_to :shipper
  belongs_to :terminal
  belongs_to :inspection_type
+ belongs_to :ship_prepare
  
  
   #interchange relativo al movimento
@@ -18,19 +19,18 @@ class HandlingItem < ActiveRecord::Base
   validates_attachment_file_name :scan_file, matches: [/pdf\Z/, /png\Z/, /jpe?g\Z/]
   validates_attachment :scan_file, size: { in: 0..2048.kilobytes }
 
- 
- 
- 
+  
  scope :extjs_default_scope, -> {}
  scope :handlingHeader, ->(handling_header) {where("handling_header_id = ?", handling_header)} 
  scope :locked, -> {where("lock_fl=?", true)}
  scope :locked_INSPECT, -> {locked.where("lock_type = ?", 'INSPECT')}
  scope :locked_DAMAGED, -> {locked.where("lock_type IN(?)", ['DAMAGED', 'DAMAGED_AU'])}
  scope :to_be_moved, -> {where("to_be_moved=?", true)}
+ scope :not_ship_prepare, -> {where("ship_prepare_id IS NULL")}
 
  
  before_create :set_by_item_type
- 
+  
  
 #gestione permessi in base a utente
 def self.default_scope
@@ -162,6 +162,15 @@ def load_dischage_get_data_json
   {:cod=>'D',    :descr=>'Sbarco'}
  ]
 end 
+
+############## calcolo fasce prezzo per ship prepare
+def price_range
+  ShipPrepare.price_range(self.datetime_op)
+end
+
+def price_range_val
+  self.ship_prepare.price_range_val(self.price_range)
+end
 
  
 end

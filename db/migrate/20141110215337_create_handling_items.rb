@@ -51,6 +51,9 @@ class CreateHandlingItems < ActiveRecord::Migration
       #banchina e gru
       t.belongs_to :pier
       t.belongs_to :gru
+      
+      #lavorazione nave
+      t.belongs_to  :ship_prepare
                   
       t.timestamps
       t.integer :created_user_id

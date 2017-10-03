@@ -1,0 +1,87 @@
+{
+ "success": true,
+	 "items": [
+	 	{
+	 	 xtype: "panel",
+		 layout: {
+		    type: 'vbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		 }, 
+	 	 items: [
+	 	 
+	 	 
+	 	 
+      			//GRID con movimenti (group by) per imbarco	        		
+						, {
+							xtype: 'grid',
+							loadMask: true,
+							flex: 0.6,
+							title: 'Movimenti di imbarco',
+							layout: 'fit',
+							selModel: 'rowmodel',
+    						multiSelect: true, 
+    						allowDeselect: true,							
+                																	
+							store: {
+								xtype: 'store',
+								autoLoad: true,	
+								proxy: {
+									url: <%= raw url_for(:controller=>'ship_prepares', :action=>'combine_list').to_json -%>, 
+									extraParams: {rec_id: <%= @item.id.to_json -%>},
+									method: 'POST', type: 'ajax', actionMethods: {read: 'POST'},					
+									reader: {
+										type: 'json',
+										method: 'POST',
+										rootProperty: 'items'
+									}
+								},
+									
+								fields: [] //serve
+							}, //store
+							columns: [
+								{header: 'Viaggio', dataIndex: 'voyage', flex: 1}
+								, {header: 'Operation Type', dataIndex: 'operation_type', flex: 1}
+								, {header: 'Handling item type', dataIndex: 'handling_item_type', flex: 1}
+								, {header: 'Handling Type', dataIndex: 'handling_type', flex: 1}
+								, {header: 'Conteggio', dataIndex: 'c_row', flex: 1}
+								, {header: 'Data', dataIndex: 'm_date', flex: 1, xtype: 'datecolumn'}
+							]
+							
+						}	 	 
+	 	 
+	 	 
+	 	 
+	 	 ]
+		 , dockedItems: [
+			  {
+			    xtype: 'toolbar',
+			    dock: 'bottom',
+			    width: 135,
+				defaults: {
+			        xtype: 'button', scale: 'medium', textAlign: 'left'
+                },
+                items: [
+			    	{text: 'Associa movimenti imbarco/sbarco', iconCls: 'fa fa-truck fa-2x', cls: 'btn', 
+			    		handler: function(){
+			    			var m_grid = this.up('window').down('grid');
+			    			
+			 				var my_listeners = {
+		                		afterClose: function(fromWindow){
+		                			m_grid.store.load();
+		                			fromWindow.close();
+		                		}		                		
+		                	}			    		
+			    		
+							acs_show_win_std('Imbarco/Sbarco', <%= raw url_for(:controller=>'ship_prepares', 
+							 	 			  :action=>'load_discharge_combine').to_json -%>,
+									     	  {rec_id: <%= @item.id -%>}, 1000, 500, my_listeners);				    					    			
+			    		
+			    		}
+			    	}
+                ]			    
+	 	 	  }
+	 	 ]				 	 
+	 }
+  ]
+} 

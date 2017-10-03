@@ -1,0 +1,120 @@
+{
+ "success": true,
+	 "items": [
+	 	{
+	 	 xtype: "panel",
+		 layout: {
+		    type: 'vbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		 }, 
+	 	 items: [
+	 	 
+	 	 
+		        	//GRID con movimenti (group by) per imbarco	        		
+						, {
+							xtype: 'grid',
+							loadMask: true,
+							flex: 0.6,
+							title: 'Movimenti di imbarco',
+							layout: 'fit',
+							selModel: 'rowmodel',
+    						multiSelect: true, 
+    						allowDeselect: true,							
+                																	
+							store: {
+								xtype: 'store',
+								autoLoad: true,	
+								proxy: {
+									url: <%= raw url_for(:controller=>'ship_prepares', :action=>'combine_search_list').to_json -%>, 
+									extraParams: {rec_id: <%= @item.id.to_json -%>},
+									method: 'POST', type: 'ajax', actionMethods: {read: 'POST'},					
+									reader: {
+										type: 'json',
+										method: 'POST',
+										rootProperty: 'items'
+									}
+								},
+									
+								fields: [] //serve
+							}, //store
+							columns: [
+								{header: 'Viaggio', dataIndex: 'voyage', flex: 1}
+								, {header: 'Operation Type', dataIndex: 'operation_type', flex: 1}
+								, {header: 'Handling item type', dataIndex: 'handling_item_type', flex: 1}
+								, {header: 'Handling Type', dataIndex: 'handling_type', flex: 1}
+								, {header: 'Conteggio', dataIndex: 'c_row', flex: 1}
+								, {header: 'Data', dataIndex: 'm_date', flex: 1, xtype: 'datecolumn'}
+							]
+							
+							 , dockedItems: [
+								  {
+								    xtype: 'toolbar',
+								    dock: 'bottom',
+								    width: 135,
+									defaults: {
+								        xtype: 'button', scale: 'medium', textAlign: 'left'
+					                },
+					                items: [
+								    	{text: 'Associa', iconCls: 'fa fa-truck fa-2x', cls: '', 
+								    		handler: function() {
+								    			var m_grid = this.up('grid');
+								    			var row_selected = m_grid.getView().getSelectionModel().getSelection()
+								    			var arrayList=[];
+								    			Ext.each(row_selected, function (item) {								    				
+                       								arrayList.push(item.data);                    
+												});
+								    			
+								    			
+												Ext.Ajax.request({
+								                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'combine_exe').to_json -%>,
+								                    waitMsg: 'Salvataggio in corso....',
+													method:'POST',                    
+								                    jsonData: {
+								                    	rec_id: <%= @item.id -%>,
+								                    	selected_group_row: arrayList
+													},	
+								             	
+													success: function(result, request) {					
+														var returnData = Ext.JSON.decode(result.responseText);
+														
+														//error
+														if (returnData.success == false){
+															Ext.MessageBox.show({
+										                        title: 'EXCEPTION',
+										                        msg: returnData.message,
+										                        icon: Ext.MessageBox.ERROR,
+										                        buttons: Ext.Msg.OK
+									                    	})
+									                      return false;										
+														}								
+										 							
+										 				//ok
+										 				  this.up('window').fireEvent('afterClose', this.up('window'));
+										 							
+													}, scope: this,
+													
+													failure: function(rec, op) {
+														var result = Ext.JSON.decode(op.getResponse().responseText);
+														Ext.MessageBox.show({
+									                        title: 'EXCEPTION',
+									                        msg: result.message,
+									                        //icon: Ext.MessageBox.ERROR,
+									                        buttons: Ext.Msg.OK
+								                    	})					
+													}, scope: this,						
+																	 
+										    	});	 								    			
+								    			
+								    			
+								    		} //handler
+								    	}
+					                ]			    
+						 	 	  }
+						 	 ]							
+							
+						}	 	 
+	 	 ]
+	 }
+  ]
+} 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170707215444) do
+ActiveRecord::Schema.define(version: 20171003204615) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -101,6 +101,8 @@ ActiveRecord::Schema.define(version: 20170707215444) do
     t.string   "name",       limit: 50
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "sp_price_A",            precision: 10, scale: 2
+    t.decimal  "sp_price_B",            precision: 10, scale: 2
   end
 
   create_table "equipment", force: true do |t|
@@ -206,9 +208,13 @@ ActiveRecord::Schema.define(version: 20170707215444) do
     t.string   "scan_file_content_type"
     t.integer  "scan_file_file_size"
     t.datetime "scan_file_updated_at"
+    t.integer  "pier_id"
+    t.integer  "gru_id"
+    t.integer  "ship_prepare_id"
   end
 
   add_index "handling_items", ["handling_header_id"], name: "handling_hader", using: :btree
+  add_index "handling_items", ["ship_prepare_id"], name: "ship_prepare_id", using: :btree
 
   create_table "import_headers", force: true do |t|
     t.integer  "ship_id",         limit: 8
@@ -388,6 +394,8 @@ ActiveRecord::Schema.define(version: 20170707215444) do
     t.integer  "updated_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "pier_id"
+    t.integer  "gru_id"
   end
 
   create_table "ship_prepare_items", force: true do |t|
@@ -441,11 +449,16 @@ ActiveRecord::Schema.define(version: 20170707215444) do
     t.integer  "updated_user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "pier_id"
+    t.integer  "gru_id"
+    t.decimal  "price_range_A_val",                    precision: 10, scale: 2
+    t.decimal  "price_range_B_val",                    precision: 10, scale: 2
   end
 
   create_table "shipowners", force: true do |t|
     t.string   "name",                          limit: 50
     t.string   "short_name",                    limit: 3
+    t.string   "name_for_interchange",          limit: 50
     t.string   "email",                         limit: 50
     t.decimal  "estimate_hourly_cost_provider",            precision: 5, scale: 2
     t.decimal  "estimate_hourly_cost_customer",            precision: 5, scale: 2

@@ -78,7 +78,7 @@ class HandlingHeader < ActiveRecord::Base
    hh.shipowner_id = rec.shipowner_id
    hh.equipment_id = rec.equipment_id
    hh.handling_status = "NEW"
-   hh.save! unless only_prepare = true
+   hh.save! unless only_prepare == true
    return hh
  end
 

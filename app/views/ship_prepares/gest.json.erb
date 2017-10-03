@@ -637,9 +637,17 @@
 			    	
 			    	{xtype: 'tbfill'},
 
+			    	{text: 'Chiusura/Fatturazione', iconCls: 'fa fa-eur fa-2x', cls: 'btn-ok', 
+			    		handler: function(){
+							acs_show_win_std('Fatturazione nave', <%= raw url_for(:controller=>'ship_prepares', 
+							 	 			  :action=>'close_and_billing').to_json -%>,
+									     	  {rec_id: <%= @item.id -%>}, 800, 400);				    					    			
+			    		}
+			    	},
+
 			    	{text: 'Rendiconto', iconCls: 'fa fa-print fa-2x', cls: 'btn-ok', 
 			    		handler: function(){
-							acs_show_win_std('Modifica', <%= raw url_for(:controller=>'ship_prepares', 
+							acs_show_win_std('Rendiconto', <%= raw url_for(:controller=>'ship_prepares', 
 							 	 			  :action=>'r_rendiconto_parameters').to_json -%>,
 									     	  {rec_id: <%= @item.id -%>}, 800, 400);				    					    			
 			    		}

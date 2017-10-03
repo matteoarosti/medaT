@@ -11,13 +11,23 @@
 </style>
 
 
-<% formValues = JSON.parse params['formValues'] %>
-<% spi = ShipPrepare.find(formValues['id']) %>
-<h1 class=medaT-report>Lista movimentazioni</h1>
+<% 
+	formValues = JSON.parse params['formValues']
+	sp = ShipPrepare.find(formValues['id'])
+	tot_gen = 0 
+%>
+
+
+<%
+# ******************************************************** 
+# MOVIMENTI MERCE
+# ********************************************************
+%>
+<h1 class=medaT-report>Lista movimentazione merce</h1>
 
 <%
 #Recupero elenco movimenti in base ai parametri
-items = spi.ship_prepare_item_weighs
+items = sp.ship_prepare_item_weighs
 group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
 %>
 
@@ -31,7 +41,7 @@ group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
 <% group_1.each do |dataC, rows| %>
 		 
 	 <tr class=liv1>
-	 	<th colspan=7>Data: <%= dataC -%></th>
+	 	<th colspan=8>Data: <%= dataC -%></th>
 	 </tr>
 	
 	 <tr>
@@ -41,7 +51,8 @@ group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
 	  <th width=80 style="text-align: right;">Netto Ric.</th>
 	  <th width=80 style="text-align: right;">Tara</th>
 	  <th width=80 style="text-align: right;">Lordo</th>		  		  
-	  <th width=80>Fascia tariffa</th>
+	  <th width=80>Fascia</th>
+	  <th width=80 style="text-align: right;">Tariffa</th>
 	 </tr>
 	
 
@@ -51,7 +62,9 @@ group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
  #Movimenti
  ###################################################### 
 %>
-	 	<% rows.each do |row| %>
+	 	<% rows.each do |row|
+	 		tot_gen += row.price_range_val
+	 		 %>
  			<tr>
  				<td align=center><%= row.created_at.strftime("%H:%M") -%></td>
  				<td><%= row.plate.to_s -%></td>
@@ -59,10 +72,88 @@ group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
  				<td align=right><%= n0(row.qty_ric) -%></td>
  				<td align=right><%= n0(row.qty_tare) -%></td>
  				<td align=right><%= n0(row.qty_gross) -%></td>
- 				<td>&nbsp;</td>
+ 				<td><%= row.price_range -%></td>
+ 				<td style="text-align: right;"><%= n2(row.price_range_val) -%></td>
 			</tr>
 		<% end %>
 
 
   <% end %>
+</table>
+
+
+
+
+
+<%
+# ******************************************************** 
+# MOVIMENTI CONTAINER
+# ********************************************************
+%>
+<h1 class=medaT-report>Lista movimentazione container</h1>
+
+<%
+#Recupero elenco movimenti in base ai parametri
+items = sp.handling_items.includes(:handling_header, :ship_prepare)
+group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
+%>
+
+<table class="table table-striped table-bordered table-condensed medaT-report">
+
+<%
+ ######################################################
+ #DATA
+ ###################################################### 
+%>
+<% group_1.each do |dataC, rows| %>
+		 
+	 <tr class=liv1>
+	 	<th colspan=9>Data: <%= dataC -%></th>
+	 </tr>
+	
+	 <tr>
+	  <th width=80 style="text-align: center;">Ora</th>
+	  <th width=40>Tipo Mov</th>
+	  <th width=40>Tipo Op</th>
+	  <th width=40>Tipologia</th>
+	  <th width=40>I/O</th>
+	  <th width=40>Viaggio</th>
+	  <th width=80>Container</th>
+	  <th width=80>Fascia tariffa</th>
+	  <th width=80 style="text-align: right;">Tariffa</th>
+	 </tr>
+	
+
+
+<%
+ ######################################################
+ #Movimenti
+ ###################################################### 
+%>
+	 	<% rows.each do |row| 
+	 		tot_gen += row.price_range_val
+	 		%>
+ 			<tr>
+ 				<td align=center><%= row.datetime_op.strftime("%H:%M") -%></td>
+ 				<td><%= row.handling_header.handling_type.to_s -%></td>
+ 				<td><%= row.operation_type.to_s -%></td>
+ 				<td><%= row.handling_item_type.to_s -%></td>
+ 				<td><%= row.handling_type.to_s -%></td>
+ 				<td><%= row.voyage.to_s -%></td>
+ 				<td><%= row.handling_header.container_number -%></td>
+ 				<td><%= row.price_range -%></td>
+ 				<td style="text-align: right;"><%= n2(row.price_range_val) -%></td>
+			</tr>
+		<% end %>
+
+  <% end %>
+</table>
+
+
+<table class="table table-striped table-bordered table-condensed medaT-report">
+	 <tr class=liv1>
+	 	<th colspan=7>TOTALE GENERALE</th>
+	 	<th width=80 style="text-align: right;"><%= n2(tot_gen) -%></th>
+	 </tr>
+
 </table>

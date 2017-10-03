@@ -91,7 +91,6 @@ class ShipPreparesController < ApplicationController
 ##################################################
  def get_open_voyage_by_ship
 ##################################################
-  logger.info params.to_yaml
   ret = {}
   ret[:success] = true   
   @sp = ShipPrepare.find(params[:id])    
@@ -285,6 +284,56 @@ end
  def r_rendiconto_a
  end
  
+# chiusura e fatturazione  
+def close_and_billing
+  @item = ShipPrepare.find(params[:rec_id])
+end
+def load_discharge_combine
+  @item = ShipPrepare.find(params[:rec_id])
+end
+def combine_search_list
+  @item = ShipPrepare.find(params[:rec_id])
+  #ritorno i movimenti relativi alla nave non ancora associati a nessuna lavorazione nave
+  items = HandlingItem.where(ship_id: @item.ship_id).not_ship_prepare
+  items = items.select(:operation_type, :handling_item_type, :handling_type, :voyage, "count(*) as c_row", "DATE(datetime_op) as m_date").group(:operation_type, :handling_item_type, :handling_type, :voyage, "DATE(datetime_op)")
+  items = items.joins(:handling_header)
+  items = items.order("DATE(datetime_op)")
+  render json: {success: true, items: items}
+end
+def combine_list
+  @item = ShipPrepare.find(params[:rec_id])
+  #ritorno i movimenti abbinati
+  items = HandlingItem.where(ship_id: @item.ship_id, ship_prepare_id: @item.id)
+  items = items.select(:operation_type, :handling_item_type, :handling_type, :voyage, "count(*) as c_row", "DATE(datetime_op) as m_date").group(:operation_type, :handling_item_type, :handling_type, :voyage, "DATE(datetime_op)")
+  items = items.joins(:handling_header)
+  items = items.order("DATE(datetime_op)")
+  render json: {success: true, items: items}
+end
+def combine_exe
+  @item = ShipPrepare.find(params[:rec_id])
+  m_where = ""
+  params[:selected_group_row].each do |g|
+    items = HandlingItem.where( operation_type: g[:operation_type], 
+                                handling_item_type: g[:handling_item_type], 
+                                handling_type: g[:handling_type],
+                                voyage: g[:voyage],
+                                ship_id:  @item.ship_id  
+                                  ).where("DATE(datetime_op) = ?", g[:m_date])
+    items = items.joins(:handling_header)
+    check_count = items.count
+    
+    if (check_count != g[:c_row])
+      render json: {success: false, message: 'Anomalia nel conteggio record. Contattare amministratore di sistema.'}
+      return false
+    end
+    
+    #aggiorno i record
+    items.update_all(ship_prepare_id: @item.id)    
+    
+    
+  end  
+  render json: {success: true}
+end
  
   
   

@@ -24,6 +24,9 @@
 			      , <%= raw extjs_std_textfield('voyage', @item) -%>
 			      , <%= raw extjs_std_datefield('departure_date', @item, {:allowBlank=>true, :fieldLabel => 'Data inizio lavorazione'}) -%>
 			      , <%= raw extjs_std_combo_model('pier', @item, {:fieldLabel => 'Banchina'}) -%>			      
+			      
+			      , <%= raw extjs_std_numberfield('price_range_A_val', @item, {:fieldLabel => 'Tariffa movim. std'}) -%>
+			      , <%= raw extjs_std_numberfield('price_range_B_val', @item, {:fieldLabel => 'Tariffa movim. fest.'}) -%>
 			      			      
 			      , <%= raw extjs_std_textareafield('notes', @item) -%>
 	    ],

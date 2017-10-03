@@ -29,6 +29,9 @@ class CreateShipPrepares < ActiveRecord::Migration
       t.boolean    :request_received      #e' stata ricevuta email "ufficiale" di richiesta lavoro
             
       t.belongs_to :pier                  #banchina
+      
+      t.decimal    :price_range_A_val,    precision: 10, scale: 2   #costo movimentazione fascia A (standard)
+      t.decimal    :price_range_B_val,    precision: 10, scale: 2   #costo movimentazione fascia B (sab/dom)
 
       t.integer :created_user_id
       t.integer :updated_user_id

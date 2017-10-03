@@ -1,0 +1,189 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'panel',
+  title: 'Dashboard', closable: true,
+  	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+		
+  items: [
+  
+	 {
+	  xtype: 'panel',
+	  flex: 0.4,
+	  	layout: {
+		    type: 'vbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		}, 
+
+	   items: [
+	   
+	
+		//andamenvo per importo
+		{
+            xtype: 'cartesian',
+            border: true,        
+			flex: 1,	
+			legend: {
+    			docked: 'right'
+			},			
+			store: {
+				xtype: 'store',
+				autoLoad: true,	
+				proxy: {
+					url: '<%= url_for(:controller=>'activities', :action=>'tab_dashboard_movs_by_date') -%>', 
+					method: 'POST',
+					type: 'ajax',
+		
+					//Add these two properties
+					actionMethods: {
+						read: 'POST'
+					},
+		
+					reader: {
+						type: 'json',
+						method: 'POST',
+						rootProperty: 'items'
+					}
+				},
+					
+				fields: [] //serve
+			}, //store					   
+	   
+	   
+	   
+			axes: [{
+                type: 'numeric',
+                position: 'left',
+                adjustByMajorUnit: true,
+                grid: true,
+                fields: ['S'],
+                minimum: 0,
+                label: {
+                	fontSize: 10
+                }
+            }, {
+                type: 'category',
+                position: 'bottom',
+                grid: true,
+                fields: ['op'],
+                renderer: function(v){ return Ext.util.Format.date(v, 'D d/m'); },
+                label: {
+                	fontSize: 9,
+                    rotate: {
+                        degrees: -55
+                    }
+                }
+            }],
+            
+            
+            
+			series: [{
+                type: 'bar',
+                axis: 'left',
+                title: [ 'Importo &euro;' ],
+                xField: 'op',
+                yField: [ 'S'],
+                stacked: true,
+                style: {
+                    opacity: 0.80,
+                    fillStyle : 'red'
+                },
+                highlight: {
+                    fillStyle: 'yellow'
+                },
+            }]            
+            	   
+		  }	   
+
+
+
+		//andamento conteggio
+		, {
+            xtype: 'cartesian',
+            border: true,        
+			flex: 1,	
+			legend: {
+    			docked: 'right'
+			},			
+			store: {
+				xtype: 'store',
+				autoLoad: true,	
+				proxy: {
+					url: '<%= url_for(:controller=>'activities', :action=>'tab_dashboard_movs_by_date') -%>', 
+					method: 'POST',
+					type: 'ajax',
+		
+					//Add these two properties
+					actionMethods: {
+						read: 'POST'
+					},
+		
+					reader: {
+						type: 'json',
+						method: 'POST',
+						rootProperty: 'items'
+					}
+				},
+					
+				fields: [] //serve
+			}, //store					   
+	   
+	   
+	   
+			axes: [{
+                type: 'numeric',
+                position: 'left',
+                adjustByMajorUnit: true,
+                grid: true,
+                fields: ['C'],
+                minimum: 0,
+                label: {
+                	fontSize: 10
+                }
+            }, {
+                type: 'category',
+                position: 'bottom',
+                grid: true,
+                fields: ['op'],
+                renderer: function(v){ return Ext.util.Format.date(v, 'D d/m'); },
+                label: {
+                	fontSize: 9,
+                    rotate: {
+                        degrees: -55
+                    }
+                }
+            }],
+            
+            
+            
+			series: [{
+                type: 'bar',
+                axis: 'left',
+                title: [ 'Conteggio' ],
+                xField: 'op',
+                yField: [ 'C'],
+                stacked: true,
+                style: {
+                    opacity: 0.80
+                },
+                highlight: {
+                    fillStyle: 'yellow'
+                },
+            }]            
+            	   
+		  }
+	   
+	   
+	   ]
+	  }
+
+  ]
+ }
+ ]
+}

@@ -121,5 +121,46 @@ class ActivitiesController < ApplicationController
  end
  def report_by_customer_s
  end
+
+ 
+################################################## 
+#tab dashboard
+##################################################
+  def tab_dashboard
+    render :partial => "tab_dashboard"
+  end
+
+  def tab_dashboard_movs_by_date
+    ret = {}
+    ret[:items] = []
+    r = {'C' => {}, 'S' => {}}
+    
+    #raggruppo i movimenti aperti in base al lock
+     gcs = Activity.select('execution_date as date_op, count(*) as t_cont, sum(amount) as s_amount').group('execution_date')
+     gcs = gcs.order('execution_date DESC').limit(30)
+     gcs.each do |gc|   
+       logger.info gc.to_yaml    
+         r["C"]["#{gc.date_op}"] = r["C"]["#{gc.date_op}"].to_i + gc.t_cont;
+         r["S"]["#{gc.date_op}"] = r["S"]["#{gc.date_op}"].to_i + gc.s_amount;
+     end  
+     
+    #scorro gli ultimi 30 giorni
+     sd = Time.now - 30.days
+     ed = Time.now
+     
+     tmp  = sd
+     begin
+       s = {}
+       s[:op] = tmp.to_date
+       s[:C] = r["C"]["#{tmp.to_date}"] || 0
+       s[:S] = r["S"]["#{tmp.to_date}"] || 0
+       ret[:items] << s
+       tmp += 1.day
+     end while tmp <= ed 
   
+    render json: ret
+  end
+  
+   
+   
 end

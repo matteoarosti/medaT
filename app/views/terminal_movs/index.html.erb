@@ -495,7 +495,13 @@ Ext.define("plugin.Printer", {
                                 url: '<%= url_for(:controller=>'activities', :action=>'report_parameters') -%>',                                
                                 op: 'new_win',
                                 leaf:true
-                           	 }
+                           	 }, {
+                                    task: <%= raw t("dashboard").to_json %>,
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'activities', :action=>'tab_dashboard') -%>',                                    
+                                    op: 'new_tab',
+                                    tab_id: 'movs_dashboard'                                
+                                }
 <% end %>                           	 
                            	 
                            	 

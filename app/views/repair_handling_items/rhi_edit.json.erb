@@ -138,11 +138,19 @@
 	  items: [
 
 			//IN GARAGE
-			{			  			  			
+			{
+			  bodyStyle:'padding:0px; border: 0px;',			  			  			
+			  style: 'margin: 10px; margin-top: 0px; margin-bottom: 0px; padding: 10px; padding-top: 0px; border: 1px solid grey; border-top: 10px solid grey;',
 			  items: [
 				{html: '<h2>Ingresso in officina</h2>'},
 				{xtype: 'textfield', fieldLabel: 'Portato il', bind: '{rec.in_garage_at:date("d/m/Y H:i")}'},
-				{xtype: 'textfield', fieldLabel: 'Portato da', bind: '{rec.in_garage_user_name}'}
+				{xtype: 'textfield', fieldLabel: 'Portato da', bind: '{rec.in_garage_user_name}'},
+				{xtype: 'displayfield', fieldLabel: 'Ultimo mov',
+					value: '<%= 
+				 				hi_t = @item.handling_item.search_hi_by_operation_type('MT')
+				 				hi_t.nil? ? '?' : I18n.t("operations.#{hi_t.handling_item_type}.short")
+				 			 -%>'
+				}
 			  ]
 			  
         	  , dockedItems: [
@@ -154,7 +162,26 @@
 							handler: function(event, toolEl, panel){ 
 				 			}
 				 		},
-				 		{xtype: 'tbfill'},{scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
+				 		{xtype: 'tbfill'}
+				 		
+				 		, {scale: 'medium', cls: 'btn', iconCls: 'fa fa-2x fa-bars', text: '', tooltip: 'Apri movimento',
+				 			handler: function(event, toolEl, panel){
+									new_rec = HandlingHeader.load(<%= @item.handling_header.id -%>);
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Mov. ' + <%= raw @item.handling_header.container_number.to_s.to_json -%>,
+										closable: true			
+							        });
+							        
+			                		newPanel.getViewModel().setData({rec: new_rec, 
+			                			is_handling_editable: false,
+			                			is_container_editable: false
+			                		});
+			                    	myApp.feedInfo.add(newPanel).show();
+						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);				 			
+				 			}
+				 		}				 		
+				 		
+				 		, {scale: 'medium', cls: 'btn-ok', iconCls: 'fa fa-2x fa-thumbs-o-up', text: '', 
 				 			bind: {visible: '{rec.in_garage_at}'}
 				 		},{scale: 'medium', cls: '', iconCls: '', text: '', bind: {iconCls: '{with_note_in_garage}'},
 					 		handler: function(event, toolEl, panel){

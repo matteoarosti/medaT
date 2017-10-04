@@ -140,8 +140,8 @@ class ActivitiesController < ApplicationController
      gcs = gcs.order('execution_date DESC').limit(60)
      gcs.each do |gc|   
        logger.info gc.to_yaml    
-         r["C"]["#{gc.date_op}"] = r["C"]["#{gc.date_op}"].to_i + gc.t_cont;
-         r["S"]["#{gc.date_op}"] = r["S"]["#{gc.date_op}"].to_i + gc.s_amount;
+         r["C"]["#{gc.date_op}"] = r["C"]["#{gc.date_op}"].to_i + gc.t_cont.to_f;
+         r["S"]["#{gc.date_op}"] = r["S"]["#{gc.date_op}"].to_i + gc.s_amount.to_f;
      end  
      
     #scorro gli ultimi 60 giorni

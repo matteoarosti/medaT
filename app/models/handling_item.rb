@@ -116,6 +116,28 @@ def search_booking_item()
   end
   return nil
 end 
+
+
+#a ritroso (nell'handling) recupero il movimento che ha acceso un certo lock type (es: INSPECT) 
+def search_hi_by_lock_type(lock_type)
+  self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc").each do |hii|
+    if hii.datetime_op < self.datetime_op || (hii.datetime_op == self.datetime_op && hii.id <= self.id)
+            return hii if hii.lock_fl = true && hii.lock_type == lock_type
+    end 
+  end
+  return nil
+end 
+
+#a ritroso (nell'handling) recupero il movimento con un certo operation_type (es: MT) 
+def search_hi_by_operation_type(operation_type)
+  self.handling_header.handling_items.where("datetime_op <= ?", self.datetime_op).order("datetime_op desc").each do |hii|
+    if hii.datetime_op < self.datetime_op || (hii.datetime_op == self.datetime_op && hii.id <= self.id)
+            return hii if hii.operation_type == operation_type
+    end 
+  end
+  return nil
+end 
+
  
 
 #is_export: se' ha (a ritroso) il booking abbinato, e' un movimento legato alla fase di export. Altrimenti alla fase di import

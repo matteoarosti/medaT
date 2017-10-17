@@ -185,7 +185,7 @@ items = sp.handling_items.includes(:handling_header, :ship_prepare, :equipment, 
 <table class="table table-striped table-bordered table-condensed medaT-report">
 	 <tr class=liv1>
 	 	<th colspan=7>TOTALE NUMERO CONTAINER MOVIMENTATI</th>
-	 	<th width=80 style="text-align: right;"><%= n(items.count) -%></th>
+	 	<th width=80 style="text-align: right;"><%= n0(items.count) -%></th>
 	 </tr>
 
 </table>

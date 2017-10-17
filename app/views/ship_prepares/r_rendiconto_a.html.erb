@@ -27,7 +27,7 @@
 
 <%
 #Recupero elenco movimenti in base ai parametri
-items = sp.ship_prepare_item_weighs
+items = sp.ship_prepare_item_weighs.includes(:ship_prepare)
 group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
 %>
 

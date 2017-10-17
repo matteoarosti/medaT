@@ -95,7 +95,7 @@ group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
 <%
 #Recupero elenco movimenti in base ai parametri
 items = sp.handling_items.includes(:handling_header, :ship_prepare)
-group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
+group_1 = items.group_by { |d| d.datetime_op.strftime("%d/%m/%y") }
 %>
 
 <table class="table table-striped table-bordered table-condensed medaT-report">

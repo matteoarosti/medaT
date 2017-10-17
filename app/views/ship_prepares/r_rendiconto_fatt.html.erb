@@ -31,7 +31,7 @@ items = sp.ship_prepare_item_weighs
 group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
 %>
 
-<% !if !items.nil? %>
+<% !if !items.empty? %>
 	<h1 class=medaT-report>Lista movimentazione merce</h1>
 <% end %>
 

@@ -23,13 +23,18 @@
 # MOVIMENTI MERCE
 # ********************************************************
 %>
-<h1 class=medaT-report>Lista movimentazione merce</h1>
+
 
 <%
 #Recupero elenco movimenti in base ai parametri
 items = sp.ship_prepare_item_weighs.includes(:ship_prepare)
 group_1 = items.group_by { |d| d.created_at.strftime("%d/%m/%y") }
 %>
+
+<% !if !items.nil? %>
+	<h1 class=medaT-report>Lista movimentazione merce</h1>
+<% end %>
+
 
 <table class="table table-striped table-bordered table-condensed medaT-report">
 

@@ -139,14 +139,15 @@ items = sp.handling_items.includes(:handling_header, :ship_prepare, :equipment, 
 		 		</tr>
 		 		
 		 		<tr>
-		 		<% ['F_20', 'E_20', 'F_40', 'E_40'].each do |k_cell| %>
+		 		<% ragg_tipologie = ['F_20', 'E_20', 'F_40', 'E_40'] %>
+		 		<% ragg_tipologie.each do |k_cell| %>
 		 		 <td align=center><%= !rowsCell[k_cell].nil? ? rowsCell[k_cell].count : '' -%></td>
 		 		<% end #celle%>
 		 		</tr>
 		 		
 		 		<!-- FASCIA -->
 		 		<tr>
-		 		<% ['F_20', 'E_20', 'F_40', 'E_40'].each do |k_cell| %>
+		 		<% ragg_tipologie.each do |k_cell| %>
 		 		 <td align=center>		 		 		
 		 		 <%= 
 		 		 	if rowsCell[k_cell].nil?
@@ -160,7 +161,17 @@ items = sp.handling_items.includes(:handling_header, :ship_prepare, :equipment, 
 		 		 	end 
 		 		 -%></td>
 		 		<% end #celle%>
-		 		</tr>		 		
+		 		</tr>		 	
+		 		
+		 		<% #verifico di aver incasellato correttamente tutti i movimenti %>
+		 		<% 
+		 			rowsCell.each do |kc, vc|
+		 			 if !ragg_tipologie.include?(kc) %>
+						 <tr>
+						 	<th colspan=9>Anomalia classificafazione containers: <%= "[#{kc}], conteggio: #{vc.count}" -%></th>
+						 </tr>
+					<% end %>
+				 <% end %>			
 				 			 
 			 <% end #compagnia%>		 			 
 			 

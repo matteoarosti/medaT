@@ -283,6 +283,8 @@ end
  end
  def r_rendiconto_a
  end
+ def r_rendiconto_fatt
+ end
  
 # chiusura e fatturazione  
 def close_and_billing

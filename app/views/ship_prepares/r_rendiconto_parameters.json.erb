@@ -24,7 +24,23 @@
     
    buttons: [
 	{
-        text: '<i class="fa fa-th-large"></i> Visualizza',
+        text: '<i class="fa fa-th-large"></i> Riepilogo per fatturazione',
+        handler: function(){
+        	fp = this.up('form');
+            if(fp.getForm().isValid()){
+                fp.getForm().submit({
+                    method: 'POST',
+                    url: '<%= url_for(:controller=>'ship_prepares', :action=>'r_rendiconto_fatt') -%>',             
+                    params: {formValues: Ext.encode(fp.getValues())},
+                    method: 'POST',
+                    standardSubmit: true,
+                    target: '_blank'
+                });
+            }
+        }
+    },    
+	{
+        text: '<i class="fa fa-th-large"></i> Dettaglio operazioni',
         handler: function(){
         	fp = this.up('form');
             if(fp.getForm().isValid()){

@@ -1,5 +1,7 @@
 class HandlingItem < ActiveRecord::Base
  belongs_to :handling_header
+ has_one :equipment, through: :handling_header
+ has_one :shipowner, through: :handling_header
  belongs_to :ship
  belongs_to :carrier
  belongs_to :booking
@@ -8,6 +10,8 @@ class HandlingItem < ActiveRecord::Base
  belongs_to :terminal
  belongs_to :inspection_type
  belongs_to :ship_prepare
+ belongs_to :pier
+ belongs_to :gru
  
  
   #interchange relativo al movimento

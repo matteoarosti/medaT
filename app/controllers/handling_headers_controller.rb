@@ -422,7 +422,7 @@ end
            :id => tdi.id, #attenzione: se ho lo stesso id di un handling_item potrebbe non essere visualizzato
            :handling_type => tdi.handling_type,
            :container_FE => tdi.container_FE,
-           :carrier_id_Name => tdi.carrier.name,
+           :carrier_id_Name => tdi.carrier.name unless tdi.carrier.nil?,
            :driver => tdi.driver,
            :plate  => tdi.plate,
            :created_at => tdi.created_at,

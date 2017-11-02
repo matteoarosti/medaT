@@ -1,6 +1,12 @@
 class Ship < ActiveRecord::Base
 
  belongs_to :shipowner
+ has_many :bookings
+ has_many :handling_items
+ has_many :import_headers
+ has_many :to_do_items
+ has_many :ship_prepares
+ 
    
  scope :extjs_default_scope, -> { eager_load(:shipowner) }
    

@@ -4,6 +4,7 @@ class RepairHandlingItem < ActiveRecord::Base
   has_one :handling_header, through: :handling_item
   has_many :repair_estimate_items, :dependent => :destroy
   has_one :equipment, through: :handling_header
+  has_one :shipowner, through: :handling_header
   
   
   #ho concluso tutte le fasi della riparazione

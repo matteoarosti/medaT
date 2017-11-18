@@ -2,6 +2,7 @@ class HandlingItem < ActiveRecord::Base
  belongs_to :handling_header
  has_one :equipment, through: :handling_header
  has_one :shipowner, through: :handling_header
+ has_one :hh_booking, through: :handling_header, source: :booking
  belongs_to :ship
  belongs_to :carrier
  belongs_to :booking

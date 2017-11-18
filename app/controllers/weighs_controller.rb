@@ -67,7 +67,7 @@ class WeighsController < ApplicationController
          #ToDo: parametrizzare
          terminal = Terminal.find(3) rescue terminal = nil #potrebbe andare in errore perche' l'utente corrente ha il filtro che esclude il terminal di sistema
          unless terminal.nil? 
-           to_do_items = HandlingItem.joins(:handling_header).where('to_weigh = true')
+           to_do_items = HandlingItem.includes(:handling_header, :terminal).where('to_weigh = true')
            
            #applico filtri impostati da utente
            to_do_items = to_do_items.where("handling_headers.container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%") if !params[:form_user][:flt_num_container].to_s.empty?
@@ -76,7 +76,7 @@ class WeighsController < ApplicationController
            ###to_do_items = to_do_items.where("plate_trailer LIKE ?", "%#{params[:form_user][:flt_plate_trailer].upcase}%") if !params[:form_user][:flt_plate_trailer].to_s.empty?       
            
            
-           to_do_items = to_do_items.limit(1000).each do |hi|
+           to_do_items = to_do_items.limit(500).each do |hi|
              
              #potrei non avere il booking (ad esempio su rientro da altro terminal)
              m_booking = hi.handling_header.booking

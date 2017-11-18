@@ -1,6 +1,6 @@
 class TerminalMovsController < ApplicationController
 
-  layout "application_extjs", only: [:index, :index_mulettista]
+  layout "application_extjs", only: [:index, :index_mulettista, :piazzale]
   
 
 #ingresso (apertura viewport Extjs)
@@ -48,7 +48,7 @@ def new_mov_search_handling
   params[:container_number] = params[:search_number] if params[:search_type] == 'container'
   params[:booking_number]   = params[:search_number] if params[:search_type] == 'booking'  
  
-  hhs = HandlingHeader.where('1 = 1')
+  hhs = HandlingHeader.where('1 = 1').includes(:equipment, :shipowner)
   hhs = hhs.where('container_number LIKE ?', "%#{params[:container_number]}%") unless params[:container_number].blank?
   hhs = hhs.where('num_booking LIKE ?', "%#{params[:booking_number]}%") unless params[:booking_number].blank?
   if !params[:status].blank?
@@ -251,5 +251,11 @@ end
     @item = HandlingItem.new
   end  
       
+  
+  
+  
+ #piazzale (test)
+   def piazzale
+   end
   
 end #class

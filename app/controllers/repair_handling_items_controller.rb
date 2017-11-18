@@ -377,14 +377,14 @@ end
 ##################################################
  def get_row_by_filtered_type
 ##################################################
-   
+   eqs = Equipment.all
    items = items_by_filtered_type(params)
 
    if !params[:form_user][:flt_num_container].to_s.empty?
      items = items.where("handling_headers.container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%")
    end
    
-   render json: items.limit(100).includes(:handling_header, :equipment).as_json(RepairHandlingItem.as_json_prop)
+   render json: items.limit(100).includes(:handling_header).preload(:equipment).as_json(RepairHandlingItem.as_json_prop)
  
  end 
  

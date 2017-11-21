@@ -67,7 +67,7 @@ class WeighsController < ApplicationController
          #ToDo: parametrizzare
          terminal = Terminal.find(3) rescue terminal = nil #potrebbe andare in errore perche' l'utente corrente ha il filtro che esclude il terminal di sistema
          unless terminal.nil? 
-           to_do_items = HandlingItem.includes(:handling_header, :terminal, :hh_booking).where('to_weigh = true')
+           to_do_items = HandlingItem.joins(:handling_header).includes(:handling_header, :terminal, :hh_booking).where('to_weigh = true')
            
            #applico filtri impostati da utente
            to_do_items = to_do_items.where("handling_headers.container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%") if !params[:form_user][:flt_num_container].to_s.empty?
@@ -108,7 +108,7 @@ class WeighsController < ApplicationController
               else
                 a.created_at
               end 
-            }
+            }.reverse
          
       when 'LIST'
         items = items.order(created_at: :desc).limit(500)          

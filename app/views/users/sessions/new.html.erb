@@ -1,0 +1,47 @@
+<style>
+
+.vertical-offset-100{
+    padding-top:100px;
+}
+
+main {
+	background-color: white;
+}
+</style>
+
+<div class="container">
+    <div class="row vertical-offset-100">
+    	<div class="col-md-4 col-md-offset-4">
+    		<div class="panel panel-default">
+			  	<div class="panel-heading">
+			    	<h3 class="panel-title"><b>Icop srl</b>&nbsp; |&nbsp; Accesso portale <b>medaT</b></h3>
+			 	</div>
+			  	<div class="panel-body">
+			    	<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+                    <fieldset>
+			    	  	<div class="form-group">
+			    		    <input class="form-control" placeholder="Username o Email" name="user[login]" type="text">
+			    		</div>
+			    		<div class="form-group">
+			    			<input class="form-control" placeholder="Password" name="user[password]" type="password" value="">
+			    		</div>
+			    		<!--
+			    		<div class="checkbox">
+			    	    	<label>
+			    	    		<input name="remember" type="checkbox" value="Remember Me"> Remember Me
+			    	    	</label>
+			    	    </div>
+			    	    -->
+			    	    <input class="btn btn-lg btn-success btn-block" type="submit" value="Login">
+						<div class="checkbox" style="width:150px">
+				          <label>
+				            <input name="user[remember_me]" type="hidden" value="0" /><input id="user_remember_me" name="user[remember_me]" type="checkbox" value="1" /><span style="color: grey">Remember me</span>
+				          </label>
+				        </div>
+			    	</fieldset>
+			      	<% end %>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>

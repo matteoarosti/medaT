@@ -581,8 +581,11 @@ Ext.define("plugin.Printer", {
                                 	leaf:true
                             	},
                              */ 
-                            	
-                            	{
+                             	{
+                                	task: 'Cambia password',
+                                	op: 'CHGPSW',                                
+                                	leaf:true
+                            	}, {
                                 	task:<%= raw t("menu.user_manager.users").to_json %>,
                                 	op: 'USERS',                                
                                 	leaf:true

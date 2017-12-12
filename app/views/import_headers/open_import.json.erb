@@ -497,8 +497,13 @@
 			     }, {
 			        text: 'Danneggiato', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			        	var loc_grid = this;			        
-			        	if (Ext.isEmpty(rec.get('status')) == false) return '';			        
+			        	var loc_grid = this;
+			        	if (Ext.isEmpty(rec.get('status')) == false) return '';
+			        	
+			        	var action_to = 'set_damaged'
+			        	if (rec.get('container_status') == 'F')		//i container FULL non vengono riparati
+			        		action_to = 'set_ok'
+			        				        
 			            var id = Ext.id();
 			            setTimeout(function() {
 
@@ -591,6 +596,7 @@
 										});
 
 
+
 			                           loc_win = Ext.create('Ext.window.Window',{
 										    layout: 'fit',
 										    items: loc_form,
@@ -599,6 +605,17 @@
 										    height: 300,
 										    id: 'myWindow'
 										}).show();
+
+/*
+									   if (rec.get('container_status') == 'F'){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: 'Container pieno. Non verra&grave; impostato come DANNEGGIATO',
+						                        //icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})									   
+									   }
+*/									   
 
 
 

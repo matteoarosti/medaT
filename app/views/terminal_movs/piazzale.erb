@@ -1,0 +1,240 @@
+    <script>
+     //usato in my_models
+     root_path = '<%= root_path -%>';
+    </script>
+    
+    <%= javascript_include_tag "/FeedViewer/std_function.js" %>
+    <%= javascript_include_tag "/FeedViewer/my_models.js" %>
+    
+    
+    <script type="text/javascript">
+    
+        function hasOption (name) {
+            return window.location.search.indexOf(name) >= 0;
+        }
+
+        Ext.Loader.setConfig({
+        	enabled: true,
+        	disableCaching : true,  
+        	paths  : {
+        		Sc : '/js/Sc',
+        		FeedViewer: '<%= root_path -%>FeedViewer'
+        	}
+        });
+        Ext.Loader.setPath('Ext.ux', '<%= root_path -%>ux');
+        Ext.require([
+            'Ext.*',
+            'FeedViewer.MovimentoPanel',
+            'FeedViewer.ScGrid', 'FeedViewer.MenuPanel', 'FeedViewer.NewHandlingHeaderPanel'
+        ]);
+        Ext.onReady(function(){
+            if (hasOption('simjax')) {
+                initAjaxSim();
+            }
+
+
+// ****** PER BUG UPDATE PROXY SU BUFFERED STORE
+Ext.define('Ext.ux.fixed.BufferedStore', {
+    override: 'Ext.data.BufferedStore',
+    contains: function(record) {
+        return this.indexOf(record) > -1;
+    }
+});
+
+
+            Ext.QuickTips.init();            
+
+
+
+
+
+
+
+
+s = Ext.create('Ext.container.Viewport',{
+
+	layout: {
+        type: 'fit',
+    },
+
+        
+        items:[
+				{
+
+					xtype: 'panel',
+				
+				    autoScroll: true,
+				
+					
+					layout: {
+				        type: 'table',
+				        columns: 8,
+				        tdAttrs: { style: 'padding: 10px; vertical-align: top;' }
+				    },
+				
+				    defaults: {
+				        xtype: 'panel',
+				        layout: {type: 'vbox'},
+				        width: 200,
+				        height: 400,
+				        bodyPadding: 5,
+				        frame: true
+				    },        
+				      
+				      
+				      <% b = Pier.find(2) %>
+				      
+				        
+				        items:[
+							{html: 'aaaa', collapsible: true},
+				            {title: <%= raw b.name.to_json -%>, collapsible: true,			
+								layout: {
+				            		type: 'vbox',
+				            		pack: 'start',
+	    							align: 'stretch'
+				            	},				            	            	
+				            	defaults: {margin: '0px 0px 3px 0px'}, //stacco tra un blocco e l'altro
+				            	items: [
+				            		{
+				            			xtype: 'fieldset',
+				            			padding: 0, frame: false, border: false,
+										layout: {
+						            		type: 'vbox',
+						            		pack: 'start',
+											align: 'stretch'
+						            	},
+				            		 	defaults: {xtype: 'button', margin: '0px 0px', cls: 'pz_cont', bodyPadding: '0px 0px', padding: 0},
+						            	items: [
+						            		{text: 'PONU8128863'},
+						            		{text: 'MSKU7288825'},
+						            		{text: 'MSKU3756147'},
+						            		{text: 'MRKU8682810'}				            		
+						            	] 
+
+				            		}, //fieldset
+				            		
+				            		{
+				            			xtype: 'fieldset',
+				            			padding: 0, frame: false, border: false,
+										layout: {
+						            		type: 'vbox',
+						            		pack: 'start',
+											align: 'stretch'
+						            	},
+				            		 	defaults: {xtype: 'button', margin: '0px 0px', cls: 'pz_cont', bodyPadding: '0px 0px', padding: 0},
+						            	items: [
+						            		{text: 'PONU8128863'},
+						            		{text: 'MSKU7288825'},
+						            		{text: 'MSKU3756147'},
+						            		{text: 'MRKU8682810'}				            		
+						            	] 
+
+				            		}, //fieldset				            		
+
+				            		{
+				            			xtype: 'fieldset',
+				            			padding: 0, frame: false, border: false,
+										layout: {
+						            		type: 'vbox',
+						            		pack: 'start',
+											align: 'stretch'
+						            	},
+				            		 	defaults: {xtype: 'button', margin: '0px 0px', cls: 'pz_cont', bodyPadding: '0px 0px', padding: 0},
+						            	items: [
+						            		{text: 'PONU8128863'},
+						            		{text: 'MSKU7288825'},
+						            		{text: 'MSKU3756147'},
+						            		{text: 'MRKU8682810'}				            		
+						            	] 
+
+				            		}, //fieldset				            		
+
+
+				            		{
+				            			xtype: 'fieldset',
+				            			padding: 0, frame: false, border: false,
+										layout: {
+						            		type: 'vbox',
+						            		pack: 'start',
+											align: 'stretch'
+						            	},
+				            		 	defaults: {xtype: 'button', margin: '0px 0px', cls: 'pz_cont', bodyPadding: '0px 0px', padding: 0},
+						            	items: [
+						            		{text: 'PONU8128863'},
+						            		{text: 'MSKU7288825'},
+						            		{text: 'MSKU3756147'},
+						            		{text: 'MRKU8682810'}				            		
+						            	] 
+
+				            		}, //fieldset				            		
+
+				            		{
+				            			xtype: 'fieldset',
+				            			padding: 0, frame: false, border: false,
+										layout: {
+						            		type: 'vbox',
+						            		pack: 'start',
+											align: 'stretch'
+						            	},
+				            		 	defaults: {xtype: 'button', margin: '0px 0px', cls: 'pz_cont', bodyPadding: '0px 0px', padding: 0},
+						            	items: [
+						            		{text: 'PONU8128863'},
+						            		{text: 'MSKU7288825'},
+						            		{text: 'MSKU3756147'},
+						            		{text: 'MRKU8682810'}				            		
+						            	] 
+
+				            		}, //fieldset				            		
+				            		
+				            	],
+				            },
+				            {title: 'Collapsible', collapsible: true, html: 'aaaa'},
+				            {title: 'Collapsible', collapsible: true, html: 'aaaa'},
+				            {title: 'Collapsible', collapsible: true, html: 'aaaa'},
+				            {title: 'Collapsible', collapsible: true, html: 'aaaa'},
+				            {title: 'Collapsible', collapsible: true, html: 'aaaa'},
+				            {title: 'Collapsible', collapsible: true, html: 'aaaa'},
+
+				            {
+				                title: 'Tools',
+				                collapsed: true,
+				                collapsible: true,
+				                html: 'aaaa',
+				                tools: [
+				                    { type:'pin' },
+				                    { type:'refresh' },
+				                    { type:'search' },
+				                    { type:'save' }
+				                ],
+				                colspan: 8
+				            },
+				            
+				            {
+				                title: 'Tools',
+				                collapsed: true,
+				                collapsible: true,
+				                width: 640,
+				                html: 'aaaa',
+				                tools: [
+				                    { type:'pin' },
+				                    { type:'refresh' },
+				                    { type:'search' },
+				                    { type:'save' }
+				                ],
+				                colspan: 8
+				            },				                    
+				
+				        ] //items
+				}        
+        
+        
+        
+        ] //items
+
+    });
+
+
+
+            
+        });
+    </script>

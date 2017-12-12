@@ -1,4 +1,7 @@
 class UsersController < ApplicationController
+  
+  layout "application_extjs", only: [:sign_in]
+  
   before_filter :authenticate_user!
   before_filter :admin_only, :except => :show
 

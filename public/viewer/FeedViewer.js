@@ -126,6 +126,13 @@ Ext.define('FeedViewer.App', {
 		 return;
 		}	
 
+
+		if (rec.get('op') == 'CHGPSW'){
+			 window.location = myApp.railsBaseUri + 'users/edit';
+			 return;
+		}	
+
+		
 		
 		if (rec.get('op') == 'LOGOUT'){
 			Ext.Ajax.request({

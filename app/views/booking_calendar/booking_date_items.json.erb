@@ -1,0 +1,40 @@
+[
+{html: ''}
+<% @items.each do |b| %>
+, {
+	padding: '1px 1px',
+	style: 'background: grey;',
+	html: <%= raw "#{b.shipowner.name}<br/>#{b.ship.name}".to_json -%>,
+	//frame: true,
+}, {
+	xtype: 'panel',
+	layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+	items: [
+		{html: ''}	
+		<% b.booking_items.each do |bi|
+			qb = bi.quantity
+			qbu = bi.quantity_used
+			
+			if (qbu == 0)
+				c = 'red'
+			elsif qbu < qb
+				c = 'yellow'
+			else
+				c = 'green'
+			end
+		 %>
+			, {
+				html: <%= raw "#{bi.equipment.equipment_type}<br/>#{qbu} / #{qb}".to_json -%>,
+				width: 50,
+				bodyStyle: 'background: <%= c -%>; margin: 2px; padding: 2px 5px;'
+			}
+		<% end %>
+		
+	]
+}
+<% end %>
+]

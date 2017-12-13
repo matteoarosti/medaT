@@ -257,5 +257,6 @@ end
  #piazzale (test)
    def piazzale
    end
-  
+
+     
 end #class

@@ -1,0 +1,119 @@
+    <script>
+     //usato in my_models
+     root_path = '<%= root_path -%>';
+    </script>
+    
+    <%= javascript_include_tag "/FeedViewer/std_function.js" %>
+    <%= javascript_include_tag "/FeedViewer/my_models.js" %>
+    
+    
+    <script type="text/javascript">
+    
+        function hasOption (name) {
+            return window.location.search.indexOf(name) >= 0;
+        }
+
+        Ext.Loader.setConfig({
+        	enabled: true,
+        	disableCaching : true,  
+        	paths  : {
+        		Sc : '/js/Sc',
+        		FeedViewer: '<%= root_path -%>FeedViewer'
+        	}
+        });
+        Ext.Loader.setPath('Ext.ux', '<%= root_path -%>ux');
+        Ext.require([
+            'Ext.*',
+            'FeedViewer.MovimentoPanel',
+            'FeedViewer.ScGrid', 'FeedViewer.MenuPanel', 'FeedViewer.NewHandlingHeaderPanel'
+        ]);
+        Ext.onReady(function(){
+            if (hasOption('simjax')) {
+                initAjaxSim();
+            }
+
+
+// ****** PER BUG UPDATE PROXY SU BUFFERED STORE
+Ext.define('Ext.ux.fixed.BufferedStore', {
+    override: 'Ext.data.BufferedStore',
+    contains: function(record) {
+        return this.indexOf(record) > -1;
+    }
+});
+
+
+            Ext.QuickTips.init();            
+
+
+
+
+
+
+
+
+s = Ext.create('Ext.container.Viewport',{
+
+	layout: {
+        type: 'fit',
+    },
+
+        
+        items:[
+				{
+
+					xtype: 'panel',				
+				    autoScroll: true,				
+					
+					layout: {
+				        type: 'table',
+				        columns: 8,
+				        tdAttrs: { style: 'padding: 10px; vertical-align: top;' }
+				    },
+				
+				    defaults: {
+				        xtype: 'panel',
+				        layout: {type: 'vbox'},
+				        width: 200,
+				        height: 400,
+				        bodyPadding: 5,
+				        frame: true
+				    },
+				        
+				        items:[
+<% for i in -3..4 %>				        
+				            {title: <%= raw (Date.today + i).to_json -%>,			
+								layout: {
+				            		type: 'vbox',
+				            		pack: 'start',
+	    							align: 'stretch'
+				            	},				            	            	
+				            	defaults: {margin: '0px 0px 3px 0px'}, //stacco tra un blocco e l'altro
+								loader: {
+									loadMask: true,
+									removeAll: true,
+									scripts: true,
+									autoLoad: true,
+									url: <%= raw url_for(:action=>'booking_date_items', :date=>(Date.today + i)).to_json -%>,
+									renderer: 'component',
+									success: function()
+									{
+										//alert('content loaded');
+									}
+								}				            					        		
+				            },
+<% end %>
+				
+				        ] //items
+				}        
+        
+        
+        
+        ] //items
+
+    });
+
+
+
+            
+        });
+    </script>

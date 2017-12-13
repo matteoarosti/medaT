@@ -585,11 +585,17 @@ Ext.define("plugin.Printer", {
                                 	task: 'Cambia password',
                                 	op: 'CHGPSW',                                
                                 	leaf:true
-                            	}, {
+                            	}
+                            	
+<% if User.current.admin_can?(:repair, :table) %>                            	
+                            	, {
                                 	task:<%= raw t("menu.user_manager.users").to_json %>,
                                 	op: 'USERS',                                
                                 	leaf:true
-                            	}, {
+                            	}
+<% end %>                            	
+                            	
+                            	, {
                                 	task:<%= raw t("menu.user_manager.logout").to_json %>,
                                 	op: 'LOGOUT',                                
                                 	leaf:true

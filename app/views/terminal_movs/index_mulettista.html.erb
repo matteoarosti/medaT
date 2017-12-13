@@ -114,6 +114,15 @@ s = Ext.create('Ext.container.Viewport',{
 					    	 	mp.activeTab.destroy();
 					    	 }
 					      }, 
+
+
+						{xtype : "button", 
+					    	text : '<i class="fa fa-exchange fa-3x" style="color:white;"></i>', 
+					    	height: 60,
+					    	 handler: function(){
+					    	 	window.location = myApp.railsBaseUri + 'users/edit';
+					    	 }
+					      },   
 					      
 						{xtype : "button", 
 					    	text : '<i class="fa fa-unlock fa-3x" style="color:white;"></i>', 

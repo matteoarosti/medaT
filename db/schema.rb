@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171003204615) do
+ActiveRecord::Schema.define(version: 20171115230934) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -565,10 +565,12 @@ ActiveRecord::Schema.define(version: 20171003204615) do
     t.integer  "role"
     t.string   "shipowner_flt",          limit: 20
     t.string   "terminal_flt",           limit: 20
+    t.string   "username"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   create_table "weighs", force: true do |t|
     t.string   "weigh_status",           limit: 5

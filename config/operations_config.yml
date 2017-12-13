@@ -156,7 +156,8 @@ TMOV:
    booking_copy: true
    operation_type: 'MT'
    lock_INSPECT: IF_EMPTY
-   start_reefer_connection: IF_FULL      
+   start_reefer_connection: IF_FULL
+   to_weigh: IF_FULL      
  REQ_ESTIMATE:
   label: Estimate Request
   icon: '<i class="fa fa-fax fa-2x" style="color:white;"></i>'

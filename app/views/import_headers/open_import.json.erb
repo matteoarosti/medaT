@@ -44,10 +44,10 @@
         	   dockedItems: [
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
-        	    hidden: true,
+        	    //height: 70,
+        	    //hidden: true,
         	    items: [{
-				    xtype: 'form',
-				    height: 70,
+				    xtype: 'form',				    
 				    layout: {
 					    type: 'hbox',
 					    pack: 'start',
@@ -57,10 +57,14 @@
 				    items: [
 				    	{xtype: 'hiddenfield', name: 'pier_id'},
 				    	{xtype: 'hiddenfield', name: 'gru_id'},
+				    	
+				    	
+				    	
 				    	{
 				    		flex: 1,
 				            xtype: 'fieldcontainer',
 				            fieldLabel: 'Data/Ora', labelAlign: 'right',
+				            itemId: 'containerDataOra',
 				            layout: 'hbox',
 				            items: [
 				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
@@ -71,7 +75,8 @@
 				      
 				      ,	{
 				    		flex: 1,
-				            xtype: 'fieldcontainer',				          
+				            xtype: 'fieldcontainer',			
+				            itemId: 'containerFilter',	          
 				            layout: 'vbox',
 				            items: [
 						      {	
@@ -92,6 +97,7 @@
 				            
 				            ]
 				        }
+				        
 				      
 				          
 				     
@@ -108,6 +114,12 @@
 				    , listeners: {
 				    	afterrender: function(comp){
 				    		comp.up('#panel-import').disable();
+				    		
+				    		if (myApp.type_role == 'mulettista'){
+				    			console.log('disabilito filtriii');
+				    			comp.down('#containerFilter').hide();
+				    			comp.down('#containerDataOra').hide();
+				    		}
 				    	
 				    		//forzo selezione banchina/gru				    		
 				 				var my_listeners = {

@@ -1,5 +1,7 @@
 class BookingCalendarController < ApplicationController
   
+  layout "application_extjs", only: [:index, :index_mulettista, :piazzale]
+  
   def index
   end
   

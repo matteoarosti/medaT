@@ -4,7 +4,7 @@
 , {
 	padding: '1px 1px',
 	style: 'background: grey;',
-	html: <%= raw "#{b.shipowner.name}/#{b.ship.name}<br/>#{b.num_booking}".to_json -%>,
+	html: <%= raw "#{b.shipowner.name}/#{b.ship.name}<br/>#{b.num_booking} / #{b.voyage}".to_json -%>,
 	//frame: true,
 }, {
 	xtype: 'panel',

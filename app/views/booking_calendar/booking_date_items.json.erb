@@ -29,7 +29,7 @@
 			if c_tmp == bi.quantity
 				c = 'green'
 			else
-				c_tmp += by_last_dett['I_FILLING'].to_i
+				c_tmp += by_last_dett['I_FILLING'].to_i + by_last_dett['I_REUSE'].to_i
 				if c_tmp == bi.quantity
 					c = 'orange'
 				else
@@ -44,7 +44,7 @@
 		 %>
 			, {
 				html: <%= raw "#{bi.equipment.equipment_type} #{bi.quantity}#{out_by_last_dett}".to_json -%>,
-				width: 90,
+				width: 110,
 				bodyStyle: 'background: <%= c -%>; margin: 2px; padding: 2px 5px;'
 			},
 		<% end %>

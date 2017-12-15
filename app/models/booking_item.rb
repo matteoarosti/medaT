@@ -13,6 +13,31 @@ class BookingItem < ActiveRecord::Base
    self.booking.get_num_impegni(self.id)
   end
   
+  
+  #creo un array con i vari stati (quanti ne ho in terminal, quanti sono gia' stati imbarcati, ...)
+  def get_by_last_dett()
+    ret = {}
+    hhs = HandlingHeader.where('1 = 1').where('booking_item_id = ?', self.id)
+    hhs.each do |hh|
+      if hh.handling_status == 'CLOSE'
+        ret[:close] = ret[:close].to_i + 1
+      else
+        last_dett = hh.last_dett
+        ret[last_dett.handling_item_type] = ret[last_dett.handling_item_type].to_i + 1 
+      end
+    end #for each
+   return ret
+  end
+  
+  def out_by_last_dett()
+    ret = []
+    by_last_dett = self.get_by_last_dett()
+    by_last_dett.each do |bisk, bisv|
+      ret << "<br/>#{bisk} #{bisv}"
+    end
+    ret.join()
+  end
+  
    
   def self.as_json_prop()
       return {

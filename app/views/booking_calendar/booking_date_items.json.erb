@@ -18,20 +18,28 @@
 		<% b.booking_items.each do |bi|
 			qb = bi.quantity
 			qbu = bi.quantity_used
+			ar_by_last_dett = []
+		    by_last_dett = bi.get_by_last_dett()
+		    by_last_dett.each do |bisk, bisv|
+		      ar_by_last_dett << "<br/>#{bisk} #{bisv}"
+		    end
+		    out_by_last_dett = ar_by_last_dett.join()
 			
-			if (qbu == 0)
-				c = 'red'
-			elsif qbu < qb
-				c = 'yellow'
-			else
+			if by_last_dett[:close] == bi.quantity
 				c = 'green'
+			elsif by_last_dett['I_FILLING'] == bi.quantity
+				c = 'orange'
+			elsif by_last_dett['O_FILLING'] == bi.quantity
+				c = 'yellow'				
+			else
+				c = 'red'
 			end
 		 %>
 			, {
-				html: <%= raw "#{bi.equipment.equipment_type}<br/>#{qbu} / #{qb}".to_json -%>,
-				width: 50,
+				html: <%= raw "#{bi.equipment.equipment_type} #{bi.quantity}#{out_by_last_dett}".to_json -%>,
+				width: 90,
 				bodyStyle: 'background: <%= c -%>; margin: 2px; padding: 2px 5px;'
-			}
+			},
 		<% end %>
 		
 	]

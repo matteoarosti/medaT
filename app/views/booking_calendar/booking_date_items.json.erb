@@ -25,15 +25,15 @@
 		    end
 		    out_by_last_dett = ar_by_last_dett.join()
 			
-			c_tmp == by_last_dett[:close]
+			c_tmp == by_last_dett[:close].to_i
 			if c_tmp == bi.quantity
 				c = 'green'
 			else
-				c_tmp == by_last_dett['I_FILLING']
+				c_tmp += by_last_dett['I_FILLING'].to_i
 				if c_tmp == bi.quantity
 					c = 'orange'
 				else
-					c_tmp == by_last_dett['O_FILLING']
+					c_tmp += by_last_dett['O_FILLING'].to_i
 					if c_tmp == bi.quantity
 						c = 'yellow'
 					else

@@ -29,7 +29,7 @@ class CreateBookings < ActiveRecord::Migration
       t.string      :status,                :limit => 5             #OPEN/CLOSE
       
       #Per frigo
-      t.decimal     :temperature
+      t.decimal     :temperature,           :precision => 5, :scale => 2
       t.text        :ventilation,           :limit => 7
       t.decimal     :humidity
       

@@ -157,7 +157,8 @@ def bitems_sc_create
  end
 
  
- to_save_params = params[:data].select{|k,v| BookingItem.column_names.include?(k) && k != 'id'}  
+ to_save_params = params[:data].select{|k,v| BookingItem.column_names.include?(k) && k != 'id'}
+ to_save_params[:temperature] = to_save_params[:temperature].to_s.gsub(',', '.').to_f if !to_save_params[:temperature].empty? 
  to_save_params.permit!
  item.update(to_save_params)
  

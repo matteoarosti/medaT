@@ -9,8 +9,8 @@
 	}.each do |kb1, b1| %>
 , {
 	padding: '1px 1px',
-	style: 'background: red;',
-	bodyStyle: 'background: blue; margin: 2px; padding: 2px 5px;',
+	style: 'background: black;',
+	bodyStyle: 'background: #ededed; margin: 2px; padding: 2px 5px;',
 	html: <%= raw "#{kb1[:shipowner].name}<br/>#{kb1[:ship].name} - #{kb1[:voyage]}".to_json -%>
 }		
 		<%

@@ -1,21 +1,38 @@
 [
 {html: ''}
-<% @items.each do |b| %>
+<% @items.group_by { |d| 
+			{
+				shipowner: d.shipowner,
+				ship: d.ship,
+				voyage: d.voyage				
+			}
+	}.each do |kb1, b1| %>
 , {
 	padding: '1px 1px',
 	style: 'background: grey;',
-	html: <%= raw "#{b.shipowner.name}/#{b.ship.name}<br/>#{b.num_booking} / #{b.voyage}".to_json -%>,
-	//frame: true,
-}, {
-	xtype: 'panel',
-	layout: {
-					    type: 'hbox',
-					    pack: 'start',
-					    align: 'stretch'
-					},
-	items: [
-		{html: ''}	
-		<% b.booking_items.each do |bi|
+	html: <%= raw "#{kb1[:shipowner].name}/#{kb1[:ship].name}<br/> / #{kb1[:voyage]}".to_json -%>
+}		
+		<%
+		b1.each do |b| %>
+		, {
+			padding: '1px 1px',
+			style: 'background: grey;',
+			html: <%= raw "Booking: #{b.num_booking}".to_json -%>
+		}, {
+			xtype: 'panel',
+			layout: {
+							    type: 'hbox',
+							    pack: 'start',
+							    align: 'stretch'
+							},
+			items: [
+				{html: ''}
+
+		
+		
+					
+		<%
+		 b.booking_items.each do |bi|
 			qb = bi.quantity
 			qbu = bi.quantity_used
 			ar_by_last_dett = []
@@ -48,8 +65,9 @@
 				bodyStyle: 'background: <%= c -%>; margin: 2px; padding: 2px 5px;'
 			},
 		<% end %>
-		
-	]
+		]
+	   <% end %>	
+
 }
 <% end %>
 ]

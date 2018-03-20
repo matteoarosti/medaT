@@ -131,7 +131,7 @@ items = sp.handling_items.includes(:handling_header, :ship_prepare, :equipment, 
 				 </tr>
 				 
 		 		<% rowsCell = rowsS.group_by { |d|
-		 				 [d.container_FE, d.handling_header.equipment.size].join('_') 
+		 				 [d.container_FE, !d.handling_header.nil? ? d.handling_header.equipment.size : 'ND'].join('_') 
 		 		} %>				 
 		 		
 		 		

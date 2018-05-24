@@ -41,7 +41,7 @@
 	                defaults: {xtype: 'textfield', flex: 1, hideLabel: false, labelWidth: 120, labelAlign: 'right'},
 	                items: [
     					<%= raw extjs_std_textfield('weight_exp', @hh, :allowBlank => false, :input_prefix => 'hh_', :fieldLabel => 'Peso (Kg)') -%>,
-    					<%= raw extjs_std_textfield('seal_shipowner', @new_rec, :allowBlank => true) -%>,
+    					<%= raw extjs_std_textfield('seal_shipowner', @new_rec, :allowBlank => false) -%>,
     					<%= raw extjs_std_textfield('seal_others', @new_rec, :allowBlank => true) -%>
 			        ]
 			    }

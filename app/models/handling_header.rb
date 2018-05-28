@@ -21,9 +21,9 @@ class HandlingHeader < ActiveRecord::Base
  def self.default_scope
    if !User.current.nil? && !User.current.shipowner_flt.blank?
     if User.current.shipowner_flt.include?(',')
-      return self.where("shipowner_id IN (#{User.current.shipowner_flt})")
+      return self.where("handling_headers.shipowner_id IN (#{User.current.shipowner_flt})")
     else
-      return self.where("shipowner_id = ?", User.current.shipowner_flt)
+      return self.where("handling_headers.shipowner_id = ?", User.current.shipowner_flt)
     end
    end
    return nil

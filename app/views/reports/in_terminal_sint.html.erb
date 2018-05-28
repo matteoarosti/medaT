@@ -8,7 +8,7 @@ formValues = JSON.parse params['formValues']
 
 
 items = HandlingHeader.is_in_terminal().not_closed()
-items = items.where(shipowner_id: formValues['shipowner_id']) unless formValues['shipowner_id'].blank?
+items = items.where(handling_headers: {shipowner_id: formValues['shipowner_id']}) unless formValues['shipowner_id'].blank?
 items = items.where(container_FE: formValues['fl_FE']) unless formValues['fl_FE'].to_s.empty?
 
 if !formValues['ship_id'].blank? || !formValues['voyage'].blank? || !formValues['num_booking'].blank?

@@ -110,6 +110,8 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 		  <th width=80>Booking</th>
 		  <th width=80>Nave</th>
 		  <th width=80>Viaggio</th>
+		  <th align=right width=60>Peso</th>
+		  <th width=80>Sigillo</th>
 		  <th width=80>Entrato il</th>
 		 </tr>
 
@@ -134,6 +136,13 @@ group_shipowner = items.group_by { |d| d.shipowner_id }
 				<td><%= row.num_booking.to_s -%></td>
 				<td><%= !row.booking.nil? ? row.booking.ship.name : '' -%></td>
 				<td><%= !row.booking.nil? ? row.booking.voyage : '' -%></td>
+				<% if op_id[:in_import_export]=='E' %>				
+					<td align=right><%= row.weight_exp.to_i -%></td>
+					<td><%= row.seal_exp_shipowner.to_s -%></td>
+				<% else %>
+					<td align=right><%= row.weight_imp.to_i -%></td>
+					<td><%= row.seal_imp_shipowner.to_s -%></td>
+				<% end %>	
 				<td><%= row.last_IN().datetime_op.strftime("%d/%m/%y %H:%M") unless row.last_IN.nil? -%></td>
 			</tr>
 		<% end %>

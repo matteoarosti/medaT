@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171115230934) do
+ActiveRecord::Schema.define(version: 20180529221931) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20171115230934) do
     t.datetime "updated_at"
     t.integer  "created_user_id"
     t.integer  "updated_user_id"
-    t.decimal  "temperature",               precision: 10, scale: 0
+    t.decimal  "temperature",               precision: 5,  scale: 2
     t.string   "ventilation",     limit: 7
     t.decimal  "humidity",                  precision: 10, scale: 0
   end
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 20171115230934) do
     t.datetime "updated_at"
     t.decimal  "sp_price_A",            precision: 10, scale: 2
     t.decimal  "sp_price_B",            precision: 10, scale: 2
+    t.string   "email"
   end
 
   create_table "equipment", force: true do |t|
@@ -566,6 +567,7 @@ ActiveRecord::Schema.define(version: 20171115230934) do
     t.string   "shipowner_flt",          limit: 20
     t.string   "terminal_flt",           limit: 20
     t.string   "username"
+    t.string   "customer_flt"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -594,6 +596,9 @@ ActiveRecord::Schema.define(version: 20171115230934) do
     t.datetime "scan_file_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "customer_id"
+    t.string   "booking_customer"
+    t.boolean  "fl_send_email_customer"
   end
 
 end

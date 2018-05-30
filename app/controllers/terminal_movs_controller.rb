@@ -30,7 +30,13 @@ class TerminalMovsController < ApplicationController
     if User.current.terminal?
       render "index_terminal"
       return
+    end
+    
+    if User.current.customer?
+      render "index_customer"
+      return
     end    
+
     
     
     #se sono qui: role non definito

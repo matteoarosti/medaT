@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   
   
   #enum role: [:user, :vip, :admin]
-  enum role: [:guest, :user, :admin, :mulettista, :agenzia, :sottobordo, :officina, :terminal]
+  enum role: [:guest, :user, :admin, :mulettista, :agenzia, :sottobordo, :officina, :terminal, :customer]
   after_initialize :set_default_role, :if => :new_record?
 
   scope :extjs_default_scope, -> {}

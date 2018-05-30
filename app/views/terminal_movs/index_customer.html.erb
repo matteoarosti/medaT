@@ -1,0 +1,212 @@
+    <script>
+     //usato in my_models
+     root_path = '<%= root_path -%>';
+    </script>
+    
+    <%= javascript_include_tag "/FeedViewer/std_function.js" %>
+    <%= javascript_include_tag "/FeedViewer/my_models.js" %>
+    
+    
+    <script type="text/javascript">
+    
+        function hasOption (name) {
+            return window.location.search.indexOf(name) >= 0;
+        }
+
+        Ext.Loader.setConfig({
+        	enabled: true,
+        	disableCaching : true,  
+        	paths  : {
+        		Sc : '/js/Sc',
+        		FeedViewer: '<%= root_path -%>FeedViewer'
+        	}
+        });
+        Ext.Loader.setPath('Ext.ux', '<%= root_path -%>ux');
+        Ext.require([
+            'Ext.*',
+            'FeedViewer.MovimentoPanel',
+            'Ext.ux.PreviewPlugin',
+            'FeedViewer.ScGrid', 'FeedViewer.MenuPanel', 'FeedViewer.NewHandlingHeaderPanel'
+        ]);
+        Ext.onReady(function(){
+            if (hasOption('simjax')) {
+                initAjaxSim();
+            }
+
+
+// ****** PER BUG UPDATE PROXY SU BUFFERED STORE
+Ext.define('Ext.ux.fixed.BufferedStore', {
+    override: 'Ext.data.BufferedStore',
+    contains: function(record) {
+        return this.indexOf(record) > -1;
+    }
+});
+
+
+
+
+Ext.define("plugin.Printer", {
+ statics: {
+	print: function(htmlElement,printAutomatically) {
+		var win = window.open('', 'Print Panel');
+	 
+		win.document.open();
+		win.document.write(htmlElement.outerHTML);
+		win.document.close();
+	 
+		if (printAutomatically){
+			win.print();
+		}
+	 
+		if (1==1 || this.closeAutomaticallyAfterPrint){
+			if(Ext.isIE){
+				window.close();
+			} else {
+				win.close();
+			}
+		}
+	 } 
+  }
+});
+
+
+
+            Ext.QuickTips.init();            
+
+
+
+
+
+
+
+
+s = Ext.create('Ext.container.Viewport',{
+
+		layout: {
+                type: 'border',
+                padding: 5
+            },
+        
+        
+        items:[
+        
+								   {
+										xtype: 'panel',
+										title: '',
+							            region: 'north',
+							            height: 42,
+							            style: 'border-bottom: 1px dotted gray;',
+							            html: [ "<div>",
+							                    "<div id=\"header-customer-logo\"></div>",
+							                    "<div id=\"header-user-name\">" + <%= raw User.current.email.to_json -%> + "</div>",
+							                    "</div>" ],
+							        }        
+        
+        
+         
+		, {
+			xtype: 'panel',
+			title: 'Menu',
+            region: 'west',
+            collapsed: true,
+            collapsible: true,
+            width: 125,
+            //floatable: false,
+            split: true,
+            minWidth: 75,
+            
+			layout: {
+						type: 'vbox',
+						align : 'stretch',
+						pack  : 'start',
+					},             	
+						
+			defaults: {
+							margin: '10 20 10 20'
+						},            
+            
+            items: [
+					      
+						{xtype : "button", 
+					    	text : '<i class="fa fa-unlock fa-3x" style="color:white;"></i>', 
+					    	height: 60,
+					    	 handler: function(){
+						    	 Ext.Ajax.request({
+									url: '<%= url_for(:controller=>'users', :action=>'sign_out') -%>',
+									method: 'delete',
+									success : function() {
+										window.location = '<%= url_for(:controller=>'user_managers', :action=>'extjs_sc_crt_tab') -%>'
+									},
+									params: {}
+								});
+					    	 }
+					      }            
+					                  
+            ]
+        },        
+        
+        
+        
+        
+			{
+			   xtype: 'tabpanel',
+			   id: 'main-panel',
+			   region: 'center',
+			   autoScroll: true,
+			   flex: 1,
+            	
+				items:[
+
+					{
+					   title: 'Home',
+					   xtype: 'panel',					   
+					    
+		               minWidth: 300,
+					   autoScroll: true,
+					   flex: 1,
+						layout: {
+						    type: 'vbox',
+						    align : 'stretch',
+						    pack  : 'start',
+						},             	
+						margin: '10 10 0 10',
+						
+						defaults: {
+							margin: '10 20 10 20',
+							textAlign: 'left'
+						},
+						
+					    items: [
+					    
+					      {xtype : "button",
+					      	scale: 'large', 
+					    	text : '<i class="fa fa-truck fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Richiedi nuova pesata</span>', height: 60,
+					    	 handler: function(){acs_show_win_std('Nuova richiesta (customer)', '<%= url_for(:controller=>'weighs', :action=>'new_request_customer') -%>', {}, 500, 500);}
+					      }, 
+					      {xtype : "button",
+					      	scale: 'large',					       
+					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Elenco pesate</span>', height: 60,					    	
+					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'weighs', :action=>'weighs_list', :filtered_type => 'LIST') -%>', {}, 'tttt');}
+					      }
+					    ]
+					}
+
+				]
+			}
+        ]
+
+    });
+
+
+ myApp = Ext.getCmp('main-panel');
+ myApp.railsBaseUri = '<%= root_path -%>';
+ myApp.type_role = 'mulettista';
+ myApp.feedInfo = Ext.getCmp('main-panel');
+
+      //      acs_show_panel_std(s.down('panel'), '<%= url_for(:controller=>'terminal_movs', :action=>'tab_dashboard') -%>', {}, 'tttt');
+
+
+
+            
+        });
+    </script>

@@ -19,6 +19,7 @@
        
      {xtype: 'hidden', name: 'authenticity_token', value: '<%= form_authenticity_token %>'},
      <%= raw extjs_std_combo_model('terminal', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>,
+     <%= raw extjs_std_combo_model('customer', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>,
 
      
          	

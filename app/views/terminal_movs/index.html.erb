@@ -348,6 +348,13 @@ Ext.define("plugin.Printer", {
                                     width: 700,
                                     height: 500
                                 }, {
+                                    task:<%= raw t("menu.weighs.new_request_customer").to_json %>,
+                                    leaf:true,
+                                 	url: '<%= url_for(:controller=>'weighs', :action=>'new_request_customer') -%>',                                    
+                                    op: 'new_win',
+                                    width: 700,
+                                    height: 500
+                                }, {
                                     task:<%= raw t("menu.weighs.to_weigh").to_json %>,
                                     leaf:true,
                                  	url: '<%= url_for(:controller=>'weighs', :action=>'weighs_list', :filtered_type => 'TO_WEIGH') -%>',                                    

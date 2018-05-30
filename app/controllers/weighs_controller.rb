@@ -1,7 +1,7 @@
 # encoding: utf-8
 class WeighsController < ApplicationController
   
-  #Prenota pesata
+  #Prenota pesata (terminal)
   def new_request
 
     @item = Weigh.new
@@ -38,11 +38,49 @@ class WeighsController < ApplicationController
     
   end
   
-  
+
+  #Prenota pesata (customer)
+  def new_request_customer
+
+    @item = Weigh.new
+    @item.weigh_status = 'OPEN'        
+    
+    #Inserimento record in ToDoItem
+    if params[:exe_save] == 'Y'    
+      
+      unless params[:no_CD] == 'Y'
+        valid_CD = ImportHeader.check_digit(params[:container_number])
+        if valid_CD == -501
+          render json: {:success => false, :message => 'Errore nel numero container'}
+          return false
+        end
+      end        
+        
+      to_save_params = params.select{|k,v| Weigh.column_names.include?(k) && k != 'id'}  
+      to_save_params.permit!
+      @item.update(to_save_params)
+      
+      #se sono qui procedo al salvataggio
+      r = @item.save  
+      
+      if r
+        message = 'Salvataggio esequito'
+      else
+        message = 'Errore in fase di salvataggio'
+      end
+      
+      render json: {:success => r, :message => message}
+      return
+    end
+    
+  end
+ 
+    
   
   ##################################################
    def weighs_list
-  ##################################################  
+  ##################################################
+     @item = Weigh.new  
      render :partial=>"weighs_list", :locals => {:filtered_type => params[:filtered_type] }
    end
 
@@ -57,6 +95,8 @@ class WeighsController < ApplicationController
      items = items.where("driver LIKE ?", "%#{params[:form_user][:flt_driver].upcase}%") if !params[:form_user][:flt_driver].to_s.empty?
      items = items.where("plate LIKE ?", "%#{params[:form_user][:flt_plate].upcase}%") if !params[:form_user][:flt_plate].to_s.empty?
      items = items.where("plate_trailer LIKE ?", "%#{params[:form_user][:flt_plate_trailer].upcase}%") if !params[:form_user][:flt_plate_trailer].to_s.empty?       
+     items = items.where("customer_id = ?", params[:form_user][:flt_customer_id]) if !params[:form_user][:flt_customer_id].to_s.empty?
+     items = items.where("booking_customer LIKE ?", "%#{params[:form_user][:flt_booking_customer].upcase}%") if !params[:form_user][:flt_booking_customer].to_s.empty?
           
      case params[:filtered_type]           
        
@@ -293,6 +333,7 @@ class WeighsController < ApplicationController
    items = items.where("weighed_at >= ?", datetime_from) unless datetime_from.nil?
    items = items.where("weighed_at <= ?", datetime_to) unless datetime_to.nil?
    items = items.where("terminal_id = ?", formValues['terminal_id']) unless formValues['terminal_id'].blank?
+   items = items.where("customer_id = ?", formValues['customer_id']) unless formValues['customer_id'].blank?
      
    items = items.joins(:terminal)
    items = items.select('weighs.*, terminals.code as terminal_code')  

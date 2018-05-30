@@ -1,5 +1,6 @@
 class Weigh < ActiveRecord::Base
   belongs_to :terminal
+  belongs_to :customer
   belongs_to :handling_item  
 
   has_attached_file :scan_file, 
@@ -31,7 +32,15 @@ class Weigh < ActiveRecord::Base
        return self.where("shipowner_id = ?", User.current.shipowner_flt)
      end
     end
-    
+
+    if !User.current.nil? && !User.current.customer_flt.blank?
+     if User.current.customer_flt.include?(',')
+       return self.where("weighs.customer_id IN (#{User.current.customer_flt})")
+     else
+       return self.where("weighs.customer_id = ?", User.current.customer_flt)
+     end
+    end
+
         
     return nil
   end
@@ -41,7 +50,8 @@ class Weigh < ActiveRecord::Base
       return {
         :methods => [:in_garage_user_name, :estimate_user_name, :estimate_sent_user_name, :estimate_authorized_user_name, :repair_completed_user_name, :out_garage_user_name], 
         :include=>{
-           :terminal  => {}
+           :terminal  => {},
+           :customer  => {}
            }
          }       
   end     

@@ -355,6 +355,7 @@ it:
     weighs:
       weighs: "Pesate"
       new_request: "Nuova prenotazione"
+      new_request_customer: "Nuova (x cliente)"
       to_weigh: "Inserisci pesata"
       list: "Elenco"
       export: "Esporta"

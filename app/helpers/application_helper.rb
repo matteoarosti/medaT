@@ -286,15 +286,12 @@ module ApplicationHelper
  def extjs_notes(label, hh, hi, p={})
    ret = ""
    ret += "{xtype: 'tbfill'}, " unless p[:tbfill] == "N"
-   
+          
    ar_note_field = []
-   ar_note_field << extjs_std_textareafield('notes',  hi, {:fieldLabel => "Note"}, {:width => "100%"})
-   ar_note_field << extjs_std_textareafield('notes_int',  hi, {:fieldLabel => "Note interne"}, {:width => "100%"})  unless !User.current.can?(:handling_header, :notes_int)
-  
+   ar_note_field << extjs_std_textareafield('notes',  hi, {:fieldLabel => "Note"}, {:width => "100%", :allowBlank => !p[:allowBlank].nil? ? p[:allowBlank] : true})
+   ar_note_field << extjs_std_textareafield('notes_int',  hi, {:fieldLabel => "Note interne"}, {:width => "100%"})  unless !User.current.can?(:handling_header, :notes_int) 
      
-     ret += extjs_fieldcontainer('', {:layout=>"vbox"}, ar_note_field)
-   
-
+   ret += extjs_fieldcontainer('', {:layout=>"vbox"}, ar_note_field)
  end
  
  

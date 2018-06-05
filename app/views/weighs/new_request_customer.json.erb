@@ -16,11 +16,11 @@
      
    items: [    	
     	<%= raw extjs_std_combo_model('customer', @item, {fieldLabel: 'Richiedente'}) -%>,
-		<%= raw extjs_std_textfield('container_number', @item, {fieldLabel: 'Container'}) -%>,    	
-		<%= raw extjs_std_textfield('booking_customer', @item, {fieldLabel: 'Booking'}) -%>,
+		<%= raw extjs_std_textfield('container_number', @item, {fieldLabel: 'Container'}, allowBlank: true) -%>,    	
+		<%= raw extjs_std_textfield('booking_customer', @item, {fieldLabel: 'Booking'}, allowBlank: true) -%>,
     	<%= raw extjs_std_textfield('driver', @item, {fieldLabel: 'Autista'}) -%>,
     	<%= raw extjs_std_textfield('plate', @item, {fieldLabel: 'Targa'}) -%>,
-    	<%= raw extjs_std_textfield('plate_trailer', @item, {fieldLabel: 'Targa rimorchio'}) -%>,
+    	<%= raw extjs_std_textfield('plate_trailer', @item, {fieldLabel: 'Targa rimorchio'}, allowBlank: true) -%>,
     	{name: 'no_CD', inputValue: 'Y', labelWidth: 280, labelAlign: 'right', fieldLabel: 'Disabilita controllo su numero container', xtype: 'checkbox'}    	
 	], 
 	
@@ -31,6 +31,18 @@
             handler: function (btn, evt) {
              m_win = this.up('window');              
              form = this.up('form').getForm();
+             
+             //inserire uno tra container e booking cliente
+             if (Ext.isEmpty(form.findField('container_number').getValue()) && Ext.isEmpty(form.findField('booking_customer').getValue())){
+             	Ext.MessageBox.show({
+                    title: 'EXCEPTION',
+                    msg: 'Inserire almeno uno tra container e booking',
+                    icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+            	});
+            	return false;
+             }
+             
              if (form.isValid()) {
              	btn.disable();
              	

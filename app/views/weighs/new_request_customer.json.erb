@@ -18,8 +18,8 @@
     	<%= raw extjs_std_combo_model('customer', @item, {fieldLabel: 'Richiedente'}) -%>,
 		<%= raw extjs_std_textfield('container_number', @item, {fieldLabel: 'Container'}, allowBlank: true) -%>,    	
 		<%= raw extjs_std_textfield('booking_customer', @item, {fieldLabel: 'Booking'}, allowBlank: true) -%>,
-    	<%= raw extjs_std_textfield('driver', @item, {fieldLabel: 'Autista'}) -%>,
-    	<%= raw extjs_std_textfield('plate', @item, {fieldLabel: 'Targa'}) -%>,
+    	<%= raw extjs_std_textfield('driver', @item, {fieldLabel: 'Autista'}, allowBlank: true) -%>,
+    	<%= raw extjs_std_textfield('plate', @item, {fieldLabel: 'Targa'}, allowBlank: true) -%>,
     	<%= raw extjs_std_textfield('plate_trailer', @item, {fieldLabel: 'Targa rimorchio'}, allowBlank: true) -%>,
     	{name: 'no_CD', inputValue: 'Y', labelWidth: 280, labelAlign: 'right', fieldLabel: 'Disabilita controllo su numero container', xtype: 'checkbox'}    	
 	], 

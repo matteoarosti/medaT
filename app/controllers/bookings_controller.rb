@@ -207,14 +207,14 @@ end
    @itemI = BookingItem.new  
  end
  def check_availability_for_filling_exe
-   b = Booking.find_by_num_booking(params[:data][:num_booking])
-   bi = BookingItem.get_by_booking_eq(b.id, params[:data][:equipment_id])
-   logger.info bi.to_yaml  
+   b = Booking.find_by_num_booking(params[:data][:num_booking])  
    
    if b.nil?     
      render json: {:success  => false, :message => 'Il booking richiesto &egrave; inesistente'}
      return
    end   
+   
+   bi = BookingItem.get_by_booking_eq(b.id, params[:data][:equipment_id])   
    if bi.nil?     
      render json: {:success  => false, :message => 'La tipologia indicata non &egrave; presente nel booking richiesto'}
      return

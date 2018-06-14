@@ -202,4 +202,40 @@ def bitem_info
   @item = BookingItem.find(params[:rec_id])
 end  
 
+ def check_availability_for_filling
+   @item  = Booking.new
+   @itemI = BookingItem.new  
+ end
+ def check_availability_for_filling_exe
+   b = Booking.find_by_num_booking(params[:data][:num_booking])
+   bi = BookingItem.get_by_booking_eq(b.id, params[:data][:equipment_id])
+   logger.info bi.to_yaml  
+   
+   if b.nil?     
+     render json: {:success  => false, :message => 'Il booking richiesto &egrave; inesistente'}
+     return
+   end   
+   if bi.nil?     
+     render json: {:success  => false, :message => 'La tipologia indicata non &egrave; presente nel booking richiesto'}
+     return
+   end   
+   if b.expiration  < Date.today
+     render json: {:success  => false, :message => 'Il booking richiesto &egrave; scaduto'}
+     return
+   end      
+   if b.status != 'OPEN' || bi.status != 'OPEN'
+     render json: {:success  => false, :message => 'Il booking richiesto non risulta aperto'}
+     return
+   end
+   num_impegni_booking = b.get_num_impegni(bi.id)
+   if num_impegni_booking.to_i + params[:data][:quantity].to_i > bi.quantity.to_i
+     render json: {:success  => false, :message => 'Disponibilit&agrave; non sufficiente per la quantit&agrave; richiesta'}
+     return
+   end   
+   
+   #dispobilita positiva
+   render json: {:success  => true, :message => 'Disponibilit&agrave; sufficiente per la tipologia richiesta'}
+ end
+ 
+ 
 end

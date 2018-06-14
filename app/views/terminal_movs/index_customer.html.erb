@@ -187,6 +187,11 @@ s = Ext.create('Ext.container.Viewport',{
 					      	scale: 'large',					       
 					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Elenco pesate</span>', height: 60,					    	
 					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'weighs', :action=>'weighs_list', :filtered_type => 'LIST') -%>', {}, 'tttt');}
+					      }, 
+					      {xtype : "button",
+					      	scale: 'large',					       
+					    	text : '<i class="fa fa-question-circle fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Verifica disponibilit&agrave; uscita container per booking</span>', height: 60,					    	
+					    	 handler: function(){acs_show_win_std('Verifica disponibilit&agrave;', '<%= url_for(:controller=>'bookings', :action=>'check_availability_for_filling') -%>', {}, 500, 300);}
 					      }
 					    ]
 					}

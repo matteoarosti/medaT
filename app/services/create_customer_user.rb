@@ -21,7 +21,7 @@ class CreateCustomerUser
     puts "--------------------------------------------------------------------------------------"
     puts "username: #{username}"
     puts "email: #{email}"
-    puts "psw: #{psw}"    
+    puts "password: #{psw}"    
     puts "--------------------------------------------------------------------------------------"
   end
 end

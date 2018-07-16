@@ -16,10 +16,12 @@ class CreateCustomerUser
         role: 8) #role 8: customer
     puts user.errors.to_yaml
     
-    puts "--------------------------------"
+    puts "-------------------------------------------------------"
+    puts "Utente creato per #{name}"
+    puts "-------------------------------------------------------"
     puts "username: #{username}"
     puts "email: #{email}"
-    puts "name: #{name}"
-    puts "--------------------------------"
+    puts "psw: #{psw}"    
+    puts "-------------------------------------------------------"
   end
 end

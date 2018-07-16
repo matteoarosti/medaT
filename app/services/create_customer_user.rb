@@ -14,6 +14,12 @@ class CreateCustomerUser
         customer_flt: customer_flt,
         shipowner_flt: shipowner_flt,
         role: 8) #role 8: customer
-    puts user.errors.to_yaml  
+    puts user.errors.to_yaml
+    
+    puts "--------------------------------"
+    puts "username: #{username}"
+    puts "email: #{email}"
+    puts "name: #{name}"
+    puts "--------------------------------"
   end
 end

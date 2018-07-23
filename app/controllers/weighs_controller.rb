@@ -336,7 +336,7 @@ class WeighsController < ApplicationController
    items = items.where("customer_id = ?", formValues['customer_id']) unless formValues['customer_id'].blank?
      
    items = items.joins(" LEFT OUTER JOIN terminals  ON terminal_id = terminals.id")
-   items = items.joins(" LEFT OUTER JOIN customer   ON customer_id = customers.id")
+   items = items.joins(" LEFT OUTER JOIN customers  ON customer_id = customers.id")
    items = items.select('weighs.*, terminals.code as terminal_code, customers.name as customer_name')  
    
    tmp_file = Tempfile.new(['medaT_weighs_export', '.xls'])

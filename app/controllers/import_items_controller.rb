@@ -131,7 +131,12 @@ class ImportItemsController < ApplicationController
       ret_status  = false
       message     = "Esiste gia' un movimento aperto per questo container"
       return {:success => ret_status, :message => message}
-    end 
+    end
+    
+    #copio in handling_header weight/imo/temperature (da record di import_item)
+    hh.temperature_imp  = rec.temperature  if rec.temperature.to_f != 0
+    hh.weight_imp       = rec.weight       if rec.weight.to_f != 0
+    hh.imo_imp          = rec.imo          if !rec.imo.blank?    
     
     hi = hh.handling_items.new()
     hi.pier_id = params[:check_form][:pier_id]

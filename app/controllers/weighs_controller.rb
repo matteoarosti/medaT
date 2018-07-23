@@ -344,7 +344,7 @@ class WeighsController < ApplicationController
    File.open(tmp_file, "wb") do |f|
      f.write(
        items.to_xls(
-         :columns => [:creaeted_by_name, :terminal_code, :container_number, :customer_name, :booking_customer, :weighed_at, :weight, :external, :driver, :plate, :plate_trailer],
+         :columns => [:created_by_name, :terminal_code, :container_number, :customer_name, :booking_customer, :weighed_at, :weight, :external, :driver, :plate, :plate_trailer],
          :headers => ["Richiedente", "Terminal", "Container", "Cliente", "Booking Cliente", "Data/ora pesata", "Peso", "Pesata esterna", "Autista", "Targa", "Targa rimorchio"]
        )
      )

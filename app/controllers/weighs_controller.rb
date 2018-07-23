@@ -335,16 +335,17 @@ class WeighsController < ApplicationController
    items = items.where("terminal_id = ?", formValues['terminal_id']) unless formValues['terminal_id'].blank?
    items = items.where("customer_id = ?", formValues['customer_id']) unless formValues['customer_id'].blank?
      
+   items = items.joins(" LEFT OUTER JOIN users      ON created_user_id = users.id")     
    items = items.joins(" LEFT OUTER JOIN terminals  ON terminal_id = terminals.id")
    items = items.joins(" LEFT OUTER JOIN customers  ON customer_id = customers.id")
-   items = items.select('weighs.*, terminals.code as terminal_code, customers.name as customer_name')  
+   items = items.select('weighs.*, terminals.code as terminal_code, customers.name as customer_name, users.name as created_by_name')  
    
    tmp_file = Tempfile.new(['medaT_weighs_export', '.xls'])
    File.open(tmp_file, "wb") do |f|
      f.write(
        items.to_xls(
-         :columns => [:terminal_code, :container_number, :customer_name, :booking_customer, :weighed_at, :weight, :external, :driver, :plate, :plate_trailer],
-         :headers => ["Terminal", "Container", "Cliente", "Booking Cliente", "Data/ora pesata", "Peso", "Pesata esterna", "Autista", "Targa", "Targa rimorchio"]
+         :columns => [:creaeted_by_name, :terminal_code, :container_number, :customer_name, :booking_customer, :weighed_at, :weight, :external, :driver, :plate, :plate_trailer],
+         :headers => ["Richiedente", "Terminal", "Container", "Cliente", "Booking Cliente", "Data/ora pesata", "Peso", "Pesata esterna", "Autista", "Targa", "Targa rimorchio"]
        )
      )
    end    

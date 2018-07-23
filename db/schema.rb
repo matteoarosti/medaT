@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180529221931) do
+ActiveRecord::Schema.define(version: 20180723221257) do
 
   create_table "activities", force: true do |t|
     t.integer  "customer_id"
@@ -599,6 +599,8 @@ ActiveRecord::Schema.define(version: 20180529221931) do
     t.integer  "customer_id"
     t.string   "booking_customer"
     t.boolean  "fl_send_email_customer"
+    t.integer  "created_user_id"
+    t.integer  "updated_user_id"
   end
 
 end

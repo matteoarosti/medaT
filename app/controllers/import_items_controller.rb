@@ -126,12 +126,28 @@ class ImportItemsController < ApplicationController
  #SBARCO #########################################
   def import_D(rec, params, lock_type = nil, only_test = false)
  #################################################    
-    hh = HandlingHeader.create_new(rec, params)
+    hh = HandlingHeader.create_new(rec, params, only_test)
     if hh == false
       ret_status  = false
       message     = "Esiste gia' un movimento aperto per questo container"
       return {:success => ret_status, :message => message}
     end
+    
+    if !only_test && hh.id.nil?
+      #anomalia: non e' riuscita la scrittura del movimento su db???
+      ret_status  = false
+      message     = "Anomalia: errore in fase di scrittura movimento su db"
+      return {:success => ret_status, :message => message}      
+    end
+    
+    if only_test
+      #se sono in fase di test non vado oltre
+      ret_status  = true
+      message     = nil
+      return {:success => ret_status, :message => message}      
+    end
+    
+    
     
     #copio in handling_header weight/imo/temperature (da record di import_item)
     hh.temperature_imp  = rec.temperature  if !rec.temperature.nil? && rec.temperature.to_f != 0

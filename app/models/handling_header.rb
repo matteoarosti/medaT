@@ -304,7 +304,6 @@ def validate_insert_item(hi, name_function = '')
    if !h_type_config['initial_handling'].split(',').include?(hi.handling_item_type)
     ret[:is_valid] = false
     ret[:message]  = 'Operazione non ammessa come iniziale'
-    logger.info ret.to_yaml
     return ret
    end
   end
@@ -315,7 +314,6 @@ def validate_insert_item(hi, name_function = '')
     if hi.datetime_op < last_datetime_op
       ret[:is_valid] = false
       ret[:message]  = "La data/ora dell'operazione non puo' essere precedente a quella dell'ultima operazione inserita per il movimento"
-      logger.info ret.to_yaml
       return ret
     end    
   end
@@ -330,7 +328,6 @@ def validate_insert_item(hi, name_function = '')
     if self.lock_fl == true
       ret[:is_valid] = false
       ret[:message]  = "check non superato ( lock )" 
-      logger.info ret.to_yaml
       return ret      
     end
   end
@@ -356,7 +353,6 @@ def validate_insert_item(hi, name_function = '')
      if !test_is_valid
       ret[:is_valid] = false
       ret[:message]  = "check non superato ( #{check_op_name} , #{check_op_value} )" 
-      logger.info ret.to_yaml
       return ret   
      end
     end
@@ -370,7 +366,6 @@ def validate_insert_item(hi, name_function = '')
    if hi.booking.nil? && !self.with_booking && (hi.container_FE != 'E' || hi.handling_item_type!= 'O_LOAD')
     ret[:is_valid] = false
     ret[:message]  = "Booking non presente" 
-    logger.info ret.to_yaml
     return ret      
    end
    
@@ -552,22 +547,21 @@ def sincro_set_handling_header_status_by_config(value, hi)
   #se e' stato indicato shipowner_id verifico di essere in una compagnia di quelle elencate
   if !value[:shipowner_id].nil? 
     if !value[:shipowner_id].to_s.split(',').include? self.shipowner_id.to_s
-      logger.info "Esco perche' la compagnia non e' di quelle elencate"
-      logger.info value.to_json
+      #logger.info "Esco perche' la compagnia non e' di quelle elencate"
       return false #esco perche' la shipwowner non e' di quelle elencate
     end
   end
     
   if !value[:reefer].nil?
     if self.equipment.reefer != value[:reefer]
-      logger.info "Non combacia reefer/non reefer"
+      #logger.info "Non combacia reefer/non reefer"
       return false #esco perche' non combacia reefer/non reefer
     end 
   end
 
   if !value[:container_FE].nil?
     if self.container_FE.to_s != value[:container_FE]
-      logger.info "Non combacia container_FE"
+      #logger.info "Non combacia container_FE"
       return false #esco perche' non combacia container_FE
     end 
   end  
@@ -589,24 +583,21 @@ def sincro_set_auto_O_OTHER(value, hi)
   #se e' stato indicato shipowner_id verifico di essere in una compagnia di quelle elencate
   if !value[:shipowner_id].nil? 
     if !value[:shipowner_id].to_s.split(',').include? self.shipowner_id.to_s
-      logger.info "[auto_O_OTHER] Esco perche' la compagnia non e' di quelle elencate"
-      logger.info "self.shipwoner_id: #{self.shipowner_id.to_s}"
-      logger.info "list shipwoner_id:"
-      logger.info value.to_json
+      #logger.info "[auto_O_OTHER] Esco perche' la compagnia non e' di quelle elencate"
       return false #esco perche' la shipwowner non e' di quelle elencate
     end
   end
     
   if !value[:reefer].nil?
     if self.equipment.reefer != value[:reefer]
-      logger.info "[auto_O_OTHER] Non combacia reefer/non reefer"
+      #logger.info "[auto_O_OTHER] Non combacia reefer/non reefer"
       return false #esco perche' non combacia reefer/non reefer
     end 
   end
 
   if !value[:container_FE].nil?
     if self.container_FE.to_s != value[:container_FE]
-      logger.info "[auto_O_OTHER] Non combacia container_FE"
+      #logger.info "[auto_O_OTHER] Non combacia container_FE"
       return false #esco perche' non combacia container_FE
     end 
   end  
@@ -648,16 +639,15 @@ def sincro_set_start_reefer_connection(value, hi)
   #verifico che l'equipment sia di tipo freeze e se necessario genero il movimento allaccio frigo
   if self.equipment.reefer == true
     if (value == true || (value == 'IF_FULL' && hi.container_FE == 'F') || (value == 'IF_EMPTY' && hi.container_FE == 'E'))
-      logger.info "Creo allaccio frigo (automatico)"
+      #logger.info "Creo allaccio frigo (automatico)"
       hi_reefer = self.handling_items.new()
       hi_reefer.datetime_op = hi.datetime_op
       hi_reefer.operation_type = 'AF'
       hi_reefer.handling_item_type = 'FRCON'
       hi_reefer.save!
-      logger.info "Allaccio frigo creato (automatico) hi_id: #{hi_reefer.id.to_s} hh_id: #{self.id.to_s} -> verifico esistenza record"
-      logger.info "hi_reefer::: #{hi_reefer.to_yaml}"
+      #logger.info "Allaccio frigo creato (automatico) hi_id: #{hi_reefer.id.to_s} hh_id: #{self.id.to_s} -> verifico esistenza record"
       if hi_reefer.id.nil?
-        logger.info "ERRORE:::: Allaccio frigo: movimento non creato (automatico)"
+        #logger.info "ERRORE:::: Allaccio frigo: movimento non creato (automatico)"
         raise ActiveRecord::RecordNotSaved
       end
     end
@@ -671,7 +661,7 @@ def sincro_set_end_reefer_connection(value, hi)
     if (value == true)
       self.handling_items.each do |hi_reefer|
         if hi_reefer.handling_item_type == 'FRCON' && hi_reefer.datetime_op_end.nil?
-      	   logger.info "Termino allaccio frigo"        
+      	   #logger.info "Termino allaccio frigo"        
            hi_reefer.datetime_op_end = hi.datetime_op
            hi_reefer.save!
         end
@@ -687,7 +677,7 @@ def sincro_set_lock_INSPECT(value, hi)
       
       #solo se gia' non e' in lock
       if (hi.lock_fl.nil?)
-        logger.info "Setto lock INSPECT (da ispezionare)"
+        #logger.info "Setto lock INSPECT (da ispezionare)"
         hi.set_lock('INSPECT')
         hi.save!
       end

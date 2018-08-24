@@ -18,7 +18,7 @@ TMOV:
    lock_INSPECT: IF_EMPTY
    handling_header_status_by_config:
     :new_status: CLOSE
-    :shipowner_id: "5,16,7,14,10,11,13,15,19,20"
+    :shipowner_id: "5,16,7,14,10,11,13,15,19,20,31"
     :reefer: false
     :container_FE: F
    auto_O_OTHER:

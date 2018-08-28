@@ -108,5 +108,5 @@ class User < ActiveRecord::Base
      #default
      return false
    end
-          
+
 end

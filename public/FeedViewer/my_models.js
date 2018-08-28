@@ -265,10 +265,10 @@ Ext.define("User", { extend: "Ext.data.Model",
     proxy: {
         type: 'ajax',
         api: {
-            read: root_path + 'user_managers/hitems_sc_read',
-            create: root_path + 'user_managers/hitems_sc_create',
-            update: root_path + 'user_managers/hitems_sc_update',
-            destroy: root_path + 'user_managers/hitems_sc_destroy'
+            read: root_path + 'user_managers/sc_read',
+            create: root_path + 'user_managers/sc_create',
+            update: root_path + 'user_managers/sc_update',
+            destroy: root_path + 'user_managers/extjs_sc_destroy'
         },
         reader: {
             type: 'json',

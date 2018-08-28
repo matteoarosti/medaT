@@ -582,27 +582,34 @@ Ext.define("plugin.Printer", {
                         children:
                             [
                              /*
-                                {
-                                	task:'Users',
-                                	url: '<%= url_for(:controller=>'user_managers', :action=>'extjs_sc_crt_tab') -%>',                                
-                                	leaf:true
-                            	},
-                             */ 
                              	{
                                 	task: 'Cambia password',
                                 	op: 'CHGPSW',                                
                                 	leaf:true
                             	}
+                             */	
                             	
 <% if User.current.admin_can?(:repair, :table) %>                            	
-                            	, {
+                             /*	{
                                 	task:<%= raw t("menu.user_manager.users").to_json %>,
                                 	op: 'USERS',                                
                                 	leaf:true
-                            	}
+                            	},
+                             */	 
+                            	{
+									task: 'Gestione utenti',
+                                	url: '<%= url_for(:controller=>'user_managers', :action=>'extjs_sc_crt_tab') -%>',                                
+                                	op: 'new_tab',
+                                	leaf:true
+                            	}, {
+									task: 'Cambia psw utente',
+                                	url: '<%= url_for(:controller=>'user_managers', :action=>'w_chg_user_psw') -%>',                                
+                                	op: 'new_win',
+                                	leaf:true
+                            	},
 <% end %>                            	
                             	
-                            	, {
+                            	{
                                 	task:<%= raw t("menu.user_manager.logout").to_json %>,
                                 	op: 'LOGOUT',                                
                                 	leaf:true

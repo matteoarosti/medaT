@@ -1,0 +1,83 @@
+<% @item = User.new %>
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+
+   items: [
+     <%= raw extjs_std_combo('id', @item, {fieldLabel: 'Utente', input_name: 'user_id' , :allowBlank => false, :store => extjs_std_store_data(User.all.map {|user| {cod: user.id, descr: "#{user.username} | #{user.email}"}})}) -%>,
+     {xtype: 'textfield', inputType: 'password', fieldLabel: 'Password', name: 'password', allowBlank: false},
+     {xtype: 'textfield', inputType: 'password', fieldLabel: 'Conferma password', name: 'password_confirmation', allowBlank: false}
+   ],
+      
+	buttons:[
+	
+         {
+            text: 'Conferma',
+            scale: 'large', cls: 'btn-confirm',
+            handler: function (btn, evt) {
+                           
+             form = this.up('form').getForm();
+             tmp_win  = this.up('window');
+             if (form.isValid()) {
+                btn.disable();
+                
+					  Ext.Ajax.request({
+		                    url: <%= raw url_for(:controller=>'user_managers', :action=>'chg_user_psw').to_json -%>,
+		                    waitMsg: 'Salvataggio in corso....',
+							method:'POST',                    
+		                    jsonData: {data: form.getValues()},	
+		             	
+							success: function(result, request) {					
+								var returnData = Ext.JSON.decode(result.responseText);
+								
+								//error
+								if (returnData.success == false){
+									Ext.MessageBox.show({
+				                        title: 'EXCEPTION',
+				                        msg: returnData.message,
+				                        icon: Ext.MessageBox.ERROR,
+				                        buttons: Ext.Msg.OK
+			                    	})
+			                      btn.enable();
+			                      return false;										
+								}								
+				 							
+				 				//ok
+				 				  tmp_win.close();				 				  
+				 							
+							}, scope: this,
+							
+							failure: function(rec, op) {
+								var result = Ext.JSON.decode(op.getResponse().responseText);
+								Ext.MessageBox.show({
+			                        title: 'EXCEPTION',
+			                        msg: result.message,
+			                        //icon: Ext.MessageBox.ERROR,
+			                        buttons: Ext.Msg.OK
+		                    	})					
+							}, scope: this,						
+											 
+				    	});	    											                    
+                
+                return false;
+             }
+            }
+          }	
+	
+	] //buttons
+
+  }
+ ]
+}

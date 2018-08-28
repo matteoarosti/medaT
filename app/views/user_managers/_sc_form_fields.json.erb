@@ -1,6 +1,15 @@
 [
     {"fieldLabel":"id","bind":"{rec.id}","disabled":true},
+    {"fieldLabel":"Username","bind":"{rec.username}","maxLength":30},
     {"fieldLabel":"name","bind":"{rec.name}","maxLength":50},
-    {"fieldLabel":"role","bind":"{rec.role}","maxLength":10},
     {"fieldLabel":"email","bind":"{rec.email}","maxLength":50},
+    
+    <%= raw extjs_std_combo_bind('Ruolo', @new_rec, :field_name => 'role', 
+    		:store => extjs_std_store_data(User.roles.keys.map {|role| {cod: role, descr: role}})) -%>,
+    		
+     {xtype: 'displayfield', fieldLabel: 'Regole su gestione ID',  value: 'Indicare gli ID separati da virgole (esempio: 2,3 per abilitare solo le compagnie con id 2 e 3)'},		
+    		
+     {"fieldLabel":"Filtro ID Compagnie","bind":"{rec.shipowner_flt}","maxLength":20},
+     {"fieldLabel":"Filtro ID Terminal","bind":"{rec.terminal_flt}","maxLength":20},
+     {"fieldLabel":"Filtro ID Compagnie","bind":"{rec.customer_flt}","maxLength":20}
 ]

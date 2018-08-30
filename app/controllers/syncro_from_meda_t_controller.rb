@@ -1,4 +1,4 @@
-class SyncroFromMedaT < ApplicationController
+class SyncroFromMedaTController < ApplicationController
   
   skip_before_action :authenticate_user!
   

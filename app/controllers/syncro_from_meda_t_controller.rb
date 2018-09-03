@@ -5,10 +5,10 @@ class SyncroFromMedaTController < ApplicationController
   skip_before_action :authenticate_user!
   
   def get_discharge_hi_for_container
-    raise "Codice IMO nave non specificato"  if params[:ship_imo_code].empty?
+    render json: {:success => false, :msg_error=>"Il codice IMO della nava non puo' essere vuoto"}  if params[:ship_imo_code].empty?
     
-    ship = Ship.find_by_imo_code(params[:ship_imo_code])    
-    raise "Nave non trovata con IMO #{params[:ship_imo_code]}"  if ship.nil?
+    ship = Ship.find_by_imo_code(params[:ship_imo_code])
+    render json: {:success => false, :msg_error=>"Nave non trovata con codice IMO #{params[:ship_imo_code]}"}
     
     hi = HandlingItem.joins(:handling_header).where(handling_headers: {container_number: params[:container_number]}, ship_id: ship.id, voyage: params[:voyage]).first
     #hi = HandlingItem.joins(:handling_header).where(handling_headers: {container_number: params[:container_number]}, ship_id: ship.id).first

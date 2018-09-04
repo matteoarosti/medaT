@@ -31,8 +31,8 @@
 	   	
 		   		<%= raw [
 		   			extjs_std_numberfield('temperature', @item, {:allowBlank => true}, {decimalPrecision:1}), 
-		   			extjs_std_numberfield('humidity', @item, {:allowBlank => true}), 
-		   			extjs_std_combo('ventilation', @item, :allowBlank => true, :store => extjs_std_store_data(@item.ventilation_get_data_json))
+		   			extjs_std_numberfield('humidity', @item, {:allowBlank => true}),
+		   			extjs_std_numberfield('ventilation', @item, {:allowBlank => true})
 		   			].join(',') -%>
 		 ]
 		},

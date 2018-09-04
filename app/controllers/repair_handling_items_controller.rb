@@ -66,7 +66,7 @@ def set_authorized
                                     "Notifica generata automaticamnete tramite sistema informativo medaT: 
                                     \n\nContainer autorizzato per riparazione: #{item.handling_header.container_number}
                                     \n\nMittente: Icop srl").deliver!
-            
+         logger.info "Fine invio email"    
        end
      end
 end

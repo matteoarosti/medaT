@@ -19,7 +19,11 @@ class SyncroFromMedaTController < ApplicationController
     
     hi = HandlingItem.joins(:handling_header).where(handling_headers: {container_number: params[:container_number]}, ship_id: ship.id, voyage: params[:voyage]).first
     #hi = HandlingItem.joins(:handling_header).where(handling_headers: {container_number: params[:container_number]}, ship_id: ship.id).first
-    ret_movs = hi.handling_header.handling_items.order(:datetime_op).select {|r| ['I_DISCHARGE', 'O_EMPTYING'].include?(r.handling_item_type)}
+    if hi
+      ret_movs = hi.handling_header.handling_items.order(:datetime_op).select {|r| ['I_DISCHARGE', 'O_EMPTYING'].include?(r.handling_item_type)}
+    else
+      ret_movs = nil
+    end    
     render json: {:success => true, :data=>{hi: ret_movs}}
   end   
   

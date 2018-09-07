@@ -74,6 +74,7 @@ class ImportItemsController < ApplicationController
       
       ii.status = ret[:success]==true ? 'OK' : nil
       ii.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
+      ii.created_handling_header_id = ret[:created_handling_header_id]
       ii.save!      
       
     end
@@ -98,6 +99,7 @@ class ImportItemsController < ApplicationController
 
    rec.status = ret[:success]==true ? 'OK' : nil
    rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
+   rec.created_handling_header_id = ret[:created_handling_header_id]
    rec.save!
    ret[:data] = rec.as_json()
    render json: ret
@@ -118,6 +120,7 @@ class ImportItemsController < ApplicationController
  
     rec.status = ret[:success]==true ? 'DAMAGED' : nil
     rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
+    rec.created_handling_header_id = ret[:created_handling_header_id]
     rec.save!
     ret[:data] = rec.as_json()
     render json: ret
@@ -189,7 +192,7 @@ class ImportItemsController < ApplicationController
       ret_status  = validate_insert_item[:is_valid]
       message     = validate_insert_item[:message]
     end
-   return {:success => ret_status, :message => message}
+   return {:success => ret_status, :message => message, :created_handling_header_id => hh.id}
   end
 
  #IMBARCO ###############################

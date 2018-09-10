@@ -8,6 +8,9 @@
 	{"fieldLabel":"<%= t('tables.ship_owners.estimate_hourly_cost_provider') -%>","bind":"{rec.estimate_hourly_cost_provider}"},
 	{"fieldLabel":"<%= t('tables.ship_owners.estimate_hourly_cost_customer') -%>","bind":"{rec.estimate_hourly_cost_customer}"},
 	{"fieldLabel":"<%= t('tables.ship_owners.repair_active') -%>","bind":"{rec.repair_active}", xtype: 'checkbox'},
+    {"fieldLabel":"Gestione VUOTI","bind":"{rec.manage_empty}", xtype: 'checkbox'},
+    {"fieldLabel":"Gestione PIENI","bind":"{rec.manage_full}",  xtype: 'checkbox'},
+    {"fieldLabel":"Autoriz.Doganale per uscita","bind":"{rec.auth_required_for_o_emptying}", xtype: 'checkbox'},
 	{"fieldLabel":"created_at","bind":"{rec.created_at}", disabled: true},
 	{"fieldLabel":"updated_at","bind":"{rec.updated_at}", disabled: true}
 

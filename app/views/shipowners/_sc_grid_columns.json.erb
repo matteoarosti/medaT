@@ -6,5 +6,8 @@
  {"text":"<%= t('tables.ship_owners.email_daily') -%>",		    "dataIndex":"email_daily",			"flex":1},
  {"text":"euro/h (off)","dataIndex":"estimate_hourly_cost_provider",	"flex":1},
  {"text":"euro/h (comp)","dataIndex":"estimate_hourly_cost_provider", "dataIndex":"estimate_hourly_cost_customer",	"flex":1},
- {text: "Prev.",  "dataIndex":"repair_active",  width: 60, xtype: 'booleancolumn', trueText: 'X', falseText: ''}  
+ {text: "Prev.",  "dataIndex":"repair_active",  width: 60, xtype: 'booleancolumn', trueText: 'X', falseText: ''},
+ {text: "Em",  "dataIndex":"manage_empty",   width: 60, xtype: 'booleancolumn', trueText: 'X', falseText: '', tooltip: 'Gestione vuoti'},
+ {text: "Fu",  "dataIndex":"manage_full",    width: 60, xtype: 'booleancolumn', trueText: 'X', falseText: '', tooltip: 'Gestione pieni'},
+ {text: "Auth.Dog.",  "dataIndex":"auth_required_for_o_emptying",    width: 60, xtype: 'booleancolumn', trueText: 'X', falseText: '', tooltip: 'Autorizzazione doganale richiesta per uscita'}
 ]

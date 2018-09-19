@@ -11,6 +11,19 @@ class ImportItemsController < ApplicationController
   end
 
   
+  #per correggere il bug che ogni tanto in fase di sbarco non vengono generati correttamente tutti i movimenti
+  # in import_items ho aggiunto l'id del hh che dovrebbe aver creato. Riaprio ii se non trovo l'hh
+  def reopen_D_non_created
+    ih = ImportHeader.find(params[:import_header_id])
+    ih.import_items.where(status: 'OK').where('created_handling_header_id IS NOT NULL').each do |ii|
+      if !HandlingHeader.exists?(ii.created_handling_header_id)
+        ii.status = null
+        ii.save!
+      end
+    end
+    render json: {:success => true}
+  end
+  
   
   #################################################  
   def test_all

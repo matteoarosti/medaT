@@ -203,6 +203,34 @@
 				 	},
 				 	
 				 	
+<% if User.current.admin_can?(:import, :verify) && @ih.import_type == 'D' %>
+	 , {iconCls: 'fa fa-question-circle-o fa-2x', scale: 'large',
+	 		text: 'Riapri', 
+			handler: function(event, toolEl, panel){
+			    var grid = this.up('grid');
+				Ext.Msg.confirm({
+	                title: 'Confirm',
+	                msg: 'Confermi la riapertura dei movimenti non generati?',
+	                icon: Ext.MessageBox.ERROR,
+	                buttons: Ext.Msg.YESNO,
+					fn: function(btn){
+						Ext.Ajax.request({
+						   method: 'POST',
+						   url: '<%= url_for(:controller=>'import_items', :action=>'reopen_D_non_created') -%>',
+						   jsonData: {import_header_id: <%= @ih.id -%>},
+						   success: function(result, request) {
+						   	  var jsonData = Ext.JSON.decode(result.responseText);								   	  
+						   	  Ext.getBody().unmask();								   	  
+			                  grid.getStore().load();													   	  
+						   }
+						});											
+					}                    
+	  			});
+			}
+		}
+<% end %>
+				 	
+				 	
 <% if User.current.admin_can?(:import, :verify) && @ih.handling_type == 'TMOV' %>
 				 , {iconCls: 'fa fa-question-circle-o fa-2x', scale: 'large',
 				 		text: 'Test', 

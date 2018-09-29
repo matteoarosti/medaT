@@ -4,7 +4,10 @@ class SyncroFromMedaTController < ApplicationController
   protect_from_forgery with: :null_session
   skip_before_action :authenticate_user!
   
+  
+  ######################################################################################
   def get_discharge_hi_for_container
+  ######################################################################################
     if params[:ship_imo_code].empty?
       render json: {:success => false, :msg_error=>"Il codice IMO della nava non puo' essere vuoto"}
       return
@@ -25,6 +28,22 @@ class SyncroFromMedaTController < ApplicationController
       ret_movs = nil
     end    
     render json: {:success => true, :data=>{hi: ret_movs}}
-  end   
+  end
   
+  
+  
+  ######################################################################################
+  def send_emptying_auth
+  ######################################################################################
+    n = External_data.create(
+      from: params[:from],
+      code1: 'AUTH_WP_C',
+      code2: params[:container_number],
+      code3: params[:ship_imo_code],
+      code4: params[:voyage]
+    )
+    render json: {:success => true, :data=>{item: n}}
+  end
+
+
 end

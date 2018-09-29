@@ -35,7 +35,7 @@ class SyncroFromMedaTController < ApplicationController
   ######################################################################################
   def send_emptying_auth
   ######################################################################################
-    n = External_data.create(
+    n = ExternalData.create(
       from: params[:from],
       code1: 'AUTH_WP_C',
       code2: params[:container_number],

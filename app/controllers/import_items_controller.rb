@@ -17,7 +17,7 @@ class ImportItemsController < ApplicationController
     ih = ImportHeader.find(params[:import_header_id])
     ih.import_items.where(status: 'OK').where('created_handling_header_id IS NOT NULL').each do |ii|
       if !HandlingHeader.exists?(ii.created_handling_header_id)
-        ii.status = null
+        ii.status = nil
         ii.save!
       end
     end

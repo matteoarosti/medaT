@@ -200,7 +200,7 @@
 										})
 
 				 		}
-				 	},
+				 	}
 				 	
 				 	
 <% if User.current.admin_can?(:import, :verify) && @ih.import_type == 'D' %>
@@ -290,11 +290,11 @@
 										})
 
 				 		}
-				 	},
+				 	}
 <% end %>				 	
 				 	
 				 
-				    {iconCls: 'fa fa-refresh fa-2x', tooltip: 'Refresh', scale: 'large', 
+				   , {iconCls: 'fa fa-refresh fa-2x', tooltip: 'Refresh', scale: 'large', 
 				    	handler: function(event, toolEl, panel){
 			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
 			                    header_form_values = header_form.getValues();

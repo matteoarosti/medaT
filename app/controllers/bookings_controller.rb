@@ -247,9 +247,9 @@ end
  
  def reefer_availibility_get_data
    ret = []
-   bis = BookingItem.joins(:booking, :equipment).where(equipment: {reefer: true}).where(bookings: {status: 'OPEN'}).where(status: 'OPEN')
+   bis = BookingItem.joins(:booking, :equipment).includes(:booking).where(equipment: {reefer: true}).where(bookings: {status: 'OPEN'}).where(status: 'OPEN')
    
-   bis.group_by { |d| d.equipment_id }.each do |eq_id, g|
+   bis.group_by { |d| {eq_id: d.equipment_id, so_id: d.booking.shipowner_id} }.each do |k, g|
      tot_quantity = 0
      tot_quantity_used = 0
      g.each do |bi|
@@ -258,11 +258,13 @@ end
      end
      
      #verifico quanti ne ho aperti in terminal
-     n_availables = HandlingHeader.joins(:equipment).where(equipment_id: eq_id).where(container_FE: 'E').not_closed.is_in_terminal.where('booking_id IS NULL').count
+     n_availables = HandlingHeader.joins(:equipment).where(equipment_id: k[:eq_id]).where(container_FE: 'E').not_closed.is_in_terminal.where('booking_id IS NULL').count
      
      ret << {
-       equipment_id: eq_id,
-       equipment_type: Equipment.find(eq_id).sizetype,
+       shipowner_id: k[:so_id],
+       shipowner_name: Shipowner.find(k[:so_id]).name,
+       equipment_id: k[:eq_id],
+       equipment_type: Equipment.find(k[:eq_id]).sizetype,
        quantity: tot_quantity,
        quantity_used: tot_quantity_used,
        quantity_missing: tot_quantity - tot_quantity_used,

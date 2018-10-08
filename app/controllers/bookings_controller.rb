@@ -258,7 +258,7 @@ end
      end
      
      #verifico quanti ne ho aperti in terminal
-     n_availables = HandlingHeader.joins(:equipment).where(equipment_id: k[:eq_id]).where(container_FE: 'E').not_closed.is_in_terminal.where('booking_id IS NULL').count
+     n_availables = HandlingHeader.joins(:equipment).where(shipowner_id: k[:so_id]).where(equipment_id: k[:eq_id]).where(container_FE: 'E').not_closed.is_in_terminal.where('booking_id IS NULL').count
      
      ret << {
        shipowner_id: k[:so_id],

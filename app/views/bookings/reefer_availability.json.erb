@@ -1,0 +1,48 @@
+{
+  success: true,
+  items: [
+		 {
+				flex: 1,
+				title: 'Frigo',
+				closable: true,
+				layout: 'fit',
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,
+				
+			    columns: [
+			       {dataIndex: 'equipment_type',    text: 'Tipologia',       flex:  1},
+			       {dataIndex: 'quantity',          text: 'Container Prenotati<br/>da Booking aperti',  width: 230, align: 'right'},
+			       {dataIndex: 'quantity_used',     text: 'Assegnati',       width: 130, align: 'right'},
+			       {dataIndex: 'quantity_missing',  text: 'Da assegnare',    width: 130, align: 'right'},
+			       {dataIndex: 'availables',        text: 'Disponibili<br/>in terminal',     width: 130, align: 'right'}			       
+				],      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'bookings/reefer_availibility_get_data').to_json -%>,
+        	            extraParams: {
+        	            },
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	    })
+        	}
+   ]
+}
+

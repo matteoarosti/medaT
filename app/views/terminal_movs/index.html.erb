@@ -259,6 +259,11 @@ Ext.define("plugin.Printer", {
                                  	url: '<%= url_for(:controller=>'bookings', :action=>'to_check') -%>',	                                
 	                                leaf:true,
 	                                op: 'new_tab'
+	                            }, {
+	                                task: 'Dispon. frigo',
+                                 	url: '<%= url_for(:controller=>'bookings', :action=>'reefer_availability') -%>',	                                
+	                                leaf:true,
+	                                op: 'new_tab'
 	                            }
                             ]
                     }

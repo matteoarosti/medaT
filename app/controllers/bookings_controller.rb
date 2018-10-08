@@ -238,4 +238,40 @@ end
  end
  
  
+ #############################################################
+ # verifica situazione disponibilita' frigo reefer
+ # (partendo dai booking aperti che richiedono reefer)
+ #############################################################
+ def reefer_availability   
+ end
+ 
+ def reefer_availibility_get_data
+   ret = []
+   bis = BookingItem.joins(:booking, :equipment).where(equipment: {reefer: true}).where(bookings: {status: 'OPEN'}).where(status: 'OPEN')
+   
+   bis.group_by { |d| d.equipment_id }.each do |eq_id, g|
+     tot_quantity = 0
+     tot_quantity_used = 0
+     g.each do |bi|
+       tot_quantity       += bi.quantity.to_f
+       tot_quantity_used  += bi.quantity_used.to_f
+     end
+     
+     #verifico quanti ne ho aperti in terminal
+     n_availables = HandlingHeader.joins(:equipment).where(equipment_id: eq_id).where(container_FE: 'E').not_closed.is_in_terminal.where('booking_id IS NULL').count
+     
+     ret << {
+       equipment_id: eq_id,
+       equipment_type: Equipment.find(eq_id).sizetype,
+       quantity: tot_quantity,
+       quantity_used: tot_quantity_used,
+       quantity_missing: tot_quantity - tot_quantity_used,
+       availables: n_availables
+     }     
+   end #per ogni tipologia 
+   
+   render json: {:success  => true, items: ret}
+   return   
+ end
+ 
 end

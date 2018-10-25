@@ -67,16 +67,17 @@
 			                items: [
 		                        <%= raw extjs_std_textfield('container_number', @item, {}, {:disabled=>true}) -%>
 							]
-				}, {
+				} , {
 			                xtype: 'fieldcontainer',
-			                fieldLabel: 'Container status',
+			                fieldLabel: 'LOCK',
 			                combineErrors: true,
 			                msgTarget : 'side',
 			                layout: 'hbox',
 			                anchor: '100%',
 			                defaults: {xtype: 'textfield', flex: 1, hideLabel: true},
 			                items: [
-		                        <%= raw extjs_std_combo('container_status', @item, {:allowBlank=>true, :store => extjs_std_store_data(@item.container_status_get_data_json)}) -%>
+		                        <%= raw extjs_std_booleanfield('lock_fl', @item, {:allowBlank => true}) -%>,
+		                        <%= raw extjs_std_textfield('lock_type', @item, {:allowBlank => true}) -%>
 							]
 						}
      ]}, {

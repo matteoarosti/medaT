@@ -8,20 +8,56 @@
 				layout: 'fit',
         	    tools: [
                 ],
-        	    xtype: 'gridpanel',
+        	    xtype: 'treepanel',
 				autoScroll: true,  
 				scroll: true,
+				rootVisible: false,
+				
+				viewConfig: {
+			        getRowClass: function(record, index) {
+			           ret = record.get('liv');
+			           return ret;																
+			         }   
+			    },
+			    
+			    tbar: [
+                   '->',  {iconCls: 'fa fa-refresh fa-2x', scale: 'large', handler: function(event, toolEl, panel){ 				 
+				 				this.up('treepanel').getStore().load();}}			    
+			    ],
 				
 			    columns: [
-			       {dataIndex: 'shipowner_name',    text: 'Compagnia',       flex:  1},
-			       {dataIndex: 'equipment_type',    text: 'Tipologia',       flex:  1},
-			       {dataIndex: 'quantity',          text: 'Container Prenotati<br/>da Booking aperti',  width: 230, align: 'right'},
-			       {dataIndex: 'quantity_used',     text: 'Assegnati',       width: 130, align: 'right'},
-			       {dataIndex: 'quantity_missing',  text: 'Da assegnare',    width: 130, align: 'right'},
-			       {dataIndex: 'availables',        text: 'Disponibili<br/>in terminal',     width: 130, align: 'right'}			       
+				  {
+			            xtype: 'treecolumn',  
+			            flex: 1,
+			            dataIndex: 'shipowner_name',
+			            menuDisabled: true, 
+			            sortable: false,
+			            header: 'Raggruppamento'
+			        },
+			       {dataIndex: 'equipment_type',    text: 'Tipologia / Ingresso',       flex:  1},
+			       {dataIndex: 'hh_stato',          text: 'Stato container',        width: 250,
+					  renderer: function(value, metaData, rec, rowIndex, colIndex, store){
+			           	if (rec.get('liv') == 'liv_0') return value;
+			           	if (rec.get('liv') == 'liv_f') {
+			           	  if (Ext.isEmpty(rec.get('lock_type'))) return '';
+			           	  return pb_get_image_lock(rec.get('lock_type')) + ' ' + rec.get('lock_type') + ' (' + Ext.util.Format.date(rec.get('lock_type_date'), 'd/m/y H:i') + ')';
+			           	}  
+			           }			       
+			       },
+			       {dataIndex: 'quantity',          tdCls: 'sf_green', text: 'Prenotati',  width: 90, align: 'right', tooltip: 'Container prenotati da booking aperti'},
+			       {dataIndex: 'quantity_used',     tdCls: 'sf_green', text: 'Gi&agrave; usciti',       width: 90, align: 'right', tooltip: 'gi&agrave; usciti per il carico'},
+			       {dataIndex: 'quantity_missing',  tdCls: 'sf_green', text: 'Da assegnare',    width: 90, align: 'right'},
+			       
+			       //{dataIndex: 'availables',        text: 'Disponibili<br/>in terminal',     width: 130, align: 'right'}
+			       
+			       {dataIndex: 'to_inspect',             	 tdCls: 'sf_yellow', text: 'Da ispez.',           width: 90, align: 'right'},
+			       {dataIndex: 'pti_ok',             		 tdCls: 'sf_yellow', text: 'PTI OK',              width: 90, align: 'right'},
+			       {dataIndex: 'pti_da_richiedere',  		 tdCls: 'sf_yellow', text: 'PTI da<br/>rich.',    width: 90, align: 'right'},
+			       {dataIndex: 'pti_in_esecuzione',  		 tdCls: 'sf_yellow', text: 'PTI in<br/>esec.',    width: 90, align: 'right'},
+			       {dataIndex: 'pti_fallito_o_danneggiato',  tdCls: 'sf_red',    text: 'PTI fal.<br/>o danneggiato',    width: 90, align: 'right'}
+			       			       
 				],      	    
-        	    store: new Ext.data.Store({
-        	    	autoLoad: true,
+        	    store: new Ext.data.TreeStore({
         	    	fields: [],
         	    	proxy: {
         	            url: <%= raw  (root_path + 'bookings/reefer_availibility_get_data').to_json -%>,
@@ -29,7 +65,7 @@
         	            },
         	            reader: {
         	                type: 'json',
-							method: 'POST',        	                
+							method: 'POST',
         	                rootProperty: 'items'
         	            },
         	            paramsAsJson: true,
@@ -42,7 +78,32 @@
 						},        	            
         	            
         	        }
-        	    })
+        	    }),
+        	    listeners: {
+        	      celldblclick: {				  							
+					  fn: function(iView, iCellEl, iColIdx, iStore, iRowEl, iRowIdx, iEvent){
+						  
+					  	col_name = iView.getGridColumns()[iColIdx].dataIndex;
+					  	rec = iView.getRecord(iRowEl);
+					  	if (rec.get('liv_entity') == 'container'){
+									new_rec = HandlingHeader.load(rec.get('hh_id'));
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Mov. ' + rec.get('shipowner_name'),
+										closable: true			
+							        });
+							        
+			                		newPanel.getViewModel().setData({rec: new_rec, 
+			                			is_handling_editable: false,
+			                			is_container_editable: false
+			                		});
+			                    	myApp.feedInfo.add(newPanel).show();
+						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);					  	
+					  	  
+					  	} //liv_entity = container
+					  }
+				  }  	
+
+        	    } //listeners
         	}
    ]
 }

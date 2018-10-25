@@ -84,3 +84,21 @@ input[disabled]{
 .x-btn.pz_cont .x-btn-inner{
 	font-size: 10px;
 }
+
+
+
+
+/* tree */
+/*.x-grid-row.liv_0 .x-grid-cell{font-size: 1.5em; background-color: black; color: white; border: 1px solid gray; padding: 3px;}*/
+.x-grid-row.liv_0 .x-grid-cell{background-color: #efefef; font-size: 1.5em; font-weight: bold; border: 1px solid gray; padding: 5px;}
+.x-grid-row.liv_f .x-grid-cell{border: 1px solid LightGray; padding: 3px;}
+
+.x-grid-row .x-grid-cell.sf_green{background-color: #A0DB8E}
+.x-grid-row .x-grid-cell.sf_yellow{background-color: #F4E287}
+.x-grid-row .x-grid-cell.sf_red{background-color: #F9BFC1}
+
+
+.no-icon {
+  display : none;
+  background-image:url('ext/resources/images/default/s.gif') !important;
+}

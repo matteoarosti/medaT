@@ -258,9 +258,11 @@ end
      end
      
      #verifico quanti ne ho aperti in terminal
-     n_availables = HandlingHeader.joins(:equipment).where(shipowner_id: k[:so_id]).where(equipment_id: k[:eq_id]).where(container_FE: 'E').not_closed.is_in_terminal.where('booking_id IS NULL').count
+     c_availables = HandlingHeader.joins(:equipment).where(shipowner_id: k[:so_id]).where(equipment_id: k[:eq_id]).where(container_FE: 'E').not_closed.is_in_terminal.where('booking_id IS NULL')
      
-     ret << {
+     n0 = {
+       liv: 'liv_0',
+       liv_entity: 'group',
        shipowner_id: k[:so_id],
        shipowner_name: Shipowner.find(k[:so_id]).name,
        equipment_id: k[:eq_id],
@@ -268,9 +270,47 @@ end
        quantity: tot_quantity,
        quantity_used: tot_quantity_used,
        quantity_missing: tot_quantity - tot_quantity_used,
-       availables: n_availables
-     }     
-   end #per ogni tipologia 
+       availables: c_availables.count
+     }
+     
+     n0[:items] = []
+     c_availables.each do |hh|
+       n1 = {
+         liv: 'liv_f',
+         liv_entity: 'container',
+         hh_id: hh.id,
+         iconCls: 'no-icon',
+         shipowner_name: hh.container_number,         
+         leaf: true
+       }
+       
+       
+       #separo in PTI ok, PTI da richiedere....
+       case hh.lock_type
+         when 'PTI_MIS'
+           n0[:pti_da_richiedere] = n0[:pti_da_richiedere].to_f + 1
+         when 'PTI_REQ'
+           n0[:pti_in_esecuzione] = n0[:pti_in_esecuzione].to_f + 1
+         when 'DAMAGED'
+           n0[:pti_fallito_o_danneggiato]  = n0[:pti_fallito_o_danneggiato].to_f + 1
+         when 'INSPECT'
+           n0[:to_inspect]  = n0[:to_inspect].to_f + 1
+         else
+           n0[:pti_ok] = n0[:pti_ok].to_f + 1    
+       end
+       
+       
+       if (hh.lock_type)
+         n1[:lock_type] = hh.lock_type
+         hi = hh.last_dett_by_lock_type(hh.lock_type)
+         n1[:lock_type_date] = hi.datetime_op
+       end
+       
+       n0[:items] << n1 
+     end
+     
+     ret << n0
+   end #per ogni raggruppamento 
    
    render json: {:success  => true, items: ret}
    return   

@@ -13,6 +13,13 @@ class RepairHandlingItemsController < ApplicationController
     else
       @item = RepairHandlingItem.find_by_handling_item_id(params[:handling_item_id])
     end
+    if @item.nil?
+      render json: {
+        success: true,
+        items: [{title: 'Error', closable: true, html: 'Nessun preventivo associato a questo dettaglio'}]
+      }
+     return 
+    end
   end
   
   
@@ -76,6 +83,9 @@ def set_repair_completed
   item = RepairHandlingItem.find(params[:rec_id])
    item.repair_completed_at = Time.zone.now
    item.repair_completed_user_id = current_user.id
+   
+   item.pti_type_confirmed_id = params[:pti_type_confirmed_id] unless params[:pti_type_confirmed_id].nil?
+   
   exe_save(item)
 end
 

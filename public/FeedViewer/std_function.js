@@ -61,12 +61,16 @@
 		if (value == 'DAMAGED') metaData.tdAttr = 'data-qtip="Danneggiato"';					
 		if (value == 'DAMAGED_AU') metaData.tdAttr = 'data-qtip="Danneggiato - Autorizzato"';
 		if (value == 'LOCK') metaData.tdAttr = 'data-qtip="In Lock"';
+		if (value == 'PTI_MIS') metaData.tdAttr = 'data-qtip="PTI necessario"';
+		if (value == 'PTI_REQ') metaData.tdAttr = 'data-qtip="PTI richiesto"';
 	   }
 	   
 		if (value == 'INSPECT') return '<i class="fa fa-search fa-2x" style="color:red;"></i>';
 		if (value == 'DAMAGED') return '<i class="fa fa-warning fa-2x" style="color:red;"></i>';
 		if (value == 'DAMAGED_AU') return '<i class="fa fa-warning fa-2x" style="color:green;"></i>';		
 		if (value == 'LOCK') return '<i class="fa fa-lock fa-2x" style="color:red;"></i>';
+		if (value == 'PTI_MIS') return '<i class="fa fa-hand-scissors-o fa-2x" style="color:red;"></i>';
+		if (value == 'PTI_REQ') return '<i class="fa fa-hand-scissors-o fa-2x" style="color:orange;"></i>';
 		return '<i class="fa fa-lock fa-2x" style="color:transparent;"></i>';
 	}
 

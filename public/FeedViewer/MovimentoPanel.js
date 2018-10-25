@@ -806,7 +806,8 @@ Ext.define('FeedViewer.MovimentoPanel', {
 					        } //column notes
 					        
 					        if (columnIndex == 13) { //doppio click su lock type
-					        	if (rec.get('lock_type') == 'DAMAGED' && myApp.canRepairTable){
+					        	//if (rec.get('lock_type') == 'DAMAGED' && myApp.canRepairTable){
+					        	if (myApp.canRepairTable){
 					        		acs_show_panel_std(myApp, myApp.railsBaseUri + 'repair_handling_items/rhi_edit', {handling_item_id: rec.get('id')}, 'Modifica');
 					        	}
 					        }

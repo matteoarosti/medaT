@@ -194,6 +194,15 @@ TMOV:
    lock_type: INSPECT
   set:
    clear_lock: true
+   lock_PTI_MIS: true
+ PTI_REQ:
+  label: Richiesta PTI
+  icon: '<i class="fa fa-hand-scissors-o fa-2x" style="color:green;"></i>'
+  check:
+   lock_type: PTI_MIS
+  set:
+   lock_type: PTI_REQ
+   create_repair_record: true   
 # DAMAGED_AU:
 #  label: Authorized
 #  icon: '<i class="fa fa-warning fa-2x" style="color:green;"></i>'
@@ -205,7 +214,9 @@ TMOV:
   icon: '<i class="fa fa-thumbs-o-up fa-2x" style="color:green;"></i>'
   hide_for_select: Y
   check:
-   lock_type: DAMAGED
+   lock_type:
+     operator: IN
+     value: DAMAGED|PTI_REQ
   set:
    clear_lock: true
  O_OTHER:

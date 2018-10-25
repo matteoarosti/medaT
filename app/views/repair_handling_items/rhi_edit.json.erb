@@ -91,16 +91,28 @@
 		    pack: 'start',
 		    align: 'stretch'
 		},
-	  bodyStyle: 'background-color: #e0e0e0;',
-		
-      defaults: {
-      	style: 'margin: 10px; padding: 10px;'
-      },
-	
+			
 	  items: [
-	     <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Container', value: #{@item.handling_header.container_number.to_json}}" -%>,
-		 <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Compagnia', value: #{@item.handling_header.shipowner.name.to_json}}" -%>,	     
-	     <%= raw "{flex: 1, labelAlign: 'top', xtype: 'textfield', fieldLabel: 'Equipment', value: #{@item.handling_header.equipment.equipment_type.to_json}}" -%>
+	     {
+			xtype: 'fieldcontainer',
+	                layout: 'hbox',
+	                anchor: '100%',
+	                bodyStyle: 'background-color: #e0e0e0;',
+	                defaults: {labelAlign: 'top', xtype: 'displayfield', width: 150, margin: '5 10 5 10'},
+	                items: [	  	 
+					     <%= raw "{flex: 1, fieldLabel: 'Container', value: #{@item.handling_header.container_number.to_json}}" -%>,
+						 <%= raw "{flex: 1, fieldLabel: 'Compagnia', value: #{@item.handling_header.shipowner.name.to_json}}" -%>,	     
+					     <%= raw "{flex: 1, fieldLabel: 'Equipment', value: #{@item.handling_header.equipment.equipment_type.to_json}}" -%>
+				    ]
+		}
+		
+		<% if @item.handling_header.equipment.reefer %>
+		  , {html: <%= raw "<h1><font size=2>PTI RICHIESTA:</font>  #{@item.pti_type_requested.name if !@item.pti_type_requested.nil?}</h1>".to_json -%>}
+		  , {html: '&nbsp;&nbsp;&nbsp;&nbsp;'}
+		  , {xtype: 'panel', bind: {html: '<H1><font size=2>PTI CONFERMATA:</font> {rec.pti_type_confirmed_name}</h1>'}}		
+		<% end %>
+		
+
 	  ]
 	} //INTESTAZIONE
 	
@@ -511,48 +523,135 @@
         	    items: [
 						{iconCls: '', text: 'Imposta/Modifica', bind: {disabled: '{!enable_operations.repair_completed_modify}'},
 							handler: function(event, toolEl, panel){
-							  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
-							   if(btn === 'yes'){
-								Ext.Ajax.request({
-				                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_repair_completed').to_json -%>,
-				                    waitMsg: 'Salvataggio in corso....',
-									method:'POST',                     
-				                    jsonData: {rec_id: <%= @item.id -%>},	
-				             	
-									success: function(result, request) {					
-										var returnData = Ext.JSON.decode(result.responseText);
+							
+							
+							  //se e' un frigo chiedo quale tipo di PTI e' stato eseguito (short, long, visual, ....)
+							  
+							  <% if @item.handling_header.equipment.reefer ################################### %>
+							  
+							        var tab_panel = this.up('container[itemId=tab_panel]');
+							        
+									var loc_form = Ext.create('Ext.form.Panel', {
+										    title: '',
+										    bodyPadding: 10,
+										    defaultType: 'textfield',
+										    	layout: {
+												    type: 'vbox',
+												    align : 'stretch',
+												    pack  : 'start',
+												},
+										    items: [
+										       {xtype: 'hiddenfield', name: 'rec_id', value: <%= @item.id -%>},
+										       <%= raw extjs_std_combo_model('pti_type_confirmed', @item, {model_class: 'pti_type'}) -%>
+										    ]
+										    , 	buttons:
+											        [{
+											            text: 'Conferma',
+											            handler: function (btn, evt) { 
+											                           
+											             var form = this.up('form').getForm();
+											             var tmp_win  = this.up('window');
+											             											             
+											             if (form.isValid()) {
+											                btn.disable();											             
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'repair_handling_items', :action=>'set_repair_completed') -%>',
+															   jsonData: form.getValues(),															   
+															   success: function(result, request) {
+															   	  var returnData = Ext.JSON.decode(result.responseText);
+															   	  
+															   	  if (returnData.success == false){
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: returnData.message,
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  
+															   	  } else {		
+															   	      tmp_win.close();														      
+																	  var rec = returnData.data[0];																				
+																	  tab_panel.getViewModel().setData({rec: rec});
+																	  tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});															   	  
+															   	  }															   	 
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+																	Ext.MessageBox.show({
+												                        title: 'EXCEPTION',
+												                        msg: 'Errore sconosciuto',
+												                        icon: Ext.MessageBox.ERROR,
+												                        buttons: Ext.Msg.OK
+											                    	})															   	  															      
+															   }
 
-										if (returnData.success == false){
+															});	
+														  return false;												             
+											             }
+											            }
+											          }
+											         ]
+  
+										});	 //loc_form
+										
+										var loc_win = Ext.create('Ext.window.Window',{
+										    layout: 'fit',
+										    items: loc_form,
+										    title: 'Conferma riparazione frigo',
+										    width: 500,
+										    height: 300
+										}).show();						  
+							  
+							     
+							  <% else                                      ################################### %>
+							  	//richiedo semplice conferma
+								  Ext.MessageBox.confirm('Richieta conferma', 'Confermi operazione?', function(btn){
+								   if(btn === 'yes'){
+									Ext.Ajax.request({
+					                    url: <%= raw url_for(:controller=>'repair_handling_items', :action=>'set_repair_completed').to_json -%>,
+					                    waitMsg: 'Salvataggio in corso....',
+										method:'POST',                     
+					                    jsonData: {rec_id: <%= @item.id -%>},	
+					             	
+										success: function(result, request) {					
+											var returnData = Ext.JSON.decode(result.responseText);
+	
+											if (returnData.success == false){
+												Ext.MessageBox.show({
+							                        title: 'EXCEPTION',
+							                        msg: returnData.message,
+							                        icon: Ext.MessageBox.ERROR,
+							                        buttons: Ext.Msg.OK
+						                    	})
+						                      return false;										
+											}
+											
+											//aggiorno il record per il bind e operation_list
+											tab_panel = this.up('container[itemId=tab_panel]');
+											rec = returnData.data[0];																				
+											tab_panel.getViewModel().setData({rec: rec});
+											tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
+										}, scope: this,
+										
+										failure: function(rec, op) {
+											alert('error');
+											var result = Ext.JSON.decode(op.getResponse().responseText);
 											Ext.MessageBox.show({
 						                        title: 'EXCEPTION',
-						                        msg: returnData.message,
+						                        msg: result.message,
 						                        icon: Ext.MessageBox.ERROR,
 						                        buttons: Ext.Msg.OK
-					                    	})
-					                      return false;										
-										}
-										
-										//aggiorno il record per il bind e operation_list
-										tab_panel = this.up('container[itemId=tab_panel]');
-										rec = returnData.data[0];																				
-										tab_panel.getViewModel().setData({rec: rec});
-										tab_panel.getViewModel().setData({enable_operations: returnData.enable_operations});
-									}, scope: this,
-									
-									failure: function(rec, op) {
-										alert('error');
-										var result = Ext.JSON.decode(op.getResponse().responseText);
-										Ext.MessageBox.show({
-					                        title: 'EXCEPTION',
-					                        msg: result.message,
-					                        icon: Ext.MessageBox.ERROR,
-					                        buttons: Ext.Msg.OK
-				                    	})					
-									}, scope: this,						
-													 
-						    	});							   
-							   } //btn == 'yes'
-							  }, this); 
+					                    	})					
+										}, scope: this,						
+														 
+							    	});							   
+								   } //btn == 'yes'
+								  }, this); 							  
+							  <% end ######################################################################### %>
+							  
+							
+							
+
 
 				 			} //handler
 				 		},

@@ -394,7 +394,7 @@ end
  
 # Sincro dell'header dopo l'inserimento di un nuovo item 
 ################################################################ 
-def sincro_save_header(hi)
+def sincro_save_header(hi, copy_params_data = {})
 ################################################################
  message = []
  operatios_config = load_op_config    
@@ -414,7 +414,7 @@ def sincro_save_header(hi)
   op_config_set = op_config['set'] || {}
 
   for set_op_name, set_op_value in op_config_set 
-   self.send("sincro_set_#{set_op_name}", set_op_value, hi)
+   self.send("sincro_set_#{set_op_name}", set_op_value, hi, copy_params_data)
   end
  
   #se presente riporto lo stato di lock
@@ -461,7 +461,7 @@ end
 
 
 ################################################################
-def sincro_set_to_weigh(value, hi)
+def sincro_set_to_weigh(value, hi, copy_params_data = {})
 ################################################################
   if (value == true || (value == 'IF_FULL' && hi.container_FE == 'F') || (value == 'IF_EMPTY' && hi.container_FE == 'E'))  
     hi.to_weigh = true
@@ -471,19 +471,19 @@ end
 
 
 ################################################################
-def sincro_set_container_in_terminal(value, hi)
+def sincro_set_container_in_terminal(value, hi, copy_params_data = {})
 ################################################################
  self.container_in_terminal = value
 end
 
 ################################################################
-def sincro_set_container_FE_copy(value, hi)
+def sincro_set_container_FE_copy(value, hi, copy_params_data = {})
 ################################################################
  self.container_FE  = hi.container_FE
 end
 
 ################################################################
-def sincro_set_booking_copy(value, hi)
+def sincro_set_booking_copy(value, hi, copy_params_data = {})
 ################################################################
  return if hi.booking.nil?
  b = Booking.find(hi.booking_id)
@@ -493,7 +493,7 @@ def sincro_set_booking_copy(value, hi)
 end
 
 ################################################################
-def sincro_set_booking_reset(value, hi)
+def sincro_set_booking_reset(value, hi, copy_params_data = {})
 ################################################################
  if value == true
    self.booking_id  = nil
@@ -504,20 +504,20 @@ end
 
 
 ################################################################
-def sincro_set_seal_imp_copy(value, hi)
+def sincro_set_seal_imp_copy(value, hi, copy_params_data = {})
 ################################################################
  self.seal_imp_shipowner  = hi.seal_shipowner unless hi.seal_shipowner.blank?
  self.seal_imp_others     = hi.seal_others unless hi.seal_others.blank?
 end
 ################################################################
-def sincro_set_seal_exp_copy(value, hi)
+def sincro_set_seal_exp_copy(value, hi, copy_params_data = {})
 ################################################################
  self.seal_exp_shipowner  = hi.seal_shipowner unless hi.seal_shipowner.blank?
  self.seal_exp_others     = hi.seal_others unless hi.seal_others.blank?
 end
 
 ################################################################
-def sincro_set_save_in_hi_weight_exp(value, hi)
+def sincro_set_save_in_hi_weight_exp(value, hi, copy_params_data = {})
 ################################################################
   if value == true
     hi.weight = self.weight_exp
@@ -527,19 +527,19 @@ end
 
 
 ################################################################
-def sincro_set_with_booking(value, hi)
+def sincro_set_with_booking(value, hi, copy_params_data = {})
 ################################################################
 end
 
 ################################################################
-def sincro_set_handling_header_status(value, hi)
+def sincro_set_handling_header_status(value, hi, copy_params_data = {})
 ################################################################
  self.handling_status = value
 end
 
 
 ################################################################
-def sincro_set_handling_header_status_by_config(value, hi)
+def sincro_set_handling_header_status_by_config(value, hi, copy_params_data = {})
 ################################################################
  #chiudo in base ai parametri indicati sulla compagnia e in base al tipo di equipment (frigo o no) 
  #value contiene elenco parametri
@@ -575,7 +575,7 @@ end
 
 
 ################################################################
-def sincro_set_auto_O_OTHER(value, hi)
+def sincro_set_auto_O_OTHER(value, hi, copy_params_data = {})
 ################################################################
  #chiudo in base ai parametri indicati sulla compagnia e in base al tipo di equipment (frigo o no) 
  #value contiene elenco parametri
@@ -627,14 +627,14 @@ end
 
 
 ################################################################
-def sincro_set_operation_type(value, hi)
+def sincro_set_operation_type(value, hi, copy_params_data = {})
 ################################################################
  hi.operation_type = value
  hi.save!
 end
 
 ################################################################
-def sincro_set_start_reefer_connection(value, hi)
+def sincro_set_start_reefer_connection(value, hi, copy_params_data = {})
 ################################################################
   #verifico che l'equipment sia di tipo freeze e se necessario genero il movimento allaccio frigo
   if self.equipment.reefer == true
@@ -655,7 +655,7 @@ def sincro_set_start_reefer_connection(value, hi)
 end
 
 ################################################################
-def sincro_set_end_reefer_connection(value, hi)
+def sincro_set_end_reefer_connection(value, hi, copy_params_data = {})
 ################################################################
   #se richiesto chiudo l'operazione di allaccio frigo per il container in corso (dettagli non ancora chiusi)
     if (value == true)
@@ -671,7 +671,7 @@ end
 
 
 ################################################################
-def sincro_set_lock_INSPECT(value, hi)
+def sincro_set_lock_INSPECT(value, hi, copy_params_data = {})
 ################################################################
     if (value == true || (value == 'IF_FULL' && hi.container_FE == 'F') || (value == 'IF_EMPTY' && hi.container_FE == 'E'))
       
@@ -690,10 +690,38 @@ end
 
 
 ################################################################
-def sincro_set_clear_lock(value, hi)
+ def sincro_set_lock_PTI_MIS(value, hi, copy_params_data = {})
+################################################################
+   #per i reefer: dopo l'ispezione creo il lock W_PTI (in attesa di richiesta PTI)
+   if self.equipment.reefer && self.shipowner.manage_empty #solo per i frigo delle compagnie per cui gestisco i vuoti   
+       if self.lock_type != 'DAMAGED' && hi.lock_type != 'DAMAGED'    #eventualmente prevale l'indicazione di danneggiato
+         hi.set_lock('PTI_MIS')
+         hi.save!
+       end       
+   end  
+ end
+
+ 
+################################################################
+ def sincro_set_create_repair_record(value, hi, copy_params_data = {})
+################################################################
+   logger.info "------ IN sincro_set_create_repair_record"
+   logger.info copy_params_data
+   rhi = RepairHandlingItem.create_from_hi(hi, copy_params_data)
+ end 
+
+################################################################
+def sincro_set_clear_lock(value, hi, copy_params_data = {})
 ################################################################
   self.lock_fl = false
   self.lock_type = nil  
+end
+
+################################################################
+def sincro_set_lock_type(value, hi, copy_params_data = {})
+################################################################
+  hi.set_lock(value)
+  hi.save!  
 end
 
 ################################################################

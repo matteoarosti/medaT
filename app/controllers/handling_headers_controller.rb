@@ -102,6 +102,7 @@ end
 def hitems_sc_create  
 ##################################################
   
+  copy_params_data = params[:data].dup  #clono perche' altrimenti non ritrovo i valori rimossi con delete
   
   #per evitare anomalia carrier_id = 0 oppure ship_id = 0
   if (
@@ -163,8 +164,11 @@ def hitems_sc_create
 
    #in ogni caso rimuovo "num_booking" (ad esempio in O_LOAD puo' essere passato blank...
    params[:data].delete(:num_booking)
+  
+   #se passato memorizzo (e rimuovo) pti_type_id (serve per l'apertura del preventivo)
+   params_pti_type_requested_id = params[:data][:pti_type_requested_id]
+   params[:data].delete(:pti_type_requested_id)
      
-   
    params[:data].permit!
    hi.assign_attributes(params[:data])
 
@@ -180,7 +184,7 @@ def hitems_sc_create
      if validate_insert_item[:is_valid]
       hi.save!()   
       hh.assign_attributes(hh_params) 
-      r = hh.sincro_save_header(hi)
+      r = hh.sincro_save_header(hi, copy_params_data)
       ret_status  = r[:success]
       message     = r[:message]
      else

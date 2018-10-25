@@ -21,6 +21,7 @@ it:
       material_price: "Prezzo mat."
       material_price_short: "Pr. mat."
       name: "Nome"
+      code: "Codice"
     to_do_items:
       num_booking: "Num. booking"
       driver: "Autista"
@@ -292,11 +293,16 @@ it:
     RFCON:
       long: "Allaccio frigo"
       short: "Allaccio frigo"
+    PTI_REQ:
+      long: "Richiesta PTI"
+      short: "Rich. PTI"  
   lock_type:
     INSPECT: "Da ispezionare"
     DAMAGED: "Danneggiato - Da autorizzare"
     DAMAGED_AU: "Danneggiato - Autorizzato"
-    LOCK: "Bloccato"             
+    LOCK: "Bloccato"
+    PTI_MIS: "PTI non richiesta"
+    PTI_REQ: "PTI richiesta"             
   menu:
     tables:
       tables: "Tabelle di base"
@@ -310,6 +316,7 @@ it:
       terminals: "Terminal"
       piers: "Banchine"
       grus: "Gru"
+      pti_types: "PTI"
     movements:
       movements: "Movimenti"
       search_insert: "Ricerca / Inserisci"

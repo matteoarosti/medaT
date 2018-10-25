@@ -5,6 +5,8 @@ class RepairHandlingItem < ActiveRecord::Base
   has_many :repair_estimate_items, :dependent => :destroy
   has_one :equipment, through: :handling_header
   has_one :shipowner, through: :handling_header
+  belongs_to :pti_type_requested, :class_name => 'PtiType'
+  belongs_to :pti_type_confirmed, :class_name => 'PtiType'
   
   
   #ho concluso tutte le fasi della riparazione
@@ -48,7 +50,7 @@ class RepairHandlingItem < ActiveRecord::Base
     return {:success => ret_status, :message => message}    
   end
   
-  def self.create_from_hi(hi)
+  def self.create_from_hi(hi, p = {})
 #    if hi.handling_header.shipowner.repair_active == true
       #al monento non serve, perche' per le ditte non richieste non vengono proprio dichiarati i dannieggiati.
       #Se poi cressero i danneggiati come farebbero a metterli riparati? 
@@ -56,7 +58,10 @@ class RepairHandlingItem < ActiveRecord::Base
        rhi.handling_item_id = hi.id
        rhi.repair_status = 'OPEN'
        rhi.in_garage_at      = hi.datetime_op
-       rhi.in_garage_user_id = hi.created_user_id     
+       rhi.in_garage_user_id = hi.created_user_id
+       
+       rhi.pti_type_requested_id = p[:pti_type_requested_id] unless p[:pti_type_requested_id].nil? 
+            
       rhi.save!
       rhi
 #    end
@@ -126,10 +131,17 @@ class RepairHandlingItem < ActiveRecord::Base
   end
 
     
+ def pti_type_requested_name
+   pti_type_requested.name unless pti_type_requested.nil?
+ end 
+  def pti_type_confirmed_name
+    pti_type_confirmed.name unless pti_type_confirmed.nil?
+  end
   
   def self.as_json_prop()
       return {
-        :methods => [:in_garage_user_name, :estimate_user_name, :estimate_sent_user_name, :estimate_authorized_user_name, :repair_completed_user_name, :out_garage_user_name], 
+        :methods => [:in_garage_user_name, :estimate_user_name, :estimate_sent_user_name, :estimate_authorized_user_name, :repair_completed_user_name, :out_garage_user_name,
+                     :pti_type_requested_name, :pti_type_confirmed_name], 
         :include=>{
            :handling_header  => {
              :include => {

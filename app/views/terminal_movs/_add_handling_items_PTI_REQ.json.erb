@@ -1,0 +1,32 @@
+<% rhi = RepairHandlingItem.new %>
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+    {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
+    {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},  
+    
+	<%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,
+    
+    <%= raw extjs_std_combo_model('pti_type_requested', rhi, {model_class: 'pti_type'}) -%>,
+    
+    <%= raw extjs_notes('notes', @hh, @new_rec) -%>    
+   ],
+      
+	buttons:[<%= render :partial=>'add_handling_items_buttons' -%>]	   
+  }
+ ]
+}

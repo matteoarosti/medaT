@@ -137,6 +137,10 @@ Ext.define("plugin.Printer", {
                                  task:<%= raw t("menu.tables.grus").to_json %>,
                                  url: '<%= url_for(:controller=>'grus', :action=>'extjs_sc_crt_tab') -%>',                                  
                                  leaf:true 
+                             }, { 
+                                 task:<%= raw t("menu.tables.pti_types").to_json %>,
+                                 url: '<%= url_for(:controller=>'pti_types', :action=>'extjs_sc_crt_tab') -%>',                                  
+                                 leaf:true 
                              }
                              
                              

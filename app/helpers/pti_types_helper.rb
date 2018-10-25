@@ -1,0 +1,2 @@
+module PtiTypesHelper
+end

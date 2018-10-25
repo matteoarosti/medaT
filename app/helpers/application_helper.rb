@@ -73,9 +73,11 @@ module ApplicationHelper
  
  def extjs_std_combo_model(name, item, p = {}, attr = {})
   field_name = name + '_id'
-  input_name = p[:input_name] || (p[:input_prefix].to_s + name + '_id')    
-  model_class = name.camelize.constantize
+  input_name = p[:input_name] || (p[:input_prefix].to_s + name + '_id')
+  model_class_name = p[:model_class] || name
+  model_class = model_class_name.camelize.constantize
 
+    
   add_attr = extsj_create_attr_str(attr)
   
   ret = "
@@ -90,7 +92,7 @@ module ApplicationHelper
       typeAhead: true,
       queryMode: 'local',
       lastQuery: '',  
-      store: #{p[:store] || extjs_std_store_model(name)},
+      store: #{p[:store] || extjs_std_store_model(model_class_name)},
       listeners: {#{p[:listeners]}}
       #{add_attr}
     }

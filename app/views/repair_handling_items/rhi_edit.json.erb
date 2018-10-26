@@ -528,6 +528,9 @@
 							  //se e' un frigo chiedo quale tipo di PTI e' stato eseguito (short, long, visual, ....)
 							  
 							  <% if @item.handling_header.equipment.reefer ################################### %>
+							        <% 
+							            @item.pti_type_confirmed = @item.pti_type_requested
+							        %>
 							  
 							        var tab_panel = this.up('container[itemId=tab_panel]');
 							        
@@ -542,7 +545,16 @@
 												},
 										    items: [
 										       {xtype: 'hiddenfield', name: 'rec_id', value: <%= @item.id -%>},
-										       <%= raw extjs_std_combo_model('pti_type_confirmed', @item, {model_class: 'pti_type'}) -%>
+										       
+										       <% if @item.pti_type_requested %>
+										         //richiest PTI.... mostro solo										       
+										         {xtype: 'hiddenfield', name: 'pti_type_confirmed_id', value: <%= @item.pti_type_confirmed_id -%>},
+										         <%= raw extjs_std_combo_model('pti_type_confirmed', @item, {model_class: 'pti_type'}, {disabled: true}) -%>
+										       <% else %>
+										          //non era stata richiesta una PTI (danneggiato???) ... permetto di sceglierla
+										          <%= raw extjs_std_combo_model('pti_type_confirmed', @item, {model_class: 'pti_type'}) -%>
+										       <% end %>
+										         
 										    ]
 										    , 	buttons:
 											        [{

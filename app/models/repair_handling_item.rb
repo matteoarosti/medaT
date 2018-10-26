@@ -59,8 +59,22 @@ class RepairHandlingItem < ActiveRecord::Base
        rhi.repair_status = 'OPEN'
        rhi.in_garage_at      = hi.datetime_op
        rhi.in_garage_user_id = hi.created_user_id
-       
-       rhi.pti_type_requested_id = p[:pti_type_requested_id] unless p[:pti_type_requested_id].nil? 
+              
+       if !p[:pti_type_requested_id].nil?
+        #viene richiesto un PTI... momorizzo il tipo di PTI richiesto ... 
+        rhi.pti_type_requested_id = p[:pti_type_requested_id]
+        rhi.save!
+        
+        #... creo gia' la riga di preventivo associata a PTI_type
+        pt = PtiType.find(p[:pti_type_requested_id])
+        rhi.add_repair_estimate_item(pt.repair_processing_id)
+        
+        #confermo gia' la redazione del preventivo
+         rhi.estimate_at = Time.zone.now
+         rhi.estimate_user_id = User.current.id         
+         rhi.calculate_total_on_estimate
+         rhi.save!
+       end  
             
       rhi.save!
       rhi
@@ -134,9 +148,31 @@ class RepairHandlingItem < ActiveRecord::Base
  def pti_type_requested_name
    pti_type_requested.name unless pti_type_requested.nil?
  end 
-  def pti_type_confirmed_name
-    pti_type_confirmed.name unless pti_type_confirmed.nil?
-  end
+ def pti_type_confirmed_name
+   pti_type_confirmed.name unless pti_type_confirmed.nil?
+ end
+ 
+ def add_repair_estimate_item(repair_processing_id, quantity = 1, side = nil, notes = nil)
+   repair_price = RepairPrice.where("repair_processing_id=?", repair_processing_id).where("shipowner_id=?", self.handling_item.handling_header.shipowner_id).first
+   logger.info 'Repair_price: '
+   logger.info repair_price.to_yaml
+   return false if !repair_price
+   n = self.repair_estimate_items.new
+       
+   #memorizzo i costo orari
+   n.provider_hourly_cost = self.handling_item.handling_header.shipowner.estimate_hourly_cost_provider
+   n.customer_hourly_cost = self.handling_item.handling_header.shipowner.estimate_hourly_cost_customer
+   
+   n.repair_processing_id = repair_processing_id
+   n.quantity = quantity
+   n.side     = side
+   n.provider_notes = notes
+      
+   n.set_auto_data(repair_price)          
+   n.save!   
+ end
+ 
+ 
   
   def self.as_json_prop()
       return {

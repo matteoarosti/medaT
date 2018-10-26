@@ -5,6 +5,8 @@ class CreatePtiTypes < ActiveRecord::Migration
       t.string  :name,            limit: 30
       t.string  :code,            limit: 5
       
+      t.belongs_to :repair_processing
+      
       t.integer :created_user_id
       t.integer :updated_user_id      
       t.timestamps

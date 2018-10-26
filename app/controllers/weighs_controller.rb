@@ -151,7 +151,7 @@ class WeighsController < ApplicationController
             }.reverse
          
       when 'LIST'
-        items = items.order(created_at: :desc).limit(500)          
+        items = items.where.not(weigh_status: 'DEL').order(created_at: :desc).limit(500)          
          
      end #case
 

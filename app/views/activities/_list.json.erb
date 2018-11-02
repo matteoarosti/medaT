@@ -346,7 +346,7 @@
 				                           loc_win = Ext.create('Ext.window.Window',{
 											    layout: 'fit',
 											    items: loc_form,
-											    title: 'Registra peso',
+											    title: 'Registra esecuzione attivit&agrave;',
 											    width: 500,
 											    height: 350,
 											    id: 'myWindow'
@@ -423,8 +423,22 @@
 													    pack  : 'start',
 													},
 											    items: [
-											        {xtype: 'hiddenfield',   name: 'id', value: rec.get('id')},
-											        {xtype: 'numberfield',   name: 'amount', allowBlank: false, fieldLabel: 'Importo', labelAlign: 'left', value: rec.get('amount')},
+											        {xtype: 'hiddenfield', name: 'id', value: rec.get('id')},
+											        {xtype: 'numberfield',   name: 'amount', allowBlank: false, fieldLabel: 'Importo', labelAlign: 'left', value: rec.get('amount'),
+											         listeners: {
+											          specialkey: function(field, e){
+											          	if (e.getKey() == e.ENTER) { 
+														  console.log('ENTER pressed');											          	  
+											    		  var m_form = field.up('form');
+											    		  if (m_form.isValid()){
+											    		    var b = field.up('form').down('button[submit_on_click=true]');
+											    		    console.log(b);
+    		  												b.handler.call(b, b, null);
+											    		  }
+												    	}
+											          }
+											         }
+											        },
 											        											      
 											      										    										    										    
 											    ]
@@ -441,8 +455,10 @@
 											     	items:
 												        [{
 												            text: 'Conferma',
+												            submit_on_click: true,
 												            scale: 'large', cls: 'btn-confirm',
 												            handler: function (btn, evt) {
+												             console.log('conferma button handler');
 												                           
 												             form = this.up('form').getForm();
 												             tmp_win  = this.up('window');
@@ -501,24 +517,6 @@
 												            }
 												          }
 												          
-												          
-												          /*
-												          , {xtype: 'tbfill'}, {
-												            text: '<i class="fa fa-truck fa-2x"></i> Pesa',												            
-												            scale: 'medium',
-												            handler: function (btn, evt) {
-												            	this.up('form').render_form(false)
-												            }
-												          }, {
-												            text: '<i class="fa fa-user fa-2x"></i> Da autista',												            
-												            scale: 'medium',
-												            handler: function (btn, evt) {
-												            	this.up('form').render_form(true)
-												            }
-												          }
-												          */
-												          
-												          
 												         ]
 	  												}] 
 	  												
@@ -531,11 +529,18 @@
 				                           loc_win = Ext.create('Ext.window.Window',{
 											    layout: 'fit',
 											    items: loc_form,
-											    title: 'Registra peso',
+											    title: 'Imposta prezzo',
 											    width: 500,
 											    height: 350,
 											    id: 'myWindow'
 											}).show();
+											
+											
+											setTimeout(function() {
+												loc_win.focus();
+												loc_win.down('form').getForm().findField('amount').focus();										
+												loc_win.down('form').getForm().findField('amount').focus();
+											}, 1);
 														                             
 			                           	return false;
 
@@ -549,7 +554,81 @@
 			            }, 1);
 			            return '<div id="' + id + '"></div>';
 			        }
-			     }
+			     } //imposta
+			     
+			     
+			   , {
+			       //se impostato posso applicare prezzo di default (da activity_op)
+			        text: 'Applica def.', width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
+			        	var loc_grid = this;
+			        	
+			        	if (!Ext.isEmpty(rec.get('amount'))) return '';
+			        	if (Ext.isEmpty(rec.get('activity_op').default_price) || rec.get('activity_op').default_price == 0) return '';
+			        	
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            			          		                	
+		                    var btn_cls = 'btn-ok';
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {			                				                
+								text: '&euro; ' + Ext.util.Format.number(rec.get('activity_op').default_price, "0,000"),
+								cls: btn_cls,								
+		                		scale: 'large',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+			                        //disabilito per prevenire doppia esecuizione
+			                       	button.disable();
+			                       	
+									Ext.MessageBox.confirm('Richieta conferma', 'Confermi il prezzo di default per l\'attivit&agrave; selezionata?', function(btn){												
+										if(btn === 'yes'){
+											Ext.Ajax.request({
+							                    url: <%= raw url_for(:controller=>'activities', :action=>'exe_set_default_price').to_json -%>,
+							                    waitMsg: 'Elaborazione in corso....',
+												method:'POST',                     
+							                    jsonData: {rec_id: rec.get('id')},	
+							             	
+												success: function(result, request) {
+														var returnData = Ext.JSON.decode(result.responseText);
+														if (returnData.success == false){
+															Ext.MessageBox.show({
+										                        title: 'EXCEPTION',
+										                        msg: returnData.message,
+										                        icon: Ext.MessageBox.ERROR,
+										                        buttons: Ext.Msg.OK
+									                    	})
+									                      return false;										
+														}																							
+												
+													loc_grid.store.load();																						 						
+												}, scope: this,
+												
+												failure: function(rec, op) {
+													Ext.MessageBox.show({
+								                        title: 'EXCEPTION',
+								                        msg: 'Errore',
+								                        icon: Ext.MessageBox.ERROR,
+								                        buttons: Ext.Msg.OK
+							                    	})					
+												}, scope: this,						
+																 
+									    	});												
+										}
+									});			                       	
+			                       	
+														                             
+			                        return false;
+			                        }, scope: rec
+
+			                });
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }			   
+			   } //applica prezzo proposto di default
 			    
 			    
 <% end %>			    

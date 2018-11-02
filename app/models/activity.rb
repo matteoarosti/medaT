@@ -6,7 +6,7 @@ class Activity < ActiveRecord::Base
       return { 
         :include=>{
            :customer  => {},
-           :activity_op => {:only=>[:name]}
+           :activity_op => {:only=>[:name, :default_price]}
            }
          }       
   end     

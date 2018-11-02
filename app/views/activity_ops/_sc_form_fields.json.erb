@@ -2,4 +2,5 @@
 	{"fieldLabel":"id","bind":"{rec.id}","disabled":true},
 	{"fieldLabel":"Lavorazione","bind":"{rec.name}","maxLength":50},
 	{"fieldLabel":"Codice","bind":"{rec.code}","maxLength":10},
+	<%= raw extjs_std_numberfield_bind('default_price', @new_rec, {allowBlank: true}) -%>,
 ]

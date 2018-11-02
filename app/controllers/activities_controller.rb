@@ -99,6 +99,21 @@ class ActivitiesController < ApplicationController
   render json: {success: ret}
  end   
  
+
+##################################################
+ def exe_set_default_price
+##################################################
+  item = Activity.find(params[:rec_id])    
+  if item.activity_op.default_price.nil?
+    render json: {success: false}
+  end
+  #se sono qui... sto impostando il prezzo di default
+  item.amount = item.activity_op.default_price    
+  ret = item.save!  
+  render json: {success: ret}
+ end   
+ 
+ 
   
 ##################################################
  def exe_delete_activity

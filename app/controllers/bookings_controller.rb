@@ -293,6 +293,8 @@ end
            n0[:pti_in_esecuzione] = n0[:pti_in_esecuzione].to_f + 1
          when 'DAMAGED'
            n0[:pti_fallito_o_danneggiato]  = n0[:pti_fallito_o_danneggiato].to_f + 1
+         when 'LOCK'
+           n0[:pti_fallito_o_danneggiato]  = n0[:pti_fallito_o_danneggiato].to_f + 1             
          when 'INSPECT'
            n0[:to_inspect]  = n0[:to_inspect].to_f + 1
          else

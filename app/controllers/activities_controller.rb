@@ -57,8 +57,6 @@ class ActivitiesController < ApplicationController
    
    #applico filtri impostati da utente
 #   items = items.where("container_number LIKE ?", "%#{params[:form_user][:flt_num_container].upcase}%") if !params[:form_user][:flt_num_container].to_s.empty?
-        
-
    
    items = items.where("created_at >= ?", Time.zone.parse(params[:form_user]['flt_date_from']).beginning_of_day) unless params[:form_user]['flt_date_from'].blank?
    items = items.where("created_at <= ?", Time.zone.parse(params[:form_user]['flt_date_to']).end_of_day) unless params[:form_user]['flt_date_to'].blank?
@@ -72,6 +70,8 @@ class ActivitiesController < ApplicationController
        items = items.where('amount IS NULL')
        items = items.where('execution_date IS NOT NULL')
        
+     when 'ALL'  
+       items = items.order('id desc')
    end #case
 
    #ordino per data     

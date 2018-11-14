@@ -221,6 +221,17 @@ Ext.define("plugin.Printer", {
                                     op: 'new_tab',
                                     tab_id: 'movs_dashboard'                                
                                 }
+<% if User.current.admin_can?(:repair, :table) %>                                
+								, {
+                                    task: <%= raw t("menu.movements.stats").to_json %>,
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'stats_movs', :action=>'tab_dashboard') -%>',                                    
+                                    op: 'new_tab',
+                                    tab_id: 'stats_dashboard'                                
+                                }
+<% end %>
+                                
+                                
                             ]
                     }, {
                         task:<%= raw t("menu.prenotations.prenotations").to_json %>,

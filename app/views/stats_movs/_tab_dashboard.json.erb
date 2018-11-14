@@ -1,0 +1,107 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'panel',
+  id: 'stats_dashboard',
+  title: 'Stats Dashboard', closable: true,
+  	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+	
+	
+  items: [
+  
+	 {
+	  xtype: 'panel',
+	  flex: 0.4,
+	  	layout: {
+		    type: 'hbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		}, 
+
+	   items: [
+	   
+		//andamenvo movimentazioni per ora
+		{
+            xtype: 'cartesian',
+            border: true,        
+			flex: 1,	
+			legend: {
+    			docked: 'right'
+			},			
+			store: {
+				xtype: 'store',
+				autoLoad: true,	
+				proxy: {
+					url: '<%= url_for(:controller=>'stats_movs', :action=>'graph_data_movs_by_hours') -%>',
+					 
+					method: 'POST', type: 'ajax',		
+					actionMethods: {read: 'POST'},
+		
+					reader: {
+						type: 'json',
+						method: 'POST',
+						rootProperty: 'items'
+					}
+				},
+					
+				fields: [] //serve
+			}, //store
+	   
+	   
+	   
+			axes: [{
+                type: 'numeric',
+                position: 'left',
+                adjustByMajorUnit: true,
+                grid: true,
+                fields: ['IE'],
+                minimum: 0,
+                label: {
+                	fontSize: 12
+                }
+            }, {
+                type: 'category',
+                position: 'bottom',
+                grid: true,
+                fields: ['op'],	//quale campo verra' visualizzato nella legenda
+                renderer: function(v){ return v + ':00' },
+                label: {
+                	fontSize: 12
+                    //rotate: {degrees: -55}
+                }
+            }],
+            
+            
+            
+			series: [{
+                type: 'bar',
+                axis: 'left',
+                //title: [ 'Entrata Vuoto', 'Uscita Vuoto', 'Sbarco Vuoto', 'Imbarco Vuoto',  'Entrata Pieno', 'Uscita Pieno', 'Sbarco Pieno', 'Imbarco Pieno'],
+                title: [ 'Entrata Vuoto', 'Uscita Vuoto', 'Entrata Pieno', 'Uscita Pieno'],
+                xField: 'op',
+                //yField: [ 'IE', 'OE', 'DE', 'LE', 'IF', 'OF', 'DF', 'LF' ],
+                yField: [ 'IE', 'OE', 'IF', 'OF' ],
+                stacked: true,
+                style: {
+                    opacity: 0.80
+                },
+                highlight: {
+                    fillStyle: 'yellow'
+                },
+            }]            
+            	   
+		  }	   
+	   
+	   
+	   ]
+	  }
+	   
+  ]
+ }
+ ]
+}

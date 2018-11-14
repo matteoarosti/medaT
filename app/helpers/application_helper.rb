@@ -84,7 +84,7 @@ module ApplicationHelper
     {
       xtype: 'combobox', name: #{input_name.to_json}, value: #{item.send(field_name).to_json},
       fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json},
-      displayField: #{model_class.combo_displayField.to_json},
+      displayField: #{(p[:displayField] || model_class.combo_displayField).to_json},
       valueField: 'id',
       forceSelection: true,
       allowBlank: #{p[:allowBlank] || false},

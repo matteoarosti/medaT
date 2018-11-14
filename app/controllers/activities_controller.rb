@@ -153,8 +153,7 @@ class ActivitiesController < ApplicationController
     #raggruppo i movimenti aperti in base al lock
      gcs = Activity.select('execution_date as date_op, count(*) as t_cont, sum(amount) as s_amount').group('execution_date')
      gcs = gcs.order('execution_date DESC').limit(60)
-     gcs.each do |gc|   
-       logger.info gc.to_yaml    
+     gcs.each do |gc|
          r["C"]["#{gc.date_op}"] = r["C"]["#{gc.date_op}"].to_i + gc.t_cont.to_f;
          r["S"]["#{gc.date_op}"] = r["S"]["#{gc.date_op}"].to_i + gc.s_amount.to_f;
      end  

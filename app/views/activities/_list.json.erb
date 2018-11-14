@@ -84,7 +84,6 @@
 			        
 			        start_refresh: function() {
 			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
-			                    console.log(header_form);
 			                    header_form_values = header_form.getValues();
 
 				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
@@ -128,7 +127,6 @@
 				 			handler: function(event, toolEl, panel){ 
 			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
 			                    header_form_values = header_form.getValues();
-			                    console.log(header_form_values);
 
 				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
 				 				this.up('grid').getStore().load();
@@ -163,7 +161,6 @@
 			        flex: 1,
 			        renderer: function (value, metaData, rec) {
 			        	ret = '';
-			        	console.log(rec.get('activity_op_id'));
 			        	if (Ext.isEmpty(rec.get('activity_op_id')) == false)
 			        		ret += '<span style="font-weight: bold;">[ ' + rec.data.activity_op.name + ' ]</span>';
 		                ret += '<div style="white-space:normal">' + value.replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
@@ -427,12 +424,10 @@
 											        {xtype: 'numberfield',   name: 'amount', allowBlank: false, fieldLabel: 'Importo', labelAlign: 'left', value: rec.get('amount'),
 											         listeners: {
 											          specialkey: function(field, e){
-											          	if (e.getKey() == e.ENTER) { 
-														  console.log('ENTER pressed');											          	  
+											          	if (e.getKey() == e.ENTER) { 											          	  
 											    		  var m_form = field.up('form');
 											    		  if (m_form.isValid()){
 											    		    var b = field.up('form').down('button[submit_on_click=true]');
-											    		    console.log(b);
     		  												b.handler.call(b, b, null);
 											    		  }
 												    	}
@@ -458,7 +453,6 @@
 												            submit_on_click: true,
 												            scale: 'large', cls: 'btn-confirm',
 												            handler: function (btn, evt) {
-												             console.log('conferma button handler');
 												                           
 												             form = this.up('form').getForm();
 												             tmp_win  = this.up('window');

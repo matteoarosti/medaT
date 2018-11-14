@@ -323,8 +323,8 @@ def validate_insert_item(hi, name_function = '')
   op_config = h_type_config[hi.handling_item_type]
   op_config_check = op_config['check'] || {}
 
-  #verifica che non sia in 'lock', a meno che non abbia impostato 'lock_type'
-  if op_config_check['lock_type'].nil?
+  #verifica che non sia in 'lock', a meno che non abbia impostato 'lock_type' o ignore_lock
+  if op_config_check['lock_type'].nil? && op_config_check['ignore_lock'] != true 
     if self.lock_fl == true
       ret[:is_valid] = false
       ret[:message]  = "check non superato ( lock )" 
@@ -345,6 +345,8 @@ def validate_insert_item(hi, name_function = '')
         else
           test_is_valid = false
         end
+      elsif check_op_name == 'ignore_lock'
+        test_is_valid = true
       else
         test_is_valid = (self.send(check_op_name) == check_op_value)
       end
@@ -457,6 +459,12 @@ def with_booking()
  else
   return true
  end
+end
+
+################################################################
+def is_reefer
+################################################################  
+  self.equipment.nil? ? nil : self.equipment.reefer
 end
 
 

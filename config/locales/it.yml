@@ -251,6 +251,9 @@ it:
     O_LOAD:
       long: "Imbarco su nave"
       short: "Imbarco"
+    O_LOAD_RE:
+      long: "Imbarco su nave (frigo vuoto)"
+      short: "Imbarco (fr.v.)"
     I_NOT_POSIT:
       long: "Ingresso per mancato posizionamento"
       short: "Miss Posit."
@@ -323,6 +326,7 @@ it:
       to_inspect_from_ship: "Da ispezionare (da nave)"
       damaged: "Danneggiati"
       to_handle: "Da movimentare"
+      stats: "Statistiche"
     prenotations:
       prenotations: "Prenotazioni / ToDo"
       list: "Lista completa"

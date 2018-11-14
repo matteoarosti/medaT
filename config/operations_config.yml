@@ -130,6 +130,20 @@ TMOV:
    handling_header_status: CLOSE
    booking_copy: true
    operation_type: 'MT'
+   end_reefer_connection: true
+ O_LOAD_RE:
+  label: Out For Load (Frigo vuoto)
+  icon: '<i class="fa fa-upload fa-2x" style="color:red;"></i>'
+  check:
+   container_in_terminal: true
+   container_FE: E
+   ignore_lock: true
+   is_reefer: true
+  set:
+   container_in_terminal: false
+   container_FE_copy: true
+   handling_header_status: CLOSE
+   operation_type: 'MT'
    end_reefer_connection: true   
  I_NOT_POSIT:
   label: In for missing positioning

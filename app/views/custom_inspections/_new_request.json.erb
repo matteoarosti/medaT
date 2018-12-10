@@ -38,10 +38,13 @@
 											  	this.up('fieldcontainer').down('checkbox').setValue(s_selected.get('manage_full'));
 										    }"
 						)				
-					-%>               
-			     , <%= raw extjs_std_combo_model('activity_op', Activity.new, {}, {flex: 1, fieldLabel: 'Operazione'}) -%>
+					-%>               			    
+			     , <%= raw extjs_std_combo('activity_op_id', Activity.new,
+			     				:fieldLabel => 'Operazione',
+			     				:input_name => 'activity_op_id', :valueField => 'id', :displayField => 'name',
+			     				:store => extjs_std_store_data(ActivityOp.all_by_type_code('CUST_INSPECTION'))) -%>
 			     , <%= raw extjs_std_booleanfield('to_be_made_available', Activity.new, {}, {readOnly: false, fieldLabel: 'Messa a disposizione', width: 300, labelWidth: 260, disabled: false}) -%>			     
-				 , <%= raw extjs_std_combo_model('terminal', Activity.new, {}, {flex: 1, fieldLabel: 'Terminal'}) -%>			     
+				 , <%= raw extjs_std_combo_model('terminal', Activity.new, {}, {flex: 1, fieldLabel: 'Terminal'}) -%>				 			     
 			     
 			     , {xtype: 'textfield',   fieldLabel: 'Booking', flex: 1, name: 'booking_number'}			     
 			     , {xtype: 'numberfield', fieldLabel: 'Quantit&agrave;', flex: 1, name: 'quantity', hideTrigger: true, width: '40%', allowBlank: false}

@@ -1,0 +1,251 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  title: 'Dett.Container',
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+	
+  	viewModel: {
+			data: {
+				rec: <%= raw @item.to_json(Activity.as_json_prop) -%>,
+				activity_open: <%= raw @item.execution_date.nil? %>
+			}	
+	},  	
+
+  items: [
+       
+   // grid con righe import
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    title: <%= raw t('forms.damageds.details_label').to_json -%>, flex: 50,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'custom_inspections/activity_dett_list').to_json -%>,
+        	            extraParams: {
+        	            	activity_id: <%= raw @item.id %>,
+        	            	form_user: {}
+        	            },
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	   dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'top',
+        	    items: [{
+				    xtype: 'form',	
+				    height: 50,
+				    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+				    padding: '10 10 10 10',
+				    items: [
+						{
+				            xtype: 'radiogroup',
+				            fieldLabel: '',
+				            layout: 'hbox',
+				            items: [{
+				                boxLabel: 'Con messa a disposizione',
+				                bind: '{rec.to_be_made_available}',
+				                width: 200                
+				            }]
+				        }, {
+				            xtype: 'textfield',
+			                fieldLabel: 'Richiesti', labelWidth: 100,
+							bind: '{rec.quantity}',
+			                width: 180
+			            }	        							     
+				    ]
+				 }, {
+				 	text: 'Aggiungi container',
+				 	scale: 'large',
+				 	bind: {disabled: '{!activity_open}'},
+				 	handler: function(){
+				 		var me = this.up('grid');
+		            	<%= raw confirm_with_form(url_for(activity_id: @item.id, :controller=>'custom_inspections', :action=>'add_container_to_activity_dett'),
+		            	"{xtype: 'textfield', name: 'container_number', fieldLabel: 'Container', allowBlank: false}", 
+		            	"
+							{
+			            		afterSave: function(fromWin){
+			            		    fromWin.destroy();
+			            			me.store.load();
+			            		}            	            	
+			            	}            	
+		            	") %>				 	
+				 	}
+				 }, '->',  {iconCls: 'fa fa-refresh fa-2x', scale: 'large', handler: function(event, toolEl, panel){
+				 				this.up('grid').getStore().load();}}
+				 ]
+			  }
+			],
+        	           	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: 'Seq',
+			        width: 50,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Container',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '<h1>' + rec.get('container_number') + '</h1>';
+			         
+			         if (rec.get('status') == 'ANN')
+			           ret += '<h2><font color=red>Richiesta annullata</font></h2>';
+			         
+			         return ret;			         
+			        }			        
+			    }
+			    
+			    <% if @item.to_be_made_available %>
+			    , {
+			        dataIndex: 'container_number',
+			        text: 'Messa a disposizione',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          
+			         if (!Ext.isEmpty(rec.get('make_available_at'))){
+			           ret = '<h3>' + Ext.util.Format.date(rec.get('make_available_at'), 'd-m-y H:i') + '</h3>';
+			           if (!Ext.isEmpty(rec.get('make_available_notes')))
+			             ret += '<div style="white-space:normal">' + rec.get('make_available_notes').replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+			           return ret;
+			         }
+			     <% if @item.execution_date.nil? %>     
+			         else {			           
+			           var b_id = Ext.id();
+					   setTimeout(function(){me.b_set_available.call(me, b_id, rec);}, 1);
+					   return '<div id="' + b_id + '"></div>';			           
+			         }
+			      <% end %>   
+			         			         
+			        }			        
+			    }
+			    <% end %>
+			    
+			    , {
+			        dataIndex: 'container_number',
+			        text: 'Visita eseguita',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          
+			         if (!Ext.isEmpty(rec.get('execution_at'))){
+			           ret = '<h3>' + Ext.util.Format.date(rec.get('execution_at'), 'd-m-y H:i') + '</h3>';
+			           if (!Ext.isEmpty(rec.get('execution_notes')))
+			             ret += '<div style="white-space:normal">' + rec.get('execution_notes').replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+			           return ret;
+			         }
+			      <% if @item.execution_date.nil? %>
+			         else {			           
+			           var b_id = Ext.id();
+					   setTimeout(function(){me.b_set_execute.call(me, b_id, rec);}, 1);
+					   return '<div id="' + b_id + '"></div>';			           
+			         }
+			      <% end %>   			         
+			        }			        
+			    }			    
+			            
+        ] //columns
+        
+        
+     	, listeners: {
+        	itemcontextmenu : function(item, record, index, e, eOpts){
+        		eOpts.stopEvent();
+                var xy = eOpts.getXY();	                	
+                new Ext.menu.Menu({
+                    items : [
+                             {
+                                text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
+                                handler: function(){
+						     	 	new_win = acs_show_win_std('Modifica', <%= raw url_for(:controller=>'custom_inspections', 
+						     	 				:action=>'modify_record').to_json -%>,
+						     	 				{rec_id: record.get('id'), from_grid_id: this.id}, 800, 400);										                                                    
+                                }, scope: this
+                              }
+                    ]
+                }).showAt(xy);
+            }
+        }          
+   
+        
+
+
+    , b_set_available: function(b_id, rec){
+        var me = this; //grid
+        var b = Ext.create('Ext.button.Button', {
+        	text: 'Registra',
+        	scale: 'large',
+        	handler: function(){            	
+            	<%= raw confirm_with_note(url_for(:controller=>'custom_inspections', :action=>'set_available'), "
+							{
+			            		afterSave: function(fromWin){
+			            		    fromWin.destroy();
+			            			me.store.load();
+			            		}            	            	
+			            	}            	
+            	") %>
+        	}
+        });
+		if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
+      } //b_set
+      
+    , b_set_execute: function(b_id, rec){
+        var me = this; //grid
+        var b = Ext.create('Ext.button.Button', {
+        	text: 'Registra',
+        	scale: 'large',
+        	handler: function(){
+            	<%= raw confirm_with_note(url_for(:controller=>'custom_inspections', :action=>'set_execution'), "
+							{
+			            		afterSave: function(fromWin){
+			            		    fromWin.destroy();
+			            			me.store.load();
+			            		}            	            	
+			            	}            	
+            	") %>        	
+        	}
+        });
+		if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
+      } //b_set      
+      
+                        	    
+    }    
+   
+  ]
+ }
+ ]
+}

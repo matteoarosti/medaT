@@ -93,8 +93,14 @@
 				                name: 'hide_check',
 				                inputValue: '1',
 				                value: 1
-				      }    
-					, {	
+				      }, {	
+								flex: 1, padding: '0 0 0 10',
+								xtype: 'checkboxfield',
+				                boxLabel: 'Escludi Messa a Disposizione',
+				                name: 'no_cust_inspect',
+				                inputValue: 'Y',
+				                uncheckedValue: 'N'
+				      }, {	
 								width: 200, labelWidth: 120, padding: '0 0 0 10',
 								xtype: 'textfield',
 								fieldStyle: 'font-size: 16px; text-transform: uppercase;',
@@ -111,7 +117,8 @@
 				 				handler: function(event, toolEl, panel){
 				 						loc_grid = this.up('grid');
 				 						header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
-				 						loc_grid.getStore().proxy.extraParams.flt_num_container = header_form.findField('flt_num_container').getValue(); 
+				 						loc_grid.getStore().proxy.extraParams.flt_num_container = header_form.findField('flt_num_container').getValue();
+				 						loc_grid.getStore().proxy.extraParams.no_cust_inspect = header_form.findField('no_cust_inspect').getSubmitValue(); 
 				 						loc_grid.getStore().load();
 				 				}
 				 	}
@@ -141,6 +148,17 @@
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         
+			         if (rec.get('to_be_moved_type') == 'CUST_INSPECTION'){
+			           ret = '<h3>MESSA A DISPOSIZIONE</h3>';
+			           ret += '<table class=import_item_detail>';
+			           ret += '<tr><th>Comp.</th><td>' + rec.data.handling_header.shipowner.name + '</td></tr>';
+			           ret += '<tr><th>Cli.</th><td>' + rec.data.handling_header.customer.name + '</td></tr>';
+			           ret += '<tr><th>Booking</th><td>' + rec.data.handling_header.booking_number + ' (richiesti: ' + rec.data.handling_header.quantity + ')</td></tr>';
+			           ret += '<tr><th>Data</th><td>' + Ext.util.Format.date(rec.data.handling_header.expiration_date, 'd-m-y') + '</td></tr>';
+			           ret += '</table>';
+			           return ret;
+			         }
+			         
 			         
 			         if (Ext.isEmpty(rec.get('plate')))
 			          out_plate = '';
@@ -167,6 +185,10 @@
 			        text: <%= raw t('forms.to_be_handled.positioning').to_json -%>,
 			        width: 150,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        
+			         if (rec.get('to_be_moved_type') == 'CUST_INSPECTION'){
+			          return '';
+			         }
 			         
 			         fila = '';
 			         tiro = '';
@@ -364,6 +386,14 @@
 			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
 			                           header_form_values = header_form.getValues();
 			                           
+			                           if (rec.get('to_be_moved_type') == 'CUST_INSPECTION'){
+											var m_url = '<%= url_for(:controller=>'custom_inspections', :action=>'set_available') -%>';
+											var m_jsonData = {rec_id: rec.get('rec_id')};  
+			                           } else {
+			                           		var m_url = '<%= url_for(:controller=>'handling_headers', :action=>'hitems_close_to_be_moved') -%>';
+											var m_jsonData = {data: {handling_item_id: rec.get('id')}};
+			                           }
+			                           
 			                           loc_form = Ext.create('Ext.form.Panel', {
 										    title: '',
 										    bodyPadding: 10,
@@ -397,10 +427,14 @@
 											             if (form.isValid()) {
 															Ext.Ajax.request({
 															   method: 'POST',
+															   /*
 															   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_close_to_be_moved') -%>',
 															   jsonData: {
 															   	data: {handling_item_id: rec.get('id')}
 															   },
+															   */
+															   url: m_url,
+															   jsonData: m_jsonData,
 															   success: function(response, opts) {
 															      store.remove(rec);
 															      store.load();
@@ -426,10 +460,14 @@
 										 
 											Ext.Ajax.request({
 											   method: 'POST',
+											   /*
 											   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_close_to_be_moved') -%>',
 											   jsonData: {
 											   	data: {handling_item_id: rec.get('id')}
 											   },
+											   */
+											   url: m_url,
+											   jsonData: m_jsonData,
 											   success: function(response, opts) {
 											      store.remove(rec);
 											      store.load();

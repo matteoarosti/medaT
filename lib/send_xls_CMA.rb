@@ -3,7 +3,6 @@ r_email_to = %w(
  gen.alampugnani@cma-cgm.com
  gen.mbalderi@cma-cgm.com
  gen.grossi@cma-cgm.com
- gen.elastraioli@cma-cgm.com
  marco.fonti@apl.com
  matteo.arosti@gmail.com
 )

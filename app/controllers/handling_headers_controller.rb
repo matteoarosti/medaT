@@ -417,6 +417,7 @@ end
      end
      ret = ret.limit(500)
      
+     
      #recupero tutte le prenotazioni container (uscita per riempimento, in cui e' il mulettista a scegliere il container)
      unless !params[:flt_num_container].to_s.empty?
        to_do_items = ToDoItem.where('1=1').not_closed.prenotazione_container.limit(1000).each do |tdi|
@@ -440,6 +441,38 @@ end
          }       
        end
      end
+     
+     #recupero elenco container da mettere a disposizione
+     if params[:no_cust_inspect].nil? || params[:no_cust_inspect].to_s != "Y"
+       to_do_make_available = ActivityDettContainer.joins(:activity)
+          .where("(activities.status IS NULL OR activities.status <> 'ANN') AND activities.execution_date  IS NULL AND (activity_dett_containers.status IS NULL or activity_dett_containers.status <> 'ANN')").where(make_available_at: nil)
+          .order("activities.expiration_date")
+       to_do_make_available.each do |ac|
+         ret << {
+           :to_be_moved_type => 'CUST_INSPECTION',
+           :id => "CUST_INSPECTION_#{ac.id}", #attenzione: se ho lo stesso id di un handling_item potrebbe non essere visualizzato
+           :rec_id => ac.id,
+           :handling_type => 'CUST_INSPECTION',
+           :container_FE => nil,
+           :carrier_id_Name => nil,
+           :driver => nil,
+           :plate  => nil,
+           :created_at => ac.created_at,
+           :booking_notes => 'bbbbb',
+           :handling_header => {
+              :container_number => ac.container_number,
+              :fila => '', :blocco => '', :tiro => '',
+              :shipowner => {:name => ac.activity.shipowner.name},
+              :customer  => {:name => ac.activity.customer.name},
+              :equipment => {:equipment_type => '???'},
+              :booking_number => ac.activity.booking_number,
+              :quantity => ac.activity.quantity,
+              :expiration_date => ac.activity.expiration_date
+           }
+         }         
+       end
+     end
+     
      
      #ordino per data     
      render json: ret.sort_by{|a|

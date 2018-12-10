@@ -374,6 +374,7 @@ it:
     activities:
       menu: "Attivit&agrave;"
       new: "Crea nuova attivit&agrave;"
+      new_custom_inspection: "Nuova visita dog."
       customers: "Anag. Clienti"
       ops: "Lavorazioni"
       list: "Elenco"

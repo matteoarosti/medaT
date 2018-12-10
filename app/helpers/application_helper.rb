@@ -435,5 +435,147 @@ end
      number_with_precision(v, precision: 2, separator: ',', delimiter: '.')    
   end
   
-      
+     
+  
+ def confirm_with_note(url, my_listeners)
+   ret = "
+       var loc_form = Ext.create('Ext.form.Panel', {
+                           title: '',
+                           bodyPadding: 10,
+                           layout: {type: 'vbox', align : 'stretch', pack  : 'start'},
+                           items: [
+                             {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes', flex: 1, width: '100%'}                                                                        
+                           ]
+                           ,   buttons:
+                                 [{
+                                     text: 'Conferma',
+                                     handler: function (btn, evt) {
+                                                    
+                                      var form = this.up('form').getForm();
+                                      var tmp_win  = this.up('window');
+                                      if (form.isValid()) {
+                                         btn.disable();
+                                         Ext.Ajax.request({
+                                            method: 'POST',
+                                            url: '#{url}',
+                                            jsonData: {rec_id: rec.get('id'), check_form: form.getValues()},
+                                            success: function(result, request) {
+                                               var jsonData = Ext.JSON.decode(result.responseText);
+                                               
+                                               if (jsonData.success == false){
+                                                Ext.MessageBox.show({
+                                                           title: 'EXCEPTION',
+                                                           msg: jsonData.message,
+                                                           icon: Ext.MessageBox.ERROR,
+                                                           buttons: Ext.Msg.OK
+                                                       })                                    
+                                               } else {
+                                                  console.log('fireEvent afterSave');
+                                                  tmp_win.fireEvent('afterSave', tmp_win);                                    
+                                               }                                  
+                                            },
+                                            failure: function(response, opts) {
+                                             Ext.MessageBox.show({
+                                                           title: 'EXCEPTION',
+                                                           msg: 'Errore sconosciuto',
+                                                           icon: Ext.MessageBox.ERROR,
+                                                           buttons: Ext.Msg.OK
+                                             })                                                                        
+                                            }
+                                         }); 
+                                        return false;                                    
+                                      }
+                                     }
+                                   }
+                                  ]
+     
+                       });  
+   
+   
+                     var loc_win = Ext.create('Ext.window.Window',{
+                           layout: 'fit',
+                           items: loc_form,
+                           title: 'Conferma',
+                           width: 500,
+                           height: 300,
+                           listeners: #{my_listeners}
+                       }).show();
+   
+                 "
+   end
+  
+  
+   def confirm_with_form(url, form, my_listeners)
+     ret = "
+         var loc_form = Ext.create('Ext.form.Panel', {
+                             title: '',
+                             bodyPadding: 10,
+                             layout: {type: 'vbox', align : 'stretch', pack  : 'start'},
+                             items: [
+                               #{form}                                                                        
+                             ]
+                             ,   buttons:
+                                   [{
+                                       text: 'Conferma',
+                                       handler: function (btn, evt) {
+                                                      
+                                        var form = this.up('form').getForm();
+                                        var tmp_win  = this.up('window');
+                                        if (form.isValid()) {
+                                           btn.disable();
+     
+                                           var ajax_parameters = {};
+                                           ajax_parameters['check_form'] = form.getValues();
+                                           if (typeof rec !== 'undefined')
+                                            ajax_parameters['rec_id'] = rec.get('id');
+     
+                                           Ext.Ajax.request({
+                                              method: 'POST',
+                                              url: '#{url}',
+                                              jsonData: ajax_parameters,
+                                              success: function(result, request) {
+                                                 var jsonData = Ext.JSON.decode(result.responseText);
+                                                 
+                                                 if (jsonData.success == false){
+                                                  Ext.MessageBox.show({
+                                                             title: 'EXCEPTION',
+                                                             msg: jsonData.message,
+                                                             icon: Ext.MessageBox.ERROR,
+                                                             buttons: Ext.Msg.OK
+                                                         })                                    
+                                                 } else {
+                                                    console.log('fireEvent afterSave');
+                                                    tmp_win.fireEvent('afterSave', tmp_win);                                    
+                                                 }                                  
+                                              },
+                                              failure: function(response, opts) {
+                                               Ext.MessageBox.show({
+                                                             title: 'EXCEPTION',
+                                                             msg: 'Errore sconosciuto',
+                                                             icon: Ext.MessageBox.ERROR,
+                                                             buttons: Ext.Msg.OK
+                                               })                                                                        
+                                              }
+                                           }); 
+                                          return false;                                    
+                                        }
+                                       }
+                                     }
+                                    ]
+       
+                         });  
+     
+     
+                       var loc_win = Ext.create('Ext.window.Window',{
+                             layout: 'fit',
+                             items: loc_form,
+                             title: 'Conferma',
+                             width: 500,
+                             height: 300,
+                             listeners: #{my_listeners}
+                         }).show();
+     
+                   "
+     end  
+   
 end

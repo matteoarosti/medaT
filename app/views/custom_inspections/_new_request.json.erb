@@ -4,169 +4,137 @@
  {
   xtype: 'form'
   , flex: 1
-  , autoScroll: true
+  , scrollable: 'y'
   , title: 'Nuova richiesta', closable: true
   ,	layout: {
-	    type: 'vbox',
+	    type  : 'hbox',
 	    align : 'begin',
 	    pack  : 'start'
-	}
+	}	
 		
   //, defaults: {padding: '0px 0px 0px 0px'}	
   , margin: '10px 10px' 	
 	
-  , items: [{html: '&nbsp'}]
+  , items: [
+     //PARTE SX: dati richiesta
+		{
+			    xtype: 'fieldcontainer'
+			  , flex: 1
+			  ,	layout: {type: 'vbox', align : 'begin', pack  : 'start'}
+			  , defaults: {labelAlign: 'right', width: '90%', fieldStyle: 'font-size: 1.5em;'}
+	  		  , style: {padding: '15px'}			  	
+	    	  , items: [
+	    	        <%= raw extjs_std_combo_model('customer', @item) -%>,
+					<%= raw extjs_std_combo('shipowner_id', @item,
+							:fieldLabel => 'Compagnia',
+							:input_name => 'shipowner_id',
+							:valueField => 'id',
+							:displayField => 'name',
+							:store => extjs_std_store_data(Shipowner.all),
+							:listeners => "change: function(combo, record, index) {								  
+											  var me = this, //combo 
+											      s_selected = combo.lastSelection[0];
+											  if (!Ext.isEmpty(s_selected))
+											  	this.up('fieldcontainer').down('checkbox').setValue(s_selected.get('manage_full'));
+										    }"
+						)				
+					-%>               
+			     , <%= raw extjs_std_combo_model('activity_op', Activity.new, {}, {flex: 1, fieldLabel: 'Operazione'}) -%>
+			     , <%= raw extjs_std_booleanfield('to_be_made_available', Activity.new, {}, {readOnly: false, fieldLabel: 'Messa a disposizione', width: 300, labelWidth: 260, disabled: false}) -%>			     
+				 , <%= raw extjs_std_combo_model('terminal', Activity.new, {}, {flex: 1, fieldLabel: 'Terminal'}) -%>			     
+			     
+			     , {xtype: 'textfield',   fieldLabel: 'Booking', flex: 1, name: 'booking_number'}			     
+			     , {xtype: 'numberfield', fieldLabel: 'Quantit&agrave;', flex: 1, name: 'quantity', hideTrigger: true, width: '40%', allowBlank: false}
+			     , <%= raw extjs_std_datefield('expiration_date', Activity.new, {}, {fieldLabel: 'Da effettuare il'}) -%>
+			     , {xtype: 'textarea',   fieldLabel: 'Note', name: 'notes', fieldStyle: 'font-size: 1em;'}			     
+				] //items
+		}, 
+				
+		{
+		  xtype: 'panel', width: 2, bodyStyle: {background: 'grey'}, height: '100%'
+		},
+		
+		//PARTE DX: note e container
+		{
+			    xtype: 'panel'			  
+			  , flex: 2
+			  ,	layout: {type: 'vbox', align : 'stretch', pack  : 'start'}			  	
+	    	  , items: [				
+					{
+					    xtype: 'fieldcontainer'
+					  , style: {border: '1px solid grey'}			  
+					  , flex: 1
+					  ,	layout: {type: 'vbox', align : 'begin', pack  : 'start'}
+					  , defaults: {labelAlign: 'right', fieldStyle: 'font-size: 1.5em;', maxLength: 11}
+			  		  , style: {padding: '10px 10px'}			  	
+			    	  , items: [
+			    	  		{html: '<h1>Indicare i container se gi&agrave; a conoscenza</h1>'}
+					        
+					      , {xtype: 'textfield',   fieldLabel: '1)',  flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '2)',  flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '3)',  flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '4)',  flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '5)',  flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '6)',  flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '7)',  flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '8)',  flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '9)',  flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '10)', flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '11)', flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '12)', flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '13)', flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '14)', flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '15)', flex: 1, name: 'container_number[]'}					      					      					      
+					      , {xtype: 'textfield',   fieldLabel: '16)', flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '17)', flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '18)', flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '19)', flex: 1, name: 'container_number[]'}
+					      , {xtype: 'textfield',   fieldLabel: '20)', flex: 1, name: 'container_number[]'}					      					      					      
+					        
+						] //items
+					}				]
+		}			
+		
+		
+  ]
   
-  , dockedItems: [
+
+
+  , dockedItems: [  
    { 
-    xtype: 'toolbar', dock: 'top',
-    padding: '10px 20px 10px 20px',
-    style:'background-color: #888;',
-    items: [  
-      {text: 'Inserisci nuova richiesta per CONTAINER'
-        , style: 'padding: 7px'
-        , iconCls: 'fa fa-plus fa-2x', scale: 'medium'
-        , handler: function(){this.up('form').addContainerRow.call(this, this.up('form'))}},	  
-      {text: 'Inserisci nuova richiesta per LOTTO'
-        , style: 'padding: 7px'      
-        , iconCls: 'fa fa-plus fa-2x', scale: 'medium'
-        , handler: function(){this.up('form').addLottoRow.call(this, this.up('form'))}},
-    ]
-   }
-   , { 
     xtype: 'toolbar', dock: 'bottom',   
     items: [  
         {xtype: 'tbfill'}
-      , {text: 'Invia richiesta', scale: 'large', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add'}
+      , {text: 'Invia richiesta', scale: 'large', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add'
+         , handler: function(){this.up('form').click_save.call(this, this.up('form'))}}
       , {xtype: 'tbfill'}
     ]
    }
-  ]  
-  
-  
-  , addContainerRow: function(form){    
-	 var m = form.rowContainer;    
-     form.add(m);
-     form.doLayout();
-  }
-  
-  , addLottoRow: function(form){    
-	 var m = form.rowLotto;    
-     form.add(m);
-     form.doLayout();
-  }
-  
-
-
-
-
-  , rowContainer:  {xtype: 'container'
-	  ,	layout: {
-		    type: 'vbox',
-		    align : 'stretch',
-		    pack  : 'start'
-		} 
-	  , style: {
-				    borderTop: '1px solid grey',
-				    borderBottom: '1px solid grey',
-				    borderCollapse: true,
-				    padding: '15px'
-				}						
-	  ,  items: [
-			{
-			    xtype: 'fieldcontainer'
-			  , flex: 1
-			  ,	layout: {type: 'hbox', align : 'stretch', pack  : 'start'}
-			  , defaults: {labelAlign: 'right'}
-	  		  , style: {padding: '15px'}			  	
-	    	  , items: [
-				   {xtype: 'textfield', fieldLabel: 'Container', width: 200, name: 'container_number'}
-			     , <%= raw extjs_std_combo('shipowner_id', HandlingHeader.new,
-							:fieldLabel => 'Compagnia',
-							:input_name => 'shipowner_id',
-							:valueField => 'id',
-							:displayField => 'name',
-							:store => extjs_std_store_data(Shipowner.all),
-							:listeners => "change: function(combo, record, index) {								  
-											  var me = this, //combo 
-											      s_selected = combo.lastSelection[0];
-											  this.up('fieldcontainer').down('checkbox').setValue(s_selected.get('manage_full'));
-										    }"
-						)				
-							 -%>     
-			     , <%= raw extjs_std_combo_model('activity_op', Activity.new, {}, {flex: 1, fieldLabel: 'Operazione'}) -%>
-			     , {xtype: 'numberfield', fieldLabel: 'Quantit&agrave;', width: 220, name: 'qty', hideTrigger: true, disabled: true}			     							 
-			     , <%= raw extjs_std_booleanfield('activity_op', Activity.new, {}, {readOnly: false, fieldLabel: 'Messa a disposizione<br><i>(in base a compagnia)</i>', width: 300, labelWidth: 260, disabled: false}) -%>          
-			     , {html: '', width: 50}
-			 ]
-			}     
-
-		  , {
-			    xtype: 'fieldcontainer'
-			  ,	layout: {type: 'hbox', align : 'stretch', pack  : 'start'}
-			  , defaults: {labelAlign: 'right'}
-	  		 	 , style: {padding: '0px 15px 0px 15px'}			  	
-	    	  , items: [	          
-	               {xtype: 'textarea',   fieldLabel: 'Note', name: 'notes', colspan: 5, flex: 1}
-			     , {html: '', width: 50}	               
-	          ]
-	        }               
-	  ]}  
-
-
-  , rowLotto:  {xtype: 'container' 
-	  ,	layout: {
-		    type: 'vbox',
-		    align : 'stretch',
-		    pack  : 'start'
-		} 
-	  , style: {	  
-				    borderTop: '1px solid grey',
-				    borderBottom: '1px solid grey',
-				    borderCollapse: true,
-				    padding: '15px'
-				}						
-	  ,  items: [
-			{
-			    xtype: 'fieldcontainer'
-			  ,	layout: {type: 'hbox', align : 'stretch', pack  : 'start'}
-			  , defaults: {labelAlign: 'right'}
-	  		  , style: {padding: '15px'}			  	
-	    	  , items: [
-			       {xtype: 'textfield',   fieldLabel: 'Booking', width: 200, name: 'bookin_number'}
-			     , <%= raw extjs_std_combo('shipowner_id', HandlingHeader.new,
-							:fieldLabel => 'Compagnia',
-							:input_name => 'shipowner_id',
-							:valueField => 'id',
-							:displayField => 'name',
-							:store => extjs_std_store_data(Shipowner.all),
-							:listeners => "change: function(combo, record, index) {								  
-											  var me = this, //combo 
-											      s_selected = combo.lastSelection[0];
-											  this.up('fieldcontainer').down('checkbox').setValue(s_selected.get('manage_full'));
-										    }"
-						)				
-							 -%>               
-			     , <%= raw extjs_std_combo_model('activity_op', Activity.new, {}, {flex: 1, fieldLabel: 'Operazione'}) -%>
-			     , {xtype: 'numberfield', fieldLabel: 'Quantit&agrave;', width: 220, name: 'qty', hideTrigger: true}			     
-			     , <%= raw extjs_std_booleanfield('activity_op', Activity.new, {}, {readOnly: false, fieldLabel: 'Messa a disposizione<br><i>(in base a compagnia)</i>', width: 300, labelWidth: 260, disabled: true}) -%>			     
-			     , {html: '', width: 50}
-			 ]
-			}     
-
-		  , {
-			    xtype: 'fieldcontainer'
-			  ,	layout: {type: 'hbox', align : 'stretch', pack  : 'start'}
-			  , defaults: {labelAlign: 'right'}
-	  		 	 , style: {padding: '0px 15px 0px 15px'}			  	
-	    	  , items: [	          
-	               {xtype: 'textarea',   fieldLabel: 'Note', name: 'notes', colspan: 5, flex: 1}
-			     , {html: '', width: 50}	               
-	          ]
-	        }               
-	  ]}    
+  ]
 
   
+  
+ , click_save: function(form){
+ 	if (form.isValid()){
+		Ext.MessageBox.confirm('Richieta conferma', 'Confermi l\'invio della richiesta?', function(btn){												
+			if(btn === 'yes'){
+				form.exe_save.call(form, form);
+			}
+		});	 	
+ 	}
  }
+ 
+ , exe_save: function(form){
+ 	var url = <%= raw url_for(:controller=>'custom_inspections', :action=>'exe_save').to_json -%>;
+    std_ajax_request.call(form, url, {data: form.getValues()}, 'exe_save_ok');	
+ }
+
+ , exe_save_ok: function(returnData){
+ 	var me = this;
+ 	show_notifica('Richiesta inviata con successo');
+ 	me.reset();
+ }
+  
+ } //form
  ]
 }

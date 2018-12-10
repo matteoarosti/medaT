@@ -198,3 +198,51 @@ function acs_show_win_std(titolo, url, jsonData, width, height, listeners, iconC
 	    
   return print_w;	    
 }
+
+
+
+function std_ajax_request(url, params, success_callback){
+  var me = this;
+  Ext.Ajax.request({
+    url: url,  jsonData: params, method:'POST',
+    waitMsg: 'Salvataggio in corso....',	                    
+	
+	success: function(result, request) {					
+		var returnData = Ext.JSON.decode(result.responseText);
+		
+		//return with error
+		if (returnData.success == false){
+			Ext.MessageBox.show({
+                   title: 'EXCEPTION',
+                   msg: returnData.message,
+                   icon: Ext.MessageBox.ERROR,
+                   buttons: Ext.Msg.OK
+           	})
+             return false;										
+		}								
+						
+		if(!Ext.isEmpty(success_callback)){
+		  me[success_callback].call(me, returnData);
+		}
+						
+	}, scope: this,
+	
+	failure: function(response, opts) {
+		Ext.MessageBox.show({
+               title: 'EXCEPTION',
+               msg: 'Errore sconosciuto',
+               //icon: Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+       	})					
+	}, scope: this,												 
+  });	 	
+} //std_ajax_request
+
+function show_notifica(msg){
+	Ext.MessageBox.show({
+	    title: 'Notifica',
+	    msg: msg,
+	    icon: Ext.MessageBox.INFO,
+	    buttons: Ext.Msg.OK
+	});
+}

@@ -150,6 +150,8 @@
 			        width: 200,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h3>' + rec.get('customer').name + '</h3>';
+			         if (!Ext.isEmpty(rec.get('shipowner')))
+			           ret += '<h4>[' + rec.get('shipowner').name + ']</h4>';
 			          return ret;			         
 			        }			        
 			    }
@@ -161,9 +163,22 @@
 			        flex: 1,
 			        renderer: function (value, metaData, rec) {
 			        	ret = '';
+			        	
+			        	if (rec.get('status') == 'ANN')
+			        	  ret += '<h2><font color=red>Richiesta annullata</font></h2>';
+			        	
 			        	if (Ext.isEmpty(rec.get('activity_op_id')) == false)
 			        		ret += '<span style="font-weight: bold;">[ ' + rec.data.activity_op.name + ' ]</span>';
 		                ret += '<div style="white-space:normal">' + value.replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+		                
+		                if (!Ext.isEmpty(rec.get('activity_type')) &&
+			        	     rec.get('activity_type').code == 'CUST_INSPECTION'){
+			        	     ret += '<br/> -- -- -- -- -- -- -- -- -- -- --';
+			        	     ret += '<br/>Nr. container: ' + rec.get('quantity');
+			        	     ret += '<br/>Booking: ' + rec.get('booking_number');
+			        	     ret += '<br/>Terminal: ' + rec.get('terminal').name;
+			        	}
+		                
 		                return ret;
 		             }
 			    }, {
@@ -191,6 +206,45 @@
 					}
 			    }
 
+
+			, {
+			        text: 'Container', tooltip: 'Dettaglio richiesta',
+			        width: 100, dataIndex: 'request_received',
+			        xtype: 'numbercolumn',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
+			        	var loc_grid = this;
+			        	
+			        	if (Ext.isEmpty(rec.get('activity_type'))) return '';
+			        	if (rec.get('activity_type').code != 'CUST_INSPECTION') return '';
+			        	
+			            var id = Ext.id();
+			            setTimeout(function() {
+			            			          
+			                ok_img = 'fa-truck';
+			                var set_external = true;
+			            
+			                var buttonOK = Ext.create('Ext.button.Button', {
+			                				                	
+								text: '<i class="fa ' + ok_img + ' fa-3x"></i>',
+								//cls: btn_cls,								
+		                		scale: 'medium',			                    
+			                        handler: function(button, b, c, d, e) {
+			                        
+				                		acs_show_panel_std(myApp, '<%= url_for(:controller=>'custom_inspections', :action=>'activity_dett') -%>', {rec_id: rec.get('id')}, 'Dettagli');	                             
+			                           	                             
+			                           	return false;
+
+			                        }, scope: rec //handler
+
+			                }); //button ok
+			                
+			                if (Ext.get(id)) {
+			                    buttonOK.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			    }
 
 
 			    

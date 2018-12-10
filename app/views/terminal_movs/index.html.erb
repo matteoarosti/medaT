@@ -485,11 +485,22 @@ Ext.define("plugin.Printer", {
                                 tab_id: 'activities_op_list'
                                 
                            	 }, {
+                                task:<%= raw t("menu.activities.type").to_json %>,
+                                url: '<%= url_for(:controller=>'activity_types', :action=>'extjs_sc_crt_tab') -%>',                                
+                                leaf:true,
+                                tab_id: 'activities_type_list'
+                                
+                           	 }, {
                                 task:<%= raw t("menu.activities.new").to_json %>,
                                 url: '<%= url_for(:controller=>'activities', :action=>'create_new') -%>',
                                 leaf:true,
                                 op: 'new_tab',
                                 tab_id: 'activities_new'
+                           	 }, {
+                                task:<%= raw t("menu.activities.new_custom_inspection").to_json %>,
+                                url: '<%= url_for(:controller=>'custom_inspections', :action=>'new_request') -%>',
+                                leaf:true,
+                                op: 'new_tab'
                            	 }, {
                                 task:<%= raw t("menu.activities.open").to_json %>,
                                 url: '<%= url_for(:controller=>'activities', :action=>'list', :filtered_type => 'OPEN') -%>',

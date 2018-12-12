@@ -13,7 +13,8 @@ class Activity < ActiveRecord::Base
            :shipowner => {},
            :activity_type => {},
            :terminal => {},
-           :activity_op => {:only=>[:name, :default_price]}
+           :activity_op => {:only=>[:name, :default_price]},
+           :activity_dett_containers => {:only => [:container_number, :status, :make_available_at, :execution_at]}
            }
          }       
   end     

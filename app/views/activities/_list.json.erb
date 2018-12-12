@@ -176,7 +176,25 @@
 			        	     ret += '<br/> -- -- -- -- -- -- -- -- -- -- --';
 			        	     ret += '<br/>Nr. container: ' + rec.get('quantity');
 			        	     ret += '<br/>Booking: ' + rec.get('booking_number');
-			        	     ret += '<br/>Terminal: ' + rec.get('terminal').name;
+			        	     ret += '<br/>Terminal: ' + rec.get('terminal').code;
+			        	     
+			        	     
+			        	     if (!Ext.isEmpty(rec.get('activity_dett_containers')))
+			        	       ret += '<br/> -- -- -- -- -- -- -- -- -- -- --';
+			        	     
+			        	     Ext.each(rec.get('activity_dett_containers'), function(dett_container) {			        	     	
+								ret += '<br/>' + dett_container.container_number;
+								if (dett_container.status == 'ANN')
+								  ret += ' [ANN]';
+								  
+								if (!Ext.isEmpty(dett_container.make_available_at))
+								  ret += ' [Disp.]';
+								if (!Ext.isEmpty(dett_container.execution_at))
+								  ret += ' [Eseg.]';
+																													
+							}, this)
+			        	    
+			        	   ret += '<br/>&nbsp;<br/>';  
 			        	}
 		                
 		                return ret;

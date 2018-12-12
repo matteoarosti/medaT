@@ -445,7 +445,9 @@ end
      #recupero elenco container da mettere a disposizione
      if params[:no_cust_inspect].nil? || params[:no_cust_inspect].to_s != "Y"
        to_do_make_available = ActivityDettContainer.joins(:activity)
-          .where("(activities.status IS NULL OR activities.status <> 'ANN') AND activities.execution_date  IS NULL AND (activity_dett_containers.status IS NULL or activity_dett_containers.status <> 'ANN')").where(make_available_at: nil)
+          .where("(activities.status IS NULL OR activities.status <> 'ANN') AND activities.execution_date  IS NULL AND (activity_dett_containers.status IS NULL or activity_dett_containers.status <> 'ANN')")
+          .where(activities: {to_be_made_available: true})
+          .where(make_available_at: nil)
           .order("activities.expiration_date")
        to_do_make_available.each do |ac|
          ret << {

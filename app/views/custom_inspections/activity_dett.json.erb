@@ -132,7 +132,7 @@
 			        }			        
 			    }
 			    
-			    <% if @item.to_be_made_available %>
+			    <% if @item.to_be_made_available == true %>
 			    , {
 			        dataIndex: 'container_number',
 			        text: 'Messa a disposizione',

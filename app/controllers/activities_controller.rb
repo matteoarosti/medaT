@@ -175,6 +175,25 @@ class ActivitiesController < ApplicationController
     render json: ret
   end
   
+  
+  
+##################################################
+ def view_scan_file
+##################################################
+  @item = Activity.find(params[:rec_id])
+ end  
+##################################################
+ def download_file
+##################################################
+  @item = Activity.find(params[:id])
+   send_file @item.scan_file.path('original'),
+               :type => @item.scan_file_content_type,
+               :x_sendfile => true,
+               :disposition => 'inline'
+    
+ end   
+
+ 
    
    
 end

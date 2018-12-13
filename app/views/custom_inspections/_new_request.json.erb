@@ -49,7 +49,19 @@
 			     , {xtype: 'textfield',   fieldLabel: 'Booking', flex: 1, name: 'booking_number'}			     
 			     , {xtype: 'numberfield', fieldLabel: 'Quantit&agrave;', flex: 1, name: 'quantity', hideTrigger: true, width: '40%', allowBlank: false}
 			     , <%= raw extjs_std_datefield('expiration_date', Activity.new, {}, {fieldLabel: 'Da effettuare il'}) -%>
-			     , {xtype: 'textarea',   fieldLabel: 'Note', name: 'notes', fieldStyle: 'font-size: 1em;'}			     
+			     , {xtype: 'textarea',   fieldLabel: 'Note', name: 'notes', fieldStyle: 'font-size: 1em;'}
+				 , {
+		            xtype: 'filefield',
+		            allowBlank: true,
+		            emptyText: 'Seleziona file scansione cedolino',
+		            fieldLabel: 'File',
+		            name: 'scan_file',
+		            buttonText: '',
+		            buttonConfig: {
+		                iconCls: 'upload-icon'
+		            }
+			      }
+			     , {xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}			     			     
 				] //items
 		}, 
 				
@@ -129,7 +141,19 @@
  
  , exe_save: function(form){
  	var url = <%= raw url_for(:controller=>'custom_inspections', :action=>'exe_save').to_json -%>;
-    std_ajax_request.call(form, url, {data: form.getValues()}, 'exe_save_ok');	
+    //std_ajax_request.call(form, url, {data: form.getValues()}, 'exe_save_ok');
+    form.submit({
+        url: url,
+        waitMsg: 'Salvataggio in corso....',
+        success: function(fp, o) {
+			var returnData = o.result; //Ext.JSON.decode(result.responseText);
+			form.exe_save_ok.call(form, returnData);
+        },
+		failure: function(fp, o) {
+            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+            Ext.Msg.alert('Import non eseguito. ', o.result.message);	                            
+        }	                        
+    });
  }
 
  , exe_save_ok: function(returnData){

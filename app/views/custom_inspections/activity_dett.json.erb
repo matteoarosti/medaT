@@ -85,7 +85,13 @@
 			                fieldLabel: 'Richiesti', labelWidth: 100,
 							bind: '{rec.quantity}',
 			                width: 180
-			            }	        							     
+			            }
+			            
+			            <% if @item.scan_file.exists? %>
+			            ,  {
+			            	html: '<%= raw link_to "[Allegato]", @item.scan_file.url(:original, false), target: "_blank" %>'
+			            }	        					
+			            <% end %>		     
 				    ]
 				 }, {
 				 	text: 'Aggiungi container',

@@ -437,7 +437,7 @@ end
   
      
   
- def confirm_with_note(url, my_listeners)
+ def confirm_with_note(url, my_listeners, rec_field_id = 'id')
    ret = "
        var loc_form = Ext.create('Ext.form.Panel', {
                            title: '',
@@ -458,7 +458,7 @@ end
                                          Ext.Ajax.request({
                                             method: 'POST',
                                             url: '#{url}',
-                                            jsonData: {rec_id: rec.get('id'), check_form: form.getValues()},
+                                            jsonData: {rec_id: rec.get('#{rec_field_id}'), check_form: form.getValues()},
                                             success: function(result, request) {
                                                var jsonData = Ext.JSON.decode(result.responseText);
                                                

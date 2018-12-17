@@ -405,6 +405,40 @@ end
      items = items.joins(:handling_header)
      render json: items.limit(2000).as_json(RepairHandlingItem.as_json_prop)     
         
+  
+   when 'to_be_cust_inspect'
+     ret = []
+     to_do_make_available = ActivityDettContainer.joins(:activity)
+        .where("(activities.status IS NULL OR activities.status <> 'ANN') AND activities.execution_date  IS NULL AND (activity_dett_containers.status IS NULL or activity_dett_containers.status <> 'ANN')")
+        .where(execution_at: nil)
+        .order("activities.expiration_date")
+     to_do_make_available.each do |ac|
+       ret << {
+         :to_be_moved_type => 'CUST_INSPECTION',
+         :id => "CUST_INSPECTION_#{ac.id}", #attenzione: se ho lo stesso id di un handling_item potrebbe non essere visualizzato
+         :rec_id => ac.id,
+         :handling_type => 'CUST_INSPECTION',
+         :container_FE => nil,
+         :carrier_id_Name => nil,
+         :driver => nil,
+         :plate  => nil,
+         :created_at => ac.created_at,
+         :booking_notes => 'bbbbb',
+         :handling_header => {
+            :container_number => ac.container_number,
+            :fila => '', :blocco => '', :tiro => '',
+            :shipowner => {:name => ac.activity.shipowner.name},
+            :customer  => {:name => ac.activity.customer.name},
+            :equipment => {:equipment_type => '???'},
+            :booking_number => ac.activity.booking_number,
+            :quantity => ac.activity.quantity,
+            :expiration_date => ac.activity.expiration_date
+         }
+       }         
+     end
+     render json: ret.as_json(HandlingItem.as_json_prop)     
+        
+     
 
    when 'to_be_moved'
      #per ogni hh aggiungo altre informazioni 11111

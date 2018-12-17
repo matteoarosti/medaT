@@ -1,0 +1,215 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  title: 'Da movimentare',
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+	
+  	
+
+  items: [
+       
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    //title: <%= raw t('forms.to_be_handled.list').to_json -%>, flex: 50,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            type: 'ajax',
+        	            url: <%= raw  (root_path + 'handling_headers/get_row_by_filtered_type').to_json -%>,
+        	            extraParams: {filtered_type: <%= raw filtered_type.to_json -%>},
+        	            reader: {
+        	                type: 'json',
+        	                rootProperty: 'items'
+        	            }
+        	        }
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	   dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
+        	    items: [
+        	    
+        	    '->',
+        	    {
+				    xtype: 'form',	
+				    hidden: false,
+				    height: 50,
+				    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+				    padding: '10 10 10 10',
+				    items: [
+				    	{
+				    		flex: 1, hidden: true,
+				            xtype: 'fieldcontainer',
+				            fieldLabel: <%= raw t('forms.to_be_handled.date_time').to_json -%>, labelAlign: 'right',
+				            layout: 'hbox',
+				            items: [
+				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
+				            	{xtype: 'timefield', name: 'datetime_op_time', width:  70},
+				            ]
+				      }, {	
+								flex: 1, padding: '0 0 0 10', hidden: true,
+								xtype: 'checkboxfield',
+				                boxLabel: <%= raw t('forms.to_be_handled.disable_request').to_json -%>,
+				                name: 'hide_check',
+				                inputValue: '1',
+				                value: 1
+				      }			 
+				     
+				    ]
+				 }
+
+				 
+				 
+				 ,  {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large',				 				 
+				 				handler: function(event, toolEl, panel){
+				 						loc_grid = this.up('grid');
+				 						loc_grid.getStore().load();
+				 				}
+				 	}
+				 ]
+			  }
+			],
+
+        	           	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: <%= raw t('forms.to_be_handled.container').to_json -%>,
+			        width: 220,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h1>' + rec.get('handling_header').container_number + '</h1>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: <%= raw t('forms.to_be_handled.details').to_json -%>,
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			           var ret = '';		         
+			           ret += '<table class=import_item_detail>';
+			           ret += '<tr><th>Comp.</th><td>' + rec.data.handling_header.shipowner.name + '</td></tr>';
+			           ret += '<tr><th>Cli.</th><td>' + rec.data.handling_header.customer.name + '</td></tr>';
+			           ret += '</table>';
+			           return ret;
+			         			         			         
+			        }			        	        
+			    }
+			     
+        
+				
+			    , {
+			        dataIndex: 'container_number',
+			        text: '',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          
+			           
+			           var b_id = Ext.id();
+					   setTimeout(function(){me.b_set_execution.call(me, b_id, rec);}, 1);
+					   return '<div id="' + b_id + '"></div>';			           
+			         			         
+			        }			        
+			    }				
+        
+        
+        
+        
+        
+        
+        
+        
+        ], //column
+        
+        
+        
+        	//TODO: DRY
+				get_image_IO: function(val, metaData){
+					if (val == 'I') metaData.tdAttr = 'data-qtip="Entrata"';
+					if (val == 'O') metaData.tdAttr = 'data-qtip="Uscita"';					
+					
+	 				if (val == 'I') return '<i class="fa fa-download fa-3x" style="color:green;"></i>';
+	 				if (val == 'O') return '<i class="fa fa-upload fa-3x" style="color:red;"></i>';
+				},
+				get_image_FE: function(val, metaData){
+					if (val == 'F') metaData.tdAttr = 'data-qtip="Pieno"';
+					if (val == 'E') metaData.tdAttr = 'data-qtip="Vuoto"';					
+					
+					if (val == 'F') return '<i class="fa fa-square fa-3x" style="color:brown;"></i>';
+					if (val == 'E') return '<i class="fa fa-square-o fa-3x" style="color:brown;"></i>';
+				},        
+			    
+			    
+
+			    
+			    listeners: {
+					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
+
+					        if (columnIndex == 1) { //doppio click sul num_container... apro il movimento aperto
+
+									new_rec = HandlingHeader.load(rec.get('handling_header_id'));
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Mov. ' + rec.get('container_number'),
+										closable: true			
+							        });
+							        
+			                		newPanel.getViewModel().setData({rec: new_rec, 
+			                			is_handling_editable: false,
+			                			is_container_editable: false
+			                		});
+			                    	myApp.feedInfo.add(newPanel).show();
+						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);    
+					        }
+					    }
+					}
+				    
+				    
+				    
+				    
+				    
+				    , b_set_execution: function(b_id, rec){
+				        var me = this; //grid
+				        var b = Ext.create('Ext.button.Button', {
+				        	text: 'Registra',
+				        	scale: 'large',
+				        	handler: function(){            	
+				            	<%= raw confirm_with_note(url_for(:controller=>'custom_inspections', :action=>'set_execution'), "
+											{
+							            		afterSave: function(fromWin){
+							            		    fromWin.destroy();
+							            			me.store.load();
+							            		}            	            	
+							            	}            	
+				            	", 'rec_id') %>
+				        	}
+				        });
+						if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
+				      } //b_set    
+
+                        	    
+        	}    
+   
+   
+   
+  ]
+ }
+ ]
+}

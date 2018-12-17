@@ -1,27 +1,14 @@
 {
  success: true,
- items: [
- {
-  xtype: 'container',
-  closable: true,
-  title: 'Da movimentare',
-    layout: {
-	    type: 'vbox',
-	    pack: 'start',
-	    align: 'stretch'
-	},
-
-  items: [
-       
+ items: [ 
 		 {
 				flex: 1,
+				title: 'Vis.Dog.',
 				layout: 'fit',
-        	    //title: <%= raw t('forms.to_be_handled.list').to_json -%>, flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
-				autoScroll: true,  
-				scroll: true,      	    
+				autoScroll: true,  scroll: true,      	    
         	    store: new Ext.data.Store({
         	    	autoLoad: true,
         	    	fields: [],
@@ -141,7 +128,5 @@
    
    
    
-  ]
- }
  ]
 }

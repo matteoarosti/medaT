@@ -437,7 +437,7 @@ end
   
      
   
- def confirm_with_note(url, my_listeners, rec_field_id = 'id')
+ def confirm_with_note(url, my_listeners, rec_field_id = 'id', maximized = false)
    ret = "
        var loc_form = Ext.create('Ext.form.Panel', {
                            title: '',
@@ -498,6 +498,7 @@ end
                            title: 'Conferma',
                            width: 500,
                            height: 300,
+                           maximized: #{maximized},
                            listeners: #{my_listeners}
                        }).show();
    

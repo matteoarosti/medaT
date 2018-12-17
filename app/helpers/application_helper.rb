@@ -435,20 +435,31 @@ end
      number_with_precision(v, precision: 2, separator: ',', delimiter: '.')    
   end
   
+  def b_close_mobile
+    "{
+      text: 'Chiudi',                                   
+      scale: 'large', cls: 'btn-used',
+      handler: function (btn, evt) {
+        var tmp_win  = this.up('window');
+        tmp_win.close();
+      }
+    }"
+  end
      
   
- def confirm_with_note(url, my_listeners, rec_field_id = 'id', maximized = false)
+ def confirm_with_note(url, my_listeners, rec_field_id = 'id', mobile = false)
    ret = "
        var loc_form = Ext.create('Ext.form.Panel', {
                            title: '',
                            bodyPadding: 10,
                            layout: {type: 'vbox', align : 'stretch', pack  : 'start'},
                            items: [
-                             {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes', flex: 1, width: '100%'}                                                                        
+                             {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes', flex: 1, width: '100%', labelAlign: 'top'}                                                                        
                            ]
                            ,   buttons:
-                                 [{
+                                 [#{b_close_mobile + ',' if mobile}'->', {
                                      text: 'Conferma',
+                                     #{"scale: 'large'," if mobile}
                                      handler: function (btn, evt) {
                                                     
                                       var form = this.up('form').getForm();
@@ -498,7 +509,7 @@ end
                            title: 'Conferma',
                            width: 500,
                            height: 300,
-                           maximized: #{maximized},
+                           maximized: #{mobile},
                            listeners: #{my_listeners}
                        }).show();
    

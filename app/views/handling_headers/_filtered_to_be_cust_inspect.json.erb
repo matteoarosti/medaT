@@ -101,12 +101,19 @@
 				           
 				         var b_id = Ext.id();
 						 setTimeout(function(){me.b_set_execution.call(me, b_id, rec);}, 1);
-						 return ret + '<div id="' + b_id + '"></div>';			           			         
+						 return ret + '<div id="' + b_id + '"></div><br/>&nbsp;';			           			         
 			        }
 			      }  
         
         
         ] //column
+        
+        
+        , viewConfig: {
+		    getRowClass: function (record, rowIndex, rp, store) {
+		        //rp.style += 'line-height: 550px;';
+		    }
+		}
         
         
 				    

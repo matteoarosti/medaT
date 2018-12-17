@@ -169,21 +169,15 @@
 			        	
 			        	if (Ext.isEmpty(rec.get('activity_op_id')) == false)
 			        		ret += '<span style="font-weight: bold;">[ ' + rec.data.activity_op.name + ' ]</span>';
-		                ret += '<div style="white-space:normal">' + value.replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+			        	if (Ext.isEmpty(value) == false)
+		                	ret += '<div style="white-space:normal">' + value.replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
 		                
 		                if (!Ext.isEmpty(rec.get('activity_type')) &&
 			        	     rec.get('activity_type').code == 'CUST_INSPECTION'){
-			        	     ret += '<br/> -- -- -- -- -- -- -- -- -- -- --';
-			        	     ret += '<br/>Nr. container: ' + rec.get('quantity');
-			        	     ret += '<br/>Booking: ' + rec.get('booking_number');
-			        	     ret += '<br/>Terminal: ' + rec.get('terminal').code;
-			        	     
-			        	     
-			        	     if (!Ext.isEmpty(rec.get('activity_dett_containers')))
-			        	       ret += '<br/> -- -- -- -- -- -- -- -- -- -- --';
-			        	     
+			        	     ret += '<br/>[' + rec.get('quantity') +', ' + rec.get('booking_number') + ', ' + rec.get('terminal').code + ']';			        	     
+			        	     			        	     
 			        	     Ext.each(rec.get('activity_dett_containers'), function(dett_container) {			        	     	
-								ret += '<br/>' + dett_container.container_number;
+								ret += '<br/>&nbsp;- ' + dett_container.container_number;
 								if (dett_container.status == 'ANN')
 								  ret += ' [ANN]';
 								  
@@ -201,13 +195,13 @@
 		             }
 			    }, {
 			        text: 'Data',
-			        flex: 1,
+			        width: 170,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '';
 			         ret += '<table class=import_item_detail>';			         
-					 ret += '<tr><th>Reg. il</th><td class=normal>' + Ext.util.Format.date(rec.get('created_at'), 'd-m-Y') + '</td></tr>';			         
-					 ret += '<tr><th>Scadenza</th><td>' + Ext.util.Format.date(rec.get('expiration_date'), 'd-m-Y') + '</td></tr>';
-					 ret += '<tr><th>Eseguito</th><td class=ok>' + Ext.util.Format.date(rec.get('execution_date'), 'd-m-Y') + '</td></tr>';
+					 ret += '<tr><th>Regis.</th><td class=normal>' + Ext.util.Format.date(rec.get('created_at'), 'd-m-y') + '</td></tr>';			         
+					 ret += '<tr><th>Scad.</th><td>' + Ext.util.Format.date(rec.get('expiration_date'), 'd-m-y') + '</td></tr>';
+					 ret += '<tr><th>Eseg.</th><td class=ok>' + Ext.util.Format.date(rec.get('execution_date'), 'd-m-y') + '</td></tr>';
 			         ret += '</table>';
 			         return ret;
 			        }			        	        

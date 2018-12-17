@@ -149,12 +149,10 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         
 			         if (rec.get('to_be_moved_type') == 'CUST_INSPECTION'){
-			           ret = '<h3>MESSA A DISPOSIZIONE</h3>';
+			           ret = '<h3>MESSA A DISPOSIZIONE (' + Ext.util.Format.date(rec.data.handling_header.expiration_date, 'd-m-y') + ')</h3>';
 			           ret += '<table class=import_item_detail>';
 			           ret += '<tr><th>Comp.</th><td>' + rec.data.handling_header.shipowner.name + '</td></tr>';
 			           ret += '<tr><th>Cli.</th><td>' + rec.data.handling_header.customer.name + '</td></tr>';
-			           ret += '<tr><th>Booking</th><td>' + rec.data.handling_header.booking_number + ' (richiesti: ' + rec.data.handling_header.quantity + ')</td></tr>';
-			           ret += '<tr><th>Data</th><td>' + Ext.util.Format.date(rec.data.handling_header.expiration_date, 'd-m-y') + '</td></tr>';
 			           ret += '</table>';
 			           return ret;
 			         }

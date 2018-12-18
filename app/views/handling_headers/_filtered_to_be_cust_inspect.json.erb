@@ -27,13 +27,13 @@
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
         	    items: [
-				 ,  {iconCls: 'fa fa-close', text: 'Chiudi', scale: 'medium',				 				 
+				 ,  {iconCls: 'fa fa-close fa-2x', scale: 'medium',				 				 
 				 				handler: function(event, toolEl, panel){
 				 						this.up('grid').destroy();
 				 				}
 				 	}        	            	    
         	     , '->',				 
-				 ,  {iconCls: 'fa fa-refresh', text: 'Refresh', scale: 'medium',				 				 
+				 ,  {iconCls: 'fa fa-refresh fa-2x',  scale: 'medium',				 				 
 				 				handler: function(event, toolEl, panel){
 				 						loc_grid = this.up('grid');
 				 						loc_grid.getStore().load();

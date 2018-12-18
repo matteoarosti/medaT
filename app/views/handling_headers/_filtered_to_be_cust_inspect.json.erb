@@ -47,17 +47,12 @@
         	    
 			    columns: [{
 			        dataIndex: 'container_number',
-			        text: <%= raw t('forms.to_be_handled.container').to_json -%>,
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 				         var me = this, ret = '';
 				         ret += '<h2>' + rec.get('handling_header').container_number + '</h2>';
 				         ret += rec.data.handling_header.shipowner.name + ' - ' + rec.data.handling_header.customer.name;  
-				         return ret;
-				           
-				         var b_id = Ext.id();
-						 setTimeout(function(){me.b_set_execution.call(me, b_id, rec);}, 1);
-						 return ret + '<div id="' + b_id + '"></div><br/>&nbsp;';			           			         
+				         return ret;				          
 			        }
 			      }  
         

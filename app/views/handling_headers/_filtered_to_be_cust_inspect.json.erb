@@ -49,6 +49,8 @@
 				         var me = this, ret = '';
 				         ret += '<h2>' + rec.get('handling_header').container_number + '</h2>';
 				         ret += rec.data.handling_header.shipowner.name + ' - ' + rec.data.handling_header.customer.name;
+				         ret += '<br/><button onclick="copyText()">Registra</button>';  
+				         return ret;
 				           
 				         var b_id = Ext.id();
 						 setTimeout(function(){me.b_set_execution.call(me, b_id, rec);}, 1);

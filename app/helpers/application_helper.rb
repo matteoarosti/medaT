@@ -454,7 +454,7 @@ end
                            bodyPadding: 10,
                            layout: {type: 'vbox', align : 'stretch', pack  : 'start'},
                            items: [
-                             {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes', flex: 1, width: '100%', labelAlign: 'top'}                                                                        
+                             {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes', flex: 1, width: '100%', labelAlign: 'top', msgTarget: 'under'}                                                                        
                            ]
                            ,   buttons:
                                  [#{b_close_mobile + ',' if mobile}'->', {

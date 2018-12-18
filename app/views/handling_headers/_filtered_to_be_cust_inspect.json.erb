@@ -5,8 +5,6 @@
 				flex: 1,
 				title: 'Vis.Dog.',
 				layout: 'fit',
-        	    tools: [
-                ],
         	    xtype: 'gridpanel',
 				autoScroll: true,  scroll: true,      	    
         	    store: new Ext.data.Store({
@@ -28,42 +26,8 @@
         	   dockedItems: [
         	   { 
         	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
-        	    items: [
-        	    
+        	    items: [        	    
         	    '->',
-        	    {
-				    xtype: 'form',	
-				    hidden: false,
-				    height: 50,
-				    layout: {
-					    type: 'hbox',
-					    pack: 'start',
-					    align: 'stretch'
-					},
-				    padding: '10 10 10 10',
-				    items: [
-				    	{
-				    		flex: 1, hidden: true,
-				            xtype: 'fieldcontainer',
-				            fieldLabel: <%= raw t('forms.to_be_handled.date_time').to_json -%>, labelAlign: 'right',
-				            layout: 'hbox',
-				            items: [
-				            	{xtype: 'datefield', name: 'datetime_op_date', width: 120},
-				            	{xtype: 'timefield', name: 'datetime_op_time', width:  70},
-				            ]
-				      }, {	
-								flex: 1, padding: '0 0 0 10', hidden: true,
-								xtype: 'checkboxfield',
-				                boxLabel: <%= raw t('forms.to_be_handled.disable_request').to_json -%>,
-				                name: 'hide_check',
-				                inputValue: '1',
-				                value: 1
-				      }			 
-				     
-				    ]
-				 }
-
-				 
 				 
 				 ,  {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large',				 				 
 				 				handler: function(event, toolEl, panel){
@@ -85,6 +49,7 @@
 				         var me = this, ret = '';
 				         ret += '<h2>' + rec.get('handling_header').container_number + '</h2>';
 				         ret += rec.data.handling_header.shipowner.name + ' - ' + rec.data.handling_header.customer.name;
+				         return ret;
 				           
 				         var b_id = Ext.id();
 						 setTimeout(function(){me.b_set_execution.call(me, b_id, rec);}, 1);

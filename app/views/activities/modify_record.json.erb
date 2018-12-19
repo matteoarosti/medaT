@@ -41,7 +41,7 @@
 		                layout: 'hbox',
 		                anchor: '100%',
 		                items: [ 	
-			        		  <%= raw extjs_std_textfield('booking_number', @item) -%>
+			        		  <%= raw extjs_std_textfield('booking_number', @item, {allowBlank: true}) -%>
 			        		, <%= raw extjs_std_numberfield('quantity', @item, {}, labelAlign: 'right') -%>					    
 			        	]
 					 }

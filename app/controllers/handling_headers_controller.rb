@@ -371,7 +371,7 @@ end
      #per ogni hh aggiungo altre informazioni 
      hh_as_json_prop = HandlingHeader.as_json_prop
      hh_as_json_prop[:methods] << :get_lock_INSPECT_date
-     items = HandlingHeader.where('1=1').locked_INSPECT
+     items = HandlingHeader.where('1=1').not_closed.locked_INSPECT
      
      #prendo solo quelli che hanno un inspect aperto abbinato ad una nave
      items = items.joins(" INNER JOIN handling_items hi ON handling_headers.id = hi.handling_header_id AND hi.lock_fl = true

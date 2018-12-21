@@ -38,7 +38,16 @@ class CustomInspectionsController < ApplicationController
   
   def activity_dett_list
     @item = Activity.find(params[:activity_id])
-    render json: {:success => true, items: @item.activity_dett_containers}
+    @item_detts = @item.activity_dett_containers
+    
+    if params[:set_amount] == true
+      #preimposto (se presente) il prezzo di default dell'attivita', a meno che non abbia gia' un prezzo sul dettaglio
+      @item_detts.collect! { |ad|         
+         ad.op_amount = @item.activity_op.default_price.to_i if ad.op_amount.nil?
+      }
+    end    
+      
+    render json: {:success => true, items: @item_detts}
   end
   
   def set_available

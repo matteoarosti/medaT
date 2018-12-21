@@ -470,6 +470,26 @@
 			                        
 			                        	//disabilito per prevenire doppia esecuizione
 			                        	button.disable();
+			                        	
+			                        	
+			                        	//se ho i dettagli container, il prezzo lo imposto da li
+			        					if (!Ext.isEmpty(rec.get('activity_type')) &&
+			        						rec.get('activity_type').code == 'CUST_INSPECTION'){
+												acs_show_win_std('Dettagli attivit&agrave;', 
+														'<%= url_for(:controller=>'custom_inspections', :action=>'activity_dett') -%>', 
+														{rec_id: rec.get('id'), set_amount: true}, 800, 500, {
+															afterSave: function(from_win){
+																from_win.destroy();
+																loc_grid.store.load();
+															}
+														}, null, 'Y');
+			        						return false;
+			        					}
+			                        	
+			                        	
+			                        	
+			                        	
+			                        	
 				                			                             
 			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
 			                           header_form_values = header_form.getValues();

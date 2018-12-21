@@ -28,6 +28,28 @@
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
+        	    
+        	    plugins: [
+		          Ext.create('Ext.grid.plugin.CellEditing', {
+		            clicksToEdit: 1,
+		            listeners:{
+			        	afteredit: function(cellEditor, context, eOpts){
+				        	var grid = context.grid;
+			        	   	grid.recalc_sum_amount.call(grid, grid);
+			        	}
+					 }
+		          })
+		        ],
+		        
+		        recalc_sum_amount: function(grid){
+		        	var sum_amount = grid.down('#sum_amount'),	
+		        		tmp_sum_amount = 0;
+					grid.store.each(function(r){
+						tmp_sum_amount += parseFloat(r.get('op_amount'));
+					});
+			        sum_amount.setValue(tmp_sum_amount);
+		        },
+		        
 				autoScroll: true,  
 				scroll: true,      	    
         	    store: new Ext.data.Store({
@@ -37,7 +59,8 @@
         	            url: <%= raw  (root_path + 'custom_inspections/activity_dett_list').to_json -%>,
         	            extraParams: {
         	            	activity_id: <%= raw @item.id %>,
-        	            	form_user: {}
+        	            	form_user: {},
+        	            	set_amount:  <%= raw params[:set_amount].to_json %>
         	            },
         	            reader: {
         	                type: 'json',
@@ -54,11 +77,83 @@
 						},        	            
         	            
         	        }
+        	        
         	    }),
         	   
  		        	   
         	           	   
         	   dockedItems: [
+
+<% if params[:set_amount] == true %>
+        	   {
+        	   	xtype: 'toolbar', dock: 'bottom',
+        	   	items: ['->', {
+        	   		xtype: 'numberfield', 
+        	   		fieldLabel: 'Totale costo operazioni',
+        	   		itemId: 'sum_amount',
+        	   		name: 'amount',
+        	   		value: <%= @item.amount.to_f.to_json %>,
+        	   		fieldStyle: 'font-weight: bold; font-size: 18px;'
+        	   	}, {
+				 	text: 'Chiudi attivit&agrave; e salva importo',
+				 	scale: 'large',
+				 	handler: function(){
+				 		var me = this.up('grid');
+				 		
+				 		var containers_dett_amount = [];
+				 		me.store.each(function(r){
+							containers_dett_amount.push({
+								id: r.get('id'),
+								op_amount: r.get('op_amount')
+							});
+						});	
+				 		
+						  Ext.Ajax.request({
+			                    url: <%= raw url_for(:controller=>'activities', :action=>'set_amount').to_json -%>,
+			                    waitMsg: 'Salvataggio in corso....',
+								method:'POST',                    
+			                    jsonData: {data: {id: <%= params[:rec_id].to_json -%>, 
+			                    				  amount: me.down('#sum_amount').getValue(),
+			                    				  containers_dett_amount: containers_dett_amount
+			                    				  }},	
+			             	
+								success: function(result, request) {					
+									var returnData = Ext.JSON.decode(result.responseText);
+									
+									//error
+									if (returnData.success == false){
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: returnData.message,
+					                        icon: Ext.MessageBox.ERROR,
+					                        buttons: Ext.Msg.OK
+				                    	})
+				                      return false;										
+									}								
+					 							
+					 				//ok
+					 				  var loc_win = this.up('window');
+					 				  loc_win.fireEvent('afterSave', loc_win);
+					 							
+								}, scope: this,
+								
+								failure: function(rec, op) {
+									var result = Ext.JSON.decode(op.getResponse().responseText);
+									Ext.MessageBox.show({
+				                        title: 'EXCEPTION',
+				                        msg: result.message,
+				                        //icon: Ext.MessageBox.ERROR,
+				                        buttons: Ext.Msg.OK
+			                    	})					
+								}, scope: this,						
+												 
+					    	});					 		
+				 		
+				 	}
+				 }]
+        	   },
+<% end %>        	   
+        	   
         	   { 
         	    xtype: 'toolbar', dock: 'top',
         	    items: [{
@@ -183,12 +278,37 @@
 			         }
 			      <% end %>   			         
 			        }			        
-			    }			    
+			    }
+			    
+			    
+			    <% if params[:set_amount] == true %>
+			    , {
+			    	dataIndex: 'op_amount',
+			    	text: 'Importo', align: 'right',
+			    	editor: {xtype: 'numberfield', allowBlank: false, msgTarget: 'under'},
+					renderer: function(value, meta){
+					      meta.style = 'border: 1px solid black;'; // applied style for DIV element
+					      //meta.tdAttr = 'style="border:1px solid black;"'; // applied style for TD element
+					      return value;      
+					   }
+			    }
+			    <% end %>
 			            
         ] //columns
         
         
      	, listeners: {
+     	
+     	
+ <% if params[:set_amount] == true %>
+	 		afterrender: function(grid){
+		     	grid.getStore().on('load', function(){
+				    grid.recalc_sum_amount.call(grid, grid);
+				}); 		
+	 		},
+<% end %>
+     	
+     	
         	itemcontextmenu : function(item, record, index, e, eOpts){
         		eOpts.stopEvent();
                 var xy = eOpts.getXY();	                	

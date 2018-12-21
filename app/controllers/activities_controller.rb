@@ -28,12 +28,26 @@ class ActivitiesController < ApplicationController
   
   def set_amount
     item = Activity.find(params[:data][:id])
-    params[:data].permit!
-    item.update(params[:data])
+    #params[:data].permit!
+    #item.update(params[:data])
+    
+    #se ho la gestione per dettaglio (cust_inpsect) aggiorno il prezzo acnhe sulle righe, oltre il totale
+    if !params[:data][:containers_dett_amount].nil?
+      params[:data][:containers_dett_amount].each do |p|
+        d = ActivityDettContainer.find(p[:id])
+        d.op_amount = p[:op_amount]
+        d.save!
+      end
+    end
+      
+    item.amount = params[:data][:amount]
     item.save!()
     render json: {:success => true, :data=>[item.as_json(Activity.as_json_prop)]}    
   end
     
+  def set_amount2
+    render json: {success: true}
+  end
   
   
   

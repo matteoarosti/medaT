@@ -87,7 +87,14 @@
 <% if params[:set_amount] == true %>
         	   {
         	   	xtype: 'toolbar', dock: 'bottom',
-        	   	items: ['->', {
+        	   	items: [{
+		            text: 'Chiudi',												            
+		            scale: 'large',
+		            handler: function (btn, evt) {
+		            	var tmp_win  = this.up('window');
+		            	tmp_win.destroy();
+		            }
+		          }, '->', {
         	   		xtype: 'numberfield', 
         	   		fieldLabel: 'Totale costo operazioni',
         	   		itemId: 'sum_amount',

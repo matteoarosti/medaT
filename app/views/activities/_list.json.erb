@@ -646,6 +646,9 @@
 			        	if (!Ext.isEmpty(rec.get('amount'))) return '';
 			        	if (Ext.isEmpty(rec.get('activity_op').default_price) || rec.get('activity_op').default_price == 0) return '';
 			        	
+			        	if (!Ext.isEmpty(rec.get('activity_type')) && rec.get('activity_type').code == 'CUST_INSPECTION') return '';
+			        	
+			        	
 			            var id = Ext.id();
 			            setTimeout(function() {
 			            			          		                	

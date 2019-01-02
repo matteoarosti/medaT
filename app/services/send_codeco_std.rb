@@ -166,6 +166,10 @@ class SendCodecoStd
       #Se il movimento è di EXPORT allora esiste un BOOKING
       if c_export == "E" then
         if c_booking != ''
+          
+          #segnalo errore se port is null
+          raise "Error: port null per il booking #{hi.handling_header.booking.num_booking}" if hi.handling_header.booking.port.nil?
+          
           c_destinazione = hi.handling_header.booking.port.port_code.to_s
           if c_destinazione != ''
             c_row = c_row + 'RFF+BN:' + c_booking + "'" + "\n"

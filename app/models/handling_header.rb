@@ -789,6 +789,17 @@ end
  def booking_id_Name
   self.booking.num_booking if self.booking
  end 
-
+ 
+ 
+################################################################
+# verifico se il container risulta svincolato (in base a nave viaggio)
+################################################################
+ def is_auth_for_o_emptying
+   item_discharge = self.get_I_DISCHARGE
+   return false if item_discharge.nil?
+   
+   #passo solo la prima parte del viaggio (.split[0]) perche' in medaT a volte ho 1902 SB...
+   return ExternalData.is_auth_for_o_emptying(self.container_number, item_discharge.ship.imo_code, item_discharge.voyage.to_s.split[0])
+ end
 
 end

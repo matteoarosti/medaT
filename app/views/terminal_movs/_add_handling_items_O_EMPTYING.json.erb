@@ -27,7 +27,30 @@
     <%= raw extjs_to_be_moved('to_be_moved', @hh, @new_rec) -%>,
     
     <%= raw extjs_notes('notes', @hh, @new_rec) -%>
+    
+    
+    <%
+     #se necessario verifico che il container risulti svincolato (sono state inserite le bolle doganali)
+     if !@hh.shipowner.nil? && @hh.shipowner.auth_required_for_o_emptying
+     
+     	if @hh.is_auth_for_o_emptying
+     	 text_info  = 'Container svincolato. Consentirne l\'uscita'
+     	 text_color = 'green';
+     	else
+     	 text_info  = 'Attenzione!!! Il container non risulta svincolato (dogana). <br>Non autorizzare l\'uscita'
+     	 text_color = 'red';
+     	end
+          
+    %>
+    , {
+    	xtype: 'displayfield', height: 50, fieldStyle: 'color: <%= text_color -%>; font-weight: bold; font-size: 1.3em;',
+    	value: <%= raw text_info.to_json -%>
+    }
+    <% end %>
+    
    ],
+   
+   
    
 	buttons:[<%= render :partial=>'add_handling_items_buttons' -%>]
 	  

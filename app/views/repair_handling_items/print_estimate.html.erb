@@ -1,5 +1,29 @@
 <%
 formValues = JSON.parse params['formValues']
+lng = "it"
+lng = "en" if formValues['lng_en']==true
+
+et_trad = {}
+et_trad["it"] = {}
+et_trad["en"] = {}
+et_trad["it"][:riparazione_container]  		= "Riparazione container"
+et_trad["it"][:data_ingresso_officina] 		= "Data ingresso in officina"
+et_trad["it"][:data_redazione_preventivo] 	= "Data redazione preventivo"
+et_trad["it"][:data_autorizzazione] 		= "Data autorizzazione"
+et_trad["it"][:dettagli] 					= "Dettaglio lavorazione"
+et_trad["it"][:totali] 						= "Dettaglio lavorazione"
+et_trad["it"][:da_fornitore] 				= "Da fornitore"
+et_trad["it"][:a_compagnia] 				= "A compagnia"
+
+et_trad["en"][:riparazione_container] 		= "Container repair"
+et_trad["en"][:data_ingresso_officina] 		= "Entry date"
+et_trad["en"][:data_redazione_preventivo] 	= "Quote date"
+et_trad["en"][:data_autorizzazione] 		= "Authorization date"
+et_trad["en"][:dettagli] 					= "Details"
+et_trad["en"][:totali] 						= "Totals"
+et_trad["en"][:da_fornitore] 				= "From supplier"
+et_trad["en"][:a_compagnia] 				= "To shipowner"
+
 %>
 
 <style type="text/css">
@@ -22,10 +46,10 @@ formValues = JSON.parse params['formValues']
 </style>
 
 
-<h1 class=medaT-report>Riparazione container [ <%= @item.handling_header.container_number -%> ] - <%= @item.handling_header.shipowner.short_name.to_s -%> | <%= @item.handling_header.equipment.sizetype.to_s -%></h1>
-<br/>Data ingresso in officina: <%= @item.in_garage_at.strftime("%d/%m/%y %H:%M") unless @item.in_garage_at.nil? -%>
-<br/>Data redazione preventivo: <%= @item.estimate_at.strftime("%d/%m/%y %H:%M") unless @item.estimate_at.nil? -%>
-<br/>Data autorizzazione: <%= @item.estimate_authorized_at.strftime("%d/%m/%y %H:%M") unless @item.estimate_authorized_at.nil? -%>
+<h1 class=medaT-report><%= et_trad[lng][:riparazione_container] -%> [ <%= @item.handling_header.container_number -%> ] - <%= @item.handling_header.shipowner.short_name.to_s -%> | <%= @item.handling_header.equipment.sizetype.to_s -%></h1>
+<br/><%= et_trad[lng][:data_ingresso_officina] -%>: <%= @item.in_garage_at.strftime("%d/%m/%y %H:%M") unless @item.in_garage_at.nil? -%>
+<br/><%= et_trad[lng][:data_redazione_preventivo] -%>: <%= @item.estimate_at.strftime("%d/%m/%y %H:%M") unless @item.estimate_at.nil? -%>
+<br/><%= et_trad[lng][:data_autorizzazione] -%>: <%= @item.estimate_authorized_at.strftime("%d/%m/%y %H:%M") unless @item.estimate_authorized_at.nil? -%>
 
 <table class="row_details medaT-report">
 
@@ -34,28 +58,28 @@ formValues = JSON.parse params['formValues']
  <tr>
   <th colspan=2>
   <% if User.current.can?(:repair, :price_provider) && formValues['show_provider_prices']==true %>  
-  	<th class="th_header" colspan=4>Da fornitore</th>
+  	<th class="th_header" colspan=4><%= et_trad[lng][:da_fornitore] -%></th>
   <% end %>
   <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>
-   	<th class="th_header" colspan=4>A compagnia</th>
+   	<th class="th_header" colspan=4><%= et_trad[lng][:a_compagnia] -%></th>
   <% end %>
  </tr>
 <% end %> 
 
  <tr>
-  <th>Dettaglio lavorazione</th>
-  <th class="n bl">Q.t&agrave;</th>
+  <th><%= et_trad[lng][:dettagli] -%></th>
+  <th class="n bl">Q.ty</th>
 
 <% if User.current.can?(:repair, :price_provider) && formValues['hide_prices']==false && formValues['show_provider_prices']==true %>
   <th class="n bl">&euro;/h</th>
-  <th class=n>Tempo</th>
+  <th class=n>Time</th>
   <th class=n>Pr.Mat.</th>
   <th class=n>Tot</th>
 <% end %>  
   
 <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true && formValues['hide_prices']==false %>		  
   <th class="n bl">&euro;/h</th>
-  <th class=n>Tempo</th>
+  <th class=n>Time</th>
   <th class=n>Pr.Mat.</th>
   <th class=n>Tot</th>  
 <% end %>
@@ -87,7 +111,7 @@ formValues = JSON.parse params['formValues']
     <% if r.confirmed==false %>
      <span class=canceled>[ RIGA ELIMINATA ]<br/></span>
     <% end %>
-  	<span class="processing_name"><%= r.repair_processing_name -%></span>
+  	<span class="processing_name"><%= r.repair_processing_name(lng) -%></span>
 	<% if User.current.admin_can?(:repair, :table) && formValues['show_customer_prices']==true %>
 	 <% if !r.code1_code2.to_s.empty? %>			         
 		<br/><%= r.code1_code2.to_s -%>
@@ -137,7 +161,7 @@ formValues = JSON.parse params['formValues']
 
 <% if formValues['hide_prices']==false %>
   <tr class="details_totals">
-   <td colspan=2 align=right>Totali</td>
+   <td colspan=2 align=right><%= et_trad[lng][:totali] -%></td>
    
   <% if User.current.can?(:repair, :price_provider) && formValues['show_provider_prices']==true %>   
    <td>&nbsp;</td>

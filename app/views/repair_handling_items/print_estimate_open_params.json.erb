@@ -27,7 +27,8 @@
 <% elsif User.current.can?(:repair, :price_provider) %>
 		{xtype: 'checkbox', value: true, name: 'show_provider_prices', fieldLabel: 'Mostra importi', inputValue: true, uncheckedValue: false},     	     	
 <% end %>     	
-     	{xtype: 'checkbox', value: false, name: 'show_deleted_row', fieldLabel: 'Mostra righe annullate', inputValue: true, uncheckedValue: false}
+     	{xtype: 'checkbox', value: false, name: 'show_deleted_row', fieldLabel: 'Mostra righe annullate', inputValue: true, uncheckedValue: false},
+     	{xtype: 'checkbox', value: false, name: 'lng_en', fieldLabel: 'Stampa in inglese', inputValue: true, uncheckedValue: false}
 	],
     
    buttons: [

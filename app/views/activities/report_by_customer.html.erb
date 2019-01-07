@@ -71,7 +71,7 @@ total_activity = 0
 							<br>[<%= row.execution_notes -%>]
 						<% end %> 
 						
-						<% if row.activity_type.code == 'CUST_INSPECTION' %>
+						<% if !row.activity_type.nil? && row.activity_type.code == 'CUST_INSPECTION' %>
 						  <% row.activity_dett_containers.each do |adc| %>						    
 						    <%= raw "<br/> #{adc.container_number}" -%>
 						    <%= raw " [ANN]" if adc.status == 'ANN' -%>

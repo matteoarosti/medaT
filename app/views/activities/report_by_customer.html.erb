@@ -70,6 +70,15 @@ total_activity = 0
 						<% unless row.execution_notes.blank? -%>
 							<br>[<%= row.execution_notes -%>]
 						<% end %> 
+						
+						<% if row.activity_type.code == 'CUST_INSPECTION' %>
+						  <% row.activity_dett_containers.each do |adc| %>						    
+						    <%= raw "<br/> #{adc.container_number}" -%>
+						    <%= raw " [ANN]" if adc.status == 'ANN' -%>
+						    <%= raw " (#{number_to_currency(adc.op_amount)})" if !adc.op_amount.nil? -%>
+						  <% end %>
+						<% end %>
+						
 					</td>				
 					<td align=right><%= number_to_currency(row.amount) -%></td>
 				</tr>

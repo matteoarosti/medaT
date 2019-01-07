@@ -4,13 +4,13 @@ class RepairEstimateItem < ActiveRecord::Base
   
 
   #ToDo: DRY  
-  def repair_processing_name
+  def repair_processing_name(lng = "it")
    if self.repair_processing.nil?
     return '#PROC_DELETE#'
    else 
-    return [ self.repair_processing.repair_position.nil? ? '#DEL#' : self.repair_processing.repair_position.description_it, 
-      self.repair_processing.repair_component.nil? ? '#DEL#' : self.repair_processing.repair_component.description_it, 
-      self.repair_processing.description_it.to_s].join(' | ')
+    return [ self.repair_processing.repair_position.nil? ? '#DEL#' : self.repair_processing.repair_position.send("description_#{lng}"), 
+      self.repair_processing.repair_component.nil? ? '#DEL#' : self.repair_processing.repair_component.send("description_#{lng}"), 
+      self.repair_processing.send("description_#{lng}").to_s].join(' | ')
    end   
   end
  

@@ -32,7 +32,7 @@ class ClearDuplicated
     test_record("customer", %w(activities ship_prepares weighs), id_from, id_to)
   end
   def update_customer(id_from, id_to)
-    update_record("ship", %w(activities ship_prepares weighs), id_from, id_to)
+    update_record("customer", %w(activities ship_prepares weighs), id_from, id_to)
   end
   
 

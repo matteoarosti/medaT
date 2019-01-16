@@ -23,7 +23,17 @@ class ClearDuplicated
   def update_ship(id_from, id_to)
     update_record("ship", %w(bookings handling_items import_headers to_do_items ship_prepares), id_from, id_to)
   end
-  
+
+    
+  ##############################################
+  # CUSTOMER
+  ##############################################
+  def test_customer(id_from, id_to)
+    test_record("customer", %w(activities ship_prepares weighs), id_from, id_to)
+  end
+  def update_customer(id_from, id_to)
+    update_record("ship", %w(activities ship_prepares weighs), id_from, id_to)
+  end
   
 
   

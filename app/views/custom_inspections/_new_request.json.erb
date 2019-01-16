@@ -31,18 +31,23 @@
 							:valueField => 'id',
 							:displayField => 'name',
 							:store => extjs_std_store_data(Shipowner.all),
-							:listeners => "change: function(combo, record, index) {								  
-											  var me = this, //combo 
-											      s_selected = combo.lastSelection[0];
-											  if (!Ext.isEmpty(s_selected))
-											  	this.up('fieldcontainer').down('checkbox').setValue(s_selected.get('manage_full'));
+							:listeners => "change: function(combo, record, index) {
+										      var me = this, //combo
+										          m_form = me.up('form');										          
+										      m_form.set_to_be_made_available.call(m_form, m_form);
 										    }"
 						)				
 					-%>               			    
 			     , <%= raw extjs_std_combo('activity_op_id', Activity.new,
 			     				:fieldLabel => 'Operazione',
 			     				:input_name => 'activity_op_id', :valueField => 'id', :displayField => 'name',
-			     				:store => extjs_std_store_data(ActivityOp.all_by_type_code('CUST_INSPECTION'))) -%>
+			     				:store => extjs_std_store_data(ActivityOp.all_by_type_code('CUST_INSPECTION')),
+								:listeners => "change: function(combo, record, index) {								  
+										      var me = this, //combo
+										          m_form = me.up('form');										          
+										      m_form.set_to_be_made_available.call(m_form, m_form);
+										    }"			     				
+			     				) -%>
 			     , <%= raw extjs_std_booleanfield('to_be_made_available', Activity.new, {}, {readOnly: false, fieldLabel: 'Messa a disposizione', width: 300, labelWidth: 260, disabled: false}) -%>			     
 				 , <%= raw extjs_std_combo_model('terminal', Activity.new, {}, {flex: 1, fieldLabel: 'Terminal'}) -%>				 			     
 			     
@@ -129,6 +134,20 @@
    }
   ]
 
+  
+ , set_to_be_made_available(form){
+   form.getForm().findField('to_be_made_available').setValue(false);
+   //in base a compagnia (se gestisco i pieni) e al flag sull'operazione scelta (to_be_made_available) setto o meno il flag "Messa a disposizione"
+   var 	f_shipowner 	= form.getForm().findField('shipowner_id'),
+   		f_activity_op 	= form.getForm().findField('activity_op_id');   
+   		
+   if (!Ext.isEmpty(f_shipowner.valueModels[0]) && !Ext.isEmpty(f_activity_op.valueModels[0])){
+   	 if (f_shipowner.valueModels[0].get('manage_full') == true && f_activity_op.valueModels[0].get('to_be_made_available') == true)
+   	 	form.getForm().findField('to_be_made_available').setValue(true);
+   }
+   
+ }
+  
   
   
  , click_save: function(form){

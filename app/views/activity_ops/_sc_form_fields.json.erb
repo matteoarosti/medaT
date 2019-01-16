@@ -3,5 +3,6 @@
 	{"fieldLabel":"Lavorazione","bind":"{rec.name}","maxLength":50},
 	{"fieldLabel":"Codice","bind":"{rec.code}","maxLength":10},
 	<%= raw extjs_std_numberfield_bind('default_price', @new_rec, {allowBlank: true}) -%>,
-	<%= raw extjs_std_combo_bind('activity_type', @new_rec, valueField: 'id', displayField: 'name', :store => extjs_std_store_data(ActivityType.all)) -%>
+	<%= raw extjs_std_combo_bind('activity_type', @new_rec, valueField: 'id', displayField: 'name', :store => extjs_std_store_data(ActivityType.all)) -%>,
+	{"fieldLabel":"Messa a disposizione","bind":"{rec.to_be_made_available}", xtype: 'checkbox'},
 ]

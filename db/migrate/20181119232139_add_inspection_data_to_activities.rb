@@ -54,6 +54,7 @@ class AddInspectionDataToActivities < ActiveRecord::Migration
     
     #per indicare le attivita' legate (selezionabili) ad una certa tipologia di attivita'
     add_reference :activity_ops, :activity_type
+    add_column    :activity_ops, :to_be_made_available, :boolean  #se l'operazione puo' richiedere la messa a disposizione
 
   end
 end

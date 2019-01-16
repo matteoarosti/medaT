@@ -64,8 +64,8 @@ class ClearDuplicated
   # execute STD
   ############################################
   def update_record(entity_name, table_list, id_from, id_to)    
-    rec_from = Shipowner.find(id_from)
-    rec_to   = Shipowner.find(id_to)
+    rec_from = Object.const_get( entity_name.camelize ).find(id_from)
+    rec_to   = Object.const_get( entity_name.camelize ).find(id_to)
     
     puts "From: (#{id_from}) #{rec_from.name.to_s}"
     puts "To:   (#{id_to}) #{rec_to.name.to_s}"

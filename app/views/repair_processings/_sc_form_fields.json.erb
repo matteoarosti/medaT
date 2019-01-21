@@ -6,5 +6,8 @@
 	{"fieldLabel":"<%= t('tables.std.description_it') -%>","bind":"{rec.description_it}","maxLength":50},
 	{"fieldLabel":"<%= t('tables.std.description_en') -%>","bind":"{rec.description_en}","maxLength":50},
 
-	<%= raw extjs_std_combo_bind('preparation_time_type', @new_rec, :field_name => 'preparation_time_type', :store => extjs_std_store_data(RepairProcessing.new.preparation_time_type_get_data_json)) -%>	
+	<%= raw extjs_std_combo_bind('preparation_time_type', @new_rec, :field_name => 'preparation_time_type', :store => extjs_std_store_data(RepairProcessing.new.preparation_time_type_get_data_json)) -%>,
+	
+	{"fieldLabel":"Proponi per lavorazione interna (in ispezione)", "bind":"{rec.suggest_for_int_on_inspect}",  xtype: 'checkbox'},	
+	{"fieldLabel":"Proponi per lavorazione officina (in ispezione)","bind":"{rec.suggest_for_off_on_inspect}",  xtype: 'checkbox'}
 ]

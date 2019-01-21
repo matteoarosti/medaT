@@ -17,7 +17,12 @@
      
     items: [       
     <%= raw extjs_std_combo_model('repair_position', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>,
-    <%= raw extjs_std_combo_model('repair_component', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>
+    <%= raw extjs_std_combo_model('repair_component', @item, {:allowBlank=>true}, {:multiSelect => false}) -%>,
+    <%= raw extjs_std_booleanfield('suggest_for_int_on_inspect', @item, {:allowBlank=>true}) -%>,
+    <%= raw extjs_std_booleanfield('suggest_for_off_on_inspect', @item, {:allowBlank=>true}) -%>
+    	
+	
+    
     ],
     
    buttons: [

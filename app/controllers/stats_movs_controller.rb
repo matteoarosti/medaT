@@ -22,6 +22,13 @@ class StatsMovsController < ApplicationController
      gcs = gcs.order('hour(datetime_op) DESC').limit(200)
 =end
 
+    where_by_form_values = ' '
+        
+    unless params[:formValues].nil?  
+      where_by_form_values += " AND datetime_op >= '#{Time.zone.parse(params[:formValues]['flt_date_from']).beginning_of_day}'"  unless params[:formValues]['flt_date_from'].blank?
+      where_by_form_values += " AND datetime_op <= '#{Time.zone.parse(params[:formValues]['flt_date_to']).end_of_day}'"  unless params[:formValues]['flt_date_to'].blank?        
+    end
+      
     gcs = HandlingHeader.find_by_sql("
       SELECT
         dd.op_h, dd.handling_type, dd.handling_item_type, dd.container_FE, sum(dd.t_cont) as t_cont
@@ -30,7 +37,8 @@ class StatsMovsController < ApplicationController
            count(*) as t_cont 
           FROM handling_headers hh 
           INNER JOIN handling_items hi ON hh.id = hi.handling_header_id
-          WHERE (hi.operation_type='MT' and hi.container_FE <>'') 
+          WHERE (hi.operation_type='MT' and hi.container_FE <>'')
+            #{where_by_form_values}
           GROUP BY date(datetime_op), hour(datetime_op), hi.handling_type, hi.handling_item_type, container_FE
       ) as dd
       GROUP BY dd.op_h, dd.handling_type, dd.handling_item_type, container_FE

@@ -12,6 +12,29 @@
 	}, 
 	
 	
+  tbar: [
+		{
+		    xtype: 'form',
+		    layout: {
+			    type: 'hbox',
+			    pack: 'start',
+			    align: 'stretch'
+			}, 
+			items: [  
+  				{xtype: 'datefield', fieldLabel: 'Da data', labelAlign: 'right', name: 'flt_date_from'},
+  				{xtype: 'datefield', fieldLabel: 'A data', labelAlign: 'right' , name: 'flt_date_to'},
+  				{xtype: 'button', text: 'Aggiorna', text: 'Applica <i class="fa fa-search"></i>', handler: function(){
+  						var me = this,
+  							m_form  = me.up('form'),
+  							m_graph = me.up('#stats_dashboard').down('cartesian');
+  						m_graph.getStore().proxy.extraParams.formValues = m_form.getValues();
+  						m_graph.getStore().load();
+  					}
+  				}
+  			]
+  		}		
+  ],	
+	
   items: [
   
 	 {
@@ -46,7 +69,8 @@
 						type: 'json',
 						method: 'POST',
 						rootProperty: 'items'
-					}
+					}, 
+					paramsAsJson: true
 				},
 					
 				fields: [] //serve

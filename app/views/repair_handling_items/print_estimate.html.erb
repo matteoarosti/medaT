@@ -12,7 +12,7 @@ et_trad["it"][:data_redazione_preventivo] 	= "Data redazione preventivo"
 et_trad["it"][:data_autorizzazione] 		= "Data autorizzazione"
 et_trad["it"][:dettagli] 					= "Dettaglio lavorazione"
 et_trad["it"][:totali] 						= "Dettaglio lavorazione"
-et_trad["it"][:da_fornitore] 				= "Da fornitore"
+et_trad["it"][:da_fornitore] 				= "Officina"
 et_trad["it"][:a_compagnia] 				= "A compagnia"
 
 et_trad["en"][:riparazione_container] 		= "Container repair"
@@ -87,7 +87,19 @@ et_trad["en"][:a_compagnia] 				= "To shipowner"
 
 <% t_provider_time_cost = t_provider_material_cost = t_customer_time_cost = t_customer_material_cost = t_provider_time_hours = t_customer_time_hours = 0 %>
 
-<% @item.repair_estimate_items.select{|n| 
+
+
+<% 
+
+  items = @item.repair_estimate_items
+  
+  #solo admin puo' vedere le op interne
+  items = items.where("(is_internal IS NULL or is_internal != true)") if !User.current.admin_can?(:repair, :table)
+  
+  #di default nascondo le op_interne a meno che non sia stato espressamente chiesto di vederle
+  items = items.where("(is_internal IS NULL or is_internal != true)") if !formValues['show_op_int']==true
+  
+  items.select{|n| 
 		n.confirmed!=false || formValues['show_deleted_row']==true
 	}.each do |r| %>
 
@@ -128,7 +140,12 @@ et_trad["en"][:a_compagnia] 				= "To shipowner"
   	
 	<% if !r.authorization_notes.to_s.empty? %>			         
 		<br/><%= r.authorization_notes.to_s -%>
-	 <% end %>			         			           	 	
+	 <% end %>
+	
+	<% if r.is_internal == true %>
+	    <br>Operazione eseguita ICOP
+	<% end %> 
+	 
   </td>
   
   <td class="n bl"><%= r.quantity -%></td>

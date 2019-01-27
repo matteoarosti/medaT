@@ -1,0 +1,151 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  title: 'Dett.Container',
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+	
+  	viewModel: {
+			data: {
+			}	
+	},  	
+
+  items: [
+       
+   // grid con righe import
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Elenco richieste', flex: 50,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+        	    		        		        
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'custom_inspections/list_to_confirm_data').to_json -%>,
+        	            extraParams: {
+        	            },
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	        
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	           	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: 'Seq',
+			        width: 50,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Container',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '<h1>' + rec.get('container_number') + '</h1>';
+			         			         
+			         return ret;			         
+			        }			        
+			    }
+			    				    
+				, {	
+			        dataIndex: 'container_number',
+			        text: 'Dettagli',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			         
+			           ret = '';
+			           ret += '<table class=import_item_detail>';
+			           ret += '<tr><td>' + rec.data.activity.activity_op.name + '</td></tr>';
+			           ret += '<tr><td><font size=2>' + rec.data.activity.shipowner.name + '</font></td></tr>';
+			           ret += '</table>';
+			           return ret;
+			         			         			        
+			        }			        	        
+			    }	
+			    
+			    , {
+			        dataIndex: 'container_number',
+			        text: 'Visita eseguita',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          
+			         if (!Ext.isEmpty(rec.get('execution_at'))){
+			           ret = '<h3>' + Ext.util.Format.date(rec.get('execution_at'), 'd-m-y H:i') + '</h3>';
+			           ///if (!Ext.isEmpty(rec.get('execution_notes')))
+			           ///  ret += '<div style="white-space:normal">' + rec.get('execution_notes').replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+			           return ret;
+			         }
+			        }			        
+			    }
+			    		    
+			    			    
+			    , {
+			        dataIndex: 'container_number',
+			        text: 'Conferma',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          			           
+			           var b_id = Ext.id();
+					   setTimeout(function(){me.b_set_execute.call(me, b_id, rec);}, 1);
+					   return '<div id="' + b_id + '"></div>';			              			         
+			        }			        
+			    }
+        ] //columns
+               
+      
+    , b_set_execute: function(b_id, rec){
+        var me = this; //grid
+        var b = Ext.create('Ext.button.Button', {
+        	text: 'Conferma<br/>avvenuta visita',
+        	scale: 'large',
+        	handler: function(){
+            	<%= raw confirm_with_note(url_for(:controller=>'custom_inspections', :action=>'exe_customer_confirmation'), "
+							{
+			            		afterSave: function(fromWin){
+			            		    fromWin.destroy();
+			            			me.store.load();
+			            		}            	            	
+			            	}            	
+            	", 'id', false, [
+            		{xtype: 'textfield', name: 'nuovo_sigillo', fieldLabel: 'Nuovo sigillo applicato', width: '100%', labelAlign: 'top', msgTarget: 'under', allowBlank: false}.to_json
+            	]) %>        	
+        	}
+        });
+		if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
+      } //b_set      
+      
+                        	    
+    }    
+   
+  ]
+ }
+ ]
+}

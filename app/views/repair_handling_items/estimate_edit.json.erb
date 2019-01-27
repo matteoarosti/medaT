@@ -138,6 +138,9 @@
 <% end %>			         			         
 			         ret += '</h4>';
 
+
+					 if (rec.get('is_internal'))
+					   ret += '<font size=+1 color=red>Operazione eseguita internamente</font>';
 			        
 
 			         if (Ext.isEmpty(rec.get('side')) == false){

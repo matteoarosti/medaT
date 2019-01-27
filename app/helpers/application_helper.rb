@@ -447,15 +447,14 @@ end
   end
      
   
- def confirm_with_note(url, my_listeners, rec_field_id = 'id', mobile = false)
+ def confirm_with_note(url, my_listeners, rec_field_id = 'id', mobile = false, fields_to_add = [])
+   fields_to_add << {xtype: 'textareafield', name: 'notes', fieldLabel: 'Note', flex: 1, width: '100%', labelAlign: 'top', msgTarget: 'under'}.to_json
    ret = "
        var loc_form = Ext.create('Ext.form.Panel', {
                            title: '',
                            bodyPadding: 10,
                            layout: {type: 'vbox', align : 'stretch', pack  : 'start'},
-                           items: [
-                             {xtype: 'textareafield', name: 'notes', fieldLabel: 'Notes', flex: 1, width: '100%', labelAlign: 'top', msgTarget: 'under'}                                                                        
-                           ]
+                           items: [" + fields_to_add.join(',') + "]
                            ,   buttons:
                                  [#{b_close_mobile + ',' if mobile}'->', {
                                      text: 'Conferma',

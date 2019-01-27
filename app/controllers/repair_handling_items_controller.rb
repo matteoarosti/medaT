@@ -106,7 +106,9 @@ end
 def get_estimate_items
   ret = {}
    rhi = RepairHandlingItem.find(params[:rhi_id])
-   ret[:items] = rhi.repair_estimate_items.as_json(RepairEstimateItem.as_json_prop)
+   items = rhi.repair_estimate_items
+   items = items.where("(is_internal IS NULL or is_internal != true)") if !User.current.admin_can?(:repair, :table)
+   ret[:items] = items.as_json(RepairEstimateItem.as_json_prop)
    ret[:success] = true
    render json: ret
 end
@@ -148,21 +150,30 @@ def save_rei
   ret = {}  
   @rhi = RepairHandlingItem.find(params[:repair_handling_item_id])
   repair_price = RepairPrice.where("repair_processing_id=?", params[:repair_processing_id]).where("shipowner_id=?", @rhi.handling_item.handling_header.shipowner_id).first
-  
+      
   if params[:id].empty?      
-    n = @rhi.repair_estimate_items.new
-    
-    #memorizzo i costo orari
-    n.provider_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost_provider
-    n.customer_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost_customer
+    n = @rhi.repair_estimate_items.new    
   else
     n = @rhi.repair_estimate_items.find(params[:id])
   end
+  
+  if !params[:is_internal].nil?  && (params[:is_internal] == true || params[:is_internal].to_s == 'true')
+    #operazione eseguita internamente (non gestisco i costi del fornitore)
+    repair_price.provider_time = 0
+    repair_price.provider_material_price = 0
+    n.provider_hourly_cost = 0
+    n.is_internal = true
+  else    
+    n.provider_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost_provider
+  end  
+
+  #memorizzo i costo orari per compagnia
+  n.customer_hourly_cost = @rhi.handling_item.handling_header.shipowner.estimate_hourly_cost_customer
     
    n.repair_processing_id = params[:repair_processing_id]
    n.quantity = params[:quantity].to_s.gsub(',', '.').to_f
    n.side = params[:side]
-   n.provider_notes = params[:provider_notes]
+   n.provider_notes = params[:provider_notes]          
    
    n.set_auto_data(repair_price)  
      
@@ -217,6 +228,25 @@ def get_processings_by_rhi
    render json: ret
 end
 
+
+#quando ispeziono, posso indicare le operazioni fatte internamente o quelle da preassegnare all'officina
+def get_processings_for_inspect_preassign
+  
+  ret = {}
+   rps = RepairPrice.joins(:repair_processing).where("shipowner_id=?", params[:shipowner_id])
+   if params[:op_for] == 'int'  
+     rps = rps.where({repair_processings: {suggest_for_int_on_inspect: true}})
+   else
+     rps = rps.where({repair_processings: {suggest_for_off_on_inspect: true}})
+   end  
+   ret[:items] = rps.as_json(RepairPrice.as_json_prop)
+   ret[:items].collect! { |ad|         
+         ad[:qty] = 0
+         ad
+      }
+   ret[:success] = true
+   render json: ret
+end
 
 
 

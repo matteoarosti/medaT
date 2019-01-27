@@ -51,6 +51,7 @@ class RepairHandlingItem < ActiveRecord::Base
   end
   
   def self.create_from_hi(hi, p = {})
+        
 #    if hi.handling_header.shipowner.repair_active == true
       #al monento non serve, perche' per le ditte non richieste non vengono proprio dichiarati i dannieggiati.
       #Se poi cressero i danneggiati come farebbero a metterli riparati? 
@@ -74,9 +75,24 @@ class RepairHandlingItem < ActiveRecord::Base
          rhi.estimate_user_id = User.current.id         
          rhi.calculate_total_on_estimate
          rhi.save!
-       end  
+       end
             
       rhi.save!
+            
+      # se passate (in fase di ispezione) creo gia' le righe legate al preventivo - LAVORAZIONI INTERNE
+      if !p[:ar_op_int].nil?
+        p[:ar_op_int].each do |c|
+          rhi.add_repair_estimate_item(c[:repair_processing_id], c[:qty], nil, nil, true)
+        end
+      end
+      
+      # se passate (in fase di ispezione) creo gia' le righe legate al preventivo - LAVORAZIONI OFFICINA
+      if !p[:ar_op_off].nil?
+        p[:ar_op_off].each do |c|
+          rhi.add_repair_estimate_item(c[:repair_processing_id], c[:qty])
+        end
+      end      
+      
       rhi
 #    end
   end
@@ -152,21 +168,27 @@ class RepairHandlingItem < ActiveRecord::Base
    pti_type_confirmed.name unless pti_type_confirmed.nil?
  end
  
- def add_repair_estimate_item(repair_processing_id, quantity = 1, side = nil, notes = nil)
+ def add_repair_estimate_item(repair_processing_id, quantity = 1, side = nil, notes = nil, op_int = false)
    repair_price = RepairPrice.where("repair_processing_id=?", repair_processing_id).where("shipowner_id=?", self.handling_item.handling_header.shipowner_id).first
-   logger.info 'Repair_price: '
-   logger.info repair_price.to_yaml
    return false if !repair_price
    n = self.repair_estimate_items.new
        
    #memorizzo i costo orari
-   n.provider_hourly_cost = self.handling_item.handling_header.shipowner.estimate_hourly_cost_provider
+   n.is_internal = op_int
+   if op_int #operazione eseguita internamente... azzero tutti i costi del provider (officina)
+     repair_price.provider_time = 0
+     repair_price.provider_material_price = 0
+     n.provider_hourly_cost = 0
+   else  
+     n.provider_hourly_cost = self.handling_item.handling_header.shipowner.estimate_hourly_cost_provider     
+   end
+   
    n.customer_hourly_cost = self.handling_item.handling_header.shipowner.estimate_hourly_cost_customer
    
    n.repair_processing_id = repair_processing_id
    n.quantity = quantity
    n.side     = side
-   n.provider_notes = notes
+   n.provider_notes = notes   
       
    n.set_auto_data(repair_price)          
    n.save!   

@@ -62,6 +62,10 @@
 		<%= raw extjs_std_numberfield('quantity', @rei, {:allowBlank => false, :minValue => 1}) -%>,		
 		<%= raw extjs_std_textfield('side', @rei, {:allowBlank => true}, {:maxLength => 20}) -%>,
 		
+<% if User.current.admin_can?(:repair, :table)%>		
+		<%= raw extjs_std_booleanfield('is_internal', @rei, {:allowBlank => true}, {:maxLength => 20, fieldLabel: 'Eseguita ICOP'}) -%>,
+<% end %>		
+		
 		<%= raw extjs_std_textareafield('provider_notes', @rei, {:fieldLabel => "Note"}, {:width => "100%"}) -%>,
 		
 	   	{xtype: 'fieldset',

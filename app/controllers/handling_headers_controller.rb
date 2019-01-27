@@ -101,7 +101,7 @@ end
 ##################################################
 def hitems_sc_create  
 ##################################################
-  
+
   copy_params_data = params[:data].dup  #clono perche' altrimenti non ritrovo i valori rimossi con delete
   
   #per evitare anomalia carrier_id = 0 oppure ship_id = 0
@@ -113,7 +113,22 @@ def hitems_sc_create
     return
   end
   
-  
+  #form personalizzata per set damages (da ispezione)
+  if !params[:data][:formDamageValues].nil?
+    formDamageValues = params[:data][:formDamageValues].with_indifferent_access
+    params[:data].delete(:formDamageValues)
+    
+    ar_op_int = []
+    ar_op_int = formDamageValues["op_int"] unless formDamageValues["op_int"].nil?  
+    ar_op_off = []
+    ar_op_off = formDamageValues["op_off"] unless formDamageValues["op_off"].nil?
+      
+  else
+    formDamageValues = nil
+    ar_op_int = []
+    ar_op_off = []      
+  end
+      
    if !params[:data][:set_lock_type_DAMAGED].nil?     
      params[:set_lock_type] = 'DAMAGED' if params[:data][:set_lock_type_DAMAGED] == true
      params[:data].delete(:set_lock_type_DAMAGED)
@@ -203,7 +218,7 @@ def hitems_sc_create
      
       #apro eventuale item in RepairHandlingItem
       if hi.lock_type == 'DAMAGED'
-        rhi = RepairHandlingItem.create_from_hi(hi)
+        rhi = RepairHandlingItem.create_from_hi(hi, {ar_op_int: ar_op_int, ar_op_off: ar_op_off}.with_indifferent_access)
       end
        
      render json: {:success => ret_status, :message => message, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]}

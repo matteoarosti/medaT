@@ -93,6 +93,22 @@ class CustomInspectionsController < ApplicationController
     ret = item.save!  
     render json: {success: ret}
    end   
+   
+   
+  ##################################################
+   def list_to_confirm
+  ##################################################    
+   end
+   
+
+   ##################################################
+   def list_to_confirm_data
+   ##################################################
+     @items = ActivityDettContainer.eager_load(:activity).preload(:activity_op, :shipowner).where.not(execution_at: nil).limit(10)            
+     render json: {:success => true, items: @items.as_json(ActivityDettContainer.as_json_prop)}         
+   end
+     
+   
 
   
 end #class

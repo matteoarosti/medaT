@@ -346,7 +346,7 @@
 														items: [
 														
 															{xtype: 'grid', flex: 1, itemId: 'op_int',
-																padding: 20,
+																padding: 20, autoScroll: true,
 																columns: [
 																	{text: 'Operazioni eseguite ICOP', dataIndex: 'repair_processing_name', flex: 1, 
 																		renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
@@ -422,7 +422,7 @@
 															},	//grid
 															
 															{xtype: 'grid', flex: 1, itemId: 'op_off',
-																padding: 20,
+																padding: 20, autoScroll: true,
 																columns: [
 																	{text: 'Operazioni da eseguire OFFICINA', dataIndex: 'repair_processing_name', flex: 1, 
 																		renderer: function(value, metaData, rec, rowIndex, colIndex, store) {

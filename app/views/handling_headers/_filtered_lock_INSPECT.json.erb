@@ -341,11 +341,11 @@
 										      }, 
 										      {xtype: 'textareafield', name: 'notes', fieldLabel: <%= raw t('forms.to_be_inspect.notes').to_json -%>},
 										      {xtype: 'fieldcontainer', flex: 1, layout: {
-														    type: 'hbox'
+														    type: 'hbox', align : 'stretch', pack  : 'start'
 														},
 														items: [
 														
-															{xtype: 'grid', flex: 1, itemId: 'op_int',
+															{xtype: 'grid', flex: 1, height: '100%', itemId: 'op_int',
 																padding: 20, autoScroll: true,
 																columns: [
 																	{text: 'Operazioni eseguite ICOP', dataIndex: 'repair_processing_name', flex: 1, 

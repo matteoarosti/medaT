@@ -576,7 +576,359 @@
 			            }, 1);
 			            return '<div id="' + id + '"></div>';
 			        }
-			     }, {
+			     }
+			     
+			     
+
+				//TODO: DRY: stessa di _filter_lock_INSPECT
+				, {
+			        text: <%= raw t('forms.to_be_inspect.damaged').to_json -%>, width: 100, hidden: false, sortable: false,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        	var loc_grid = this;			        
+			        	if (rec.get('lock_type') != 'INSPECT' || rec.get('handling_header').lock_fl == false || rec.get('handling_header').lock_type != 'INSPECT') return '';			        
+			            var id = Ext.id();
+			            setTimeout(function() {
+
+			                var buttonRotto = Ext.create('Ext.button.Button', {
+								text: '<i class="fa fa-warning fa-3x"></i>',
+								cls: 'btn-del',
+		                		scale: 'large',			                    
+			                        handler: function(grid, rowIndex, colIndex, a, b) {
+
+			                        
+			                           //costruisco una form
+			                           //se ho spuntato 'hide_check' committo subito
+			                           //altrimenti mostro la form per la conferma
+			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+			                           header_form_values = header_form.getValues();
+			                           
+			                           loc_form = Ext.create('Ext.form.Panel', {
+										    title: '',
+										    bodyPadding: 10,
+										    defaultType: 'textfield',
+										    	layout: {
+												    type: 'vbox',
+												    align : 'stretch',
+												    pack  : 'start',
+												},
+										    items: [
+										    {
+										            xtype: 'fieldcontainer',
+										            fieldLabel: 'Data/Ora',
+										            layout: 'hbox',
+										            items: [
+										                {xtype: 'hiddenfield', name: 'rec_id', value: rec.get('id')},										                 
+										            	{xtype: 'datefield', name: 'datetime_op_date', width: 120, value: header_form_values.datetime_op_date},
+										            	{xtype: 'timefield', name: 'datetime_op_time', width:  70, value: header_form_values.datetime_op_time},
+										            ]
+										      }, 
+										      {xtype: 'textareafield', name: 'notes', fieldLabel: <%= raw t('forms.to_be_inspect.notes').to_json -%>},
+										      {xtype: 'fieldcontainer', layout: {
+														    type: 'hbox'
+														},
+														items: [
+														
+															{xtype: 'grid', flex: 1, itemId: 'op_int',
+																padding: 20,
+																columns: [
+																	{text: 'Operazioni eseguite ICOP', dataIndex: 'repair_processing_name', flex: 1, 
+																		renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+																           return '<h3>' + value + '</h3>';
+																        }},																    
+																	 {
+																        width: 50, align: 'center',
+																        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+																        	var me = this; //me = grid;
+																			var b_id = Ext.id();
+																		    setTimeout(function(){me.b_add_qty.call(me, b_id, rec);}, 1);
+																		    return '<div id="' + b_id + '"></div>';																        
+																        }   
+																     }, {																        
+																        width: 50, align: 'center',
+																        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+																        	var me = this; //me = grid;
+																			var b_id = Ext.id();
+																		    setTimeout(function(){me.b_dec_qty.call(me, b_id, rec);}, 1);
+																		    return '<div id="' + b_id + '"></div>';																        
+																        }   
+																     }, {
+																     	text: 'Qty', width: 50, dataIndex: 'qty',
+																     	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+																           return '<h3>' + value + '</h3>';
+																        }
+																     }    
+																        
+																],
+																store: {
+																	xtype: 'store',
+																	autoLoad: true,	
+																	proxy: {
+																		url: 'bookings/to_check_get_data',
+																		url: <%= raw  (root_path + 'repair_handling_items/get_processings_for_inspect_preassign').to_json -%>, 
+																		extraParams: {shipowner_id: rec.get('handling_header').shipowner_id, op_for: 'int'},
+																		method: 'POST',
+																		type: 'ajax',															
+																		actionMethods: {read: 'POST'},															
+																		reader: {type: 'json', method: 'POST', rootProperty: 'items'}
+																	},
+																		
+																	fields: [] //serve
+																} //store
+																
+															      
+															      
+															    , b_add_qty: function(b_id, rec){
+															        var me = this; //grid
+															        var b = Ext.create('Ext.button.Button', {
+															        	text: '+',
+															        	scale: 'large',
+															        	handler: function(){            	
+															            	rec.set('qty', rec.get('qty') + 1);
+															        	}
+															        });
+																	if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
+															      } //b_add_qty
+															      
+															    , b_dec_qty: function(b_id, rec){
+															        var me = this; //grid
+															        var b = Ext.create('Ext.button.Button', {
+															        	text: '-',
+															        	scale: 'large',
+															        	handler: function(){
+															        	    if (rec.get('qty') > 0)        	
+															            		rec.set('qty', rec.get('qty') - 1);
+															        	}
+															        });
+																	if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
+															      } //b_dec_qty																      															      
+															      
+															},	//grid
+															
+															{xtype: 'grid', flex: 1, itemId: 'op_off',
+																padding: 20,
+																columns: [
+																	{text: 'Operazioni da eseguire OFFICINA', dataIndex: 'repair_processing_name', flex: 1, 
+																		renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+																           return '<h3>' + value + '</h3>';
+																        }},																    
+																	 {
+																        width: 50, align: 'center',
+																        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+																        	var me = this; //me = grid;
+																			var b_id = Ext.id();
+																		    setTimeout(function(){me.b_add_qty.call(me, b_id, rec);}, 1);
+																		    return '<div id="' + b_id + '"></div>';																        
+																        }   
+																     }, {
+																        width: 50, align: 'center',
+																        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+																        	var me = this; //me = grid;
+																			var b_id = Ext.id();
+																		    setTimeout(function(){me.b_dec_qty.call(me, b_id, rec);}, 1);
+																		    return '<div id="' + b_id + '"></div>';																        
+																        }   
+																     }, {
+																     	text: 'Qty', width: 50, dataIndex: 'qty',
+																     	renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+																           return '<h3>' + value + '</h3>';
+																        }
+																     }    
+																        
+																],
+																store: {
+																	xtype: 'store',
+																	autoLoad: true,	
+																	proxy: {
+																		url: 'bookings/to_check_get_data',
+																		url: <%= raw  (root_path + 'repair_handling_items/get_processings_for_inspect_preassign').to_json -%>, 
+																		extraParams: {shipowner_id: rec.get('handling_header').shipowner_id, op_for: 'off'},
+																		method: 'POST',
+																		type: 'ajax',															
+																		actionMethods: {read: 'POST'},															
+																		reader: {type: 'json', method: 'POST', rootProperty: 'items'}
+																	},
+																		
+																	fields: [] //serve
+																} //store
+																
+															      
+															      
+															    , b_add_qty: function(b_id, rec){
+															        var me = this; //grid
+															        var b = Ext.create('Ext.button.Button', {
+															        	text: '+',
+															        	scale: 'large',
+															        	handler: function(){            	
+															            	rec.set('qty', rec.get('qty') + 1);
+															        	}
+															        });
+																	if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
+															      } //b_add_qty
+															      
+															    , b_dec_qty: function(b_id, rec){
+															        var me = this; //grid
+															        var b = Ext.create('Ext.button.Button', {
+															        	text: '-',
+															        	scale: 'large',
+															        	handler: function(){
+															        	    if (rec.get('qty') > 0)        	
+															            		rec.set('qty', rec.get('qty') - 1);
+															        	}
+															        });
+																	if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
+															      } //b_dec_qty																      															      
+															      
+															}	//grid													
+																
+
+														]
+											  }
+										    ]
+										    , 	buttons:
+											        [{
+											        	text: '< Indietro', scale: 'large', cls: 'btn-used', handler: function(){this.up('window').destroy();}
+											        }, {xtype: 'tbfill'}, {
+											            text: 'Conferma e dichiara come riparato', scale: 'large', cls: 'btn-del',
+											            handler: function (btn, evt) {
+											             btn.disable();
+											             
+											             var v_form = this.up('form');
+											             
+											             var ar_op_int = [], ar_op_off = [];
+
+														 //lavorazioni eseguite internamente												             
+											             v_form.down('#op_int').store.each(function(r){
+															if (r.get('qty') > 0)
+																ar_op_int.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+														 });
+														 
+														 //lavorazioni da preassegnare a officina												             
+											             v_form.down('#op_off').store.each(function(r){
+															if (r.get('qty') > 0)
+																ar_op_off.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+														 });														 
+              
+											             var form = this.up('form').getForm();
+											             var tmp_win  = this.up('window');
+											             if (form.isValid()) {
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
+															   jsonData: {
+															   		data: {
+															   				handling_header_id: rec.get('handling_header_id'), 
+															   				handling_item_type: 'INSPECT',
+															   				notes: form.findField('notes').getValue(),
+															   				formDamageValues: {
+															   					op_int: ar_op_int,
+															   					op_off: ar_op_off,
+															   					isRepairCompleted: true
+															   				}
+															   			},
+															   		set_lock_type: 'DAMAGED'
+															   },
+															   success: function(response, opts) {
+															      store.remove(rec);
+															      tmp_win.close();
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+															   }
+															});	
+														  return false;												             
+											             }
+											            }
+											          }, {
+											            text: 'Conferma', scale: 'large',
+											            handler: function (btn, evt) {
+											             btn.disable();
+											             
+											             var v_form = this.up('form');
+											             
+											             var ar_op_int = [], ar_op_off = [];
+
+														 //lavorazioni eseguite internamente												             
+											             v_form.down('#op_int').store.each(function(r){
+															if (r.get('qty') > 0)
+																ar_op_int.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+														 });
+														 
+														 //lavorazioni da preassegnare a officina												             
+											             v_form.down('#op_off').store.each(function(r){
+															if (r.get('qty') > 0)
+																ar_op_off.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+														 });														 
+              
+											             var form = this.up('form').getForm();
+											             var tmp_win  = this.up('window');
+											             if (form.isValid()) {
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
+															   jsonData: {
+															   		data: {
+															   				handling_header_id: rec.get('handling_header_id'), 
+															   				handling_item_type: 'INSPECT',
+															   				notes: form.findField('notes').getValue(),
+															   				formDamageValues: {
+															   					op_int: ar_op_int,
+															   					op_off: ar_op_off
+															   				}
+															   			},
+															   		set_lock_type: 'DAMAGED'
+															   },
+															   success: function(response, opts) {
+															      store.remove(rec);
+															      tmp_win.close();
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+															   }
+															});	
+														  return false;												             
+											             }
+											            }
+											          }
+											         ]
+  
+										});
+
+
+			                           loc_win = Ext.create('Ext.window.Window',{
+										    layout: 'fit',
+										    items: loc_form,
+										    title: <%= raw t('forms.to_be_inspect.import_confirm').to_json -%>,
+										    width: 500,
+										    height: 300,
+										    id: 'myWindow',
+										    listeners: {
+										    	afterrender: function(compo){
+										    		console.log('aaaaaaaa');
+										    		/*compo.down('#op_int').getSelectionModel().deselectAll();
+										    		compo.down('#op_off').getSelectionModel().deselectAll();
+										    		compo.down('#op_off').getSelectionModel().selectAll();*/
+										    	}
+										    }
+										}).show().maximize();
+													                           			                           
+			                           return false;
+
+
+
+			                        }, scope: rec
+
+			                });			                
+			                if (Ext.get(id)) {
+			                    buttonRotto.render(Ext.get(id));
+			                }
+			            }, 1);
+			            return '<div id="' + id + '"></div>';
+			        }
+			     } 
+				
+				
+/*****			     
+			     , {
 			        text: <%= raw t('forms.to_be_moved.inspect_damaged').to_json -%>, width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			        	var loc_grid = this;		
@@ -696,7 +1048,7 @@
 			            return '<div id="' + id + '"></div>';
 			        }
 			     }           
-        
+*****/        
         
         
         

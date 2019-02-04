@@ -503,7 +503,60 @@
 										    ]
 										    , 	buttons:
 											        [{
-											            text: 'Conferma',
+											        	text: '< Indietro', scale: 'large', cls: 'btn-used', handler: function(){this.up('window').destroy();}
+											        }, {xtype: 'tbfill'}, {
+											            text: 'Conferma e dichiara come riparato', scale: 'large', cls: 'btn-del',
+											            handler: function (btn, evt) {
+											             btn.disable();
+											             
+											             var v_form = this.up('form');
+											             
+											             var ar_op_int = [], ar_op_off = [];
+
+														 //lavorazioni eseguite internamente												             
+											             v_form.down('#op_int').store.each(function(r){
+															if (r.get('qty') > 0)
+																ar_op_int.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+														 });
+														 
+														 //lavorazioni da preassegnare a officina												             
+											             v_form.down('#op_off').store.each(function(r){
+															if (r.get('qty') > 0)
+																ar_op_off.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+														 });														 
+              
+											             var form = this.up('form').getForm();
+											             var tmp_win  = this.up('window');
+											             if (form.isValid()) {
+															Ext.Ajax.request({
+															   method: 'POST',
+															   url: '<%= url_for(:controller=>'handling_headers', :action=>'hitems_sc_create') -%>',
+															   jsonData: {
+															   		data: {
+															   				handling_header_id: rec.get('id'), 
+															   				handling_item_type: 'INSPECT',
+															   				notes: form.findField('notes').getValue(),
+															   				formDamageValues: {
+															   					op_int: ar_op_int,
+															   					op_off: ar_op_off,
+															   					isRepairCompleted: true
+															   				}
+															   			},
+															   		set_lock_type: 'DAMAGED'
+															   },
+															   success: function(response, opts) {
+															      store.remove(rec);
+															      tmp_win.close();
+															   },
+															   failure: function(response, opts) {
+															      console.log('server-side failure with status code ' + response.status);
+															   }
+															});	
+														  return false;												             
+											             }
+											            }
+											          }, {
+											            text: 'Conferma e invia a officina', scale: 'large',
 											            handler: function (btn, evt) {
 											             btn.disable();
 											             

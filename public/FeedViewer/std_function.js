@@ -201,7 +201,7 @@ function acs_show_win_std(titolo, url, jsonData, width, height, listeners, iconC
 
 
 
-function std_ajax_request(url, params, success_callback){
+function std_ajax_request(url, params, success_callback, fParams){
   var me = this;
   Ext.Ajax.request({
     url: url,  jsonData: params, method:'POST',
@@ -222,7 +222,7 @@ function std_ajax_request(url, params, success_callback){
 		}								
 						
 		if(!Ext.isEmpty(success_callback)){
-		  me[success_callback].call(me, returnData);
+		  me[success_callback].call(me, returnData, fParams);
 		}
 						
 	}, scope: this,

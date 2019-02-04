@@ -104,11 +104,107 @@ class CustomInspectionsController < ApplicationController
    ##################################################
    def list_to_confirm_data
    ##################################################
-     @items = ActivityDettContainer.eager_load(:activity).preload(:activity_op, :shipowner).where.not(execution_at: nil).limit(10)            
-     render json: {:success => true, items: @items.as_json(ActivityDettContainer.as_json_prop)}         
+     items = ActivityDettContainer.eager_load(:activity).preload(:activity_op, :shipowner)
+            .where("(activities.status IS NULL OR activities.status <> 'ANN') AND (activity_dett_containers.status IS NULL or activity_dett_containers.status <> 'ANN')")
+            .where("confirmed_at IS NULL")
+            #### al momento le mostro tutte
+            #.where(" activity_dett_containers.execution_at IS NOT NULL 
+            #        OR activities.to_be_made_available IS NULL OR activities.to_be_made_available = 0 
+            #        OR (activities.to_be_made_available = 1 AND activity_dett_containers.make_available_at IS NOT NULL) 
+            #        OR (activities.expiration_date > #{Date.today})")
+     if !params[:f_values].blank?               
+      items = items.where("container_number LIKE  ?", "%#{params[:f_values][:flt_num_container].strip}%") unless params[:f_values][:flt_num_container].empty? 
+     end      
+     items = items.order("activities.expiration_date").limit(300)
+                        
+     render json: {:success => true, items: items.as_json(ActivityDettContainer.as_json_prop)}
    end
      
    
+   def verify_container_exists
+     item = search_hh_tmov_open(params[:data][:container_number], params[:data][:activity][:shipowner_id])
+     render json: {:success => true, item: item}
+   end
+     
 
+   
+   
+   #il cliente conferma l'effettiva esecuzione della visita (che poi puo' essere fatturata)
+   #se il container e' gestito in medaT allora salvo anche il sigillo
+   def exe_customer_confirmation
+     item = ActivityDettContainer.joins(:activity).find(params[:rec_id])
+     #se ho passato sigillo recupero hh e salvo il sigillo come fase di importo o export
+     if !params[:check_form][:nuovo_sigillo].nil?
+      hh = search_hh_tmov_open(item.container_number, item.activity.shipowner_id)
+      if hh
+        to_log = {}
+        hi = hh.last_dett
+        if hi.is_import_export == 'I'
+          to_log['seal_imp_others'] = {from: hh.seal_imp_others, to: params[:check_form][:nuovo_sigillo]}   
+          hh.seal_imp_others =  params[:check_form][:nuovo_sigillo]
+        else
+          to_log['seal_exp_others'] = {from: hh.seal_exp_others, to: params[:check_form][:nuovo_sigillo]}
+          hh.seal_exp_others =  params[:check_form][:nuovo_sigillo]
+        end
+        hh.save!
+        
+        #loggo la modifica del sigillo
+        LogEvent.base(hh, 'U', 'cu_inspect_confirmed', to_log)
+      end
+     end
+     
+     #salvo i dati
+     item.confirmed_at      = Time.zone.now
+     item.confirmed_user_id = current_user.id
+     item.confirmed_notes   = params[:check_form][:notes]
+     item.save!
+     
+      #loggo
+      LogEvent.base(item, 'U', 'cu_inspect_confirmed')
+          
+     render json: {:success => true}
+   end
+   
+   
+   
+   def exe_postpones
+     item = ActivityDettContainer.joins(:activity).find(params[:rec_id])
+     ac = item.activity
+     ac.expiration_date = params[:check_form][:new_date]
+     ac.save!
+     
+     #loggo
+     LogEvent.base(ac, 'U', 'postpones', {to: ac.expiration_date, notes: params[:check_form][:notes]})     
+     render json: {:success => true}   
+   end
+   
+
+  def exe_dett_ann
+    item = ActivityDettContainer.joins(:activity).find(params[:rec_id])
+    item.status = 'ANN'
+    item.save!
+    
+    #loggo
+    LogEvent.base(item, 'U', 'ann', {notes: params[:check_form][:notes]})     
+    render json: {:success => true}   
+  end
   
+  
+  def verify_not_pending_exists
+    #verifico se ci sono delle richieste che sono "scadute" (vanno posticipate) o sono state eseguite e devono essere confermate
+    num_pending = ActivityDettContainer.num_pending
+    if num_pending == 0
+      render json: {:success => true}
+    else
+      render json: {:success => false, message: "Ci sono #{num_pending} richieste in sospeso che devono essere confermate, posicipate o annullate. Utilizza il menu \"Conferma/gestisci visite doganali\" per gestirle"}
+    end
+  end
+   
+   
+   private
+   
+   def search_hh_tmov_open(container_number, shipowner_id)
+     HandlingHeader.find_by({container_number: container_number, shipowner_id: shipowner_id, handling_type: 'TMOV', handling_status: 'OPEN'})
+   end
+     
 end #class

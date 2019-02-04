@@ -540,6 +540,15 @@ Ext.define("plugin.Printer", {
                                     op: 'new_tab',
                                     tab_id: 'movs_dashboard'                                
                                 }
+                                
+								, {
+                                    task: 'Registra',
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'custom_inspections', :action=>'list_to_confirm') -%>',                                    
+                                    op: 'new_tab'                                
+                                }                                
+                                
+                                
 <% end %>                           	 
                            	 
                            	 

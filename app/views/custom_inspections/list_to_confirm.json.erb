@@ -26,6 +26,42 @@
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
+        	    
+        	    
+        	    
+				dockedItems: [
+		        	   { 
+		        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
+		        	    items: [
+		        	    
+						  {
+						    xtype: 'form', height: 30,
+						    layout: {
+							    type: 'hbox',
+							    pack: 'start',
+							    align: 'stretch'
+							},
+						    items: [
+						    	{	
+										xtype: 'textfield',
+						                fieldLabel: 'Container',
+						                name: 'flt_num_container'
+						      	}
+						    ]
+						 }		        	    
+		        	    
+		        	     , '->',
+		        	    	{iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
+						 		handler: function(event, toolEl, panel){ 
+						 						var loc_grid = this.up('grid');
+				 								var header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+				 								loc_grid.getStore().proxy.extraParams.f_values = header_form.getValues(); 						 						
+						 						loc_grid.getStore().load();
+						 			}
+						 		}
+						 ]
+					  }
+					],        	    
         	    		        		        
 				autoScroll: true,  
 				scroll: true,      	    
@@ -71,7 +107,7 @@
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h1>' + rec.get('container_number') + '</h1>';
-			         			         
+			         ret += '<p>' + rec.data.activity.shipowner.name + '</p>';
 			         return ret;			         
 			        }			        
 			    }
@@ -82,14 +118,26 @@
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			         
 			           ret = '';
-			           ret += '<table class=import_item_detail>';
-			           ret += '<tr><td>' + rec.data.activity.activity_op.name + '</td></tr>';
-			           ret += '<tr><td><font size=2>' + rec.data.activity.shipowner.name + '</font></td></tr>';
-			           ret += '</table>';
+			           ret = '<h3>' + rec.data.activity.activity_op.name + '</h3>';
+			           ret += '<h3>' + rec.data.activity.customer.name + '</3>';			           
+			           
 			           return ret;
 			         			         			        
 			        }			        	        
 			    }	
+
+
+			    , {
+			        dataIndex: 'container_number',
+			        text: 'Da effetturare il',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          			         
+			           ret = '<h3>' + Ext.util.Format.date(rec.get('activity').expiration_date, 'd/m/y') + '</h3>';
+			           return ret;
+			        }			        
+			    }
+
 			    
 			    , {
 			        dataIndex: 'container_number',
@@ -98,10 +146,14 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         var me = this; //me = grid;			          
 			         if (!Ext.isEmpty(rec.get('execution_at'))){
-			           ret = '<h3>' + Ext.util.Format.date(rec.get('execution_at'), 'd-m-y H:i') + '</h3>';
-			           ///if (!Ext.isEmpty(rec.get('execution_notes')))
-			           ///  ret += '<div style="white-space:normal">' + rec.get('execution_notes').replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+			           ret = '<h3 style="color: green;">' + Ext.util.Format.date(rec.get('execution_at'), 'd/m/y H:i') + '</h3>';
 			           return ret;
+			         } else {
+			           var b_id = Ext.id();
+					   setTimeout(function(){me.b_postpones.call(me, b_id, rec);}, 1);
+			           var b_id_ann = Ext.id();
+					   setTimeout(function(){me.b_ann.call(me, b_id_ann, rec);}, 1);					   
+					   return '<div id="' + b_id + '"></div>' + '<div id="' + b_id_ann + '"></div>';			         
 			         }
 			        }			        
 			    }
@@ -127,6 +179,21 @@
         	text: 'Conferma<br/>avvenuta visita',
         	scale: 'large',
         	handler: function(){
+        		//verifico esistenza container in medaT e in base a questo avro' nella form di conferma il sigillo o meno        	
+        		std_ajax_request.call(me, <%= raw url_for(:controller=>'custom_inspections', :action=>'verify_container_exists').to_json -%>, {data: rec.data}, 'exe_open_set_execute', {rec: rec});
+        	}
+        });
+		if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
+      } //b_set      
+      
+
+
+
+    , exe_open_set_execute: function(returnData, stdAjaxParams){
+        var me = this, //grid
+        	rec = stdAjaxParams.rec;        	        
+        
+        if (!Ext.isEmpty(returnData.item)){ 
             	<%= raw confirm_with_note(url_for(:controller=>'custom_inspections', :action=>'exe_customer_confirmation'), "
 							{
 			            		afterSave: function(fromWin){
@@ -136,12 +203,77 @@
 			            	}            	
             	", 'id', false, [
             		{xtype: 'textfield', name: 'nuovo_sigillo', fieldLabel: 'Nuovo sigillo applicato', width: '100%', labelAlign: 'top', msgTarget: 'under', allowBlank: false}.to_json
+            	]) %>
+        } else {
+            	<%= raw confirm_with_note(url_for(:controller=>'custom_inspections', :action=>'exe_customer_confirmation'), "
+							{
+			            		afterSave: function(fromWin){
+			            		    fromWin.destroy();
+			            			me.store.load();
+			            		}            	            	
+			            	}            	
+            	", 'id', false, [
+            	]) %>
+        
+        }   	
+      } //b_set      
+
+
+
+    , b_postpones: function(b_id, rec){
+    	if (
+    		!Ext.isEmpty(rec.get('execution_at')) ||
+    		(Ext.util.Format.date(rec.get('datetime_op_end'), 'Ymd') > Ext.util.Format.date(new Date(), 'Ymd'))
+    	) return '';     	
+    	
+        var me = this; //grid                
+        var b = Ext.create('Ext.button.Button', {
+        	text: 'Posticipa',
+        	scale: 'medium', cls: 'btn-del',
+        	handler: function(){
+            	<%= raw confirm_with_note(url_for(:controller=>'custom_inspections', :action=>'exe_postpones'), "
+							{
+			            		afterSave: function(fromWin){
+			            		    fromWin.destroy();
+			            			me.store.load();
+			            		}            	            	
+			            	}            	
+            	", 'id', false, [
+            		{xtype: 'displayfield', value: 'Verr&agrave; posticipata la data di tutti containers presenti nella stessa richiesta'}.to_json,
+            		{xtype: 'datefield', name: 'new_date', fieldLabel: 'Posticipa al', width: '100%', labelAlign: 'top', msgTarget: 'under', allowBlank: false}.to_json
             	]) %>        	
         	}
         });
-		if (Ext.get(b_id)) {b.render(Ext.get(b_id));}      
-      } //b_set      
+		if (Ext.get(b_id)) {b.render(Ext.get(b_id));}		
+		      
+      } //b_postpones
       
+    , b_ann: function(b_id, rec){
+    	if (
+    		!Ext.isEmpty(rec.get('execution_at')) ||
+    		(Ext.util.Format.date(rec.get('datetime_op_end'), 'Ymd') > Ext.util.Format.date(new Date(), 'Ymd'))
+    	) return '';     	
+    	
+        var me = this; //grid                
+        var b = Ext.create('Ext.button.Button', {
+        	text: 'Annulla',
+        	scale: 'medium', cls: 'btn-del',
+        	handler: function(){
+            	<%= raw confirm_with_note(url_for(:controller=>'custom_inspections', :action=>'exe_dett_ann'), "
+							{
+			            		afterSave: function(fromWin){
+			            		    fromWin.destroy();
+			            			me.store.load();
+			            		}            	            	
+			            	}
+            	", 'id', false, [
+            	]) %>        	
+        	}
+        });
+		if (Ext.get(b_id)) {b.render(Ext.get(b_id));}		
+		      
+      } //b_ann
+
                         	    
     }    
    

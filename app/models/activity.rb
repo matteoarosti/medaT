@@ -26,7 +26,7 @@ class Activity < ActiveRecord::Base
            :activity_type => {},
            :terminal => {},
            :activity_op => {:only=>[:name, :default_price]},
-           :activity_dett_containers => {:only => [:container_number, :status, :make_available_at, :execution_at]}
+           :activity_dett_containers => {:only => [:container_number, :status, :make_available_at, :execution_at, :confirmed_at]}
            }
          }       
   end     
@@ -46,5 +46,37 @@ class Activity < ActiveRecord::Base
     {:cod=>'CLOSE', :descr=>'Close'}
    ] 
   end 
+  
+  
+  #gestione permessi in base a utente
+  def self.default_scope
+
+    if !User.current.nil? && !User.current.terminal_flt.blank?
+     if User.current.terminal_flt.include?(',')
+       return self.where("activities.terminal_id IN (#{User.current.terminal_flt})")
+     else
+       return self.where("activities.terminal_id = ?", User.current.terminal_flt)
+     end
+    end
+
+    if !User.current.nil? && !User.current.shipowner_flt.blank?
+     if User.current.shipowner_flt.include?(',')
+       return self.where("activities.shipowner_id IN (#{User.current.shipowner_flt})")
+     else
+       return self.where("activities.shipowner_id = ?", User.current.shipowner_flt)
+     end
+    end
+
+    if !User.current.nil? && !User.current.customer_flt.blank?
+     if User.current.customer_flt.include?(',')
+       return self.where("activities.customer_id IN (#{User.current.customer_flt})")
+     else
+       return self.where("activities.customer_id = ?", User.current.customer_flt)
+     end
+    end
+
+        
+    return nil
+  end  
   
 end

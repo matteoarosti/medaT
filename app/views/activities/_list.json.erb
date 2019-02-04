@@ -182,9 +182,11 @@
 								  ret += ' [ANN]';
 								  
 								if (!Ext.isEmpty(dett_container.make_available_at))
-								  ret += ' [Disp.]';
+								  ret += ' [Dis]';
 								if (!Ext.isEmpty(dett_container.execution_at))
-								  ret += ' [Eseg.]';
+								  ret += ' [Ese]';
+								if (!Ext.isEmpty(dett_container.confirmed_at))
+								  ret += ' [Con]';								  
 																													
 							}, this)
 			        	    

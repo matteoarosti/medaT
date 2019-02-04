@@ -76,6 +76,27 @@ class RepairHandlingItem < ActiveRecord::Base
          rhi.calculate_total_on_estimate
          rhi.save!
        end
+       
+       
+      # se in fase di ispezione e' stato dichiarato che e' gia' riparato (perche' hanno svolto tutto internamente)...
+      if !p[:formDamageValues].nil?
+        if !p[:formDamageValues][:isRepairCompleted].nil? && p[:formDamageValues][:isRepairCompleted] == true
+          rhi.estimate_at = Time.zone.now
+          rhi.estimate_user_id = User.current.id         
+          rhi.calculate_total_on_estimate
+          
+          rhi.repair_completed_at = Time.zone.now
+          rhi.repair_completed_user_id = User.current.id        
+          
+          rhi.out_garage_at = Time.zone.now
+          rhi.out_garage_user_id = User.current.id
+          
+          rhi.save!        
+        end      
+        
+      end
+       
+       
             
       rhi.save!
             
@@ -91,7 +112,8 @@ class RepairHandlingItem < ActiveRecord::Base
         p[:ar_op_off].each do |c|
           rhi.add_repair_estimate_item(c[:repair_processing_id], c[:qty])
         end
-      end      
+      end
+      
       
       rhi
 #    end

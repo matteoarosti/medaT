@@ -121,10 +121,9 @@ def hitems_sc_create
     ar_op_int = []
     ar_op_int = formDamageValues["op_int"] unless formDamageValues["op_int"].nil?  
     ar_op_off = []
-    ar_op_off = formDamageValues["op_off"] unless formDamageValues["op_off"].nil?
-      
+    ar_op_off = formDamageValues["op_off"] unless formDamageValues["op_off"].nil?      
   else
-    formDamageValues = nil
+    formDamageValues = {}
     ar_op_int = []
     ar_op_off = []      
   end
@@ -218,7 +217,7 @@ def hitems_sc_create
      
       #apro eventuale item in RepairHandlingItem
       if hi.lock_type == 'DAMAGED'
-        rhi = RepairHandlingItem.create_from_hi(hi, {ar_op_int: ar_op_int, ar_op_off: ar_op_off}.with_indifferent_access)
+        rhi = RepairHandlingItem.create_from_hi(hi, {ar_op_int: ar_op_int, ar_op_off: ar_op_off, formDamageValues: formDamageValues}.with_indifferent_access)
       end
        
      render json: {:success => ret_status, :message => message, :hh=>[hh.as_json(extjs_sc_model.constantize.as_json_prop)]}

@@ -24,7 +24,7 @@
 			  , defaults: {labelAlign: 'right', width: '90%', fieldStyle: 'font-size: 1.5em;'}
 	  		  , style: {padding: '15px'}			  	
 	    	  , items: [
-	    	        <%= raw extjs_std_combo_model('customer', @item) -%>,
+	    	        <%= raw extjs_std_combo_model('customer', @item, fieldLabel: 'Cliente') -%>,
 					<%= raw extjs_std_combo('shipowner_id', @item,
 							:fieldLabel => 'Compagnia',
 							:input_name => 'shipowner_id',

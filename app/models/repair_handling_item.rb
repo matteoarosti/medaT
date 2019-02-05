@@ -99,10 +99,13 @@ class RepairHandlingItem < ActiveRecord::Base
        
             
       rhi.save!
-            
+      
+      
+      logger.info ">>>>>>>>>>>>> test if ar_op_int <<<<<<<<<<<<"      
       # se passate (in fase di ispezione) creo gia' le righe legate al preventivo - LAVORAZIONI INTERNE
       if !p[:ar_op_int].nil?
         p[:ar_op_int].each do |c|
+          logger.info ">>>>>>>>>> adding op_int id: #{c[:repair_processing_id]}"
           rhi.add_repair_estimate_item(c[:repair_processing_id], c[:qty], nil, nil, true)
         end
       end
@@ -110,6 +113,7 @@ class RepairHandlingItem < ActiveRecord::Base
       # se passate (in fase di ispezione) creo gia' le righe legate al preventivo - LAVORAZIONI OFFICINA
       if !p[:ar_op_off].nil?
         p[:ar_op_off].each do |c|
+          logger.info ">>>>>>>>>> adding op_int id: #{c[:repair_processing_id]}"
           rhi.add_repair_estimate_item(c[:repair_processing_id], c[:qty])
         end
       end

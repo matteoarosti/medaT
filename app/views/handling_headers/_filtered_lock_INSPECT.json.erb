@@ -516,13 +516,13 @@
 														 //lavorazioni eseguite internamente												             
 											             v_form.down('#op_int').store.each(function(r){
 															if (r.get('qty') > 0)
-																ar_op_int.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+																ar_op_int.push({repair_processing_id: r.get('repair_processing_id'), qty: r.get('qty')});
 														 });
 														 
 														 //lavorazioni da preassegnare a officina												             
 											             v_form.down('#op_off').store.each(function(r){
 															if (r.get('qty') > 0)
-																ar_op_off.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+																ar_op_off.push({repair_processing_id: r.get('repair_processing_id'), qty: r.get('qty')});
 														 });														 
               
 											             var form = this.up('form').getForm();
@@ -567,13 +567,13 @@
 														 //lavorazioni eseguite internamente												             
 											             v_form.down('#op_int').store.each(function(r){
 															if (r.get('qty') > 0)
-																ar_op_int.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+																ar_op_int.push({repair_processing_id: r.get('repair_processing_id'), qty: r.get('qty')});
 														 });
 														 
 														 //lavorazioni da preassegnare a officina												             
 											             v_form.down('#op_off').store.each(function(r){
 															if (r.get('qty') > 0)
-																ar_op_off.push({repair_processing_id: r.get('id'), qty: r.get('qty')});
+																ar_op_off.push({repair_processing_id: r.get('repair_processing_id'), qty: r.get('qty')});
 														 });														 
               
 											             var form = this.up('form').getForm();

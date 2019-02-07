@@ -134,6 +134,15 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         var me = this; //me = grid;			          			         
 			           ret = '<h3>' + Ext.util.Format.date(rec.get('activity').expiration_date, 'd/m/y') + '</h3>';
+			           
+			           if (rec.get('activity').to_be_made_available == true){
+			           	if (!Ext.isEmpty(rec.get('make_available_at')))
+			           		ret += '<p>Messa a disposizione<br/> il ' + Ext.util.Format.date(rec.get('make_available_at'), 'd/m/y H.i') + '</p>';
+			           	else
+			           		ret += '<p>Messa a disposizione<br/>non ancora eseguita</p>';
+			           }
+			           
+			           
 			           return ret;
 			        }			        
 			    }

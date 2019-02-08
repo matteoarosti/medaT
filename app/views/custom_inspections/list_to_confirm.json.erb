@@ -107,7 +107,13 @@
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h1>' + rec.get('container_number') + '</h1>';
-			         ret += '<p>' + rec.data.activity.shipowner.name + '</p>';
+			         ret += '<p>';
+			         ret += rec.data.activity.shipowner.name;
+			         
+					  if (!Ext.isEmpty(rec.get('activity').created_user_name))
+					  	ret += '<br><font size=1>[' + rec.get('activity').created_user_name + '</font>]';
+
+			         ret += '</p>';
 			         return ret;			         
 			        }			        
 			    }

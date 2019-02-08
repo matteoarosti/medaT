@@ -150,8 +150,16 @@
 			        width: 200,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h3>' + rec.get('customer').name + '</h3>';
-			         if (!Ext.isEmpty(rec.get('shipowner')))
-			           ret += '<h4>[' + rec.get('shipowner').name + ']</h4>';
+			         
+			         ret += '<p>';			         
+				         if (!Ext.isEmpty(rec.get('shipowner')))
+				           ret += rec.get('shipowner').name;
+				          
+				          if (!Ext.isEmpty(rec.get('created_user_name')))
+				          	ret += '<br><font size=1>[' + rec.get('created_user_name') + ']</font>';
+			         
+			         ret += '</p>'; 	
+			          	 
 			          return ret;			         
 			        }			        
 			    }

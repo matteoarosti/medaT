@@ -17,7 +17,10 @@ class ActivityDettContainer < ActiveRecord::Base
   def self.as_json_prop()
       return {
          :include=>{
-           :activity  => {include: {activity_op: {}, shipowner: {}, customer: {only: 'name'}}} 
+           :activity  => {
+              include: {activity_op: {}, shipowner: {}, customer: {only: 'name'}},
+              :methods => [:created_user_name]
+           }
          }
        }
   end     

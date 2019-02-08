@@ -27,9 +27,18 @@ class Activity < ActiveRecord::Base
            :terminal => {},
            :activity_op => {:only=>[:name, :default_price]},
            :activity_dett_containers => {:only => [:container_number, :status, :make_available_at, :execution_at, :confirmed_at]}
-           }
+           },
+         :methods => [:created_user_name]
          }       
   end     
+  
+  
+  def created_user_name
+    u = User.find(self.created_user_id) rescue u = nil
+    return u.name if !u.nil?
+    self.created_user_id
+  end
+  
   
   def is_activity(activity_type_code)
     if !self.activity_type.nil? && self.activity_type.code == activity_type_code

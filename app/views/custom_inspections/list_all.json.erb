@@ -1,0 +1,211 @@
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  is_main_panel: true,
+  
+  title: 'Richieste - ALL',
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+	
+  	viewModel: {
+			data: {
+			}	
+	},  	
+
+  items: [
+       
+   // grid con righe import
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Elenco richieste - ALL', flex: 50,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',        	            	    
+        	    
+				dockedItems: [
+		        	   { 
+		        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
+		        	    items: [		        	    
+		        	    
+						  {
+						    xtype: 'form', height: 30,
+						    layout: {
+							    type: 'hbox',
+							    pack: 'start',
+							    align: 'stretch'
+							},
+						    items: [
+							    	{
+										xtype: 'textfield',
+						                fieldLabel: 'Container',
+						                name: 'flt_num_container'
+							      	}, {	
+											xtype: 'datefield', labelAlign: 'right',
+											padding: '0 0 0 10',
+							                fieldLabel: 'Da data', name: 'flt_date_from'
+							 		}, {	
+											xtype: 'datefield', labelAlign: 'right',
+											padding: '0 0 0 10',
+							                fieldLabel: 'A data', name: 'flt_date_to'
+							 		}
+						    	]
+						 	}
+		        	     , '->',
+		        	    	{iconCls: 'fa fa-filter fa-2x', text: 'Filtra', scale: 'large', 
+						 		handler: function(event, toolEl, panel){ 
+				 						var loc_grid = this.up('grid');
+		 								var header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+		 								loc_grid.getStore().proxy.extraParams.f_values = header_form.getValues(); 						 						
+				 						loc_grid.getStore().load();
+						 			}
+						 		}
+						 , {iconCls: 'fa fa-close fa-2x', scale: 'large', 
+						 		handler: function(event, toolEl, panel){ 
+				 						this.up('container[is_main_panel=true]').destroy();
+						 			}
+						 		}	        	    
+						      	
+
+		        	    		        	     
+						 ]
+					  }
+					],        	    
+        	    		        		        
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'custom_inspections/list_all_data').to_json -%>,
+        	            extraParams: {
+        	            },
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	        
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	           	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: 'Seq',
+			        width: 50,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'container_number',
+			        text: 'Container',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '<h1>' + rec.get('container_number') + '</h1>';
+			         ret += '<p>';
+			         ret += rec.data.activity.shipowner.name;
+			         
+					  if (!Ext.isEmpty(rec.get('activity').created_user_name))
+					  	ret += '<br><font size=1>[' + rec.get('activity').created_user_name + '</font>]';
+
+			         ret += '</p>';
+			         return ret;			         
+			        }			        
+			    }
+			    				    
+				, {	
+			        dataIndex: 'container_number',
+			        text: 'Dettagli',
+			        flex: 1,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			         
+			           ret = '';
+			           ret = '<h3>' + rec.data.activity.activity_op.name + '</h3>';
+			           ret += '<h3>' + rec.data.activity.customer.name + '</3>';			           
+			           
+			           return ret;
+			         			         			        
+			        }			        	        
+			    }	
+
+
+			    , {
+			        dataIndex: 'container_number',
+			        text: 'Da effetturare il',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          			         
+			           ret = '<h3>' + Ext.util.Format.date(rec.get('activity').expiration_date, 'd/m/y') + '</h3>';
+			           
+			           if (rec.get('activity').to_be_made_available == true){
+			           	if (!Ext.isEmpty(rec.get('make_available_at')))
+			           		ret += '<p>Messa a disposizione<br/> il ' + Ext.util.Format.date(rec.get('make_available_at'), 'd/m/y H.i') + '</p>';
+			           	else
+			           		ret += '<p>Messa a disposizione<br/>non ancora eseguita</p>';
+			           }
+			           
+			           
+			           return ret;
+			        }			        
+			    }
+
+			    
+			    , {
+			        dataIndex: 'container_number',
+			        text: 'Visita eseguita',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          
+			         
+			         
+			          if (!Ext.isEmpty(rec.get('execution_at'))){
+			           ret = '<h3 style="color: green;">' + Ext.util.Format.date(rec.get('execution_at'), 'd/m/y H:i') + '</h3>';
+			           return ret;
+			          }
+			        }			        
+			    }
+			    		    
+			    			    
+			    , {
+			        dataIndex: 'container_number',
+			        text: 'Visita confermata',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          
+			         
+			           if (!Ext.isEmpty(rec.get('confirmed_at'))){
+			             ret = '<h3 style="color: green;">' + Ext.util.Format.date(rec.get('confirmed_at'), 'd/m/y H:i') + '</h3>';
+			             return ret;
+			           }
+			        }			        
+			    }
+
+        ] //columns
+               
+
+                        	    
+    }    
+   
+  ]
+ }
+ ]
+}

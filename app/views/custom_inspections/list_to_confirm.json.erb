@@ -22,7 +22,7 @@
 		 {
 				flex: 1,
 				layout: 'fit',
-        	    title: 'Elenco richieste', flex: 50,
+        	    title: 'Elenco richieste in attesa', flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
@@ -51,12 +51,18 @@
 						 }		        	    
 		        	    
 		        	     , '->',
+		        	    	{iconCls: 'fa fa-filter fa-2x', text: 'Tutte', scale: 'large', 
+						 		handler: function(event, toolEl, panel){ 
+				 						acs_show_panel_std(myApp, '<%= url_for(:controller=>'custom_inspections', :action=>'list_all') -%>', {}, 'ALL');	                             			                           	                             
+			                           	return false;
+						 			}
+						 		},		        	     
 		        	    	{iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
 						 		handler: function(event, toolEl, panel){ 
-						 						var loc_grid = this.up('grid');
-				 								var header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
-				 								loc_grid.getStore().proxy.extraParams.f_values = header_form.getValues(); 						 						
-						 						loc_grid.getStore().load();
+				 						var loc_grid = this.up('grid');
+		 								var header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
+		 								loc_grid.getStore().proxy.extraParams.f_values = header_form.getValues(); 						 						
+				 						loc_grid.getStore().load();
 						 			}
 						 		}
 						 ]

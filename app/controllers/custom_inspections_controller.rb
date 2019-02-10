@@ -102,6 +102,13 @@ class CustomInspectionsController < ApplicationController
    
 
    ##################################################
+   def list_all
+   ##################################################    
+   end
+   
+   
+
+   ##################################################
    def list_to_confirm_data
    ##################################################
      items = ActivityDettContainer.eager_load(:activity).preload(:activity_op, :shipowner)
@@ -120,7 +127,25 @@ class CustomInspectionsController < ApplicationController
      render json: {:success => true, items: items.as_json(ActivityDettContainer.as_json_prop)}
    end
      
+
    
+   
+    ##################################################
+    def list_all_data
+    ##################################################
+      items = ActivityDettContainer.eager_load(:activity).preload(:activity_op, :shipowner)
+      if !params[:f_values].blank?               
+       items = items.where("container_number LIKE  ?", "%#{params[:f_values][:flt_num_container].strip}%") unless params[:f_values][:flt_num_container].empty?
+        items = items.where("activities.expiration_date >= ?", Time.zone.parse(params[:f_values]['flt_date_from']).beginning_of_day) unless params[:f_values]['flt_date_from'].blank?
+        items = items.where("activities.expiration_date <= ?", Time.zone.parse(params[:f_values]['flt_date_to']).end_of_day) unless params[:f_values]['flt_date_to'].blank?
+      end      
+      
+      items = items.order("activities.expiration_date desc").limit(200)
+                         
+      render json: {:success => true, items: items.as_json(ActivityDettContainer.as_json_prop)}
+    end
+
+      
    def verify_container_exists
      item = search_hh_tmov_open(params[:data][:container_number], params[:data][:activity][:shipowner_id])
      render json: {:success => true, item: item}

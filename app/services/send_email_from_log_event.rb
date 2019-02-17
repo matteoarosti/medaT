@@ -6,7 +6,8 @@ class SendEmailFromLogEvent
             
       HandlingMailer.send_simple(ij[:email][:to], 
                                  ij[:email][:subject], 
-                                 ij[:email][:msg]).deliver!
+                                 ij[:email][:msg],
+                                 'text/html').deliver!
     end     
     
   end #call

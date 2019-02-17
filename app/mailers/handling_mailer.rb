@@ -119,8 +119,8 @@ class HandlingMailer < ActionMailer::Base
   #INVIA MAIL CON BODY INLNE
   #**************************************************************
   #**************************************************************
-  def send_simple(email_to, subject, body)
-    mail(:to => email_to, :subject => subject, :body => body)
+  def send_simple(email_to, subject, body, content_type = 'text/plain')    
+    mail(:to => email_to, :subject => subject, :body => body, content_type: content_type)
   end
   
   

@@ -34,7 +34,7 @@ Cliente: #{item.customer.name}<br/>
 Compagnia: #{item.shipowner.name}<br/>
 Operaione: #{item.activity_op.name}<br/>
     "
-    LogEvent.send_mail(item, 'NEW_ACTIVITY', merge_email_to(item.customer.email_notify_activity, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'NEW_ACT')), 'Notifica nuova attivit&agrave;', text_email)
+    LogEvent.send_mail_html(item, 'NEW_ACTIVITY', merge_email_to(item.customer.email_notify_activity, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'NEW_ACT')), 'Notifica nuova attivit&agrave;', text_email)
     
     render json: {:success => true}
   end

@@ -33,12 +33,18 @@ class CustomInspectionsController < ApplicationController
 Cliente: #{item.customer.name}<br/>
 Compagnia: #{item.shipowner.name}<br/>
 Operaione: #{item.activity_op.name}<br/>
-Messa a disposizione: #{item.to_be_made_available}
-Terminal: #{item.termina.name}
-Booking: #{item.booking_number.to_s}
-Quantit&agrave;: #{item.quantity}
-Da effettuare il: #{item.expiration_date}
-    "
+Messa a disposizione: #{item.to_be_made_available}<br/>
+Terminal: #{item.termina.name}<br/>
+Booking: #{item.booking_number.to_s}<br/>
+Quantit&agrave;: #{item.quantity}<br/>
+Da effettuare il: #{item.expiration_date}<br/>
+------------<br/>"
+
+    params["container_number"].each do |c|
+      text_email += "Container: #{c.strip}<br/>"
+    end
+
+
     LogEvent.send_mail_html(item, 'NEW_ACTIVITY', merge_email_to(item.customer.email_notify_activity, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'NEW_ACT')), 'Notifica nuova attività', text_email)
     
     render json: {:success => true}

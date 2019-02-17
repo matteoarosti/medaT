@@ -11,13 +11,13 @@ class SendEmailFromLogEvent
                                    ij[:email][:subject], 
                                    ij[:email][:msg],
                                    ij[:email][:content_type] || 'text/plain').deliver!
-        ij.result_at = Time.zone.now                             
-        ij.save!
+        i.result_at = Time.zone.now                             
+        i.save!
       rescue Exception => e
         #memorizzo l'errore
-        ij.result_at = Time.zone.now
-        ij.result_notes = e.message
-        ij.save!
+        i.result_at = Time.zone.now
+        i.result_notes = e.message
+        i.save!
       end
       
       

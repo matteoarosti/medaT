@@ -41,8 +41,10 @@ Da effettuare il: #{item.expiration_date}<br/>
 ------------<br/>"
 
     params["container_number"].each do |c|
-      text_email += "Container: #{c.strip}<br/>"
+      text_email += "Container: #{c.strip}<br/>" if !c.strip.empty?
     end
+    
+    text_mail += "<br/><br/>medaT software for Icop"
 
 
     LogEvent.send_mail_html(item, 'NEW_ACTIVITY', merge_email_to(item.customer.email_notify_activity, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'NEW_ACT')), 'Notifica nuova attività', text_email)

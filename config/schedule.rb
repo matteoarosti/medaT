@@ -9,6 +9,7 @@ set :environment, "development"
 
 every 3.minute do
   runner "SendEmailHiNotify.new.call"
+  runner "SendEmailFromLogEvent.new.call"
 end
 
 every 2.hours do  

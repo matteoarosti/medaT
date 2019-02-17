@@ -4,10 +4,11 @@ class SendEmailFromLogEvent
     LogEvent.where(operation_crud: 'E').where(result_at: nil).each do |i|
       ij = (ActiveSupport::JSON.decode i.notes).with_indifferent_access
             
-      HandlingMailer.send_simple(ij[:email][:to], 
+      ret = HandlingMailer.send_simple(ij[:email][:to], 
                                  ij[:email][:subject], 
                                  ij[:email][:msg],
-                                 'text/html').deliver!
+                                 ij[:email][:content_type] || 'text/plain').deliver!
+      puts ret.to_json
     end     
     
   end #call

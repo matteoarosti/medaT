@@ -29,12 +29,17 @@ class CustomInspectionsController < ApplicationController
     
     
     text_email = "
-<h2>Notifica inserimento nuova attivit&agrave;<h2>
+<h2>Notifica inserimento nuova attivit&agrave;</h2>
 Cliente: #{item.customer.name}<br/>
 Compagnia: #{item.shipowner.name}<br/>
 Operaione: #{item.activity_op.name}<br/>
+Messa a disposizione: #{item.to_be_made_available}
+Terminal: #{item.termina.name}
+Booking: #{item.booking_number.to_s}
+Quantit&agrave;: #{item.quantity}
+Da effettuare il: #{item.expiration_date}
     "
-    LogEvent.send_mail_html(item, 'NEW_ACTIVITY', merge_email_to(item.customer.email_notify_activity, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'NEW_ACT')), 'Notifica nuova attivit&agrave;', text_email)
+    LogEvent.send_mail_html(item, 'NEW_ACTIVITY', merge_email_to(item.customer.email_notify_activity, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'NEW_ACT')), 'Notifica nuova attività', text_email)
     
     render json: {:success => true}
   end

@@ -10,5 +10,24 @@ class LogEvent < ActiveRecord::Base
       notes: p.to_json
     })
   end
+
   
+  
+  def self.send_mail(e, op = 'ND', to = nil, subject = '', msg = '', p = {})
+    LogEvent.create!({
+      entity_name: e.class.name,
+      entity_id: e.id,
+      operation_crud: 'E',
+      operation: op,
+      notes: {
+        email: {
+          to: to,
+          subject: subject,
+          msg: msg
+        }
+      }.to_json
+    })
+  end
+  
+    
 end

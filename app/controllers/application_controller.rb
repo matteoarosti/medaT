@@ -183,5 +183,10 @@ class ApplicationController < ActionController::Base
     User.current = current_user
   end
   
+  
+  
+  def merge_email_to(*p)
+    p.join(';')
+  end
     
 end

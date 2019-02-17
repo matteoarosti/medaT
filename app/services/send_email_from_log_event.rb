@@ -15,7 +15,7 @@ class SendEmailFromLogEvent
         ij.save!
       rescue Exception => e
         #memorizzo l'errore
-        ij.result_at = Time.zone.new
+        ij.result_at = Time.zone.now
         ij.result_notes = e.message
         ij.save!
       end

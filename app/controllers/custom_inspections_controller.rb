@@ -34,7 +34,7 @@ Cliente: #{item.customer.name}<br/>
 Compagnia: #{item.shipowner.name}<br/>
 Operaione: #{item.activity_op.name}<br/>
 Messa a disposizione: #{item.to_be_made_available}<br/>
-Terminal: #{item.termina.name}<br/>
+Terminal: #{item.terminal.name}<br/>
 Booking: #{item.booking_number.to_s}<br/>
 Quantit&agrave;: #{item.quantity}<br/>
 Da effettuare il: #{item.expiration_date}<br/>

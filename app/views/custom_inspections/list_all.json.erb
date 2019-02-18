@@ -179,6 +179,10 @@
 			         
 			          if (!Ext.isEmpty(rec.get('execution_at'))){
 			           ret = '<h3 style="color: green;">' + Ext.util.Format.date(rec.get('execution_at'), 'd/m/y H:i') + '</h3>';
+			           
+					  if (!Ext.isEmpty(rec.get('execution_user_name')))
+					  	ret += '<font size=1>[' + rec.get('execution_user_name') + '</font>]';
+			           
 			           return ret;
 			          }
 			        }			        
@@ -194,6 +198,10 @@
 			         
 			           if (!Ext.isEmpty(rec.get('confirmed_at'))){
 			             ret = '<h3 style="color: green;">' + Ext.util.Format.date(rec.get('confirmed_at'), 'd/m/y H:i') + '</h3>';
+			             
+					  if (!Ext.isEmpty(rec.get('confirmed_user_name')))
+					  	ret += '<font size=1>[' + rec.get('confirmed_user_name') + '</font>]';
+			             
 			             return ret;
 			           }
 			        }			        

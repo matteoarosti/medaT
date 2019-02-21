@@ -51,6 +51,12 @@ Note: #{item.notes.to_s}<br/>
 
     LogEvent.send_mail_html(item, 'NEW_ACTIVITY', merge_email_to(item.customer.email_notify_activity.to_s, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'NEW_ACT').to_s), 'Notifica nuova attività', text_email)
     
+    #solo se e' stata richiesta la messa a disposizione invio email a Agenzia (Archibugi)
+    if (item.to_be_made_available)
+      LogEvent.send_mail_html(item, 'NEW_ACT_MA', merge_email_to('', TabConfig.get_notes('EMAIL', 'CUST_INSP', 'NEW_ACT_MA').to_s), 'Notifica nuova attività con Messa a disposizione', text_email)
+    end
+    
+    
     render json: {:success => true}
   end
   

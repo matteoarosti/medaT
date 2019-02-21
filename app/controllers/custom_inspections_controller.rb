@@ -115,7 +115,7 @@ Utente: #{item.make_available_user_name}<br/>
 Container: #{item.container_number}<br/>
 Operazione: #{item.activity.activity_op.name}<br/>
 Compagnia: #{item.activity.shipowner.name}<br/>
-Utente: #{item.make_available_user_name}<br/>    
+Utente: #{item.execution_user_name}<br/>    
 ------------<br/><br/><br/>medaT software for Icop"
 
     LogEvent.send_mail_html(item, 'EXEC', merge_email_to(item.activity.customer.email_notify_activity.to_s, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'EXEC').to_s), "Notifica attività eseguita - Container: #{item.container_number}", text_email)    
@@ -247,7 +247,7 @@ text_email = "
 Container: #{item.container_number}<br/>
 Operazione: #{item.activity.activity_op.name}<br/>
 Compagnia: #{item.activity.shipowner.name}<br/>
-Utente: #{item.make_available_user_name}<br/>    
+Utente: #{item.confirmed_user_name}<br/>    
 ------------<br/><br/><br/>medaT software for Icop"
 
 LogEvent.send_mail_html(item, 'CONF', merge_email_to(item.activity.customer.email_notify_activity.to_s, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'CONF').to_s), "Notifica attività confermata - Container: #{item.container_number}", text_email)    

@@ -30,14 +30,16 @@ class CustomInspectionsController < ApplicationController
     
     text_email = "
 <h2>Notifica inserimento nuova attivit&agrave;</h2>
+Utente: #{item.created_user_name}<br/>
 Cliente: #{item.customer.name}<br/>
 Compagnia: #{item.shipowner.name}<br/>
 Operaione: #{item.activity_op.name}<br/>
-Messa a disposizione: #{item.to_be_made_available}<br/>
+Messa a disposizione: #{item.to_be_made_available ? "Si" : "No"}<br/>
 Terminal: #{item.terminal.name}<br/>
 Booking: #{item.booking_number.to_s}<br/>
 Quantit&agrave;: #{item.quantity}<br/>
 Da effettuare il: #{item.expiration_date}<br/>
+Note: #{item.notes.to_s}<br/>
 ------------<br/>"
 
     params["container_number"].each do |c|

@@ -60,7 +60,7 @@
 		<%= raw extjs_std_textareafield('notes', @item) -%>,
 	        
 	    <%= raw extjs_fieldcontainer('', {}, [
-	    								extjs_std_datefield('expiration', @item, {:allowBlank => true}, fcR {}),
+	    								extjs_std_datefield('expiration', @item, {:allowBlank => true}),
 	    								extjs_std_datefield('beginning', @item, {:allowBlank => true, fieldLabel: 'Valido dal'	}, fcR {})
 	    								]) -%>,
 	    <%= raw extjs_fieldcontainer('', {}, [

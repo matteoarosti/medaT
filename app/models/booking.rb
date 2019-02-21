@@ -74,12 +74,19 @@ end
 def valida_insert_item(hi)
  ret = {}
      
- #controllo lo stato del booking
+ #controllo la data di validita' del booking (expiration)
  if !self.expiration.blank? && self.expiration  < Date.today
    ret[:is_valid] = false
    ret[:message]  = 'Il booking e\' scaduto'
    return ret
  end
+ 
+  #controllo la data di validita' del booking (beginning)
+  if !self.beginning.blank? && self.beginning  > Date.today
+    ret[:is_valid] = false
+    ret[:message]  = 'Il booking non e\' ancora valido'
+    return ret
+  end 
  
  #controllo lo stato del booking
  if self.status != 'OPEN' || hi.booking_item.status != 'OPEN'

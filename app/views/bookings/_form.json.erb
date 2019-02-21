@@ -60,9 +60,13 @@
 		<%= raw extjs_std_textareafield('notes', @item) -%>,
 	        
 	    <%= raw extjs_fieldcontainer('', {}, [
-	    								extjs_std_combo('status', @item, :store => extjs_std_store_data(@item.status_get_data_json)),
 	    								extjs_std_datefield('expiration', @item, {:allowBlank => true}, fcR {}),
-	    								extjs_std_booleanfield('to_check', @item, {}, fcR)]) -%>,
+	    								extjs_std_datefield('beginning', @item, {:allowBlank => true, fieldLabel: 'Valido dal'	}, fcR {})
+	    								]) -%>,
+	    <%= raw extjs_fieldcontainer('', {}, [
+	    								extjs_std_combo('status', @item, :store => extjs_std_store_data(@item.status_get_data_json)),
+	    								extjs_std_booleanfield('to_check', @item, {}, fcR)
+	    								]) -%>,	    								
 	    								
 		<%= raw extjs_std_booleanfield('to_weigh_in_terminal', @item, {:fieldLabel => 'Richiedi pesa'}, fcR) -%>	    								
 	   ],

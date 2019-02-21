@@ -30,7 +30,14 @@ class ActivityDettContainer < ActiveRecord::Base
     Activity::default_scope
   end
   
+
+  def make_available_user_name
+    u = User.find(self.make_available_user_id) rescue u = nil
+    return u.name if !u.nil?
+    self.make_available_user_id
+  end
   
+    
   def execution_user_name
     u = User.find(self.execution_user_id) rescue u = nil
     return u.name if !u.nil?

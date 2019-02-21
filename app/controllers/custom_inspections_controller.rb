@@ -33,7 +33,7 @@ class CustomInspectionsController < ApplicationController
 Utente: #{item.created_user_name}<br/>
 Cliente: #{item.customer.name}<br/>
 Compagnia: #{item.shipowner.name}<br/>
-Operaione: #{item.activity_op.name}<br/>
+Operazione: #{item.activity_op.name}<br/>
 Messa a disposizione: #{item.to_be_made_available ? "Si" : "No"}<br/>
 Terminal: #{item.terminal.name}<br/>
 Booking: #{item.booking_number.to_s}<br/>
@@ -81,6 +81,18 @@ Note: #{item.notes.to_s}<br/>
     item.make_available_notes   = params[:check_form][:notes] unless params[:check_form].nil?       
     item.make_available_user_id = current_user.id
     item.save!
+    
+    
+    text_email = "
+<h2>Notifica messa a disposizione</h2>
+Container: #{item.container_number}<br/>
+Operazione: #{item.activity.activity_op.name}<br/>
+Compagnia: #{item.activity.shipowner.name}<br/>
+Utente: #{item.make_available_user_name}<br/>    
+------------<br/><br/><br/>medaT software for Icop"
+
+    LogEvent.send_mail_html(item, 'MAKE_AV', merge_email_to(item.activity.customer.email_notify_activity.to_s, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'MAKE_AV').to_s), "Notifica messa a disposizione - Container: #{item.container_number}", text_email)
+    
     render json: {:success => true}
   end
   
@@ -91,6 +103,17 @@ Note: #{item.notes.to_s}<br/>
     item.execution_notes   = params[:check_form][:notes]       
     item.execution_user_id = current_user.id    
     item.save!
+    
+    text_email = "
+<h2>Notifica attività eseguita</h2>
+Container: #{item.container_number}<br/>
+Operazione: #{item.activity.activity_op.name}<br/>
+Compagnia: #{item.activity.shipowner.name}<br/>
+Utente: #{item.make_available_user_name}<br/>    
+------------<br/><br/><br/>medaT software for Icop"
+
+    LogEvent.send_mail_html(item, 'EXEC', merge_email_to(item.activity.customer.email_notify_activity.to_s, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'EXEC').to_s), "Notifica attività eseguita - Container: #{item.container_number}", text_email)    
+    
     render json: {:success => true}
   end
   
@@ -211,6 +234,18 @@ Note: #{item.notes.to_s}<br/>
      
       #loggo
       LogEvent.base(item, 'U', 'cu_inspect_confirmed')
+
+      #Invio notifica email      
+text_email = "
+<h2>Notifica attività confermata</h2>
+Container: #{item.container_number}<br/>
+Operazione: #{item.activity.activity_op.name}<br/>
+Compagnia: #{item.activity.shipowner.name}<br/>
+Utente: #{item.make_available_user_name}<br/>    
+------------<br/><br/><br/>medaT software for Icop"
+
+LogEvent.send_mail_html(item, 'CONF', merge_email_to(item.activity.customer.email_notify_activity.to_s, TabConfig.get_notes('EMAIL', 'CUST_INSP', 'CONF').to_s), "Notifica attività confermata - Container: #{item.container_number}", text_email)    
+      
           
      render json: {:success => true}
    end

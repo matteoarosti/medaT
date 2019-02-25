@@ -120,7 +120,12 @@ end
 def get_import_row
  @ih = ImportHeader.find(params[:import_header_id])
  ret = {}
-   items = @ih.import_items
+   #items = @ih.import_items
+   
+   #mostro tutti i container dei viaggi che hanno la stessa parte iniziale (es: 1709, 1709 M, ...)
+   real_voyage = @ih.voyage.split(' ')[0]
+   items = ImportItem.joins(:import_header).where("SUBSTR(import_headers.voyage, 1, #{real_voyage.size}) = '#{real_voyage}'")
+   items = items.where(import_headers: {import_type: @ih.import_type, import_status: @ih.import_status, ship_id: @ih.ship_id})
    items = items.where("status IS NULL") unless params[:show_imported].to_i == 1
    items = items.where("container_number LIKE ?", "%#{params[:flt_num_container].upcase}%") if !params[:flt_num_container].to_s.empty?
    ret[:items] = items.order(:container_number).as_json(ImportItem.as_json_prop)

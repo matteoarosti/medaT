@@ -113,6 +113,10 @@
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h1>' + rec.get('container_number') + '</h1>';
+			         
+			         if (!Ext.isEmpty(rec.get('creation_notes')))
+			           ret += '<p>' + rec.get('creation_notes') + '</p>';
+			         
 			         ret += '<p>';
 			         ret += rec.data.activity.shipowner.name;
 			         

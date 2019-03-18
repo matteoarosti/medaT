@@ -91,27 +91,106 @@
 			  		  , style: {padding: '10px 10px'}			  	
 			    	  , items: [
 			    	  		{html: '<h1>Indicare i container se gi&agrave; a conoscenza</h1>'}
-					        
-					      , {xtype: 'textfield',   fieldLabel: '1)',  flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '2)',  flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '3)',  flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '4)',  flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '5)',  flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '6)',  flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '7)',  flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '8)',  flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '9)',  flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '10)', flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '11)', flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '12)', flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '13)', flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '14)', flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '15)', flex: 1, name: 'container_number[]'}					      					      					      
-					      , {xtype: 'textfield',   fieldLabel: '16)', flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '17)', flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '18)', flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '19)', flex: 1, name: 'container_number[]'}
-					      , {xtype: 'textfield',   fieldLabel: '20)', flex: 1, name: 'container_number[]'}					      					      					      
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '1)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '2)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '3)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '4)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '5)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '6)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '7)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '8)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '9)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '10)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '11)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '12)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '13)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '14)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '15)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}					      					      					      
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '16)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '17)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '18)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '19)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}
+					      , {xtype: 'fieldcontainer', layout: {type: 'hbox', align : 'begin', pack  : 'start'}, 
+					      		defaults: {labelAlign: 'right'}, items: [  
+					      		{xtype: 'textfield',   fieldLabel: '20)',  flex: 1, name: 'container_number[]', fieldStyle: 'font-size: 1.5em;', maxLength: 11},
+					      		{xtype: 'textarea',    fieldLabel: 'Note',  flex: 1, name: 'container_notes[]'}
+					      		]}					      					      					      
 					        
 						] //items
 					}				]

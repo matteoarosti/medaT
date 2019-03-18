@@ -233,8 +233,13 @@
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         ret = '<h1>' + rec.get('container_number') + '</h1>';
 			         
+			         if (!Ext.isEmpty(rec.get('creation_notes')))
+			           ret += '<p>' + rec.get('creation_notes') + '</p>';
+			         
+			         
 			         if (rec.get('status') == 'ANN')
 			           ret += '<h2><font color=red>Richiesta annullata</font></h2>';
+			         
 			         
 			         return ret;			         
 			        }			        

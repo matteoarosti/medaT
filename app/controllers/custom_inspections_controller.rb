@@ -11,18 +11,22 @@ class CustomInspectionsController < ApplicationController
   ####################################################     
   def exe_save
   ####################################################    
+    logger.info params.to_json
     to_h_data = params.dup  #clono perche' altrimenti non ritrovo i valori rimossi con delete    
-    to_h_data.except!("container_number", "authenticity_token", "controller", "action").permit!
+    to_h_data.except!("container_number", "container_notes", "authenticity_token", "controller", "action").permit!
     
     item = Activity.new
     item.activity_type_id = ActivityType.find_by_code('CUST_INSPECTION').id
     item.update(to_h_data)
     
     #scrivo le righe di dettagli containers
+    cc = 0
     params["container_number"].each do |c|
       if !c.strip.blank?
-        item.activity_dett_containers.new(container_number: c.strip)
+        c_notes = params["container_notes"][cc].blank? ? nil : params["container_notes"][cc]
+        item.activity_dett_containers.new(container_number: c.strip, creation_notes: c_notes)
       end
+      cc += 1
     end    
     
     item.save!()

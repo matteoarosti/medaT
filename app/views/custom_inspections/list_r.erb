@@ -74,12 +74,12 @@ items = items.order("activities.expiration_date desc").limit(200)
 			
 			<td>				
 				<%= raw "<p>#{rec.execution_at.strftime("%d/%m/%y %H:%M")}</p>" if rec.execution_at  -%>
-				<%= raw "<p>#{rec.execution_user_name}</p>" if rec.execution_user_name  -%>
+				<%= raw "<p><font size=1>[#{rec.execution_user_name}]</p>" if rec.execution_user_name  -%>
 			</td>
 			
 			<td>				
 				<%= raw "<p>#{rec.confirmed_at.strftime("%d/%m/%y %H:%M")}</p>" if rec.confirmed_at  -%>
-				<%= raw "<p>#{rec.confirmed_user_name}</p>" if rec.confirmed_user_name  -%>
+				<%= raw "<p><font size=1>[#{rec.confirmed_user_name}]</p>" if rec.confirmed_user_name  -%>
 			</td>			
 			
 		</tr>

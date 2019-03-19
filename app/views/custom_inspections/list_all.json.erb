@@ -41,19 +41,38 @@
 							    pack: 'start',
 							    align: 'stretch'
 							},
+							defaults: {
+								margin: 5
+							},
 						    items: [
 							    	{
 										xtype: 'textfield',
-						                fieldLabel: 'Container',
-						                name: 'flt_num_container'
+						                name: 'flt_num_container',
+						                emptyText: 'Container'
 							      	}, {	
-											xtype: 'datefield', labelAlign: 'right',
-											padding: '0 0 0 10',
-							                fieldLabel: 'Da data', name: 'flt_date_from'
+											xtype: 'datefield', labelAlign: 'right', width: 140,
+											padding: '0 0 0 5',
+							                name: 'flt_date_from',
+							                emptyText: 'Da seguire dal'
 							 		}, {	
-											xtype: 'datefield', labelAlign: 'right',
-											padding: '0 0 0 10',
-							                fieldLabel: 'A data', name: 'flt_date_to'
+											xtype: 'datefield', labelAlign: 'right',  width: 140,
+											padding: '0 0 0 5',
+											name: 'flt_date_to',
+							                emptyText: '.. al'
+							                
+							 		}, {
+							 			xtype: 'fieldcontainer', padding: '5 5 5 5', layout: 'hbox', items: [
+											{													
+														xtype: 'checkboxfield',														
+										                boxLabel: 'Eseguite',
+										                margin: '0px 8px 0px 0px',
+										                name: 'show_executed', inputValue: 1, value: 1, uncheckedValue: 0
+										    }, {													
+														xtype: 'checkboxfield',														
+										                boxLabel: 'Non seguite',
+										                name: 'show_not_executed', inputValue: 1, value: 1, uncheckedValue: 0
+										      }							 			
+							 			]
 							 		}
 						    	]
 						 	}
@@ -66,6 +85,24 @@
 				 						loc_grid.getStore().load();
 						 			}
 						 		}
+						 , {iconCls: 'fa fa-print fa-2x', scale: 'large', 
+						 		handler: function(event, toolEl, panel){ 
+				 						
+				 						var loc_grid = this.up('grid'),
+		 								    header_form = loc_grid.getDockedComponent('toptoolbar').down('form');
+				 						
+							            if(header_form.getForm().isValid()){
+							                header_form.getForm().submit({
+							                    method: 'POST',
+							                    url: '<%= url_for(:controller=>'custom_inspections', :action=>'list_r', :authenticity_token => form_authenticity_token) -%>',             
+							                    params: {formValues: Ext.encode(header_form.getValues())},
+							                    method: 'POST',
+							                    standardSubmit: true,
+							                    target: '_blank'
+							                });
+							            }
+								 	}
+						 		}		
 						 , {iconCls: 'fa fa-close fa-2x', scale: 'large', 
 						 		handler: function(event, toolEl, panel){ 
 				 						this.up('container[is_main_panel=true]').destroy();

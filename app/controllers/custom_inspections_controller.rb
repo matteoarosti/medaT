@@ -1,5 +1,5 @@
 class CustomInspectionsController < ApplicationController
-
+  layout "application_report", only: [:list_r]
 
   #inserimento nuova richiesta
   def new_request
@@ -196,7 +196,10 @@ Utente: #{item.execution_user_name}<br/>
        items = items.where("container_number LIKE  ?", "%#{params[:f_values][:flt_num_container].strip}%") unless params[:f_values][:flt_num_container].empty?
         items = items.where("activities.expiration_date >= ?", Time.zone.parse(params[:f_values]['flt_date_from']).beginning_of_day) unless params[:f_values]['flt_date_from'].blank?
         items = items.where("activities.expiration_date <= ?", Time.zone.parse(params[:f_values]['flt_date_to']).end_of_day) unless params[:f_values]['flt_date_to'].blank?
-      end      
+        
+        items = items.where("activity_dett_containers.execution_date IS NULL") if params[:f_values]['show_executed'] == 0  
+        items = items.where("activity_dett_containers.execution_date IS NOT NULL")     if params[:f_values]['show_not_executed'] == 0
+      end
       
       items = items.order("activities.expiration_date desc").limit(200)
                          
@@ -294,7 +297,10 @@ LogEvent.send_mail_html(item, 'CONF', merge_email_to(item.activity.customer.emai
       render json: {:success => false, message: "Ci sono #{num_pending} richieste in sospeso che devono essere confermate, posicipate o annullate. Utilizza il menu \"Conferma/gestisci visite doganali\" per gestirle"}
     end
   end
-   
+
+  
+  def list_r
+  end   
    
    private
    

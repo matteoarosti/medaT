@@ -51,7 +51,7 @@ items = items.order("activities.expiration_date desc").limit(200)
 				<%= raw "<p>#{rec.creation_notes}</p>" unless rec.creation_notes.nil? -%>
 				
 				<p>
-				<%= raw "<p>#{rec.activity.shipowner.name}</p>" -%>
+				<%= raw "#{rec.activity.shipowner.name}" -%>
 				<%= raw "<br/><font size=1>[#{rec.activity.created_user_name}</font>]" unless rec.activity.created_user_name.nil? -%>
 				</p>			         
 			</td>

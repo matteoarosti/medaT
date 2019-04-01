@@ -713,8 +713,6 @@ end
 ################################################################
  def sincro_set_create_repair_record(value, hi, copy_params_data = {})
 ################################################################
-   logger.info "------ IN sincro_set_create_repair_record"
-   logger.info copy_params_data
    rhi = RepairHandlingItem.create_from_hi(hi, copy_params_data)
  end 
 
@@ -731,6 +729,29 @@ def sincro_set_lock_type(value, hi, copy_params_data = {})
   hi.set_lock(value)
   hi.save!  
 end
+
+
+################################################################
+def sincro_set_close_if_not_manage_shipowner(value, hi, copy_params_data = {})
+################################################################
+  return if self.equipment.reefer == true   #non chiudo i frigo
+  return if self.lock_type == 'DAMAGED'     #non chiudo se danneggiato
+
+  if value == 'E'
+    if !self.shipowner.manage_empty
+      self.handling_status = 'CLOSE'
+    end  
+  end
+  
+  if value == 'F'
+    if !self.shipowner.manage_full
+      self.handling_status = 'CLOSE'
+    end  
+  end  
+end
+
+
+
 
 ################################################################
 def get_lock_INSPECT_date

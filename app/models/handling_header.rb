@@ -624,6 +624,10 @@ def sincro_set_auto_O_OTHER(value, hi, copy_params_data = {})
     ret_status  = r[:success]
     message     = r[:message]
   else
+  
+    logger.info "Error in validate O_OTHER"
+    logger.info validate_insert_item.to_yaml
+    
     ret_status  = validate_insert_item[:is_valid]
     message     = validate_insert_item[:message]
     raise ActiveRecord::RecordNotSaved

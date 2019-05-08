@@ -74,6 +74,7 @@ class ActivitiesController < ApplicationController
    
    items = items.where("created_at >= ?", Time.zone.parse(params[:form_user]['flt_date_from']).beginning_of_day) unless params[:form_user]['flt_date_from'].blank?
    items = items.where("created_at <= ?", Time.zone.parse(params[:form_user]['flt_date_to']).end_of_day) unless params[:form_user]['flt_date_to'].blank?
+   items = items.where(:customer_id => params[:form_user]['flt_customer_id']) unless params[:form_user]['flt_customer_id'].blank?  
    
    case params[:filtered_type]           
      

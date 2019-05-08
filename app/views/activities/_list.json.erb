@@ -1,3 +1,4 @@
+<% @item = Activity.new %>
 {
  success: true,
  items: [
@@ -101,6 +102,12 @@
 								width: 200, labelWidth: 80, padding: '0 0 0 10',
 				                fieldLabel: 'A data', name: 'flt_date_to'
 				 		}
+				 		
+				 		
+				 		
+				 		, <%= raw extjs_std_combo_model('customer', @item, {input_name: 'flt_customer_id'}, {width: 270, autoWidth: false}) -%>
+				 		
+				 		
 				    
 					/*				    
 						{									

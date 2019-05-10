@@ -498,9 +498,24 @@ end
           .where(make_available_at: nil)
           .order("activities.expiration_date")
        to_do_make_available.each do |ac|
+         
+         #recupero (se preente) il movimento relativo al container
+         md_hh = HandlingHeader.container(ac.container_number).where(handling_status: 'OPEN').first
+         
+         if !md_hh.nil?
+           nota_container = [
+                            md_hh.equipment.equipment_type, 
+                            md_hh.with_booking == true ? 'E' : 'I',
+                            ac.activity.activity_op.short_name || ac.activity.activity_op.name
+                            ].join(' | ')
+         else
+           nota_container = ac.activity.activity_op.name
+         end
+         
          ret << {
            :to_be_moved_type => 'CUST_INSPECTION',
            :id => "CUST_INSPECTION_#{ac.id}", #attenzione: se ho lo stesso id di un handling_item potrebbe non essere visualizzato
+           :nota_container => nota_container,
            :rec_id => ac.id,
            :handling_type => 'CUST_INSPECTION',
            :container_FE => nil,

@@ -61,10 +61,11 @@ class Weigh < ActiveRecord::Base
     if 1==1 #### !self.customer.nil && !self.customer.email_notify_weigh.blank?
       #begin
         text_email = "
-<h2>Cedolino pesa</h2>
-Container: #{self.container_number.to_s}.<br/>
-------------<br/>"        
-        LogEvent.send_mail_html(self, 'MAIL_WE', ['matteo.arosti@gmail.com', 'm.arosti@apracs.it'], 
+Cedolino pesa
+Container: #{self.container_number.to_s}
+------------
+medaT for Icop"        
+        LogEvent.send_mail(self, 'MAIL_WE', ['matteo.arosti@gmail.com', 'm.arosti@apracs.it'], 
                   "Invio scansione pesa container #{self.container_number}", text_email,
                   {attachments: [
                                   {file_name: self.scan_file_file_name, file_path: self.scan_file.path('original')}

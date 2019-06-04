@@ -120,17 +120,44 @@ class HandlingMailer < ActionMailer::Base
   #**************************************************************
   #**************************************************************
   def send_simple(email_to, subject, body, content_type = 'text/plain', ar_attachments = [])
-    if !ar_attachments.nil?
+    if !ar_attachments.nil? && ar_attachments.length > 0
       ar_attachments.each do |a|
         a = a.with_indifferent_access
-        #attachments[a[:file_name]] =  {
-        #  mime_type: 'image/jpg',
-        #  content: File.read(a[:file_path])
-        #}
         attachments[a[:file_name]] =  File.read(a[:file_path]) 
       end
-    end      
-    mail(:to => email_to, :subject => subject, :body => body, content_type: content_type)
+      mail(:to => email_to, :subject => subject, :body => body, content_type: content_type, override_mail_fn: true)
+    else
+      mail(:to => email_to, :subject => subject, :body => body, content_type: content_type, override_mail_fn: false) 
+    end 
+  end
+  
+  
+  
+  
+  #override per inviare correttamente allegati
+  def mail(headers = {}, &block)
+    message = super    
+
+    # If there are no regular attachments, we don't have to modify the mail
+    ###return message unless message.parts.any? { |part| part.attachment? && !part.inline? }
+    return message unless headers[:override_mail_fn]  
+      
+    # Combine the html part and inline attachments to prevent issues with clients like iOS
+    html_part = Mail::Part.new do
+      content_type 'multipart/related'
+      message.parts.delete_if { |part| (!part.attachment? || part.inline?) && add_part(part) }
+    end
+
+    # Any parts left must be regular attachments
+    attachment_parts = message.parts.slice!(0..-1)
+
+    # Reconfigure the message
+    message.content_type 'multipart/mixed'
+    message.header['content-type'].parameters[:boundary] = message.body.boundary
+    message.add_part(html_part)
+    attachment_parts.each { |part| message.add_part(part) }
+
+    message
   end
   
   

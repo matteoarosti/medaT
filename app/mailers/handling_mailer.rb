@@ -119,7 +119,17 @@ class HandlingMailer < ActionMailer::Base
   #INVIA MAIL CON BODY INLNE
   #**************************************************************
   #**************************************************************
-  def send_simple(email_to, subject, body, content_type = 'text/plain')    
+  def send_simple(email_to, subject, body, content_type = 'text/plain', ar_attachments = [])
+    if !ar_attachments.nil?
+      ar_attachments.each do |a|
+        a = a.with_indifferent_access
+        #attachments[a[:file_name]] =  {
+        #  mime_type: 'image/jpg',
+        #  content: File.read(a[:file_path])
+        #}
+        attachments[a[:file_name]] =  File.read(a[:file_path]) 
+      end
+    end      
     mail(:to => email_to, :subject => subject, :body => body, content_type: content_type)
   end
   

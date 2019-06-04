@@ -56,6 +56,29 @@ class Weigh < ActiveRecord::Base
   end
 
   
+  
+  def send_mail_html_to_customer   
+    if 1==1 #### !self.customer.nil && !self.customer.email_notify_weigh.blank?
+      #begin
+        text_email = "
+<h2>Cedolino pesa</h2>
+Container: #{self.container_number.to_s}.<br/>
+------------<br/>"        
+        LogEvent.send_mail(self, 'MAIL_WE', ['matteo.arosti@gmail.com', 'm.arosti@apracs.it'], 
+                  "Invio scansione pesa container #{self.container_number}", text_email,
+                  {attachments: [
+                                  {file_name: self.scan_file_file_name, file_path: self.scan_file.path('original')}
+                                ]})
+        return true        
+      #rescue => exception  
+      #  logger.info exception.backtrace
+      #  return false
+      #end
+    end   
+  end
+  
+  
+  
   def self.as_json_prop()
       return {
         :methods => [:in_garage_user_name, :estimate_user_name, :estimate_sent_user_name, :estimate_authorized_user_name, :repair_completed_user_name, :out_garage_user_name], 

@@ -23,7 +23,8 @@ class LogEvent < ActiveRecord::Base
         email: {
           to: to,
           subject: subject,
-          msg: msg
+          msg: msg,
+          attachments: p[:attachments] || []
         }
       }.to_json
     })
@@ -43,7 +44,8 @@ class LogEvent < ActiveRecord::Base
           to: to,
           subject: subject,
           msg: msg,
-          content_type: 'text/html'
+          content_type: 'text/html',
+          attachments: p[:attachments] || []
         }
       }.to_json
     })

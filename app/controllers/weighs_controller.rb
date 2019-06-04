@@ -194,7 +194,8 @@ class WeighsController < ApplicationController
         item.driver = params[:driver]
         item.plate  = params[:plate]
         item.plate_trailer = params[:plate_trailer]
-        ret = item.save!
+        ret = item.save!        
+        item.send_mail_html_to_customer
         
          #settaggio su handling_item
          hi.to_weigh = false
@@ -232,7 +233,8 @@ class WeighsController < ApplicationController
       item.plate  = params[:plate]
       item.plate_trailer = params[:plate_trailer]
       
-      ret = item.save!  
+      ret = item.save!
+      item.send_mail_html_to_customer  
       render json: {success: ret, w_id: item.id}
     end 
    end   

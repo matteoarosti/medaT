@@ -58,8 +58,8 @@ class Weigh < ActiveRecord::Base
   
   
   def send_mail_html_to_customer   
-    if 1==1 #### !self.customer.nil && !self.customer.email_notify_weigh.blank?
-      #begin
+   begin
+    if !self.customer.nil && !self.customer.email_notify_weigh.blank?
         text_email = "
 Cedolino pesa
 Container: #{self.container_number.to_s}
@@ -71,11 +71,11 @@ medaT for Icop"
                                   {file_name: self.scan_file_file_name, file_path: self.scan_file.path('original')}
                                 ]})
         return true        
-      #rescue => exception  
-      #  logger.info exception.backtrace
-      #  return false
-      #end
-    end   
+    end
+   rescue => exception  
+    #logger.info exception.backtrace
+    return false
+   end   
   end
   
   

@@ -65,7 +65,7 @@ Cedolino pesa
 Container: #{self.container_number.to_s}
 ------------
 medaT for Icop"        
-        LogEvent.send_mail(self, 'MAIL_WE', ['matteo.arosti@gmail.com'], 
+        LogEvent.send_mail(self, 'MAIL_WE', [self.customer.email_notify_weigh], 
                   "Invio scansione pesa container #{self.container_number}", text_email,
                   {attachments: [
                                   {file_name: self.scan_file_file_name, file_path: self.scan_file.path('original')}

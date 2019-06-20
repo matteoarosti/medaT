@@ -59,7 +59,7 @@ class Weigh < ActiveRecord::Base
   
   def send_mail_html_to_customer   
    begin
-    if !self.customer.nil && !self.customer.email_notify_weigh.blank?
+    if !self.customer.nil? && !self.customer.email_notify_weigh.blank?
         text_email = "
 Cedolino pesa
 Container: #{self.container_number.to_s}

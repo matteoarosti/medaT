@@ -1,7 +1,19 @@
 class DocH < ActiveRecord::Base
   
   belongs_to :customer
-  belongs_to :doc_type  
+  belongs_to :doc_type
+  
+  
+  has_attached_file :doc_file, 
+      path: ":rails_root/record_images/:class/:attachment/:id_partition/:style/:filename",
+      url: "activities/download_file/:id"
+  # Validate content type, filename, size
+  #validates_attachment_content_type :scan_file, content_type: /\Aimage/
+  validates_attachment_content_type :doc_file, content_type: ["application/pdf", /\Aimage\/.*\Z/]
+  #validates_attachment_file_name :scan_file, matches: [/png\Z/, /jpe?g\Z/]
+  validates_attachment :doc_file, size: { in: 0..4096.kilobytes }
+  do_not_validate_attachment_file_type :doc_file
+  
   
   def assign_num
     #ToDo: block

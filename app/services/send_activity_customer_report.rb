@@ -5,6 +5,15 @@ class SendActivityCustomerReport
     prepare_docs_file_and_send_email
   end
   
+  def set_0_before_date(date_to)
+    ActivityDettContainer.joins(:activity)
+      .where("activity_dett_containers.execution_at < ? or activity_dett_containers.confirmed_at < ?", date_to, date_to)
+      .where("activities.customer_id IS NOT NULL")
+      .where("doc_h_notifica_id IS NULL")
+      .update_all(doc_h_notifica_id: 0)         
+  end
+  
+  
   #preparo, per ogni cliente, pdf da inviare con resconto attivita' del giorno  
   def create_docs
     #per ogni cliente
@@ -58,7 +67,7 @@ class SendActivityCustomerReport
    Documento in allegato
    ------------
    medaT for Icop"        
-           LogEvent.send_mail(docH, 'MAIL_DOC', ['matteo.arosti@gmail.com'], 
+           LogEvent.send_mail(docH, 'MAIL_DOC', ['matteo.arosti@gmail.com', 'amministrazione@icopsrl.net'], 
                      "Invio documento #{docH.doc_type.name} - #{docH.nr_seq}/#{docH.nr_anno}", text_email,
                      {attachments: [
                                      {file_name: docH.doc_file_file_name, file_path: docH.doc_file.path('original')}
@@ -77,9 +86,9 @@ class SendActivityCustomerReport
   def activity_exec_or_confirmed_in_date
     items = ActivityDettContainer.eager_load(:activity).preload(:activity_op, :shipowner)
            .where("(activities.status IS NULL OR activities.status <> 'ANN') AND (activity_dett_containers.status IS NULL or activity_dett_containers.status <> 'ANN')")
-           .where("confirmed_at IS NOT NULL or confirmed_at IS NOT NULL")
+           .where("activity_dett_containers.execution_at IS NOT NULL or activity_dett_containers.confirmed_at IS NOT NULL")
            .where("activities.customer_id IS NOT NULL")
-           #.where("doc_h_notifica_id IS NULL")
+           .where("doc_h_notifica_id IS NULL")
                
   end
   

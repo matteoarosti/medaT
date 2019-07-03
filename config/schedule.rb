@@ -47,3 +47,8 @@ end
 every 5.hours, :at => '2:20 am' do 
   command "cd /var/www/rails-app/medaT; bin/spring stop"
 end
+
+#generazioen e invio email activity customer report
+every 1.day, :at => '01:02 am' do
+  runner "SendActivityCustomerReport.new.call"
+end

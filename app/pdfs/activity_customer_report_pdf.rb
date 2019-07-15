@@ -49,7 +49,7 @@ class ActivityCustomerReportPdf < Prawn::Document
     grid([riga_from, 9], [riga_to, 9]).bounding_box do write_cell_ar_no_title(['Eseguita il']) end
     grid([riga_from,10], [riga_to,10]).bounding_box do write_cell_ar_no_title(['Confermata il']) end
 
-    #elenco attività (TD)
+    #elenco attività (DETT_CONTAINERS)
     ActivityDettContainer.where(doc_h_notifica_id: docH.id).each do |rec|
       
       if riga_to >= 50
@@ -65,6 +65,26 @@ class ActivityCustomerReportPdf < Prawn::Document
       grid([riga_from, 9], [riga_to, 9]).bounding_box do write_cell_ar_no_title([rec.execution_at ? rec.execution_at.strftime("%d/%m/%y %H:%M") : '']) end
       grid([riga_from,10], [riga_to,10]).bounding_box do write_cell_ar_no_title([rec.confirmed_at ? rec.confirmed_at.strftime("%d/%m/%y %H:%M") : '']) end     
     end
+    
+
+    
+    #elenco attività (ACTIVITIES - no CUST_INSPECTION)
+    Activity.where(doc_h_notifica_id: docH.id).each do |rec|
+      
+      if riga_to >= 50
+        start_new_page
+        riga_to = 8
+      end
+      
+      riga_from = riga_to + 1
+      riga_to   = riga_from + 1
+      
+      grid([riga_from, 0], [riga_to, 2]).bounding_box do write_cell_ar_container('-', ['-']) end      
+      grid([riga_from, 3], [riga_to, 8]).bounding_box do write_cell_ar_no_title([!rec.activity_op.nil? ? rec.activity_op.name : '']) end
+      grid([riga_from, 9], [riga_to, 9]).bounding_box do write_cell_ar_no_title([rec.execution_at ? rec.execution_at.strftime("%d/%m/%y %H:%M") : '']) end
+      grid([riga_from,10], [riga_to,10]).bounding_box do write_cell_ar_no_title(['']) end     
+    end
+    
 
 
 

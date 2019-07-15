@@ -164,6 +164,8 @@ class SendActivityCustomerReport
     #  .update_all(doc_h_notifica_id: 0)
     
     Activity
+      .joins("LEFT OUTER JOIN activity_types ON activity_types.id = activities.activity_type_id")
+      .where("activity_type_id is null OR activity_types.code != 'CUST_INSPECTION'")
       .where("execution_at IS NOT NULL")
       .where("doc_h_notifica_id IS NULL")
       .update_all(doc_h_notifica_id: 0)               

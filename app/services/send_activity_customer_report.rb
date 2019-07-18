@@ -112,7 +112,7 @@ class SendActivityCustomerReport
    Documento in allegato
    ------------
    medaT for Icop"        
-           LogEvent.send_mail(docH, 'MAIL_DOC', ['matteo.arosti@gmail.com', 'amministrazione@icopsrl.net'],           
+           LogEvent.send_mail(docH, 'MAIL_DOC', merge_email_to('', TabConfig.get_notes('EMAIL', 'ACTIVITY', 'DAILY_CLI').to_s),           
                      "Invio documento #{docH.doc_type.name} - #{docH.nr_seq}/#{docH.nr_anno}", text_email,
                      {attachments: [
                                      {file_name: docH.doc_file_file_name, file_path: docH.doc_file.path('original')}

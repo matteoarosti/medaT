@@ -89,7 +89,6 @@ class SendActivityCustomerReport
       puts "Genero pdf per #{d.id} doc"
       
       tmp_file_name = Tempfile.new(['activity_customer_report_', '.pdf']).path
-      #tmp_file_name = 'tmp/aaaaa.pdf'
       print "\nGenero #{tmp_file_name}"    
       pdf = ActivityCustomerReportPdf.new()
       pdf.draw(d)
@@ -106,7 +105,8 @@ class SendActivityCustomerReport
   def test_csv_eSolver(anno, numero)
     d = DocH.where(doc_type: DocType.find_by!(code: 'ADN')).where(nr_anno: anno, nr_seq: numero).first
     #csv per eSolder (Fatturazione elettronica)
-    tmp_file_name_csv_fe = Tempfile.new(['activity_customer_fe_', '.csv']).path
+    #tmp_file_name_csv_fe = Tempfile.new(['activity_customer_fe_', '.csv']).path
+    tmp_file_name = "/tmp/fe_#{anno}_#{numero}.csv"
     print "\nGenero #{tmp_file_name_csv_fe} (Fatturazione Elettronica)"    
     tmp_file_csv_fe = File.open(tmp_file_name_csv_fe, "w")
     tmp_file_csv_fe.puts prepare_csv_FE_eSolver(d)

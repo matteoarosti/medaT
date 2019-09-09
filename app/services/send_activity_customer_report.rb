@@ -146,7 +146,7 @@ class SendActivityCustomerReport
             
     
     #righe (no dett)              
-    Activity.where(doc_h_notifica_id: docH.id).each do |rec|
+    Activity.where(doc_h_notifica_id: d.id).each do |rec|
       out_data = rec.execution_at
       importo = rec.amount
       ar_out << ['RIG',

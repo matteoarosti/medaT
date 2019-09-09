@@ -131,6 +131,7 @@ class SendActivityCustomerReport
       out_data = rec.confirmed_at
       out_data = rec.execution_at if out_data.nil?
       importo = rec.activity_op.recalculate_gest_price.nil? ? rec.op_amount : 0
+      importo = -1 if rec.activity_op.recalculate_gest_price.nil? && importo == 0
       ar_out << ['RIG',
                   out_data.strftime("%Y%m%d"),
                   d.nr_seq,
@@ -149,6 +150,7 @@ class SendActivityCustomerReport
     Activity.where(doc_h_notifica_id: d.id).each do |rec|
       out_data = rec.execution_at
       importo = rec.activity_op.recalculate_gest_price.nil? ? rec.amount : 0
+      importo = -1 if rec.activity_op.recalculate_gest_price.nil? && importo == 0
       ar_out << ['RIG',
                   out_data.strftime("%Y%m%d"),
                   d.nr_seq,

@@ -130,7 +130,7 @@ class SendActivityCustomerReport
     ActivityDettContainer.where(doc_h_notifica_id: d.id).each do |rec|
       out_data = rec.confirmed_at
       out_data = rec.execution_at if out_data.nil?
-      importo = rec.activity_op.recalculate_gest_price.nil? ? 0 : rec.amount
+      importo = rec.activity_op.recalculate_gest_price.nil? ? 0 : rec.op_amount
       ar_out << ['RIG',
                   out_data.strftime("%Y%m%d"),
                   d.nr_seq,

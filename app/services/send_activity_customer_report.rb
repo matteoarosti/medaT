@@ -108,7 +108,7 @@ class SendActivityCustomerReport
     #csv per eSolder (Fatturazione elettronica)
     tmp_file_name_csv_fe = Tempfile.new(['activity_customer_fe_', '.csv']).path
     print "\nGenero #{tmp_file_name_csv_fe} (Fatturazione Elettronica)"    
-    tmp_file_csv_fe = File.open(tmp_file_name_csv_fe, "W")
+    tmp_file_csv_fe = File.open(tmp_file_name_csv_fe, "w")
     tmp_file_csv_fe.puts prepare_csv_FE_eSolver(d)
     tmp_file_csv_fe.close
     print "\nGenerato"

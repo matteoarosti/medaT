@@ -96,12 +96,74 @@ class SendActivityCustomerReport
       pdf.render_file(tmp_file_name)      
       print "\nGenerato"
       d.doc_file = File.open(tmp_file_name)
-      d.save!
-      
-      send_doc_email(d)
+      d.save!      
+      send_doc_email(d)      
     end      
   end
   
+  
+  
+  def test_csv_eSolver(anno, numero)
+    d = DocH.where(doc_type: DocType.find_by!(code: 'ADN')).where(nr_anno: anno, nr_seq: numero).first
+    #csv per eSolder (Fatturazione elettronica)
+    tmp_file_name_csv_fe = Tempfile.new(['activity_customer_fe_', '.csv']).path
+    print "\nGenero #{tmp_file_name_csv_fe} (Fatturazione Elettronica)"    
+    tmp_file_csv_fe.open(tmp_file_name_csv_fe, "W")
+    tmp_file_csv_fe.puts prepare_csv_FE_eSolver(d)
+    tmp_file_csv_fe.close
+    print "\nGenerato"
+  end
+  
+  
+  def prepare_csv_FE_eSolver(d)
+    ar_out = []
+    #intestazione
+    ar_out << "TES:Tipo record;TES:Data servizio;TES:Numero progressivo;TES:Codice cliente;TES:Tipo lavoro;TES:Commento;RIG:Codice servizio;RIG:quantità;RIG:Centro analisi;RIG:Descrizione riga;RIG:Descrizione estesa;Numero ore;Banchina;Orario iniziale;Orario finale;% maggiorazione"
+    #record di testata
+    ar_out << ['TES',
+            d.created_at.strftime("%Y%m%d"),
+            d.nr_seq,
+            d.customer.gest_code
+        ].join(';')
+        
+    #righe (dett)
+    ActivityDettContainer.where(doc_h_notifica_id: d.id).each do |rec|
+      out_data = min(rec.confirmed_at, rec.execution_at)
+      importo = rec.activity_op.recalculate_gest_price.nil? ? 0 : rec.amount
+      ar_out << ['RIG',
+                  out_data.strftime("%Y%m%d"),
+                  d.nr_seq,
+                  d.customer.gest_code,
+                  'tipo lavoro???',
+                  '', #commento
+                  rec.activity_op.gest_code, #codice servizio,
+                  1, #quantita????
+                  '', '', '',   #centro analisi, descrizione riga, descrizione estesa
+                  importo
+              ].join(';')        
+    end
+            
+    
+    #righe (no dett)              
+    Activity.where(doc_h_notifica_id: docH.id).each do |rec|
+      out_data = rec.execution_at
+      importo = rec.amount
+      ar_out << ['RIG',
+                  out_data.strftime("%Y%m%d"),
+                  d.nr_seq,
+                  d.customer.gest_code,
+                  'tipo lavoro???',
+                  '', #commento
+                  rec.activity_op.gest_code, #codice servizio,
+                  1, #quantita????
+                  '', '', '',   #centro analisi, descrizione riga, descrizione estesa
+                  importo
+              ].join(';')
+    end
+
+     
+    return c_out.join("\n")
+  end
   
   
   

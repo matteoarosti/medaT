@@ -4,6 +4,16 @@ class SyncroFromMedaTController < ApplicationController
   protect_from_forgery with: :null_session
   skip_before_action :authenticate_user!
   
+  def get_container_per_booking
+    if params[:num_booking].empty?
+      render json: {:success => false, :msg_error=>"Numero booking obbligatorio"}        
+      return
+    end
+    
+    hh = HandlingHeader.where(num_booking: params[:num_booking]) #Verificare: lo trovo veramente in num_booking??
+    render json: {:success => true, :data=>{hi: hh}}  #ToDo: ritornare solo num_container???     
+  end
+  
   
   ######################################################################################
   def get_discharge_hi_for_container

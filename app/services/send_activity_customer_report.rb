@@ -163,7 +163,7 @@ class SendActivityCustomerReport
     end
 
      
-    return c_out.join("\n")
+    return ar_out.join("\n")
   end
   
   

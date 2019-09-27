@@ -139,7 +139,7 @@ class SendActivityCustomerReport
     
     begin
          text_email = "In allegato: documento csv per import in gestionale"        
-         LogEvent.send_mail(docH, 'MAIL_DOC', 'matteo.arosti@gmail.com',           
+         LogEvent.send_mail(d, 'MAIL_DOC', 'matteo.arosti@gmail.com',           
                    "Invio csv documento #{d.doc_type.name} - #{d.nr_seq}/#{d.nr_anno}", text_email,
                    {attachments: [{file_name: "fe_#{anno}_#{numero}.csv", file_path: tmp_file_name_csv_fe}]})
          return true

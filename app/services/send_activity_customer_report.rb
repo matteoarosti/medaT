@@ -104,7 +104,6 @@ class SendActivityCustomerReport
   
   def prepare_csv_file_and_send_email
     items = DocH.where(doc_type: DocType.find_by!(code: 'ADN')).where(sent_csv_on: nil).each do |d|
-      puts "Genero csv per #{d.id} doc"
       
       #verifico che siano stati inseriti tutti i prezzi (da valutare)
       to_send = true
@@ -116,6 +115,7 @@ class SendActivityCustomerReport
       end      
       
       if to_send
+        puts "Genero e invio csv per #{d.id} doc"
         ret = send_csv_eSolver(d.nr_anno, d.nr_seq)
         if ret
           d.sent_csv_on = Time.zone.now

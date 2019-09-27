@@ -144,7 +144,9 @@ class SendActivityCustomerReport
                    {attachments: [{file_name: "fe_#{anno}_#{numero}.csv", file_path: tmp_file_name_csv_fe}]})
          return true
     rescue => exception  
+      puts exception.message
       puts exception.backtrace #RIMUOVEREEEEEEEEEEEEEEEE
+      raise "mi blocco"
      return false
     end
     

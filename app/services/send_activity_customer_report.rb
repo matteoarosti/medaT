@@ -138,13 +138,11 @@ class SendActivityCustomerReport
     print "\nGenerato"
     
     begin
-     if !docH.customer.nil?
-         text_email = "Documento in allegato"        
+         text_email = "In allegato: documento csv per import in gestionale"        
          LogEvent.send_mail(docH, 'MAIL_DOC', 'matteo.arosti@gmail.com',           
                    "Invio csv documento #{d.doc_type.name} - #{d.nr_seq}/#{d.nr_anno}", text_email,
                    {attachments: [{file_name: "fe_#{anno}_#{numero}.csv", file_path: tmp_file_name_csv_fe}]})
-         return true        
-     end
+         return true
     rescue => exception  
       puts exception.backtrace #RIMUOVEREEEEEEEEEEEEEEEE
      return false

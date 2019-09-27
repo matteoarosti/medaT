@@ -3,6 +3,7 @@ class SendActivityCustomerReport
   def call
     create_docs
     prepare_docs_file_and_send_email
+    prepare_csv_file_and_send_email
   end
   
   

@@ -93,7 +93,7 @@ class HandlingHeader < ActiveRecord::Base
      return {
         :include=>{
             :shipowner  => {:only=>[:name]}, 
-            :equipment  => {:only=>[:type]},
+            :equipment  => {:only=>[:equipment_type, :type]},
             :booking    => {:only=>[:voyage], :include => {:ship => {:only=>[:name]}}}
         },
         :methods => [:shipowner_id_Name, :equipment_id_Name, :booking_id_Name]

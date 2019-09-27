@@ -11,7 +11,7 @@ class SyncroFromMedaTController < ApplicationController
     end
     
     hh = HandlingHeader.where(num_booking: params[:num_booking]) #Verificare: lo trovo veramente in num_booking??
-    render json: {:success => true, :data=>{hi: hh}}  #ToDo: ritornare solo num_container???     
+    render json: {:success => true, :data=>hh.as_json(HandlingHeader.as_json_prop)}  #ToDo: ritornare solo num_container???     
   end
   
   

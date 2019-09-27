@@ -49,6 +49,6 @@ every 5.hours, :at => '2:20 am' do
 end
 
 #generazioen e invio email activity customer report
-every 1.day, :at => '01:02 am' do
+every 1.day, :at => '23:32 am' do
   runner "SendActivityCustomerReport.new.call"
 end

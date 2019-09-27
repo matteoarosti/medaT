@@ -116,7 +116,7 @@ class SendActivityCustomerReport
       end      
       
       if to_send
-        ret = send_csv_eSolver(d.nr_anno, d.nr_numero)
+        ret = send_csv_eSolver(d.nr_anno, d.nr_seq)
         if ret
           d.sent_csv_on = Time.zone.now
           d.save!

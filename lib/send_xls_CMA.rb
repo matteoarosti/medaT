@@ -1,10 +1,9 @@
 r_email_to = %w(
- m.galli@fmg.eu
  gen.alampugnani@cma-cgm.com
- gen.mbalderi@cma-cgm.com
- gen.grossi@cma-cgm.com
- gen.mfonti@cma-cgm.com
- matteo.arosti@gmail.com
+ gen.lgabetta@cma-cgm.com
+ gen.pnazari@cma-cgm.com
+ gen.ppuppo@cma-cgm.com
+ ssc.itequipment@cma-cgm.com
 )
 
 SendCsvStd.new.send_TMOV(3, [3], r_email_to, Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day, true)

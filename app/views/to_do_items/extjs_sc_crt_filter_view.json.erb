@@ -16,7 +16,9 @@
      },	
      
     items: [       
-    <%= raw extjs_std_combo('status', @item, :field_name => 'status', :store => extjs_std_store_data(ToDoItem.new.status_get_data_json)) -%>,
+    	<%= raw extjs_std_combo('status', @item, :field_name => 'status', :store => extjs_std_store_data(ToDoItem.new.status_get_data_json), allowBlank: true) -%>,
+    	<%= raw extjs_std_datefield('created_at', @item, :name => 'created_at_from', :fieldLabel => 'Da data', allowBlank: true) -%>,
+    	<%= raw extjs_std_datefield('created_at', @item, :name => 'created_at_to',   :fieldLabel => 'A data', allowBlank: true) -%>
     ],
     
    buttons: [

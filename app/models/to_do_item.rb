@@ -7,7 +7,9 @@ class ToDoItem < ActiveRecord::Base
   #obbligatorio per extjs_sc
   scope :extjs_default_scope, -> { }    
   scope :not_closed, -> {where("status <> ?", 'CLOSE')}
-  scope :prenotazione_container, -> {where("to_do_type = ?", 'CONT_PRE_ASS')}    
+  scope :prenotazione_container, -> {where("to_do_type = ?", 'CONT_PRE_ASS')}
+  scope :post_it_mul, -> {where("to_do_type = ?", 'POST_IT_MUL')}
+      
     
   def self.as_json_prop()
       return {
@@ -24,7 +26,8 @@ class ToDoItem < ActiveRecord::Base
     
   def to_do_type_get_data_json
    [
-    {:cod=>'CONT_PRE_ASS', :descr=>'Prenotazione container'}
+     {:cod=>'CONT_PRE_ASS', :descr=>'Prenotazione container'},
+     {:cod=>'POST_IT_MUL',  :descr=>'Post-It mulettista'}
    ]
   end    
   
@@ -60,5 +63,12 @@ class ToDoItem < ActiveRecord::Base
    ]
   end     
   
+  
+  def created_user_name
+    u = User.find(self.created_user_id) rescue u = nil
+    return u.name if !u.nil?
+    self.created_user_id
+  end
+
     
 end

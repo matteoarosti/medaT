@@ -490,6 +490,28 @@ end
        end
      end
      
+     
+
+     #recupero i Post-It per i mulettisti
+     unless !params[:flt_num_container].to_s.empty?
+       to_do_items = ToDoItem.where('1=1').not_closed.post_it_mul.limit(1000).each do |tdi|
+         b = Booking.get_by_num(tdi.num_booking)
+         ret << {
+           :to_be_moved_type => tdi.to_do_type,
+           :id => tdi.id, #attenzione: se ho lo stesso id di un handling_item potrebbe non essere visualizzato
+           :handling_type => 'POST-IT',
+           :container_FE => nil,
+           :created_at => tdi.created_at,
+           :created_user_name => tdi.created_user_name,
+           :notes => tdi.notes,
+           :handling_header => {
+              :container_number => tdi.container_number.to_s
+           }
+         }       
+       end
+     end
+     
+     
      #recupero elenco container da mettere a disposizione
      if params[:no_cust_inspect].nil? || params[:no_cust_inspect].to_s != "Y"
        to_do_make_available = ActivityDettContainer.joins(:activity)

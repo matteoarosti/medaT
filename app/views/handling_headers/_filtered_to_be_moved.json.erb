@@ -160,6 +160,15 @@
 			         }
 			         
 			         
+ 			         if (rec.get('to_be_moved_type') == 'POST_IT_MUL'){
+			           ret = '';
+			           ret += '<h2>Post-It <span><font size=2> del ' + Ext.util.Format.date(rec.get('created_at'), 'd-m-y') + ' di ' + rec.get('created_user_name') + '</font></span></h2>';
+			           ret += '<div style="white-space:normal">' + rec.get('notes').replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+			           return ret;
+			         }
+
+			         
+			         
 			         if (Ext.isEmpty(rec.get('plate')))
 			          out_plate = '';
 			         else
@@ -185,6 +194,11 @@
 			        text: <%= raw t('forms.to_be_handled.positioning').to_json -%>,
 			        width: 150,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			        
+			         if (rec.get('to_be_moved_type') == 'POST_IT_MUL'){
+			          return '';
+			         }
+			        
 			        
 			         if (rec.get('to_be_moved_type') == 'CUST_INSPECTION'){
 			          return '';
@@ -233,6 +247,114 @@
 			                        	//disabilito per prevenire doppia esecuizione
 			                        	button.disable();
 			                        
+			                        
+			                        	if (rec.get('to_be_moved_type') == 'POST_IT_MUL'){
+			                        	
+			                        		//form per chiusura o inserimento note
+			                        		
+				
+				           								var loc_form = Ext.create('Ext.form.Panel', {
+															    title: '',
+															    bodyPadding: 10,
+															    flex: 1,
+															    defaultType: 'textfield',
+															    	layout: {
+																	    type: 'vbox',
+																	    align : 'stretch',
+																	    pack  : 'start',
+																	},
+															    items: [
+															      {xtype: 'hiddenfield', name: 'to_do_item_id', value: rec.get('id')},
+															      {xtype: 'textareafield', name: 'notes_int', fieldLabel: 'Notes', flex: 1}
+															    ]
+															    ,
+												    			dockedItems: [{
+																    xtype: 'toolbar',
+																    dock: 'right',
+																    width: 135,
+																	defaults: {
+																        xtype: 'button', scale: 'medium', textAlign: 'left'
+													                },			    
+																    margin: '5 5 5 5',
+															    
+															     	items:
+																        [{
+																            text: 'Eseguita',
+																            scale: 'large', cls: 'btn-confirm',
+																            handler: function (btn, evt) {
+																             btn.disable();
+																                           
+																             var form = this.up('form').getForm();
+																             var tmp_win  = this.up('window');
+																             if (form.isValid()) {
+																				Ext.Ajax.request({
+																				   method: 'POST',
+																				   waitMsg: 'Attendere',
+																				   url: '<%= url_for(:controller=>'to_do_items', :action=>'close_to_be_moved') -%>',
+																				   jsonData: {
+																				   	data: form.getValues()
+																				   },
+																				   success: function(result, request) {
+																				   
+																				      var jsonData = Ext.JSON.decode(result.responseText);
+																				   
+																				   	  if (jsonData.success == false){																				   	  	
+																					    btn.enable();
+																						Ext.MessageBox.show({
+																	                        title: 'EXCEPTION',
+																	                        msg: jsonData.message,
+																	                        icon: Ext.MessageBox.ERROR,
+																	                        buttons: Ext.Msg.OK
+																                    	});															   	  
+																				   	  } else {																				   	  	 
+																					      store.remove(rec);
+																					      store.load();
+																					      tmp_win.close();																					      
+																				   	  }																   																				   
+				
+																				   },
+																				   failure: function(response, opts) {																				      																					
+																					    btn.enable();																      																				      
+																						Ext.MessageBox.show({
+																	                        title: 'EXCEPTION',
+																	                        msg: response.status,
+																	                        icon: Ext.MessageBox.ERROR,
+																	                        buttons: Ext.Msg.OK
+																                    	})																      
+																				   }
+																				});	
+																			  return false;												             
+																             }
+																            }
+																          }, 
+																          
+																          {
+																            text: 'Chiudi',												            
+																            scale: 'large',
+																            handler: function (btn, evt) {
+																            	this.up('window').close();
+																            }
+																          }
+																          
+																         ]
+					  												}]
+															});		
+															
+								                           loc_win = Ext.create('Ext.window.Window',{
+															    layout: 'fit',
+															    items: loc_form,
+															    title: 'Assegna container',
+															    width: 500,
+															    height: 300,
+															    id: 'myWindow'
+															}).show();
+																		 
+			                        					                        		
+			                        		return;
+			                        	} //end POST_IT_MUL
+			                        	
+			                        	
+			                        	
 			                        
 			                           if (rec.get('to_be_moved_type') == 'CONT_PRE_ASS'){
 			                            //e' una preassegnazione di container (es: uscita vuoto per riempimento)
@@ -385,6 +507,11 @@
 			                           //altrimenti mostro la form per la conferma
 			                           header_form = loc_grid.getDockedComponent('toptoolbar').down('form').getForm();
 			                           header_form_values = header_form.getValues();
+			                           
+			                           
+			                           if (rec.get('to_be_moved_type') == 'POST_IT_MUL'){
+			                           	return false;
+			                           }
 			                           
 			                           if (rec.get('to_be_moved_type') == 'CUST_INSPECTION'){
 											var m_url = '<%= url_for(:controller=>'custom_inspections', :action=>'set_available') -%>';

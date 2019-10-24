@@ -1,0 +1,66 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'form',
+   flex: 1,
+	layout: {
+	    type: 'vbox',
+	    align : 'stretch',
+	    pack  : 'start',
+	}, 
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+     
+   items: [
+    	{xtype: 'textfield', name: 'container_number', fieldLabel: 'Container (opz)', allowBlank: true},
+    	{xtype: 'textareafield', name: 'notes', fieldLabel: 'Post-It', allowBlank: false}
+	], 
+	
+	
+	buttons: [
+		{
+            text: 'Salva',
+            handler: function (btn, evt) {
+             m_win = this.up('window');              
+             form = this.up('form').getForm();
+             if (form.isValid()) {
+             	btn.disable();
+             	
+						form.submit({
+	                        url: '<%= url_for(:controller => 'to_do_items', :action=>'new_POST_IT_MUL', :exe_save => 'Y') -%>',
+	                        //waitMsg: 'Importazione in corso....',
+	                        success: function(fp, o) {
+	                            Ext.MessageBox.show({
+			                        title: 'Successo',
+			                        msg: 'Salvataggio eseguito',
+			                        buttons: Ext.Msg.OK
+		                    	});
+	                            m_win.close();
+	                        },
+							failure: function(fp, op) {
+								var result = Ext.JSON.decode(op.response.responseText);
+	                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                                //Ext.Msg.alert('Errore in fase di salvataggio');
+								Ext.MessageBox.show({
+			                        title: 'Errore',
+			                        msg: result.message,
+			                        buttons: Ext.Msg.OK
+		                    	});                                
+								btn.enable();
+	                        }	                        
+	                    });             	
+             	
+             	
+             	
+             	
+			 }
+			}
+	     }	
+	]
+	
+  }
+ ]
+}	

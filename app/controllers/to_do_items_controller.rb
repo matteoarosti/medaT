@@ -6,6 +6,44 @@ class ToDoItemsController < ApplicationController
   
   
   
+  #come lista mostro solo le liste aperte
+  ##########################################
+   def extjs_sc_list
+  ########################################## 
+    model_class = extjs_sc_model.to_s
+    
+    items = model_class.constantize.extjs_default_scope
+    
+     #gestione eventuali filtri
+     unless params[:my_filters].nil?
+       params[:my_filters].each do |kp, p|
+         case kp
+         when 'created_at_from'
+           items = items.where("created_at >= ?", Time.zone.parse(p).beginning_of_day) unless p.blank?           
+         when 'created_at_to'
+           items = items.where("created_at <= ?", Time.zone.parse(p).beginning_of_day) unless p.blank?
+         else
+           items = items.where("#{kp} = ?", p) unless p.blank?  
+         end
+         
+       end
+     else
+        #default apertura 
+        items = items.not_closed  
+     end  
+
+    
+    
+      
+    ret = {}
+    ret[:items] = items.limit(params[:limit]).offset(params[:start]).as_json(model_class.constantize.as_json_prop)
+    ret[:total] = model_class.constantize.extjs_default_scope.count
+    
+    render json: ret
+   end  
+ 
+  
+  
   #Prenota uscita vuoto per riempimento
   def new_O_FILLING
 
@@ -70,12 +108,63 @@ class ToDoItemsController < ApplicationController
   end
   
   
+
+  
+  
+  
+  
+  #Nuova nota per mulettisti
+  def new_POST_IT_MUL
+
+    @item = ToDoItem.new
+    @item.status = 'OPEN'
+    @item.to_do_type = 'POST_IT_MUL'
+    
+    #Inserimento record in ToDoItem
+    if params[:exe_save] == 'Y'     
+      @item.container_number = params[:container_number]
+      @item.notes            = params[:notes]
+           
+            
+      #se sono qui procedo al salvataggio
+      r = @item.save  
+      
+      if r
+        message = 'Salvataggio esequito'
+      else
+        message = 'Errore in fase di salvataggio'
+      end
+      
+      render json: {:success => r, :message => message}
+      return
+    end
+    
+  end
+  
+      
+  
+  
+  
+  
   
   #viene assegnato dal mulettista un container a una prenotazione
   def close_to_be_moved
     to_do_item_id = params[:data][:to_do_item_id]
     num_container = params[:data][:num_container].to_s.upcase
+            
+    tdi = ToDoItem.find(to_do_item_id)
+    
+    
+    if tdi.to_do_type == 'POST_IT_MUL'
+      tdi.status = 'CLOSE'
+      tdi.notes_int = params[:data][:notes_int]      
+      tdi.save!() 
+      render json: {:success => true}
+      return
+    end
+       
       
+    ### DEFAULT: to_do_type = CONT_PRE_ASS  
     hh = HandlingHeader.not_closed.container(num_container).first    
 
     #errore se non trovo il movimento aperto per il container
@@ -88,7 +177,7 @@ class ToDoItemsController < ApplicationController
 
     #costruisco la nuova riga di dettaglio (recuperando i parametri dal to_do_item)
     hi = hh.handling_items.new()
-    tdi = ToDoItem.find(to_do_item_id) 
+    
         
      #verifico equipment e compagnia
      if hh.equipment_id != tdi.equipment_id

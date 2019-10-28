@@ -26,7 +26,12 @@ class ActivitiesController < ApplicationController
     render json: {:success => true, :data=>[item.as_json(Activity.as_json_prop)]}    
   end
   
+  
+  
+  
+  
   def set_amount
+    
     item = Activity.find(params[:data][:id])
     #params[:data].permit!
     #item.update(params[:data])
@@ -35,12 +40,27 @@ class ActivitiesController < ApplicationController
     if !params[:data][:containers_dett_amount].nil?
       params[:data][:containers_dett_amount].each do |p|
         d = ActivityDettContainer.find(p[:id])
-        d.op_amount = p[:op_amount]
+        
+        if p[:recalculate_gest_price] == true
+          d.op_amount = nil
+          d.recalculate_gest_price = true
+        else  
+          d.recalculate_gest_price = false    
+          d.op_amount = p[:op_amount]
+        end
+          
         d.save!
       end
     end
-      
-    item.amount = params[:data][:amount]
+    
+    if params[:data][:recalculate_gest_price] == true
+      item.recalculate_gest_price = true
+    else  
+      item.recalculate_gest_price = false    
+      item.amount = params[:data][:amount]
+    end
+    
+    item.amount_setted = true  
     item.save!()
     render json: {:success => true, :data=>[item.as_json(Activity.as_json_prop)]}    
   end
@@ -82,7 +102,8 @@ class ActivitiesController < ApplicationController
        items = items.where('execution_date IS NULL')
 
      when 'SET_AMOUNT'
-       items = items.where('amount IS NULL')
+       #items = items.where('amount IS NULL')
+       items = items.where('amount_setted IS NULL OR amount_setted <> TRUE')
        items = items.where('execution_date IS NOT NULL')
        
      when 'ALL'  

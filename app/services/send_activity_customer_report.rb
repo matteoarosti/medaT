@@ -109,10 +109,10 @@ class SendActivityCustomerReport
       #verifico che siano stati inseriti tutti i prezzi (da valutare)
       to_send = true
       ActivityDettContainer.where(doc_h_notifica_id: d.id).each do |rec|
-        to_send = false if rec.activity.amount.nil?
+        to_send = false if rec.activity.amount_setted != true
       end
       Activity.where(doc_h_notifica_id: d.id).each do |rec|
-        to_send = false if rec.amount.nil?
+        to_send = false if rec.amount_setted != true
       end      
       
       if to_send
@@ -171,8 +171,8 @@ class SendActivityCustomerReport
     #righe (dett)
     ActivityDettContainer.where(doc_h_notifica_id: d.id).each do |rec|      
       perc_sconto = 0
-      importo = rec.activity_op.recalculate_gest_price.nil? ? rec.op_amount : 0
-      perc_stonto = 100 if rec.activity_op.recalculate_gest_price.nil? && importo == 0
+      importo = rec.recalculate_gest_price.nil? ? rec.op_amount : 0
+      perc_sconto = 100 if rec.recalculate_gest_price.nil? && importo == 0
       ar_out << ['RIG',
                   campo_data,
                   d.nr_seq,
@@ -194,8 +194,8 @@ class SendActivityCustomerReport
     #righe (no dett)              
     Activity.where(doc_h_notifica_id: d.id).each do |rec|
       perc_sconto = 0
-      importo = rec.activity_op.recalculate_gest_price.nil? ? rec.amount : 0
-      perc_sconto = 100 if rec.activity_op.recalculate_gest_price.nil? && importo == 0
+      importo = rec.recalculate_gest_price.nil? ? rec.amount : 0
+      perc_sconto = 100 if rec.recalculate_gest_price.nil? && importo == 0
       ar_out << ['RIG',
                   campo_data,
                   d.nr_seq,

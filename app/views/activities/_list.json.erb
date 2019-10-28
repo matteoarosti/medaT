@@ -524,7 +524,25 @@
 													},
 											    items: [
 											        {xtype: 'hiddenfield', name: 'id', value: rec.get('id')},
-											        {xtype: 'numberfield',   name: 'amount', allowBlank: false, fieldLabel: 'Importo', labelAlign: 'left', value: rec.get('amount'),
+											        
+											        {xtype: 'checkbox', hidden: true, 
+											        		name: 'recalculate_gest_price', value: rec.get('activity_op').recalculate_gest_price, 
+											        		fieldLabel: 'Usa prezzo da listino gestionale',
+											        		inputValue: true, uncheckedValue: false,
+											        		listeners: {
+											        			change: function(f){
+											        				var form = f.up('form').getForm();
+											        				if (f.getValue() == true)
+											        					form.findField('amount').disable();
+											        				if (f.getValue() == false)
+											        					form.findField('amount').enable();
+											        					
+											        			}
+											        		}
+											        },
+											        
+											        {xtype: 'numberfield', disabled: true,   
+											        		name: 'amount', allowBlank: false, fieldLabel: 'Importo', labelAlign: 'left', value: rec.get('amount'),
 											         listeners: {
 											          specialkey: function(field, e){
 											          	if (e.getKey() == e.ENTER) { 											          	  
@@ -536,10 +554,24 @@
 												    	}
 											          }
 											         }
-											        },
-											        											      
+											        }
+											     
+											     	   											      
 											      										    										    										    
 											    ]
+											    
+											    , listeners: {
+											     		afterrender: function(comp){
+											     		
+											     			//in base a recalculate_gest_price abilito/disabilito il prezzo
+											     		
+											     			if (rec.get('activity_op').recalculate_gest_price == true){
+											     				comp.getForm().findField('recalculate_gest_price').show();
+											     			} else {
+											     				comp.getForm().findField('amount').enable();
+											     			}
+											     		}
+											     	}
 											    ,
 								    			dockedItems: [{
 												    xtype: 'toolbar',
@@ -659,6 +691,8 @@
 			        text: 'Applica def.', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {			        			        			        
 			        	var loc_grid = this;
+			        	
+			        	//per ora lo disabilito sempre (ToDo: finire gestione con amount_setted)
 			        	
 			        	if (!Ext.isEmpty(rec.get('amount'))) return '';
 			        	if (Ext.isEmpty(rec.get('activity_op').default_price) || rec.get('activity_op').default_price == 0) return '';

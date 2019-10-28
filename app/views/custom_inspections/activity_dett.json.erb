@@ -95,6 +95,7 @@
 		            	tmp_win.destroy();
 		            }
 		          }, '->', {
+		            hidden: true, //non piu' usato
         	   		xtype: 'numberfield', 
         	   		fieldLabel: 'Totale costo operazioni',
         	   		itemId: 'sum_amount',
@@ -109,12 +110,27 @@
 				 		
 				 		var containers_dett_amount = [];
 				 		me.store.each(function(r){
+				 		
+				 			if (r.get('recalculate_gest_price') != true && Ext.isEmpty(r.get('op_amount'))){
+				 				alert('Impostare tutti i prezzi');
+				 				containers_dett_amount = null;
+				 				return false;
+				 			}
+				 			
+				 			if (r.get('recalculate_gest_price') == true && !Ext.isEmpty(r.get('op_amount'))){
+				 				alert('Impostare il prezzo o Da Listino');
+				 				containers_dett_amount = null;
+				 				return false;
+				 			}				 		
+				 		
 							containers_dett_amount.push({
 								id: r.get('id'),
+								recalculate_gest_price: r.get('recalculate_gest_price'),
 								op_amount: r.get('op_amount')
 							});
-						});	
+						});
 				 		
+				 		if (!Ext.isEmpty(containers_dett_amount)){
 						  Ext.Ajax.request({
 			                    url: <%= raw url_for(:controller=>'activities', :action=>'set_amount').to_json -%>,
 			                    waitMsg: 'Salvataggio in corso....',
@@ -154,7 +170,8 @@
 			                    	})					
 								}, scope: this,						
 												 
-					    	});					 		
+					    	});	
+					    }				 		
 				 		
 				 	}
 				 }]
@@ -297,13 +314,27 @@
 			    , {
 			    	dataIndex: 'op_amount',
 			    	text: 'Importo', align: 'right',
-			    	editor: {xtype: 'numberfield', allowBlank: false, msgTarget: 'under'},
-					renderer: function(value, meta){
+			    	editor: {xtype: 'numberfield', allowBlank: true, msgTarget: 'under'},
+					renderer: function(value, meta, rec){
+						 
 					      meta.style = 'border: 1px solid black;'; // applied style for DIV element
 					      //meta.tdAttr = 'style="border:1px solid black;"'; // applied style for TD element
 					      return value;      
 					   }
 			    }
+			    
+			    
+			    
+			    <% if @item.activity_op.recalculate_gest_price == true %>			    
+			    , {
+				    xtype:'checkcolumn',
+				    text: 'Da listino',
+				    dataIndex: 'recalculate_gest_price',
+				    inputValue: true, uncheckedValue: false				    
+				}
+				<% end %>
+			    
+			    
 			    <% end %>
 			            
         ] //columns

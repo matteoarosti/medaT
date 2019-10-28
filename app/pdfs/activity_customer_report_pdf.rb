@@ -29,7 +29,7 @@ class ActivityCustomerReportPdf < Prawn::Document
       riga_from = riga_to + 2
       riga_to   = riga_from + 4    
       ar_delivered_by = ['I.CO.P. s.rl.', 'Via L.go Mare Vanvitelli, 68', '60121 - Ancona', 'Italia']
-      ar_delivered_to = [docH.customer.name]
+      ar_delivered_to = [docH.customer.name, docH.customer.address.to_s]
       grid([riga_from,0], [riga_to,4]).bounding_box do write_cell_ar('Mittente',      ar_delivered_by, 8) end
       grid([riga_from,6], [riga_to,10]).bounding_box do write_cell_ar('Destinatario', ar_delivered_to, 8) end
         
@@ -85,6 +85,13 @@ class ActivityCustomerReportPdf < Prawn::Document
       grid([riga_from,10], [riga_to,10]).bounding_box do write_cell_ar_no_title(['']) end     
     end
     
+    
+      riga_from = riga_to + 2
+      riga_to   = riga_from + 1
+      grid([riga_from, 0], [riga_to, 10]).bounding_box do
+        text "Si prega di far pervenire eventuali contestazioni entro 2 gg dalla presenta alla email fatturazione@icopsrl.net", :size => 7      
+      end
+
 
 
 

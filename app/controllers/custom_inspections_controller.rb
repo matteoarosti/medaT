@@ -77,8 +77,9 @@ Note: #{item.notes.to_s}<br/>
     
     if params[:set_amount] == true
       #preimposto (se presente) il prezzo di default dell'attivita', a meno che non abbia gia' un prezzo sul dettaglio
-      @item_detts.collect! { |ad|         
-         ad.op_amount = @item.activity_op.default_price.to_i if ad.op_amount.nil?
+      @item_detts.collect! { |ad|
+         ad.recalculate_gest_price = ad.recalculate_gest_price.nil? ? @item.activity_op.recalculate_gest_price : ad.recalculate_gest_price         
+         ad.op_amount = @item.activity_op.recalculate_gest_price == true ? nil : @item.activity_op.default_price.to_i if ad.op_amount.nil?
       }
     end    
       

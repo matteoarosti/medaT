@@ -31,9 +31,6 @@ class ToDoItemsController < ApplicationController
         #default apertura 
         items = items.not_closed  
      end  
-
-    
-    
       
     ret = {}
     ret[:items] = items.limit(params[:limit]).offset(params[:start]).as_json(model_class.constantize.as_json_prop)
@@ -143,7 +140,43 @@ class ToDoItemsController < ApplicationController
   
       
   
+  def list_POST_IT_MUL
+  end
   
+  #come lista mostro solo le liste aperte
+  ##########################################
+   def get_list_POST_IT_MUL
+  ########################################## 
+    model_class = extjs_sc_model.to_s
+    
+    items = model_class.constantize.post_it_mul
+    
+     #gestione eventuali filtri
+     unless params[:f_values].nil?
+       params[:f_values].each do |kp, p|
+         case kp
+         when 'flt_date_from'
+           items = items.where("created_at >= ?", Time.zone.parse(p).beginning_of_day) unless p.blank?           
+         when 'flt_date_to'
+           items = items.where("created_at <= ?", Time.zone.parse(p).beginning_of_day) unless p.blank?
+         when 'show_executed'
+           items = items.where("status <> 'CLOSE'") if p == 0  
+         when 'show_not_executed'
+           items = items.where("status <> 'OPEN'") if p == 0           
+         end
+         
+       end
+     else
+        #default apertura 
+        items = items.where("status = 'OPEN' or created_at >= ?", 1.week.ago)  
+     end  
+      
+    ret = {}
+    ret[:items] = items.limit(params[:limit]).offset(params[:start]).as_json(model_class.constantize.as_json_prop)
+    ret[:total] = model_class.constantize.extjs_default_scope.count
+    
+    render json: ret
+   end 
   
   
   

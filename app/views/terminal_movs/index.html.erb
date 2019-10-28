@@ -258,6 +258,11 @@ Ext.define("plugin.Printer", {
                                     leaf: true,
                                  	url: '<%= url_for(:controller=>'to_do_items', :action=>'new_POST_IT_MUL') -%>',                                    
                                     op: 'new_win',                                
+                                }, {
+                                    task: 'Elenco Post-It',
+                                    leaf: true,
+                                 	url: '<%= url_for(:controller=>'to_do_items', :action=>'list_POST_IT_MUL') -%>',                                    
+                                    op: 'new_tab',                                
                                 }                            
                         ]    
                      },{

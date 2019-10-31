@@ -23,14 +23,14 @@ class DocH < ActiveRecord::Migration
         
     
     create_table :doc_hs do |t|
-      t.belongs_to :doc_type
-      t.integer  :nr_anno
-      t.integer  :nr_seq
+      t.belongs_to  :doc_type
+      t.integer     :nr_anno
+      t.integer     :nr_seq
       
-      t.belongs_to :customer
-      t.date     :d_reg
-      t.string   :status, limit: 5      #OPEN, CLOSE, ...
-      t.boolean  :draft                 #bozza
+      t.belongs_to  :customer
+      t.date        :d_reg                 #data del documento
+      t.string      :status, limit: 5      #OPEN, CLOSE, ...
+      t.boolean     :draft                 #bozza
       
       t.attachment  :doc_file
       

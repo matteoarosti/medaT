@@ -269,6 +269,21 @@ class SendActivityCustomerReport
   
   
   ### UTILITY ####
+  
+  
+  def set_0_to_all()    
+    ActivityDettContainer.joins(:activity)
+      .where("activity_dett_containers.execution_at IS NOT NULL or activity_dett_containers.confirmed_at IS NOT NULL")
+      .where("activities.customer_id IS NOT NULL")
+      .update_all(doc_h_notifica_id: 0)
+    
+    Activity
+      .joins("LEFT OUTER JOIN activity_types ON activity_types.id = activities.activity_type_id")
+      .where("activity_type_id is null OR activity_types.code != 'CUST_INSPECTION'")
+      .where("execution_at IS NOT NULL")
+      .update_all(doc_h_notifica_id: 0)               
+  end
+  
   def set_0_before_date(date_to)
     
     #ActivityDettContainer.joins(:activity)

@@ -231,7 +231,7 @@ class SendActivityCustomerReport
    medaT for Icop"        
            LogEvent.send_mail(docH, 'MAIL_DOC',
                      
-                     docH.customer.email_notify_activity.to_s.empty? ? TabConfig.get_notes('EMAIL', 'ACTIVITY', 'DAILY_CLI').to_s : docH.customer.email_notify_activity.to_s
+                     docH.customer.email_notify_activity.to_s.empty? ? TabConfig.get_notes('EMAIL', 'ACTIVITY', 'DAILY_CLI').to_s : docH.customer.email_notify_activity.to_s,
            
                      #merge_email_to(
                      #   docH.customer.email_notify_activity.to_s,                         

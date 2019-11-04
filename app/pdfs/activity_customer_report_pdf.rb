@@ -80,7 +80,7 @@ class ActivityCustomerReportPdf < Prawn::Document
       riga_to   = riga_from + 1
       
       grid([riga_from, 0], [riga_to, 2]).bounding_box do write_cell_ar_container('-', ['-']) end      
-      grid([riga_from, 3], [riga_to, 8]).bounding_box do write_cell_ar_no_title([!rec.activity_op.nil? ? rec.activity_op.name : '']) end
+      grid([riga_from, 3], [riga_to, 8]).bounding_box do write_cell_ar_no_title([!rec.activity_op.nil? ? rec.activity_op.name : '', rec.notes]) end
       grid([riga_from, 9], [riga_to, 9]).bounding_box do write_cell_ar_no_title([rec.execution_at ? rec.execution_at.strftime("%d/%m/%y %H:%M") : '']) end
       grid([riga_from,10], [riga_to,10]).bounding_box do write_cell_ar_no_title(['']) end     
     end

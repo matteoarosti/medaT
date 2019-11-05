@@ -137,7 +137,7 @@ class SendActivityCustomerReport
     tmp_file_csv_fe.puts prepare_csv_FE_eSolver(d)
     tmp_file_csv_fe.close
     print "\nGenerato"
-    
+    return true
 =begin    
       begin
            text_email = "In allegato: documento csv per import in gestionale"        

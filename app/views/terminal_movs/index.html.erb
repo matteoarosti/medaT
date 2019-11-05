@@ -562,6 +562,12 @@ Ext.define("plugin.Printer", {
                                     op: 'new_tab'                                
                                 }                                
                                 
+                                , {
+                                task: 'DRA',
+                                url: '<%= url_for(:controller=>'doc_hs', :action=>'w_list', doc_type_id: 1) -%>',
+                                leaf:true,
+                                op: 'new_tab'
+                           	 }
                                 
 <% end %>                           	 
                            	 

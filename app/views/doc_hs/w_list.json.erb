@@ -1,0 +1,193 @@
+<% @item = DocH.new %>
+{
+ success: true,
+ items: [
+ {
+  xtype: 'container',
+  closable: true,
+  title: <%= raw "Docs".to_json -%>,
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},  	
+
+  items: [
+       
+   // grid con righe import
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'doc_hs/get_list').to_json -%>,
+        	            extraParams: {
+        	            	o_filter: <%= raw params.to_json -%>,
+        	            	form_user: {}
+        	            },
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	   dockedItems: [
+        	   { 
+        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
+        	    items: [
+        	    '->', {
+				    xtype: 'form',	
+				    height: 50,
+				    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+				    padding: '10 10 10 10',
+				    
+				    defaults: {
+				    	xtype: 'textfield',
+				    	labelAlign: 'right',
+				    	width: 150, labelWidth: 70, padding: '0 0 0 10',
+				    	fieldStyle: 'font-size: 16px; text-transform: uppercase;',
+		                enableKeyEvents: true,
+		                listeners: {                   
+			                'keypress': function(field,event){
+			                    if (event.getKey() == event.ENTER){
+			                        this.up('form').start_refresh();
+			                    }
+			                }                                   
+			            }
+			        },
+			        
+			        start_refresh: function() {
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    header_form_values = header_form.getValues();
+
+				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
+				 				this.up('grid').getStore().load();			        
+			        },
+
+				    items: [
+				    
+				       {	
+								xtype: 'datefield',
+								width: 200, labelWidth: 80, padding: '0 0 0 10',
+				                fieldLabel: 'Da data', name: 'flt_date_from'
+				 		}, {	
+								xtype: 'datefield',
+								width: 200, labelWidth: 80, padding: '0 0 0 10',
+				                fieldLabel: 'A data', name: 'flt_date_to'
+				 		}
+				 		
+				 		
+				 		
+				 		, <%= raw extjs_std_combo_model('customer', @item, {input_name: 'flt_customer_id'}, {width: 270, autoWidth: false}) -%>
+				 		
+				 		
+				    ]
+				 }
+				 
+				 ,  {iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
+				 			handler: function(event, toolEl, panel){ 
+			                    header_form = this.up('grid').getDockedComponent('toptoolbar').down('form').getForm();
+			                    header_form_values = header_form.getValues();
+
+				    			this.up('grid').store.proxy.extraParams.form_user = header_form_values;				 				 
+				 				this.up('grid').getStore().load();
+				 			}
+				 	}
+				 ]
+			  }
+			],
+        	           	    
+        	    
+			    columns: [{
+			        text: '',
+			        width: 30,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         return '<h5>' + (rowIndex + 1) + '</h5>';
+			        }			        
+			    }, {
+			        dataIndex: 'id',
+			        text: 'Anno/Doc',
+			        width: 200,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         	ret = '<h3>' + rec.get('nr_anno') + ' / ' + rec.get('nr_seq') + '</h3>';			         			         				          	 
+			          	return ret;			         
+			        }			        
+			    }
+			    
+			    
+			    , {
+			        dataIndex: 'customer_id',
+			        text: 'Intestatario',
+			        flex: 1,
+			        renderer: function (value, metaData, rec) {
+			        	ret = '<h3>' + rec.get('customer').name + '</h3>';
+		                return ret;
+		             }
+			    }, {
+			        text: 'Data',
+			        dataIndex: 'd_reg',
+			        width: 170,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';			         			         
+					 ret += Ext.util.Format.date(value, 'd-m-y');			         
+			         return ret;
+			        }			        	        
+			    }			        	        
+			    
+			    
+			    , {
+			        text: 'PDF',
+			        dataIndex: 'pdf_link',
+			        width: 70,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';			         			         
+					 if (!Ext.isEmpty(value))
+					 	ret += '<a href="' + value + '"  target="_blank">[pdf]</a>';;			         
+			         return ret;
+			        }			        	        
+			    }
+			    
+			    , {
+			        text: '.csv',
+			        dataIndex: 'sent_csv_on',
+			        width: 70,
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         ret = '';			         			         
+					 if (!Ext.isEmpty(value))
+					 	ret += 'Y';			         
+			         return ret;
+			        }			        	        
+			    }
+
+
+		]
+		}
+   
+  ]
+ }
+ ]
+}

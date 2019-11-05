@@ -6,7 +6,7 @@ class DocH < ActiveRecord::Base
   
   has_attached_file :doc_file, 
       path: ":rails_root/record_images/:class/:attachment/:id_partition/:style/:filename",
-      url: "activities/download_file/:id"
+      url: "doc_hs/download_file/:id"
   # Validate content type, filename, size
   #validates_attachment_content_type :scan_file, content_type: /\Aimage/
   validates_attachment_content_type :doc_file, content_type: ["application/pdf", /\Aimage\/.*\Z/]
@@ -27,5 +27,27 @@ class DocH < ActiveRecord::Base
     self.nr_anno = nr.nr_anno
     self.nr_seq  = nr.last_seq
   end
+
   
+  
+  def pdf_link
+    self.doc_file.url(:original, false) unless doc_file.nil?
+  end
+  
+  
+  def self.as_json_prop()
+       return {
+          :include=>{
+              :customer  => {:only=>[:name]}, 
+              :doc_type  => {:only=>[:code, :name]}
+          },
+          :methods => [:customer_id_Name, :doc_type_id_Name, :pdf_link]
+        }
+   end     
+   
+  
+  
+  
+  
+    
 end

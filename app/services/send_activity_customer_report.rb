@@ -174,8 +174,8 @@ class SendActivityCustomerReport
     #righe (dett)
     ActivityDettContainer.where(doc_h_notifica_id: d.id).each do |rec|      
       perc_sconto = 0
-      importo = rec.recalculate_gest_price.nil? ? rec.op_amount : 0
-      perc_sconto = 100 if rec.recalculate_gest_price.nil? && importo == 0
+      importo = !rec.recalculate_gest_price.present? ? rec.op_amount : 0
+      perc_sconto = 100 if !rec.recalculate_gest_price.present? && importo == 0
       ar_out << ['RIG',
                   campo_data,
                   d.nr_seq,
@@ -197,8 +197,8 @@ class SendActivityCustomerReport
     #righe (no dett)              
     Activity.where(doc_h_notifica_id: d.id).each do |rec|
       perc_sconto = 0
-      importo = rec.recalculate_gest_price.nil? ? rec.amount : 0
-      perc_sconto = 100 if rec.recalculate_gest_price.nil? && importo == 0
+      importo = !rec.recalculate_gest_price.present? ? rec.amount : 0
+      perc_sconto = 100 if !rec.recalculate_gest_price.present? && importo == 0
       ar_out << ['RIG',
                   campo_data,
                   d.nr_seq,

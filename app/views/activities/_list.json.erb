@@ -526,7 +526,8 @@
 											        {xtype: 'hiddenfield', name: 'id', value: rec.get('id')},
 											        
 											        {xtype: 'checkbox', hidden: true, 
-											        		name: 'recalculate_gest_price', value: rec.get('activity_op').recalculate_gest_price, 
+											        		name: 'recalculate_gest_price', 
+											        		value: rec.get('amount_setted') == true ? rec.get('recalculate_gest_price') : rec.get('activity_op').recalculate_gest_price, 
 											        		fieldLabel: 'Usa prezzo da listino gestionale',
 											        		inputValue: true, uncheckedValue: false,
 											        		listeners: {
@@ -542,7 +543,8 @@
 											        },
 											        
 											        {xtype: 'numberfield', disabled: true,   
-											        		name: 'amount', allowBlank: false, fieldLabel: 'Importo', labelAlign: 'left', value: rec.get('amount'),
+											        		name: 'amount', allowBlank: false, fieldLabel: 'Importo', labelAlign: 'left', 
+											        		value: rec.get('amount'),
 											         listeners: {
 											          specialkey: function(field, e){
 											          	if (e.getKey() == e.ENTER) { 											          	  

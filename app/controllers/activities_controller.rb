@@ -111,7 +111,7 @@ class ActivitiesController < ApplicationController
    end #case
 
    #ordino per data     
-   render json: items.limit(500).as_json(Activity.as_json_prop)     
+   render json: items.limit(200).as_json(Activity.as_json_prop)     
    
  
  end 

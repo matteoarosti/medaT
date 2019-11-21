@@ -567,11 +567,22 @@
 											     		
 											     			//in base a recalculate_gest_price abilito/disabilito il prezzo
 											     		
-											     			if (rec.get('activity_op').recalculate_gest_price == true){
-											     				comp.getForm().findField('recalculate_gest_price').show();
+											     			if (rec.get('amount_setted') == true){
+											     				//prezzo gia' impostato
+											     				if (rec.get('activity_op').recalculate_gest_price || rec.get('recalculate_gest_price'))
+											     					comp.getForm().findField('recalculate_gest_price').show();
+											     				if (!rec.get('recalculate_gest_price'))
+											     					comp.getForm().findField('amount').enable();	
 											     			} else {
-											     				comp.getForm().findField('amount').enable();
+											     				//apertura per caricamento
+												     			if (rec.get('activity_op').recalculate_gest_price == true){
+												     				comp.getForm().findField('recalculate_gest_price').show();
+												     			} else {
+												     				comp.getForm().findField('amount').enable();
+												     			}
 											     			}
+											     		
+											     			
 											     		}
 											     	}
 											    ,

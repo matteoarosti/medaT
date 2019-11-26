@@ -28,7 +28,7 @@ class Activity < ActiveRecord::Base
            :activity_op => {:only=>[:name, :default_price, :recalculate_gest_price]},
            :activity_dett_containers => {
                 :only => [:container_number, :status, :make_available_at, :execution_at, :confirmed_at],
-                :methods => [:dra_out]}
+                :methods => [:dra_out]
            }
            },
          :methods => [:created_user_name]

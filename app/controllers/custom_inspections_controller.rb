@@ -173,7 +173,7 @@ Utente: #{item.execution_user_name}<br/>
    ##################################################
    def list_to_confirm_data
    ##################################################
-     items = ActivityDettContainer.eager_load(:activity).preload(:activity_op, :shipowner)
+     items = ActivityDettContainer.eager_load(:activity).preload(:activity_op, :shipowner).joins(:activity)
             .where("(activities.status IS NULL OR activities.status <> 'ANN') AND (activity_dett_containers.status IS NULL or activity_dett_containers.status <> 'ANN')")
             .where("confirmed_at IS NULL")
             #### al momento le mostro tutte

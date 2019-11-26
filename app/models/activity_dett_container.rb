@@ -20,10 +20,10 @@ class ActivityDettContainer < ActiveRecord::Base
          :include=>{
            :activity  => {
               include: {activity_op: {}, shipowner: {}, customer: {only: 'name'}},
-              :methods => [:created_user_name, :dra_out]
+              :methods => [:created_user_name]
            }
          },
-         :methods => [:confirmed_user_name, :execution_user_name]
+         :methods => [:confirmed_user_name, :execution_user_name, :dra_out]
        }
   end     
   

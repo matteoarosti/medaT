@@ -202,7 +202,9 @@
 								  ret += ' [Ese]';
 								if (!Ext.isEmpty(dett_container.confirmed_at))
 								  ret += ' [Con]';								  
-																													
+													
+								if (!Ext.isEmpty(dett_container.dra_out))
+								  ret += ' ' + dett_container.dra_out;
 							}, this)
 			        	    
 			        	   ret += '<br/>&nbsp;<br/>';  

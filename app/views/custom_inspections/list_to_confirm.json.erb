@@ -158,6 +158,8 @@
 			           		ret += '<p>Messa a disposizione<br/>non ancora eseguita</p>';
 			           }
 			           
+			           if (!Ext.isEmpty(rec.get('dra_out')))
+			           		ret += '<p>' + rec.get('dra_out') + '</p>';
 			           
 			           return ret;
 			        }			        

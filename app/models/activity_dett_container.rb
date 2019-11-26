@@ -54,7 +54,8 @@ class ActivityDettContainer < ActiveRecord::Base
  
  def dra_out
    if self.doc_h_notifica
-     return "DRA: #{self.doc_h_notifica.nr_seq}/#{self.doc_h_notifica.nr_anno}"
+     anno_short = self.doc_h_notifica.nr_anno - 2000
+     return "DRA: #{self.doc_h_notifica.nr_seq}/'#{anno_short}"
    end
  end
   

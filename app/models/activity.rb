@@ -5,7 +5,7 @@ class Activity < ActiveRecord::Base
   belongs_to :shipowner
   belongs_to :activity_type
   has_many   :activity_dett_containers
-  
+  belongs_to :doc_h_notifica, class_name: "DocH"
   
   has_attached_file :scan_file, 
       path: ":rails_root/record_images/:class/:attachment/:id_partition/:style/:filename",
@@ -31,7 +31,7 @@ class Activity < ActiveRecord::Base
                 :methods => [:dra_out]
            }
            },
-         :methods => [:created_user_name]
+         :methods => [:created_user_name, :dra_out]
          }       
   end     
   
@@ -90,5 +90,12 @@ class Activity < ActiveRecord::Base
         
     return nil
   end  
+  
+  def dra_out
+   if self.doc_h_notifica
+     anno_short = self.doc_h_notifica.nr_anno - 2000
+     return "DRA: #{self.doc_h_notifica.nr_seq}/#{anno_short}"
+   end
+ end
   
 end

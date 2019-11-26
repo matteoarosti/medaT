@@ -208,6 +208,10 @@
 							}, this)
 			        	    
 			        	   ret += '<br/>&nbsp;<br/>';  
+			        	} else {
+			        		//no CUST_INSPECTION
+			        		if (!Ext.isEmpty(rec.get('dra_out')))
+								  ret += '<br>' + rec.get('dra_out');
 			        	}
 		                
 		                return ret;

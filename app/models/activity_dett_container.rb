@@ -51,6 +51,12 @@ class ActivityDettContainer < ActiveRecord::Base
    return u.name if !u.nil?
    self.confirmed_user_id
  end
+ 
+ def dra_out
+   if self.doc_h_notifica
+     return "DRA: #{self.doc_h_notifica.nr_seq}/#{self.doc_h_notifica.nr_anno}"
+   end
+ end
   
     
 end

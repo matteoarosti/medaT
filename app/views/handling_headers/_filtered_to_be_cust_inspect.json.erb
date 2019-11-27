@@ -50,11 +50,16 @@
 			        flex: 1,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 				         var me = this, ret = '';
+				         
 				         ret += '<h2>' + rec.get('handling_header').container_number + '</h2>';
-				         ret += rec.data.handling_header.shipowner.name + ' - ' + rec.data.handling_header.customer.name;  
+				         
+				         ret += '<p>';
 				         
 				         if (!Ext.isEmpty(rec.get('activity_op_name')))
-				           ret += '<p>' + rec.get('activity_op_name') + '</p>';
+				           ret += '<b>' + rec.get('activity_op_name') + '</b><br/>';				         
+				         
+				         ret += rec.data.handling_header.shipowner.name + ' - ' + rec.data.handling_header.customer.name;  
+				         ret += '</p>';
 				         
 				         return ret;				          
 			        }

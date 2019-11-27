@@ -53,10 +53,12 @@
 				         
 				         ret += '<h2>' + rec.get('handling_header').container_number + '</h2>';				         
 				         
-				         if (!Ext.isEmpty(rec.get('activity_op_name')))
-				           ret += '<h3>' + rec.get('activity_op_name') + '</h3>';				         
 				         
 				         ret += '<p>';
+				         
+				         if (!Ext.isEmpty(rec.get('activity_op_name')))
+				           ret += '<strong>' + rec.get('activity_op_name') + '</strong><br>';				         
+				         
 				         ret += rec.data.handling_header.shipowner.name + ' - ' + rec.data.handling_header.customer.name;  
 				         ret += '</p>';
 				         

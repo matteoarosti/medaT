@@ -438,6 +438,7 @@ end
          :plate  => nil,
          :created_at => ac.created_at,
          :booking_notes => 'bbbbb',
+         :activity_op_name => !ac.activity.activity_op.nil? ? ac.activity.activity_op.name : nil,
          :handling_header => {
             :container_number => ac.container_number,
             :fila => '', :blocco => '', :tiro => '',

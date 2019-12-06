@@ -332,7 +332,7 @@
 			    <% if @item.activity_op.recalculate_gest_price == true %>			    
 			    , {
 				    xtype:'checkcolumn',
-				    text: 'Da listino',
+				    text: 'Usa prezzo listino', width: 150,
 				    dataIndex: 'recalculate_gest_price',
 				    inputValue: true, uncheckedValue: false				    
 				}
@@ -340,9 +340,9 @@
 				
 				
 				, {				    
-				    text: 'Prezzo Listino',
+				    text: '(Listino)',
 				    dataIndex: 'op_amount',
-				    align: 'right', width: 110,
+				    align: 'right', width: 80,
 				    renderer: function(value, meta, rec){						 
 					      if (!Ext.isEmpty(rec.get('activity').activity_op.default_price))
 					      	return parseFloat(rec.get('activity').activity_op.default_price);					      	

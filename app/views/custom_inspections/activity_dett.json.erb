@@ -20,7 +20,8 @@
 
   items: [
   		 <% 
-  		 	t_header = "<h1>#{@item.activity_op.name}</h1>" 
+  		 	t_header = "<h4>#{@item.customer.name}</h4>"
+  		 	t_header += "<h1>#{@item.activity_op.name}</h1>" 
   		 	t_header += "<h2><font color=blue>Richiesta Messa a disposizione</font></h2>" if @item.to_be_made_available
   		 	t_header += "<p><i>#{@item.notes}</i></p>" if !@item.notes.empty?
   		 %>

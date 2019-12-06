@@ -277,7 +277,7 @@
 			    
 			    , {
 			        dataIndex: 'container_number',
-			        text: 'Visita eseguita',
+			        text: 'Eseguita',
 			        width: 150, align: 'center',
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			         var me = this; //me = grid;			          
@@ -297,6 +297,22 @@
 			        }			        
 			    }
 			    
+			    
+			    , {
+			        dataIndex: 'container_number',
+			        text: 'Confermata (cli)',
+			        width: 150, align: 'center',
+			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+			         var me = this; //me = grid;			          
+			         if (!Ext.isEmpty(rec.get('execution_at'))){
+			           ret = '<h3>' + Ext.util.Format.date(rec.get('confirmed_at'), 'd-m-y H:i') + '</h3>';
+			           if (!Ext.isEmpty(rec.get('confirmed_notes')))
+			             ret += '<div style="white-space:normal">' + rec.get('confirmed_notes').replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
+			           return ret;
+			         }			      	         
+			        }			        
+			    }
+
 			    
 			    <% if params[:set_amount] == true %>
 			    , {

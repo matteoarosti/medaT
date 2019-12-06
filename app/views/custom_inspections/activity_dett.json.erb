@@ -30,7 +30,7 @@
 		 {
 				flex: 1,
 				layout: 'fit',
-        	    title: 'Dettaglio container', flex: 50,
+        	    flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',
@@ -196,17 +196,8 @@
 					},
 				    padding: '10 10 10 10',
 				    items: [
-						{
-				            xtype: 'textfield',
-			                fieldLabel: 'Richiesti', labelWidth: 100,
-							bind: '{rec.quantity}',
-			                width: 180
-			            }
-			            
 			            <% if @item.scan_file.exists? %>
-			            ,  {
-			            	html: '<%= raw link_to "[Allegato]", @item.scan_file.url(:original, false), target: "_blank" %>'
-			            }	        					
+			              {html: '<%= raw link_to "[Allegato]", @item.scan_file.url(:original, false), target: "_blank" %>'}	        					
 			            <% end %>		     
 				    ]
 				 }, {

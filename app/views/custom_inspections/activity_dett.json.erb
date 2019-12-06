@@ -19,7 +19,7 @@
 	},  	
 
   items: [
-  		 {html: <%= raw "<h1>#{@item.activity_op.name}</h1>".to_json -%>},
+  		 {html: <%= raw "<h1>#{@item.activity_op.name}</h1><p><i>#{@item.notes}</i></p>".to_json -%>},
        
    // grid con righe import
 		 {

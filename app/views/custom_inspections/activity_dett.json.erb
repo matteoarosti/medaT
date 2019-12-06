@@ -340,12 +340,10 @@
 				    dataIndex: 'op_amount',
 				    align: 'right', width: 100,
 				    renderer: function(value, meta, rec){						 
-					      if (!Ext.isEmpyt(rec.get('activity').activity_op.default_price))
-					      	return parseFloat(rec.get('activity').activity_op.default_price);
-					      	
-					      return null;						          
-					}
-				    				    
+					      if (!Ext.isEmpty(rec.get('activity').activity_op.default_price))
+					      	return parseFloat(rec.get('activity').activity_op.default_price);					      	
+					      return null;
+					}				    				    
 				}
 			    
 			    

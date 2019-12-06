@@ -19,13 +19,13 @@
 	},  	
 
   items: [
-  		 {html: '...'},
+  		 {html: <%= raw "<h1>#{@item.activity_op.name}</h1>".to_json -%>},
        
    // grid con righe import
 		 {
 				flex: 1,
 				layout: 'fit',
-        	    title: <%= raw t('forms.damageds.details_label').to_json -%>, flex: 50,
+        	    title: 'Dettaglio container', flex: 50,
         	    tools: [
                 ],
         	    xtype: 'gridpanel',

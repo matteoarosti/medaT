@@ -21,7 +21,7 @@
   items: [
   		 <% 
   		 	t_header = "<h1>#{@item.activity_op.name}</h1>" 
-  		 	t_header += "<h2 font color=blue>Richiesta Messa a disposizione</h2>" if @item.to_be_made_available
+  		 	t_header += "<h2><font color=blue>Richiesta Messa a disposizione</font></h2>" if @item.to_be_made_available
   		 	t_header += "<p><i>#{@item.notes}</i></p>" if !@item.notes.empty?
   		 %>
   		 {html: <%= raw t_header.to_json -%>, padding: 10},
@@ -333,9 +333,9 @@
 				
 				
 				, {				    
-				    text: 'Prezzo base',
+				    text: 'Prezzo Listino',
 				    dataIndex: 'op_amount',
-				    align: 'right', width: 100,
+				    align: 'right', width: 110,
 				    renderer: function(value, meta, rec){						 
 					      if (!Ext.isEmpty(rec.get('activity').activity_op.default_price))
 					      	return parseFloat(rec.get('activity').activity_op.default_price);					      	

@@ -314,6 +314,17 @@
 			    }
 
 			    
+			    , {				    
+				    text: '(Listino)',
+				    dataIndex: 'op_amount',
+				    align: 'right', width: 80,
+				    renderer: function(value, meta, rec){						 
+					      if (!Ext.isEmpty(rec.get('activity').activity_op.default_price))
+					      	return parseFloat(rec.get('activity').activity_op.default_price);					      	
+					      return null;
+					}				    				    
+				}
+			    
 			    <% if params[:set_amount] == true %>
 			    , {
 			    	dataIndex: 'op_amount',
@@ -339,16 +350,7 @@
 				<% end %>
 				
 				
-				, {				    
-				    text: '(Listino)',
-				    dataIndex: 'op_amount',
-				    align: 'right', width: 80,
-				    renderer: function(value, meta, rec){						 
-					      if (!Ext.isEmpty(rec.get('activity').activity_op.default_price))
-					      	return parseFloat(rec.get('activity').activity_op.default_price);					      	
-					      return null;
-					}				    				    
-				}
+				
 			    
 			    
 			    <% end %>

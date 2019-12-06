@@ -317,7 +317,7 @@
 			    <% if params[:set_amount] == true %>
 			    , {
 			    	dataIndex: 'op_amount',
-			    	text: 'Importo', align: 'right',
+			    	text: 'Applica importo', align: 'right', width: 120,
 			    	editor: {xtype: 'numberfield', allowBlank: true, msgTarget: 'under'},
 					renderer: function(value, meta, rec){
 						 
@@ -344,7 +344,7 @@
 				    align: 'right', width: 80,
 				    renderer: function(value, meta, rec){						 
 					      if (!Ext.isEmpty(rec.get('activity').activity_op.default_price))
-					      	return parseFloat(rec.get('activity').activity_op.default_price) + '&euro;';					      	
+					      	return parseFloat(rec.get('activity').activity_op.default_price) + ' &euro;';					      	
 					      return null;
 					}				    				    
 				}

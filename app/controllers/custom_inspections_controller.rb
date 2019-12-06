@@ -84,7 +84,7 @@ Note: #{item.notes.to_s}<br/>
           ad.op_amount = @item.activity_op.recalculate_gest_price == true ? nil : @item.activity_op.default_price.to_i if ad.op_amount.nil?
         end
         
-        ad.op_default_price = @item.activity_op.default_price 
+        #ad.op_default_price = @item.activity_op.default_price 
       }
     end    
       

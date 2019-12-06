@@ -184,6 +184,11 @@
 			        	
 			        	if (Ext.isEmpty(rec.get('activity_op_id')) == false)
 			        		ret += '<span style="font-weight: bold;">[ ' + rec.data.activity_op.name + ' ]</span>';
+			        		
+			        	if (rec.get('to_be_made_available'))
+			        		ret += ' <span style="font-weight: bold; font-size: 1em;">** + Messa a disp.**</span>';
+			        		
+			        		
 			        	if (Ext.isEmpty(value) == false)
 		                	ret += '<div style="white-space:normal">' + value.replace(/(?:\r\n|\r|\n)/g, '<br />'); + '</div>';
 		                

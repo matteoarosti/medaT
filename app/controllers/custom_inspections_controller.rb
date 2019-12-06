@@ -82,13 +82,11 @@ Note: #{item.notes.to_s}<br/>
           #propongo default
           ad.recalculate_gest_price = ad.recalculate_gest_price.nil? ? @item.activity_op.recalculate_gest_price : ad.recalculate_gest_price         
           ad.op_amount = @item.activity_op.recalculate_gest_price == true ? nil : @item.activity_op.default_price.to_i if ad.op_amount.nil?
-        end
-        
-        #ad.op_default_price = @item.activity_op.default_price 
+        end         
       }
     end    
       
-    render json: {:success => true, items: @item_detts}
+    render json: {:success => true, items: @item_detts.as_json(ActivityDettContainer.as_json_prop)}
   end
   
   def set_available

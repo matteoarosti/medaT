@@ -19,7 +19,11 @@
 	},  	
 
   items: [
-  		 {html: <%= raw "<h1>#{@item.activity_op.name}</h1><p><i>#{@item.notes}</i></p>".to_json -%>},
+  		 <% 
+  		 	t_header = "<h1>#{@item.activity_op.name}</h1><p><i>#{@item.notes}</i></p>" 
+  		 	t_header += "<p font color=blue>Richiesta Messa a disposizione</p>" if @item.to_be_made_available
+  		 %>
+  		 {html: <%= raw t_header.to_json -%>},
        
    // grid con righe import
 		 {
@@ -192,15 +196,6 @@
 				    padding: '10 10 10 10',
 				    items: [
 						{
-				            xtype: 'radiogroup',
-				            fieldLabel: '',
-				            layout: 'hbox',
-				            items: [{
-				                boxLabel: 'Con messa a disposizione',
-				                bind: '{rec.to_be_made_available}',
-				                width: 200                
-				            }]
-				        }, {
 				            xtype: 'textfield',
 			                fieldLabel: 'Richiesti', labelWidth: 100,
 							bind: '{rec.quantity}',

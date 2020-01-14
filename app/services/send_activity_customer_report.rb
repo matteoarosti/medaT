@@ -284,6 +284,16 @@ class SendActivityCustomerReport
   
   ### UTILITY ####
   
+  def force_regenerate_csv(anno, seq)
+    item = DocH.find_by(
+      doc_type: DocType.find_by!(code: 'ADN'),
+      nr_anno: anno,
+      nr_seq:  seq)
+    item.sent_csv_on = nil
+    item.save!
+  end
+      
+  
   
   def set_0_to_all()    
     ActivityDettContainer.joins(:activity)

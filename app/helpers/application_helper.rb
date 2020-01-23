@@ -385,9 +385,8 @@ end
           xtype: 'fieldset',
           title: 'Info Booking',
           layout: 'anchor',
-          items: [
-          
-      {
+          items: [          
+          {
                 xtype: 'fieldcontainer',
                 combineErrors: true,
                 msgTarget : 'side',
@@ -398,8 +397,12 @@ end
                      {fieldLabel: 'Numero', value: #{hh.num_booking.to_json},     labelWidth: 70},
                      {fieldLabel: 'Nave', value: #{(!hh.booking.nil? ? hh.booking.ship.name : '').to_json}, labelWidth: 70, labelAlign: 'right'},
                      {fieldLabel: 'Viaggio', value: #{(!hh.booking.nil? ? hh.booking.voyage : '').to_json}, labelWidth: 70, labelAlign: 'right'},
-            ]
-        }
+                ]
+           }          
+           , {
+              html: #{ !hh.booking.notes.to_s.empty? ? ("Note booking: " + hh.booking.notes).to_json : ''.to_json},
+              bodyStyle: 'color: red; font-weight: bold;'
+           }
       ]
     }           
    "

@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
      end
      
      #solo alcuni possono vedere/manutenere le tabelle repair
-     if [1,2,4,38,39].include?(self.id) 
+     if [1,2,4,38,39,64].include?(self.id) 
        return true
      end
      

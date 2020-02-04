@@ -66,12 +66,13 @@ total_activity = 0
 	 				<td><%= row.execution_date.strftime("%d/%m/%y") -%></td>
 					<td>
 						<%= raw "<b>[ #{row.activity_op.name} ]</b>" unless row.activity_op.nil? -%>
-						
-						<%= raw '<span style="font-weight: bold; font-size: 1em; color: blue;">** Richiesta Messa a disposizione **</span>' if row.to_be_made_available %>
+												
 						<%= row.notes -%>
 						<% unless row.execution_notes.blank? -%>
 							<br>[<%= row.execution_notes -%>]
-						<% end %> 
+						<% end %>
+						
+						<%= raw '<br/><span style="font-weight: bold; font-size: 1em; color: blue;">** Richiesta Messa a disposizione **</span>' if row.to_be_made_available %> 
 						
 						<% if !row.activity_type.nil? && row.activity_type.code == 'CUST_INSPECTION' %>
 						  <% row.activity_dett_containers.each do |adc| %>						    

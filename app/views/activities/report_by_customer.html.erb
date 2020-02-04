@@ -23,8 +23,8 @@ items = items.where({activity_op_id: formValues['activity_op_id']}) unless formV
 items = items.where("execution_date >= ?", Date.parse(formValues['execution_date_from'])) unless formValues['execution_date_from'].blank?
 items = items.where("execution_date <= ?", Date.parse(formValues['execution_date_to'])) unless formValues['execution_date_to'].blank?
 
-items = items.where("amount is not null") if formValues['fl_valutato'] == 'Y'
-items = items.where("amount is null") if formValues['fl_valutato'] == 'N'
+items = items.where("amount_setted is not null") if formValues['fl_valutato'] == 'Y'
+items = items.where("amount_setted is null") if formValues['fl_valutato'] == 'N'
 
 items = items.order('customers.name')
 group_customer = items.group_by { |d| d.customer_id }
@@ -73,7 +73,7 @@ total_activity = 0
 						
 						<% if !row.activity_type.nil? && row.activity_type.code == 'CUST_INSPECTION' %>
 						  <% row.activity_dett_containers.each do |adc| %>						    
-						    <%= raw "<br/> #{adc.container_number}" -%>
+						    <%= raw "<br/> #{adc.container_number} - {adc.dra_out}" -%>
 						    <%= raw " [ANN]" if adc.status == 'ANN' -%>
 						    <%= raw " (#{number_to_currency(adc.op_amount)})" if !adc.op_amount.nil? -%>
 						  <% end %>

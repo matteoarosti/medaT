@@ -69,7 +69,7 @@ total_activity = 0
 												
 						<%= raw "<br/>#{row.notes}" unless row.notes.blank? -%>
 						
-						<%= raw "<br/>Inserito da #{row.created_user_name}, #{" - Compagnia " + row.shipowner.name if row.shipowner}" %>
+						<%= raw "<br/>Inserito da #{row.created_user_name} #{" - Compagnia " + row.shipowner.name if row.shipowner}" %>
 						
 						<% unless row.execution_notes.blank? -%>
 							<br>[<%= row.execution_notes -%>]
@@ -79,7 +79,7 @@ total_activity = 0
 						
 						<% if !row.activity_type.nil? && row.activity_type.code == 'CUST_INSPECTION' %>
 						  <% row.activity_dett_containers.each do |adc| %>						    
-						    <%= raw "<br/> #{adc.container_number} - #{adc.dra_out}" -%>
+						    <%= raw "<br/> &nbsp; Container: #{adc.container_number} - #{adc.dra_out}" -%>
 						    
 						    <%= raw ' [Dis]' if adc.make_available_at %>
 						    <%= raw ' [Ese]' if adc.execution_at %>

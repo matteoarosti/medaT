@@ -67,7 +67,8 @@ total_activity = 0
 					<td>
 						<%= raw "<b>[ #{row.activity_op.name} ]</b>" unless row.activity_op.nil? -%>
 												
-						<%= row.notes -%>
+						<%= raw "<br/>#{row.notes}" unless row.notes.blank? -%>
+						
 						<% unless row.execution_notes.blank? -%>
 							<br>[<%= row.execution_notes -%>]
 						<% end %>

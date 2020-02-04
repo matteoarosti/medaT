@@ -82,6 +82,8 @@ total_activity = 0
 						    <%= raw " [ANN]" if adc.status == 'ANN' -%>
 						    <%= raw " (#{number_to_currency(adc.op_amount)})" if !adc.op_amount.nil? -%>
 						  <% end %>
+						<% else %>
+							<%= raw "<br/>#{adc.dra_out}" -%>
 						<% end %>
 						
 					</td>				

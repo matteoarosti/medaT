@@ -69,6 +69,8 @@ total_activity = 0
 												
 						<%= raw "<br/>#{row.notes}" unless row.notes.blank? -%>
 						
+						<%= raw "<br/>#{row.shipowner.name if row.shipowner} - #{row.created_user_name}" %>
+						
 						<% unless row.execution_notes.blank? -%>
 							<br>[<%= row.execution_notes -%>]
 						<% end %>

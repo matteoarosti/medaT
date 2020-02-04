@@ -83,7 +83,7 @@ total_activity = 0
 						    <%= raw " (#{number_to_currency(adc.op_amount)})" if !adc.op_amount.nil? -%>
 						  <% end %>
 						<% else %>
-							<%= raw "<br/>#{adc.dra_out}" -%>
+							<%= raw "<br/>#{row.dra_out}" -%>
 						<% end %>
 						
 					</td>				

@@ -73,7 +73,7 @@ total_activity = 0
 						
 						<% if !row.activity_type.nil? && row.activity_type.code == 'CUST_INSPECTION' %>
 						  <% row.activity_dett_containers.each do |adc| %>						    
-						    <%= raw "<br/> #{adc.container_number} - {adc.dra_out}" -%>
+						    <%= raw "<br/> #{adc.container_number} - #{adc.dra_out}" -%>
 						    <%= raw " [ANN]" if adc.status == 'ANN' -%>
 						    <%= raw " (#{number_to_currency(adc.op_amount)})" if !adc.op_amount.nil? -%>
 						  <% end %>

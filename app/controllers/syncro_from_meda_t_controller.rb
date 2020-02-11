@@ -4,6 +4,31 @@ class SyncroFromMedaTController < ApplicationController
   protect_from_forgery with: :null_session
   skip_before_action :authenticate_user!
   
+  
+  def check_container_svincolato
+    if params[:container_number].empty?
+      render json: {:success => false, :msg_error=>"Container obbligatorio"}        
+      return
+    end
+       
+    hh = HandlingHeader.container(params[:container_number]).where(handling_status: 'OPEN').is_in_terminal.first
+    if !md_hh.nil?
+      ret = {:success => false, :msg_error=>"Il container non risulta essere in terminal"}              
+    else
+      if @hh.is_auth_for_o_emptying
+        ret = {:success => true}   
+      else
+        ret = {:success => false, :msg_error=>"Il container non risulta essere in terminal"}
+      end
+    end
+    
+    render json: ret  
+    
+  end
+  
+  
+  
+  
   def get_container_per_booking
     if params[:num_booking].empty?
       render json: {:success => false, :msg_error=>"Numero booking obbligatorio"}        

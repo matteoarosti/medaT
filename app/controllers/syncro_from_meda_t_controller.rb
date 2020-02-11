@@ -12,7 +12,7 @@ class SyncroFromMedaTController < ApplicationController
     end
        
     hh = HandlingHeader.container(params[:container_number]).where(handling_status: 'OPEN').is_in_terminal.first
-    if !hh.nil?
+    if hh.nil?
       ret = {:success => false, :msg_error=>"Il container non risulta essere in terminal"}              
     else
       if hh.is_auth_for_o_emptying

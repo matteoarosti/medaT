@@ -334,7 +334,105 @@
 											      										    										    										    
 											    ]
 											    ,
-								    			dockedItems: [{
+								    			dockedItems: [
+								    			  {
+								    			    xtype: 'toolbar',
+												    dock: 'left',
+												    width: 350,
+												    layout: 'fit',
+												    items: [
+												      {
+														xtype: 'grid',
+														loadMask: true,
+														flex: 1,																	
+														store: {
+															xtype: 'store',
+															autoLoad: true,	
+															proxy: {
+																url: <%= raw url_for(:controller=>'weighs', :action=>'get_weigh_events').to_json -%>, 
+																extraParams: {
+																	rec_id: rec.get('id'), 
+																	type: rec.get('type')
+																},
+																
+																paramsAsJson: true,
+																method: 'POST', type: 'ajax',																													
+																actionMethods: {read: 'POST'},													
+																reader: {
+																	type: 'json',
+																	method: 'POST',
+																	rootProperty: 'items'
+																}
+															},
+																
+															fields: [] //serve
+														}, //store
+														columns: [{header: 'Registro Eventi', dataIndex: 'out_des', flex: 1}],
+														
+														dockedItems: {
+														    xtype: 'toolbar',
+														    dock: 'bottom',
+														    width: 135,
+															defaults: {xtype: 'button', scale: 'medium', textAlign: 'left'},
+															items: [
+																{text: 'Acquisisci</br>Peso Lordo', handler: function (btn, evt) {btn.up('grid').registraEvento('LORDO', rec, btn)}},
+																{xtype: 'container', width: 20},																
+																{text: 'Acquisisci</br>Tara', handler: function (btn, evt) {btn.up('grid').registraEvento('TARA', rec, btn)}},
+																{xtype: 'tbfill'},
+																{
+														            text: 'Genera</br>e invia',
+														            scale: 'large', cls: 'btn-confirm',
+														            handler: function (btn, evt) {
+														                           
+														             form = this.up('form').getForm();
+														             tmp_win  = this.up('window');
+														             
+														                btn.disable();
+														                
+													                    Ext.Ajax.request({
+														                    url: <%= raw url_for(:action=>'generate_and_save_weigh').to_json -%>,
+														                    waitMsg: 'Salvataggio in corso....',
+																			method:'POST',                    
+														                    jsonData: form.getValues(),	
+														             	
+																			success: function(result, request) {					
+																			      loc_grid.store.remove(rec);
+																			      //loc_grid.store.load();
+																			      tmp_win.close();
+																 							
+																			}, scope: this,
+																			
+																			failure: function(rec, op) {
+																				Ext.Msg.alert('Errore');
+																			}, scope: this,																													
+																    	});
+														             
+														            }
+														          }
+																
+															]
+														},
+														
+														registraEvento(tipo_evento, rec, btn){
+															Ext.Ajax.request({
+											                    url: <%= raw url_for(:action=>'exe_save_weigh_event').to_json -%>,
+											                    waitMsg: 'Salvataggio in corso....',
+																method:'POST',                    
+											                    jsonData: {tipo_evento: tipo_evento, rec_id: rec.get('id'), type: rec.get('type')},	
+											             	
+																success: function(result, request) {																					      
+																      btn.up('grid').store.load();													 							
+																}, scope: this,
+																
+																failure: function(rec, op) {
+																	Ext.Msg.alert('Errore');
+																}, scope: this,																													
+													    	});	 													                    														
+														}
+													  } //grid events
+												    ]
+								    			  },
+								    			  {
 												    xtype: 'toolbar',
 												    dock: 'right',
 												    width: 135,
@@ -344,7 +442,8 @@
 												    margin: '5 5 5 5',
 											    
 											     	items:
-												        [{
+												        [
+												        {
 												            text: 'Conferma',
 												            scale: 'large', cls: 'btn-confirm',
 												            handler: function (btn, evt) {
@@ -470,8 +569,8 @@
 											    layout: 'fit',
 											    items: loc_form,
 											    title: 'Registra peso',
-											    width: 500,
-											    height: 350,
+											    width: 840,
+											    height: 420,
 											    id: 'myWindow'
 											}).show();
 														                             

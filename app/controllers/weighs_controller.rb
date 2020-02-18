@@ -103,7 +103,7 @@ class WeighsController < ApplicationController
        when 'TO_WEIGH'
          items = items.where('weigh_status = ?', 'OPEN')
          
-         #aggiungo i pese da handling_item         
+         #aggiungo le reichiesta di pesa da handling_item (in base al flag sul booking)         
          #ToDo: parametrizzare
          terminal = Terminal.find(3) rescue terminal = nil #potrebbe andare in errore perche' l'utente corrente ha il filtro che esclude il terminal di sistema
          unless terminal.nil? 
@@ -162,6 +162,80 @@ class WeighsController < ApplicationController
    end 
       
    
+   
+  ##################################################
+   def generate_and_save_weight
+  ##################################################
+     if (params[:type] == 'FROM_HI')         #inserimento pesa da movimento
+       hi = HandlingItem.find(params[:rec_id])
+       item = hi.weigh
+       if (!item)         
+           render json: {success: false, msg: 'Pesi mancanti'}
+           return
+       end
+       
+       item.external = false
+       item.weigh_status = 'CLOSE'
+       item.terminal_id = 3 #ToDo: parametrizzare
+       item.shipowner_id = hi.handling_header.shipowner_id
+       item.container_number = hi.handling_header.container_number
+       
+       
+       #genero pdf/jpg
+       #item.scan_file = params[:file]
+       
+       #imosto i pesi (in base alle letture)
+       item.weight_container = params[:weight_container].to_s.gsub(',', '.').to_f
+       item.weight_goods = params[:weight_goods].to_s.gsub(',', '.').to_f
+       item.weight = item.weight_container + item.weight_goods  
+         
+       item.weighed_at = Time.zone.now
+       item.driver = params[:driver]
+       item.plate  = params[:plate]
+       item.plate_trailer = params[:plate_trailer]
+       ret = item.save!        
+       
+       #settaggio su handling_item
+       hi.to_weigh = false
+       hi.weigh_id = item.id
+       hi.save!
+              
+       #riporto il peso su hh
+       hi.handling_header.weight_exp = item.weight
+       hi.handling_header.save!
+       
+       #item.send_mail_html_to_customer
+       render json: {success: true, w_id: item.id}
+       
+         
+     else                                    #inserimento pesa da prenotazione
+       
+      item = Weigh.find(params[:rec_id])
+      
+      #genero pdf/jpg
+      #item.scan_file = params[:file]  
+        
+      #imosto i pesi (in base alle letture)
+      item.weight_container = params[:weight_container].to_s.gsub(',', '.').to_f
+      item.weight_goods = params[:weight_goods].to_s.gsub(',', '.').to_f
+      item.weight = item.weight_container + item.weight_goods  
+        
+      item.external = false  
+      item.scan_file = params[:file]
+      item.weighed_at = Time.zone.now
+      item.driver = params[:driver]
+      item.plate  = params[:plate]
+      item.plate_trailer = params[:plate_trailer]
+      
+      ret = item.save!
+      #item.send_mail_html_to_customer  
+      render json: {success: ret, w_id: item.id}
+     end  
+   end
+   
+   
+   
+   
   ##################################################
    def save_weight
   ##################################################
@@ -171,7 +245,11 @@ class WeighsController < ApplicationController
        begin
                  
         hi = HandlingItem.find(params[:rec_id])
-        item = Weigh.new
+        
+        item = hi.weigh        
+        if (!item)
+          item = Weigh.new
+        end  
         
          item.external = params[:external]
          if (!params[:weight].blank?)  
@@ -231,8 +309,8 @@ class WeighsController < ApplicationController
       item.weighed_at = Time.zone.now
       item.driver = params[:driver]
       item.plate  = params[:plate]
-      item.plate_trailer = params[:plate_trailer]
-      
+      item.plate_trailer = params[:plate_trailer]        
+        
       ret = item.save!
       item.send_mail_html_to_customer  
       render json: {success: ret, w_id: item.id}
@@ -360,7 +438,91 @@ class WeighsController < ApplicationController
  def search_in_medaT
    #cerco eventuale movimento aperto per container
    @item = HandlingHeader.not_closed.container(params[:form_values][:medaT_search_num_container]).first
-   logger.info @item.to_yaml
  end
+ 
+ 
+ 
+ 
+ 
+ #lista eventi su weigh
+ def get_weigh_events
+   if (params[:type] == 'FROM_HI')    
+     hi = HandlingItem.find(params[:rec_id])
+     item = hi.weigh
+     if !item
+       render json: []
+       return
+     end     
+   else
+     item = Weigh.find(params[:rec_id])       
+   end
+     
+   items = LogEvent.all_for(item)
+   ret = []
+   peso_lordo = 0
+   peso_tara  = 0
+   items.each do |i|
+     
+     jp = (ActiveSupport::JSON.decode i.notes).with_indifferent_access
+     
+     r = {}
+     case i.operation
+       when 'LORDO'
+         r[:out_des] = '<h3>PESO LORDO</h3>'
+         peso_lordo = jp[:weigh]
+       when 'TARA'
+         r[:out_des] = '<h3>TARA</h3>'
+         peso_tara  = jp[:weigh]
+     end
+     
+     #utente/data
+     u = User.find(i.created_user_id) rescue u = nil
+     r[:out_des] += u.name if !u.nil?
+     r[:out_des] += ", " + i.created_at.strftime("%d/%m/%y %H:%M")
+       
+     #peso          
+     r[:out_des] += ", " + jp[:weigh].to_s + "Kg"
+       
+     ret << r    
+   end
+   
+   #se ho peso lordo e tara propongo il totale
+   if (peso_lordo > 0 && peso_tara > 0)
+     
+     font_color = 'green'
+     font_color = 'red' if (peso_lordo - peso_tara) < 0       
+     
+     ret << {out_des: "<FONT color=#{font_color}><h3>Netto: " + (peso_lordo - peso_tara).to_s + '</h3></font>'}
+   end
+   
+   render json: ret.as_json            
+ end
+ 
+ 
+ 
+ #registro evento (peso lordo o tara)
+ def exe_save_weigh_event
+   if (params[:type] == 'FROM_HI')         #inserimento pesa da movimento
+      hi = HandlingItem.find(params[:rec_id])
+      if hi.weigh_id
+        item = hi.weigh
+      else
+       
+        #creo intanto weigh per hi, se non esiste gia
+        item = Weigh.new
+        item.handling_item_id = hi.id        
+        item.save!
+        hi.weigh_id = item.id
+        hi.save!
+      end 
+   else                                    #inserimento pesa da prenotazione
+     item = Weigh.find(params[:rec_id])         
+   end
+   
+   #sull'item registro l'evento
+   LogEvent.base(item, 'H', params[:tipo_evento], {weigh: 44565})
+   render json: {success: true}
+   
+ end #exe_save_weigh_event
    
 end

@@ -13,6 +13,7 @@ class HandlingItem < ActiveRecord::Base
  belongs_to :ship_prepare
  belongs_to :pier
  belongs_to :gru
+ belongs_to :weigh
  
  
   #interchange relativo al movimento

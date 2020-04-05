@@ -531,7 +531,7 @@ class WeighsController < ApplicationController
    localhost.close
    
    
-   puts peso_letto
+   logger.info peso_letto
    sssss
    
    #sull'item registro l'evento

@@ -9,4 +9,8 @@
 	
 	{"fieldLabel":"Codice gestionale","bind":"{rec.gest_code}","maxLength":50},
 	{"fieldLabel":"Usa prezzo da listino in importazione su gestionale","bind":"{rec.recalculate_gest_price}", xtype: 'checkbox'},
+	
+	{"fieldLabel":"Escludi se gestione vuoti (su compagnia)","bind":"{rec.exclude_if_manage_empty}", xtype: 'checkbox'},
+	{"fieldLabel":"Escludi se gestione pieni (su compagnia)","bind":"{rec.exclude_if_manage_full}", xtype: 'checkbox'},
+	
 ]

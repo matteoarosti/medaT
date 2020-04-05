@@ -519,8 +519,23 @@ class WeighsController < ApplicationController
      item = Weigh.find(params[:rec_id])         
    end
    
+   #leggo peso da pesa (scheda LAN)
+   localhost = Net::Telnet::new("Host" => "192.168.201.10",
+                                "Timeout" => 10,
+                                "Prompt" => /[$%#>] \z/n)
+   localhost.cmd("R") { |c| 
+      #ricevo es: ST,GS,       0,kg
+      ar_lettura = c.split(',')
+      peso_letto = ar_lettura[2]  
+   }
+   localhost.close
+   
+   
+   puts peso_letto
+   sssss
+   
    #sull'item registro l'evento
-   LogEvent.base(item, 'H', params[:tipo_evento], {weigh: 44565})
+   LogEvent.base(item, 'H', params[:tipo_evento], {weigh: peso_letto})
    render json: {success: true}
    
  end #exe_save_weigh_event

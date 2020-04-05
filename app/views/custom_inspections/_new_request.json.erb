@@ -50,7 +50,7 @@
 										      m_form.check_if_managed(m_form, m_form);
 										    }"			     				
 			     				) -%>
-			     , <%= raw extjs_std_booleanfield('to_be_made_available', Activity.new, {}, {readOnly: false, fieldLabel: 'Messa a disposizione', width: 300, labelWidth: 260, disabled: false}) -%>			     
+			     , <%= raw extjs_std_booleanfield('to_be_made_available', Activity.new, {}, {hidden: true,readOnly: false, fieldLabel: 'Messa a disposizione', width: 300, labelWidth: 260, disabled: false}) -%>			     
 				 , <%= raw extjs_std_combo_model('terminal', Activity.new, {}, {flex: 1, fieldLabel: 'Terminal'}) -%>				 			     
 			     
 			     , {xtype: 'textfield',   fieldLabel: 'Booking', flex: 1, name: 'booking_number'}			     

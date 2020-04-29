@@ -3,8 +3,8 @@ class SendActivityCustomerReport
   def call
     prepare_db
     create_docs                       #genera i DRA per le attivita ancora da fatturare
-    #prepare_docs_file_and_send_email  #where doc_file_file_name: nil -> genero pdf e invio email a cliente)
-    #prepare_csv_file_and_send_email   #where sent_csv_on: nil -> genero csv
+    prepare_docs_file_and_send_email  #where doc_file_file_name: nil -> genero pdf e invio email a cliente)
+    prepare_csv_file_and_send_email   #where sent_csv_on: nil -> genero csv
   end
   
   

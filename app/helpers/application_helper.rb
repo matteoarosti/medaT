@@ -51,7 +51,7 @@ module ApplicationHelper
    ret = "
      {
        xtype: 'combobox', 
-       fieldLabel: #{name.humanize.to_json},
+       fieldLabel: #{(p[:fieldLabel] || name.humanize).to_json},
        displayField: #{p[:displayField].to_json},
        valueField: #{p[:valueField].to_json || p[:displayField].to_json},
        forceSelection: true,

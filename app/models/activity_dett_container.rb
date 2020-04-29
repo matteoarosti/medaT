@@ -52,7 +52,9 @@ class ActivityDettContainer < ActiveRecord::Base
    self.confirmed_user_id
  end
  
- def dra_out
+ 
+ def dra_out   
+   return "NO DRA" if self.doc_h_notifica == 0   
    if self.doc_h_notifica
      anno_short = self.doc_h_notifica.nr_anno - 2000
      return "DRA: #{self.doc_h_notifica.nr_seq}/#{anno_short}"

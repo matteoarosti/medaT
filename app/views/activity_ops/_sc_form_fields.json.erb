@@ -5,12 +5,17 @@
 	{"fieldLabel":"Codice","bind":"{rec.code}","maxLength":10},
 	<%= raw extjs_std_numberfield_bind('default_price', @new_rec, {allowBlank: true}) -%>,
 	<%= raw extjs_std_combo_bind('activity_type', @new_rec, valueField: 'id', displayField: 'name', :store => extjs_std_store_data(ActivityType.all)) -%>,
-	{"fieldLabel":"Messa a disposizione","bind":"{rec.to_be_made_available}", xtype: 'checkbox'},
 	
 	{"fieldLabel":"Codice gestionale","bind":"{rec.gest_code}","maxLength":50},
 	{"fieldLabel":"Usa prezzo da listino in importazione su gestionale","bind":"{rec.recalculate_gest_price}", xtype: 'checkbox'},
 	
-	{"fieldLabel":"Escludi se gestione vuoti (su compagnia)","bind":"{rec.exclude_if_manage_empty}", xtype: 'checkbox'},
-	{"fieldLabel":"Escludi se gestione pieni (su compagnia)","bind":"{rec.exclude_if_manage_full}", xtype: 'checkbox'},
+	{"fieldLabel":"Non consentire se gestione vuoti (su compagnia)","bind":"{rec.exclude_if_manage_empty}", xtype: 'checkbox'},
+	{"fieldLabel":"Non consentire se gestione pieni (su compagnia)","bind":"{rec.exclude_if_manage_full}", xtype: 'checkbox'},
+	
+	{"fieldLabel":"Non generare DRA","bind":"{rec.exclude_from_dra}", xtype: 'checkbox'},
+	
+	{"fieldLabel":"Messa a disposizione","bind":"{rec.to_be_made_available}", xtype: 'checkbox'},	
+	/*{"fieldLabel":"Addebita messa disp. a cliente","bind":"{rec.charge_make_available_to_customer}", xtype: 'checkbox'},*/
+	{"fieldLabel":"Addebita messa disp. a agenzia","bind":"{rec.charge_make_available_to_agency}", xtype: 'checkbox'},
 	
 ]

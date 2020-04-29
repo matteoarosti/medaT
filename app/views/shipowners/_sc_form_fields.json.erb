@@ -11,7 +11,16 @@
     {"fieldLabel":"Gestione VUOTI","bind":"{rec.manage_empty}", xtype: 'checkbox'},
     {"fieldLabel":"Gestione PIENI","bind":"{rec.manage_full}",  xtype: 'checkbox'},
     {"fieldLabel":"Autoriz.Doganale per uscita","bind":"{rec.auth_required_for_o_emptying}", xtype: 'checkbox'},
-	{"fieldLabel":"created_at","bind":"{rec.created_at}", disabled: true},
-	{"fieldLabel":"updated_at","bind":"{rec.updated_at}", disabled: true}
+    
+    
+    <%= raw extjs_std_combo_bind('make_available_charge_to_customer', @new_rec, valueField: 'id', displayField: 'name', 
+    			:fieldLabel => 'Addebita messa a disposizione a', :allowBlank => true,
+    			:store => extjs_std_store_data(Customer.all)) -%>,
+	{"fieldLabel":"con coodice articolo gest.","bind":"{rec.make_available_charge_to_customer_with_gest_code}","maxLength":50},
+    
+    
+    
+	, {"fieldLabel":"created_at","bind":"{rec.created_at}", disabled: true}
+	, {"fieldLabel":"updated_at","bind":"{rec.updated_at}", disabled: true}
 
 ]

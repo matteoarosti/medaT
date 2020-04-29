@@ -1,9 +1,10 @@
 class SendActivityCustomerReport
   
   def call
-    create_docs
-    prepare_docs_file_and_send_email
-    prepare_csv_file_and_send_email
+    prepare_db
+    create_docs                       #genera i DRA per le attivita ancora da fatturare
+    #prepare_docs_file_and_send_email  #where doc_file_file_name: nil -> genero pdf e invio email a cliente)
+    #prepare_csv_file_and_send_email   #where sent_csv_on: nil -> genero csv
   end
   
   
@@ -11,7 +12,7 @@ class SendActivityCustomerReport
   #preparo, per ogni cliente, pdf da inviare con resconto attivita' del giorno  
   def create_docs
     
-    #per ogni cliente
+    #per ogni cliente, partedneo da activty_dett_containers
     activity_exec_or_confirmed_in_date.group_by { |r| r.activity.customer}.each do |customer, adcs|
       puts "Customer id: #{customer.id} - #{customer.name} (nr. attività: #{adcs.size})"
       
@@ -23,32 +24,53 @@ class SendActivityCustomerReport
                     .where("doc_h_notifica_id IS NULL")
                     .where("execution_at IS NOT NULL")
       
-      #preparo il documento
-      doc_type = DocType.find_or_create_by!(code: 'ADN') do |dt|
-        dt.name = 'Resoconto attività'
-      end
       
       DocH.transaction do
-        dh = DocH.new(customer: customer, doc_type: doc_type, draft: true)
-        dh.d_reg = Time.zone.today
-        dh.assign_num
-        dh.save!
         
         adcs.each do |i|
-          i.doc_h_notifica_id = dh.id
-          i.save!
-        end
+          
+          puts "activity_id: #{i.id}"
+          
+          if i.activity_op.exclude_from_dra != true
+             puts "allego a DRA"
+             #genero o recupero un documento intestato al cliente non ancora inviato
+             dh = find_or_create_open_customer_doc_h(customer)
+            
+             i.doc_h_notifica_id = dh.id
+             i.save!
+          else
+            puts "da non allegare a DRA" 
+            i.doc_h_notifica_id = 0 #cosi non viene piu' elaborato
+            i.save!
+          end  
+          
+          #ToDo: se richiesto devo addebitare la messa a disposizione all'agenzia
+          
+        end #each
+        
         
         acts.each do |i|
-          i.doc_h_notifica_id = dh.id
-          i.save!
-        end
+          puts "activity_id: #{i.id}"
+          if i.activity_op.exclude_from_dra != true
+            puts "allego a DRA"
+            #genero o recupero un documento intestato al cliente non ancora inviato
+            dh = find_or_create_open_customer_doc_h(customer)
+                      
+            i.doc_h_notifica_id = dh.id
+            i.save!
+          else
+            puts "da non allegare a DRA"
+            i.doc_h_notifica_id = 0 #cosi non viene piu elaborato
+            i.save!
+          end
+        end #each
  
       end #transaction
     end
     
     
     #ciclo su activities (no cust_inspection)
+    # (se ho activity, non gia' inserite nei DRA dal ciclo prima)
     activity_exec_or_confirmed_in_date_from_actvities.group_by { |r| r.customer}.each do |customer, adcs|
         puts "Customer id: #{customer.id} - #{customer.name} (nr. attività: #{adcs.size})"
         
@@ -58,22 +80,23 @@ class SendActivityCustomerReport
                       .where("(activities.status IS NULL OR activities.status <> 'ANN')")
                       .where("activity_type_id is null OR activity_types.code != 'CUST_INSPECTION'")
                       .where("doc_h_notifica_id IS NULL")
-                      .where("execution_at IS NOT NULL")
+                      .where("execution_at IS NOT NULL")        
         
-        #preparo il documento
-        doc_type = DocType.find_or_create_by!(code: 'ADN') do |dt|
-          dt.name = 'Resoconto attività'
-        end
-        
-        DocH.transaction do
-          dh = DocH.new(customer: customer, doc_type: doc_type, draft: true)
-          dh.d_reg = Time.zone.today
-          dh.assign_num
-          dh.save!
-                    
+        DocH.transaction do                                
           acts.each do |i|
-            i.doc_h_notifica_id = dh.id
-            i.save!
+            puts "activity_id: #{i.id}"
+            if i.activity_op.exclude_from_dra != true
+              puts "allego a DRA"
+              #genero o recupero un documento intestato al cliente non ancora inviato
+              dh = find_or_create_open_customer_doc_h(customer)
+                        
+              i.doc_h_notifica_id = dh.id
+              i.save!
+            else
+              puts "da non allegare a DRA"
+              i.doc_h_notifica_id = 0 #cosi non viene piu elaborato
+              i.save!
+            end
           end
     
         end #transaction
@@ -284,6 +307,23 @@ class SendActivityCustomerReport
   
   ### UTILITY ####
   
+  #ritorna un documento non ancora generato per il cliente, oppure ne crea uno nuovo
+  def find_or_create_open_customer_doc_h(customer)
+    dh = DocH.find_or_create_by!(
+        customer: customer, 
+        doc_type: DocType.find_by!(code: 'ADN'),
+        doc_file_file_name: nil
+    ) do |new_doc|
+      puts "Genero nuovo DRA"
+      new_doc.d_reg = Time.zone.today
+      new_doc.assign_num
+    end
+    puts "dra: #{dh.nr_seq}/#{dh.nr_anno}"
+    dh.save!
+    dh
+  end
+        
+  
   def force_regenerate_csv(anno, seq)
     item = DocH.find_by(
       doc_type: DocType.find_by!(code: 'ADN'),
@@ -324,5 +364,13 @@ class SendActivityCustomerReport
       .update_all(doc_h_notifica_id: 0)               
   end
   
+  
+  
+  def prepare_db
+    #preparo il tipo documento
+    doc_type = DocType.find_or_create_by!(code: 'ADN') do |dt|
+      dt.name = 'Resoconto attività'
+    end
+  end  
     
 end

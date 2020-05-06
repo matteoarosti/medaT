@@ -204,7 +204,7 @@
 				 }, {
 				 	text: 'Aggiungi container',
 				 	scale: 'large',
-				 	bind: {disabled: '{!activity_open}'},
+				 	//bind: {disabled: '{!activity_open}'},
 				 	handler: function(){
 				 		var me = this.up('grid');
 		            	<%= raw confirm_with_form(url_for(activity_id: @item.id, :controller=>'custom_inspections', :action=>'add_container_to_activity_dett'),

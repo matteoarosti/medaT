@@ -104,6 +104,23 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
    <% end %>				
 			</tr>
 		<% end %>
+		
+		<!-- dettagli operazioni preventivo -->
+		
+		<% a_op.each do |aop| %>
+		<tr>
+				<td>&nbsp;</td>				
+				<td><%= aop.quantity -%> <%= aop.repair_processing_id %></td>
+   <% if User.current.can?(:repair, :price_provider) %>
+				<td class=n align=right><%= number_to_currency(a.total_cost_provider_authorized.to_f) -%></td>
+   <% end %>			
+   <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>				
+				<td class=n align=right><%= number_to_currency(a.total_cost_customer_authorized.to_f) -%></td>
+   <% end %>				
+			</tr>
+		<% end %>
+		
+		
 		</table>
 
 

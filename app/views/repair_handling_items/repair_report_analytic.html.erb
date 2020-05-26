@@ -108,7 +108,7 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 		<!-- dettagli operazioni preventivo -->		
 		<%
 		 	a_op = a.repair_estimate_items
-   			a_op = a_op.where("(is_internal IS NULL") if formValues['show_only_internal']==true
+   			a_op = a_op.where(is_internal: true) if formValues['show_only_internal']==true
 		%>
 		
 		<% a_op.each do |aop| %>

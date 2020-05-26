@@ -103,8 +103,8 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 				<td class=n align=right><%= number_to_currency(a.total_cost_customer_authorized.to_f) -%></td>
    <% end %>				
 			</tr>
-		<% end %>
-		
+			
+			
 		<!-- dettagli operazioni preventivo -->
 		
 		<% a_op.each do |aop| %>
@@ -118,7 +118,13 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 				<td class=n align=right><%= number_to_currency(a.total_cost_customer_authorized.to_f) -%></td>
    <% end %>				
 			</tr>
+		<% end %>	
+			
+			
+		<!-- fine estimate items each -->	
 		<% end %>
+		
+		
 		
 		
 		</table>

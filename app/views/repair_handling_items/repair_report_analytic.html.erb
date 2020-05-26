@@ -94,7 +94,7 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 
 		<% op_val.group_by { |d| d }.each do |a, a_opyy| %> 		
  			<tr>
-				<td><%= a.handling_header.container_number -%></td>				
+				<td width=10><%= a.handling_header.container_number -%></td>				
 				<td><%= a.repair_completed_at.strftime("%d/%m/%y %H:%M") unless a.repair_completed_at.nil? -%></td>
    <% if User.current.can?(:repair, :price_provider) %>
 				<td class=n align=right><%= number_to_currency(a.total_cost_provider_authorized.to_f) -%></td>

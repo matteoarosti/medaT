@@ -33,6 +33,8 @@ end
 items = items.where("repair_completed_at >= ?", date_from) unless formValues['date_op_from'].blank?
 items = items.where("repair_completed_at <= ?", date_to) unless formValues['date_op_to'].blank?
 
+items = items.where(is_internal: true) if formValues['show_customer_prices']==true
+
 items = items.joins({:handling_item => :handling_header})
 
 group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner_id }

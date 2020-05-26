@@ -34,7 +34,7 @@ items = items.where("repair_completed_at >= ?", date_from) unless formValues['da
 items = items.where("repair_completed_at <= ?", date_to) unless formValues['date_op_to'].blank?
 
 if formValues['show_only_internal']==true
-	items = items.where(is_internal: true)	 
+	items = items.where({repair_estimate_items: {is_internal: true}})	 
 end
 
 items = items.joins({:handling_item => :handling_header})

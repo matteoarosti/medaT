@@ -6,8 +6,7 @@
 
 <style media="print">
  h1.medaT-report{padding: 0px 0px; margin: 0px 0px; font-size: 13px;}
- table.medaT-report tr td, table.medaT-report tr th{font-size: 9px; padding: 0px 2px}
- table.medaT-report tr.liv_d td {font-size: 7px; font-style: italic}
+ table.medaT-report tr td, table.medaT-report tr th{font-size: 9px; padding: 0px 2px} 
 </style>
 
 
@@ -115,7 +114,7 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 		<% a_op.each do |aop| %>
 		<tr class=liv_d>
 				<td>&nbsp;</td>				
-				<td><%= aop.quantity.to_i.to_s -%> <%= aop.repair_processing_name %></td>
+				<td>&nbsp; &nbsp; > <%= aop.quantity.to_i.to_s -%> <%= aop.repair_processing_name %></td>
    <% if User.current.can?(:repair, :price_provider) %>
 				<td class=n align=right><%= number_to_currency( (aop.provider_time * aop.provider_hourly_cost) + aop.provider_material_price )-%></td>
    <% end %>			

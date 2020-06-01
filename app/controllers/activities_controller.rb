@@ -131,7 +131,8 @@ class ActivitiesController < ApplicationController
   item = Activity.find(params[:data][:id])    
   params[:data].permit!
   item.update(params[:data])
-  ret = item.save!  
+  ret = item.save!
+  LogEvent.base(item, 'U', 'exe_modify_record', item.attributes)  
   render json: {success: ret}
  end   
  
@@ -156,6 +157,7 @@ class ActivitiesController < ApplicationController
 ##################################################
   item = Activity.find(params[:rec_id])    
   ret = item.destroy!
+  LogEvent.base(item, 'D', 'exe_delete_activity')
   ret = true
   render json: {success: ret}
  end   

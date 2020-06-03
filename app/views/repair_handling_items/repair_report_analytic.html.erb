@@ -119,7 +119,7 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 		<tr class=liv_d>
 				<td>&nbsp;</td>				
 				<td>&nbsp; &nbsp; > <%= aop.quantity.to_i.to_s -%> <%= aop.repair_processing_name %></td>
-   <% if User.current.can?(:repair, :price_provider) %>
+   <% if User.current.can?(:repair, :price_provider) && formValues['show_only_internal']!=true %>
 				<td class=n align=right><%= number_to_currency( (aop.provider_time * aop.provider_hourly_cost) + aop.provider_material_price )-%></td>
    <% end %>			
    <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>				

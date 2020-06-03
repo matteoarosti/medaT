@@ -39,7 +39,7 @@ end
 
 items = items.joins({:handling_item => :handling_header})
 items = items.joins(:repair_estimate_items)
-items = items.includes(:repair_estimate_items)
+items = items.eager_load(:repair_estimate_items)
 
 group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner_id }
 %>

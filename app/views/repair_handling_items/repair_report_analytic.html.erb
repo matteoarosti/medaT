@@ -108,7 +108,7 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
    <% end %>				
 			</tr>
 			
-			
+	<% if formValues['show_op'] == true %>		
 		<!-- dettagli operazioni preventivo -->		
 		<%
 		 	a_op = a.repair_estimate_items
@@ -116,17 +116,19 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 		%>
 		
 		<% a_op.each do |aop| %>
-		<tr class=liv_d>
+		  <tr class=liv_d>
 				<td>&nbsp;</td>				
 				<td>&nbsp; &nbsp; > <%= aop.quantity.to_i.to_s -%> <%= aop.repair_processing_name %></td>
-   <% if User.current.can?(:repair, :price_provider) && formValues['show_only_internal']!=true %>
+   			  <% if User.current.can?(:repair, :price_provider) && formValues['show_only_internal']!=true %>
 				<td class=n align=right><%= number_to_currency( (aop.provider_time * aop.provider_hourly_cost) + aop.provider_material_price )-%></td>
-   <% end %>			
-   <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>				
+   			  <% end %>			
+   			  <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>				
 				<td class=n align=right><%= number_to_currency((aop.customer_time.to_f * aop.customer_hourly_cost.to_f).to_f + aop.customer_material_price.to_f) -%></td>
-   <% end %>				
-			</tr>
+   			  <% end %>				
+		  </tr>
 		<% end %>	
+		
+	<% end %>	
 			
 			
 		<!-- fine estimate items each -->	

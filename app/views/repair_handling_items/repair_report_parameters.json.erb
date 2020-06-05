@@ -41,6 +41,7 @@
 <% if User.current.admin_can?(:repair, :price) %>
      	{xtype: 'checkbox', value: false, name: 'show_customer_prices', fieldLabel: 'Mostra prezzi a compagnia', inputValue: true, uncheckedValue: false},
      	{xtype: 'checkbox', value: false, name: 'show_only_internal', fieldLabel: 'Mostra solo operazioni interne', inputValue: true, uncheckedValue: false},
+     	{xtype: 'checkbox', value: false, name: 'show_op', fieldLabel: 'Mostra dettaglio operazioni', inputValue: true, uncheckedValue: false}
 <% end %>     	
 	],
     

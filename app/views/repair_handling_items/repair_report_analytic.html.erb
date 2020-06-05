@@ -123,7 +123,7 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 				<td class=n align=right><%= number_to_currency( (aop.provider_time * aop.provider_hourly_cost) + aop.provider_material_price )-%></td>
    <% end %>			
    <% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>				
-				<td class=n align=right><%= number_to_currency((aop.customer_time * aop.customer_hourly_cost) + aop.customer_material_price) -%></td>
+				<td class=n align=right><%= number_to_currency((aop.customer_time * aop.customer_hourly_cost).to_d + aop.customer_material_price.to_d) -%></td>
    <% end %>				
 			</tr>
 		<% end %>	

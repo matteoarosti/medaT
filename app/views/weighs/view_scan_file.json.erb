@@ -13,12 +13,16 @@
    
    
    listeners: {
-   	afterrender: function(comp){   	
+   	afterrender: function(comp){
+   	  <% if @item.scan_file_content_type != 'application/pdf' %>   	
    		//comp.up('window').maximize();
    		comp.down('container').down('panel').setHeight(900);
    		comp.down('container').down('panel').setWidth('auto');
    		comp.up('window').setHeight(450);
-   		comp.up('window').doLayout();   		   		
+   		comp.up('window').doLayout();
+   	  <% else %>
+   	  	//comp.up('window').destroy();
+   	  <% end  -%>	   		   		
     }
    },
    
@@ -30,13 +34,30 @@
      			height: '100%',
      			autoScroll: true,
      			items: [
+     			
+     			<% if @item.scan_file_content_type != 'application/pdf' %>
+     			  
 		    	    {
 		     			xtype: 'panel',
-		     			//flex: 1,
 		     			html: '<img src=<%= raw @item.scan_file.url(:original).to_json %> style="max-height: 900px; width: auto;">',
-		     			//src: <%= raw @item.scan_file.url(:original).to_json %>,
 		     			mode : 'image'
-		    		}     			
+		    		}
+		    	  
+		    	<% else %>	
+		    		{
+		    		  xtype: 'panel',
+		    		  layout: 'fit',
+		    		  items: 
+			    		{
+			    			xtype: 'component',
+				            autoEl: {
+				                tag: 'iframe',
+				                style: 'height: 100%; width: 100%; border: none',
+				                src: <%= raw @item.scan_file.url(:original).to_json %>
+				            }
+			    		}
+			    	}
+			     <% end %>		
      			]
     		}
 	], 
@@ -44,6 +65,7 @@
    
 	
 	buttons: [
+	<% if @item.scan_file_content_type != 'application/pdf' %>   	
 		{
             text : '<i class="fa fa-print" style="color:white;"></i> Stampa',            
             handler: function (btn, evt) {
@@ -51,7 +73,10 @@
             	tmp_html = Ext.dom.Query.selectNode('#' + tmp_win.id);
 				plugin.Printer.print(tmp_html, true);
     		}
-	     }, {
+	     },
+	 <% end %>    
+	     
+	      {
             text: 'Chiudi',
             handler: function (btn, evt) {
             	this.up('window').close();

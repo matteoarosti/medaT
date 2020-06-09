@@ -162,9 +162,35 @@ class WeighsController < ApplicationController
    end 
       
    
-   
+  #salvataggio dati di testata (autista, ...) 
   ##################################################
-   def generate_and_save_weight
+  def save_weigh_header_data
+  ##################################################
+    if (params[:type] == 'FROM_HI')         #inserimento pesa da movimento
+      hi = HandlingItem.find(params[:rec_id])
+      item = hi.weigh        
+      if (!item)
+        item = Weigh.new
+      end  
+    else
+      item = Weigh.find(params[:rec_id])
+    end
+    
+    item.driver = params[:driver]
+    item.plate  = params[:plate]
+    item.plate_trailer = params[:plate_trailer]
+    if (params[:type] != 'FROM_HI')
+      item.container_number  = params[:container_number] unless params[:container_number].nil?
+      item.booking_customer  = params[:booking_customer] unless params[:booking_customer].nil?
+    end
+    ret = item.save!
+    render json: {success: ret}
+  end   
+   
+   
+   #n
+  ##################################################
+   def generate_pdf
   ##################################################
      if (params[:type] == 'FROM_HI')         #inserimento pesa da movimento
        hi = HandlingItem.find(params[:rec_id])
@@ -173,64 +199,21 @@ class WeighsController < ApplicationController
            render json: {success: false, msg: 'Pesi mancanti'}
            return
        end
-       
-       item.external = false
-       item.weigh_status = 'CLOSE'
-       item.terminal_id = 3 #ToDo: parametrizzare
-       item.shipowner_id = hi.handling_header.shipowner_id
-       item.container_number = hi.handling_header.container_number
-       
-       
-       #genero pdf/jpg
-       #item.scan_file = params[:file]
-       
-       #imosto i pesi (in base alle letture)
-       item.weight_container = params[:weight_container].to_s.gsub(',', '.').to_f
-       item.weight_goods = params[:weight_goods].to_s.gsub(',', '.').to_f
-       item.weight = item.weight_container + item.weight_goods  
-         
-       item.weighed_at = Time.zone.now
-       item.driver = params[:driver]
-       item.plate  = params[:plate]
-       item.plate_trailer = params[:plate_trailer]
-       ret = item.save!        
-       
-       #settaggio su handling_item
-       hi.to_weigh = false
-       hi.weigh_id = item.id
-       hi.save!
-              
-       #riporto il peso su hh
-       hi.handling_header.weight_exp = item.weight
-       hi.handling_header.save!
-       
-       #item.send_mail_html_to_customer
-       render json: {success: true, w_id: item.id}
-       
-         
      else                                    #inserimento pesa da prenotazione
-       
-      item = Weigh.find(params[:rec_id])
+      item = Weigh.find(params[:rec_id]) 
+     end
+     
+     
+     #genero pdf
+      tmp_file_name = Tempfile.new(['weigh_cedolino_', '.pdf']).path
+      pdf = WeighCedolinoPdf.new()
+      pdf.draw(item)
+      pdf.render_file(tmp_file_name)      
+      print "\nGenerato"
+      item.scan_file = File.open(tmp_file_name)
+      item.save!
       
-      #genero pdf/jpg
-      #item.scan_file = params[:file]  
-        
-      #imosto i pesi (in base alle letture)
-      item.weight_container = params[:weight_container].to_s.gsub(',', '.').to_f
-      item.weight_goods = params[:weight_goods].to_s.gsub(',', '.').to_f
-      item.weight = item.weight_container + item.weight_goods  
-        
-      item.external = false  
-      item.scan_file = params[:file]
-      item.weighed_at = Time.zone.now
-      item.driver = params[:driver]
-      item.plate  = params[:plate]
-      item.plate_trailer = params[:plate_trailer]
-      
-      ret = item.save!
-      #item.send_mail_html_to_customer  
-      render json: {success: ret, w_id: item.id}
-     end  
+     render json: {success: true, pesi: pdf.pesi}
    end
    
    
@@ -267,7 +250,11 @@ class WeighsController < ApplicationController
         item.container_number = hi.handling_header.container_number 
         item.handling_item_id = params[:rec_id]
         
-        item.scan_file = params[:file]
+        #il file potrei averlo generato e non lo ricevo in fase di salvataggio
+        if !params[:file].nil?  
+          item.scan_file = params[:file]
+        end
+              
         item.weighed_at = Time.zone.now
         item.driver = params[:driver]
         item.plate  = params[:plate]
@@ -305,11 +292,20 @@ class WeighsController < ApplicationController
        end        
         
       item.weigh_status = 'CLOSE'
-      item.scan_file = params[:file]
+     
+      #il file potrei averlo generato e non lo ricevo in fase di salvataggio
+      if !params[:file].nil?  
+        item.scan_file = params[:file]
+      end
+         
       item.weighed_at = Time.zone.now
       item.driver = params[:driver]
       item.plate  = params[:plate]
-      item.plate_trailer = params[:plate_trailer]        
+      item.plate_trailer = params[:plate_trailer]       
+        
+      
+      item.container_number  = params[:container_number] unless params[:container_number].nil?
+      item.booking_customer  = params[:booking_customer] unless params[:booking_customer].nil?
         
       ret = item.save!
       item.send_mail_html_to_customer  
@@ -340,7 +336,12 @@ class WeighsController < ApplicationController
   ##################################################
    def view_scan_file
   ##################################################
-    @item = Weigh.find(params[:rec_id])
+     if (params[:type] == 'FROM_HI')    
+       hi = HandlingItem.find(params[:rec_id])
+       @item = hi.weigh     
+     else
+       @item = Weigh.find(params[:rec_id])       
+     end
    end   
 
   ##################################################
@@ -519,6 +520,8 @@ class WeighsController < ApplicationController
      item = Weigh.find(params[:rec_id])         
    end
    
+=begin   
+   
    #leggo peso da pesa (scheda LAN)
    localhost = Net::Telnet::new("Host" => "192.168.201.10",
                                 "Timeout" => 10,
@@ -529,11 +532,10 @@ class WeighsController < ApplicationController
       peso_letto = ar_lettura[2]  
    }
    localhost.close
+=end  
    
-   
-   logger.info peso_letto
-   sssss
-   
+   peso_letto = 800
+
    #sull'item registro l'evento
    LogEvent.base(item, 'H', params[:tipo_evento], {weigh: peso_letto})
    render json: {success: true}

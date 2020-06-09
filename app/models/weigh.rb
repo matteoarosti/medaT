@@ -7,8 +7,8 @@ class Weigh < ActiveRecord::Base
       path: ":rails_root/record_images/:class/:attachment/:id_partition/:style/:filename",
       url: "weighs/download_file/:id"
   # Validate content type, filename, size
-  validates_attachment_content_type :scan_file, content_type: /\Aimage/
-  validates_attachment_file_name :scan_file, matches: [/png\Z/, /jpe?g\Z/]
+  validates_attachment_content_type :scan_file, content_type: [/\Aimage/, 'application/pdf']
+  validates_attachment_file_name :scan_file, matches: [/png\Z/, /jpe?g\Z/, /pdf\Z/]
   validates_attachment :scan_file, size: { in: 0..1024.kilobytes }
 ##  do_not_validate_attachment_file_type :scan_file
     

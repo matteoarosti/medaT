@@ -271,6 +271,7 @@
 			                ok_img = 'fa-user';
 			                var set_external = true;
 			                var btn_cls = 'btn-warning';
+			                var rec_type = rec.get('type');
 			                
 			                if (rec.get('type') == 'FROM_HI' && rec.get('to_weigh_in_terminal') == true) {
 			                	ok_img = 'fa-truck';
@@ -326,10 +327,44 @@
 											            }
 											        },
 											        
-											        {xtype: 'textfield', name: 'driver', value: rec.get('driver'), fieldLabel: 'Autista'},
-											        {xtype: 'textfield', name: 'plate', value: rec.get('plate'), fieldLabel: 'Targa'},
-											        {xtype: 'textfield', name: 'plate_trailer', value: rec.get('plate_trailer'), fieldLabel: 'Targa rimorchio'},
-											        
+											        {
+											         xtype: 'fieldset',
+											         title: 'Dati',
+											         layout: 'vbox',
+											         bodyPadding: 25, margin: 10,
+											         default: {padding: 10},
+											         items: [ 
+											          {xtype: 'textfield', name: 'driver', value: rec.get('driver'), fieldLabel: 'Autista'},
+											          {xtype: 'textfield', name: 'plate', value: rec.get('plate'), fieldLabel: 'Targa'},
+											          {xtype: 'textfield', name: 'plate_trailer', value: rec.get('plate_trailer'), fieldLabel: 'Targa rimorchio'},
+											          {hidden: true, xtype: 'textfield', name: 'container_number', value: rec.get('container_number'), fieldLabel: 'Container'},
+											          {hidden: true, xtype: 'textfield', name: 'booking_customer', value: rec.get('booking_customer'), fieldLabel: 'Booking'},
+											         
+											          //salvataggio dati (targa, autista, ...)
+											          {
+											          	xtype: 'button', itemId: 'b_save_header_data',
+											          	text: 'Salva',
+											          	handler: function(b){
+											          		var m_form = b.up('form');
+											          		Ext.Ajax.request({
+											                    url: <%= raw url_for(:action=>'save_weigh_header_data').to_json -%>,
+											                    waitMsg: 'Salvataggio in corso....',
+																method:'POST',                    
+											                    jsonData: m_form.getValues(),	
+											             	
+																success: function(result, request) {					
+																      alert('Salvataggio eseguito');
+													 			}, scope: this,
+																
+																failure: function(rec, op) {
+																	Ext.Msg.alert('Errore');
+																}, scope: this,																													
+													    	});
+											          	} //handler
+											          }
+											         
+											         ]
+											        },
 											        {xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}											      
 											      										    										    										    
 											    ]
@@ -337,7 +372,7 @@
 								    			dockedItems: [
 								    			  {
 								    			    xtype: 'toolbar',
-								    			    hidden: true,
+								    			    hidden: false, //Matteo
 												    dock: 'left',
 												    width: 350,
 												    layout: 'fit',
@@ -376,31 +411,32 @@
 														    width: 135,
 															defaults: {xtype: 'button', scale: 'medium', textAlign: 'left'},
 															items: [
-																{text: 'Acquisisci</br>Peso Lordo', handler: function (btn, evt) {btn.up('grid').registraEvento('LORDO', rec, btn)}},
+																{text: 'Leggi</br>P. Lordo', handler: function (btn, evt) {btn.up('grid').registraEvento('LORDO', rec, btn)}},
 																{xtype: 'container', width: 20},																
-																{text: 'Acquisisci</br>Tara', handler: function (btn, evt) {btn.up('grid').registraEvento('TARA', rec, btn)}},
+																{text: 'Leggi</br>Tara', handler: function (btn, evt) {btn.up('grid').registraEvento('TARA', rec, btn)}},
 																{xtype: 'tbfill'},
 																{
-														            text: 'Genera</br>e invia',
+														            text: 'Genera</br>Pdf',
 														            scale: 'large', cls: 'btn-confirm',
 														            handler: function (btn, evt) {
 														                           
 														             form = this.up('form').getForm();
 														             tmp_win  = this.up('window');
 														             
-														                btn.disable();
+														             	//Matteo: riabilitare
+														                ///btn.disable();
 														                
 													                    Ext.Ajax.request({
-														                    url: <%= raw url_for(:action=>'generate_and_save_weigh').to_json -%>,
+														                    url: <%= raw url_for(:action=>'generate_pdf').to_json -%>,
 														                    waitMsg: 'Salvataggio in corso....',
 																			method:'POST',                    
 														                    jsonData: form.getValues(),	
 														             	
 																			success: function(result, request) {					
-																			      loc_grid.store.remove(rec);
-																			      //loc_grid.store.load();
-																			      tmp_win.close();
-																 							
+																			    //ritorna il peso... lo imposto
+																			    var returnData = Ext.JSON.decode(result.responseText);
+																				form.findField('weight').setValue(returnData.pesi.netto);
+																				form.findField('file').disable();			
 																			}, scope: this,
 																			
 																			failure: function(rec, op) {
@@ -409,6 +445,14 @@
 																    	});
 														             
 														            }
+														          }, {
+														            //view file
+														          	text : '</br><i class="fa fa-print" style="color:white;"></i>',
+														            scale: 'large', cls: 'btn-confirm',
+														          	handler: function(){
+														          	  acs_show_win_std('Cedolino', <%= raw url_for(:controller=>'weighs', :action=>'view_scan_file').to_json -%>,
+																     	 		form.getValues(), 800, 400);										
+																	}      	
 														          }
 																
 															]
@@ -542,6 +586,17 @@
 	  											listeners: {	
    													afterrender: function(comp){
    														this.render_form(set_external);
+   														
+   														if (rec_type != 'FROM_HI'){
+   															//consento gestione num container e booking
+   															comp.getForm().findField('container_number').enable().show();
+   															comp.getForm().findField('booking_customer').enable().show();
+   															comp.down('#b_save_header_data').show();
+   														} else {
+   															comp.getForm().findField('container_number').disable().hide();
+   															comp.getForm().findField('booking_customer').disable().hide();
+   															comp.down('#b_save_header_data').hide();
+   														}
    													}
    												},
    												
@@ -570,7 +625,7 @@
 											    layout: 'fit',
 											    items: loc_form,
 											    title: 'Registra peso',
-											    width: 540, //portare a 840
+											    width: 840, //portare a 840
 											    height: 420,
 											    id: 'myWindow'
 											}).show();

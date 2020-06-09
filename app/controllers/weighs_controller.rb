@@ -519,22 +519,26 @@ class WeighsController < ApplicationController
    else                                    #inserimento pesa da prenotazione
      item = Weigh.find(params[:rec_id])         
    end
+
+   if params[:peso].to_i > 0
+     peso_letto = params[:peso].to_i
+   else      
+     peso_letto = 0   
+     #leggo peso da pesa (scheda LAN)
+     localhost = Net::Telnet::new("Host" => "192.168.201.10",
+                                  "Timeout" => 10,
+                                  "Prompt" => /[$%#>] \z/n)
+     localhost.cmd("R") { |c| 
+        #ricevo es: ST,GS,       0,kg
+        #ToDo: memorizzare anche UM
+        ar_lettura = c.split(',')
+        peso_letto = ar_lettura[2]  
+     }
+     localhost.close  
    
-   peso_letto = 0   
-   #leggo peso da pesa (scheda LAN)
-   localhost = Net::Telnet::new("Host" => "192.168.201.10",
-                                "Timeout" => 10,
-                                "Prompt" => /[$%#>] \z/n)
-   localhost.cmd("R") { |c| 
-      #ricevo es: ST,GS,       0,kg
-      #ToDo: memorizzare anche UM
-      ar_lettura = c.split(',')
-      peso_letto = ar_lettura[2]  
-   }
-   localhost.close  
-   
-   #per test 
-   #peso_letto = 800
+     #per test 
+     peso_letto = 800
+   end
 
    #sull'item registro l'evento
    LogEvent.base(item, 'H', params[:tipo_evento], {weigh: peso_letto})

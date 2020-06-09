@@ -405,7 +405,7 @@
 														}, //store
 														columns: [{header: 'Registro Eventi', dataIndex: 'out_des', flex: 1}],
 														
-														dockedItems: {
+														dockedItems: [{
 														    xtype: 'toolbar',
 														    dock: 'bottom',
 														    width: 135,
@@ -447,7 +447,7 @@
 														            }
 														          }, {
 														            //view file
-														          	text : '</br><i class="fa fa-print" style="color:white;"></i>',
+														          	text : '</br><i class="fa fa-search" style="color:white;"></i>',
 														            scale: 'large', cls: 'btn-confirm',
 														          	handler: function(){
 														          	  acs_show_win_std('Cedolino', <%= raw url_for(:controller=>'weighs', :action=>'view_scan_file').to_json -%>,
@@ -456,14 +456,45 @@
 														          }
 																
 															]
-														},
+														}, 
+														{
+														    xtype: 'toolbar',
+														    dock: 'bottom',
+														    height: 60,
+														    layout: 'hbox',
+															defaults: {xtype: 'button', scale: 'medium', textAlign: 'left'},
+															items: [
+															         {text: 'Inserisci</br>P. Lordo', 
+															         	handler: function (btn, evt) {
+															         		var msgbox = Ext.Msg.prompt('Peso Lordo', 'Inserisci in KG', function(btnIns, value){
+															         			if (btnIns == 'ok') {
+															         				btn.up('grid').registraEvento('LORDO', rec, btn, value);
+															         			}
+															         		} )
+															            }
+															          },  
+															          {xtype: 'container', width: 20},
+																 	  {text: 'Inserisci</br>Tara', 
+															         	handler: function (btn, evt) {
+															         		var msgbox = Ext.Msg.prompt('Peso Lordo', 'Inserisci in KG', function(btnIns, value){
+															         			if (btnIns == 'ok') {
+															         				btn.up('grid').registraEvento('TARA', rec, btn, value);
+															         			}
+															         		} )
+															            }
+															          },
+															          {xtype: 'container', width: 20},
+															]
+														}
 														
-														registraEvento(tipo_evento, rec, btn){
+														],
+														
+														registraEvento(tipo_evento, rec, btn, value){
 															Ext.Ajax.request({
 											                    url: <%= raw url_for(:action=>'exe_save_weigh_event').to_json -%>,
 											                    waitMsg: 'Salvataggio in corso....',
 																method:'POST',                    
-											                    jsonData: {tipo_evento: tipo_evento, rec_id: rec.get('id'), type: rec.get('type')},	
+											                    jsonData: {tipo_evento: tipo_evento, rec_id: rec.get('id'), type: rec.get('type'), peso: value},	
 											             	
 																success: function(result, request) {																					      
 																      btn.up('grid').store.load();													 							

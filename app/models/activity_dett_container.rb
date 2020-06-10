@@ -54,7 +54,7 @@ class ActivityDettContainer < ActiveRecord::Base
  
  
  def dra_out         
-   if !self.doc_h_notifica && self.doc_h_notifica > 0
+   if !self.doc_h_notifica_id.nil? && self.doc_h_notifica_id > 0
      anno_short = self.doc_h_notifica.nr_anno - 2000
      ret "DRA: #{self.doc_h_notifica.nr_seq}/#{anno_short}"
    else
@@ -62,7 +62,7 @@ class ActivityDettContainer < ActiveRecord::Base
    end
    
    #messa a dispo
-   if !self.doc_h_notifica_make_available_id && self.doc_h_notifica_make_available_id > 0
+   if !self.doc_h_notifica_make_available_id.nil? && self.doc_h_notifica_make_available_id > 0
      anno_short = self.doc_h_notifica_make_available.nr_anno - 2000
      ret "(M.D.: #{self.doc_h_notifica_make_available.nr_seq}/#{anno_short})"
    end

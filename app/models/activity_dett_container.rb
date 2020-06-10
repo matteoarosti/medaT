@@ -65,7 +65,7 @@ class ActivityDettContainer < ActiveRecord::Base
    #messa a dispo
    if !self.doc_h_notifica_make_available_id.nil? && self.doc_h_notifica_make_available_id > 0
      anno_short = self.doc_h_notifica_make_available.nr_anno - 2000
-     ret += "(M.D.: #{self.doc_h_notifica_make_available.nr_seq}/#{anno_short})"
+     ret += " (disp.: #{self.doc_h_notifica_make_available.nr_seq}/#{anno_short})"
    end
     
    return ret

@@ -45,6 +45,21 @@ class SendActivityCustomerReport
           end  
           
           #ToDo: se richiesto devo addebitare la messa a disposizione all'agenzia
+          if i.activity_op.charge_make_available_to_agency
+            puts "devo abbinare la messa a disposizione all'agenzia"
+            
+            ag_customer = Customer.find_by(id: i.shipowner.make_available_charge_to_customer_id)
+            if ag_customer.nil?     
+              puts "non indicata l'agenzia per la compagnia #{i.shipowner.name}"         
+              LogEvent.send_mail(docH, 'MAIL_ERR', 'matteo.arosti@gmail.com',            
+                                   "Errore su addebito messa a disposizione - agenzia", 'ToDo')
+            
+            else
+             dh_ag_customer = find_or_create_open_customer_doc_h(ag_customer)
+             i.doc_h_notifica_make_available_id = dh_ag_customer.id
+             i.save!
+            end
+          end
           
         end #each
         
@@ -153,7 +168,7 @@ class SendActivityCustomerReport
   def send_csv_eSolver(anno, numero)
     d = DocH.where(doc_type: DocType.find_by!(code: 'ADN')).where(nr_anno: anno, nr_seq: numero).first
     #csv per eSolder (Fatturazione elettronica)
-    #tmp_file_name_csv_fe = Tempfile.new(['activity_customer_fe_', '.csv']).path
+    ###tmp_file_name_csv_fe = Tempfile.new(['activity_customer_fe_', '.csv']).path
     tmp_file_name_csv_fe = "/share_fe/fe_#{anno}_#{numero}.csv"
     print "\nGenero #{tmp_file_name_csv_fe} (Fatturazione Elettronica)"    
     tmp_file_csv_fe = File.open(tmp_file_name_csv_fe, "w")
@@ -238,6 +253,30 @@ class SendActivityCustomerReport
                   perc_sconto
               ].join(';')
     end
+    
+    
+    
+    #righe (dett) - Addebito Messa a disposizione per agenzia
+        ActivityDettContainer.where(doc_h_notifica_make_available_id: d.id).each do |rec|      
+          perc_sconto = 0
+          importo = 0
+          ar_out << ['RIG',
+                      campo_data,
+                      d.nr_seq,
+                      d.customer.gest_code,
+                      '',
+                      '', #commento
+                      rec.activity.shipowner.make_available_charge_to_customer_with_gest_code, #codice gestionale per messa a disposizione - agenzia
+                      1, #quantita????
+                      '', '',   #centro analisi, descrizione riga,
+                      '', #note
+                      rec.container_number.to_s, #descrizione estesa
+                      importo,
+                      '','','','',
+                      perc_sconto
+                  ].join(';')        
+        end
+        
 
      
     return ar_out.join("\n")

@@ -86,6 +86,25 @@ class ActivityCustomerReportPdf < Prawn::Document
     end
     
     
+    #addebito Messa a Disposizione: Agenzia (DETT_CONTAINERS)
+    ActivityDettContainer.where(doc_h_notifica_make_available_id: docH.id).each do |rec|
+      
+      if riga_to >= 50
+        start_new_page
+        riga_to = 8
+      end
+      
+      riga_from = riga_to + 1
+      riga_to   = riga_from + 1
+      
+      grid([riga_from, 0], [riga_to, 2]).bounding_box do write_cell_ar_container(rec.container_number, [rec.activity.shipowner.name]) end      
+      grid([riga_from, 3], [riga_to, 8]).bounding_box do write_cell_ar_no_title(['Messa a disposizione per: ' + rec.activity.activity_op.name, 'Richiedente: ' + rec.activity.customer.name]) end
+      grid([riga_from, 9], [riga_to, 9]).bounding_box do write_cell_ar_no_title([rec.execution_at ? rec.execution_at.strftime("%d/%m/%y %H:%M") : '']) end
+      grid([riga_from,10], [riga_to,10]).bounding_box do write_cell_ar_no_title([rec.confirmed_at ? rec.confirmed_at.strftime("%d/%m/%y %H:%M") : '']) end     
+    end
+
+    
+    
       riga_from = riga_to + 2
       riga_to   = riga_from + 1
       grid([riga_from, 0], [riga_to, 10]).bounding_box do

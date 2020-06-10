@@ -3,6 +3,7 @@ class ActivityDettContainer < ActiveRecord::Base
   has_one :activity_op, through: :activity
   has_one :shipowner, through: :activity
   belongs_to :doc_h_notifica, class_name: "DocH"
+  belongs_to :doc_h_notifica_make_available, class_name: "DocH"
   
   scope :extjs_default_scope, -> {}     
 

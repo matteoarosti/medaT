@@ -58,7 +58,9 @@ class ActivityDettContainer < ActiveRecord::Base
    if !self.doc_h_notifica_id.nil? && self.doc_h_notifica_id > 0
      anno_short = self.doc_h_notifica.nr_anno - 2000
      ret = "DRA: #{self.doc_h_notifica.nr_seq}/#{anno_short}"
-   else
+   elsif self.doc_h_notifica_id.nil?
+     ret = '' #nil, ancora da generare
+   else #0 - > non deve essere generato DRA
      ret = "NO DRA" 
    end
    

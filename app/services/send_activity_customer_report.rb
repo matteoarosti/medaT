@@ -45,14 +45,14 @@ class SendActivityCustomerReport
           end  
           
           #ToDo: se richiesto devo addebitare la messa a disposizione all'agenzia
-          if i.activity_op.charge_make_available_to_agency
+          if i.activity.to_be_made_available && i.activity_op.charge_make_available_to_agency
             puts "devo abbinare la messa a disposizione all'agenzia"
             
             ag_customer = Customer.find_by(id: i.shipowner.make_available_charge_to_customer_id)
             if ag_customer.nil?     
               puts "non indicata l'agenzia per la compagnia #{i.shipowner.name}"         
-              LogEvent.send_mail(docH, 'MAIL_ERR', 'matteo.arosti@gmail.com',            
-                                   "Errore su addebito messa a disposizione - agenzia", 'ToDo')
+              LogEvent.send_mail(i, 'MAIL_ERR', 'matteo.arosti@gmail.com',            
+                                   "Errore su addebito messa a disposizione - agenzia (shipowner: #{i.shipowner.name})", 'ToDo')
             
             else
              dh_ag_customer = find_or_create_open_customer_doc_h(ag_customer)

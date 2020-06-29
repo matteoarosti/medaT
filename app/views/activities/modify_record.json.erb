@@ -20,7 +20,6 @@
 			      , <%= raw extjs_std_combo_model('activity_op', @item,
       						:listeners => "change: function(combo, record, index) {
 						      var me = this;
-						      console.log(combo);						      							          
 						      if (Ext.isEmpty(me.valueModels[0]) || Ext.isEmpty(me.valueModels[0].get('gest_code'))) {
 						      	show_notifica('Attenzione!! Operazione non valida');
 						      	me.setValue(me.originalValue);

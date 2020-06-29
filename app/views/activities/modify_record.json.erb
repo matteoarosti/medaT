@@ -21,8 +21,9 @@
       						:listeners => "change: function(combo, record, index) {
 						      var me = this, //combo
 						          m_form = me.up('form');										          
-						      console.log(me);
-						      console.log(record);
+						      if (Ext.isEmpty(me.valueModels[0]) || Ext.isEmpty(me.valueModels[0].get('gest_code'))) {
+						      	show_notifica('Attenzione!! Operazione non valida');
+						      }
 						    }"			      
 			      	) -%>
 			      , <%= raw extjs_std_textareafield('notes', @item) -%>

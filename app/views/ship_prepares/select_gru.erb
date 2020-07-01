@@ -1,0 +1,58 @@
+{
+ success: true,
+ items: [
+
+   
+   //grid navi
+		 {
+				flex: 1,
+				layout: 'fit',
+        	    title: 'Ricerca nave',
+        	    closable: true,
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            type: 'ajax',
+        	            url: <%= raw  (root_path + 'grus/extjs_sc_list').to_json -%>,
+        	            extraParams: {},
+        	            reader: {
+        	                type: 'json',
+        	                rootProperty: 'items'
+        	            }
+        	        }
+        	    }), 
+        	    
+        	    
+			    columns: [{
+			        dataIndex: 'name',
+			        text: 'Gru',
+			        flex: 1
+			        }
+			    ],
+		
+				
+			buttons: [
+			  {
+	            text: 'Seleziona gru', scale: 'large',
+	            handler: function (btn, evt) {      
+	            	var m_win = btn.up('window');
+	            	var m_grid = btn.up('window').down('grid');
+	            	var gru_selected = m_grid.getView().getSelectionModel().getSelection();
+	            	if (gru_selected.length == 1)
+	            		m_win.fireEvent('afterOk', m_win, gru_selected[0].get('id'));
+	            	else
+	            		show_notifica('Selezionare una gru');       
+	             }
+	          }
+			]	    
+		}	    
+   
+
+ ]
+}

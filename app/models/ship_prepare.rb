@@ -40,6 +40,21 @@ class ShipPrepare < ActiveRecord::Base
   
   
   
+  #in base a quanto definito nel campo container_positions (da excel Gianma)
+  #ritorno la posizione di un dato container
+  def find_container_position(container_number)
+    return nil if self.container_positions.nil?
+    self.container_positions.each_line do |line|
+       r = line.split("\t")
+       return r[1].strip.to_s.rjust(6, '0') if r[0] == container_number        
+    end
+    return nil #non trovato
+  end
+  
+  
+  
+  
+  
 #valori per combo
 def status_get_data_json
  [

@@ -28,6 +28,24 @@
 			}),					
 		"bind":"{rec.shipowner_id}",					  
 	},
+	{xtype: 'textarea', "fieldLabel":"Configurazione","bind":"{rec.j_config}", height: 340},
+	{
+		xtype: 'button', text: 'Simula',
+		handler: function(b){
+			var f_form = b.up('form');
+			acs_show_win_std('Posiziona con GRU', <%= raw url_for(:controller=>'ship_prepares', 
+							 	 			  :action=>'gru_place_in_bay').to_json -%>,
+									     	  {
+									     	  	simula: 'Y',
+									     	  	j_config: f_form.viewModel.data.rec.get('j_config')
+									     	  }, 800, 400, {
+									     	  	close: function(comp){
+									     	  		comp.destroy();
+									     	  	}
+									     	  }, null, 'Y');
+		}
+	},
+	        
 	{"fieldLabel":"created_at","bind":"{rec.created_at}", disabled: true},
 	{"fieldLabel":"updated_at","bind":"{rec.updated_at}", disabled: true}
 ]

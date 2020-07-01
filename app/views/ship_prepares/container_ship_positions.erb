@@ -1,0 +1,73 @@
+{
+ "success": true,
+	 "items": [
+	 	{
+	 	 xtype: "panel",
+	 	 layout: {
+		    type: 'vbox',
+		    align : 'stretch',
+		    pack  : 'start',
+		 }, 
+	 	 items: [ 
+			  {
+			    xtype: 'form',
+			    flex: 1,
+				layout: {
+				    type: 'vbox',
+				    align : 'stretch',
+				    pack  : 'start',
+				},	
+				
+			   defaults: {flex: 1, width: '100%', labelAlign: 'top'},  
+			     
+			   items: [
+			   	<%= raw extjs_std_textareafield('container_positions', @ship_prepare) -%>
+			   	]
+			  }	
+		],
+		buttons: [
+			  {
+	            text: 'Salve', scale: 'large',
+	            handler: function (btn, evt) {      
+	            	var m_win = btn.up('window');
+	            	var m_form = m_win.down('form').getForm();
+	            			Ext.Ajax.request({
+				                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'exe_save_container_positions').to_json -%>,
+				                    waitMsg: 'Salvataggio in corso....',
+									method:'POST',                    
+				                    jsonData: {item_id: <%= @ship_prepare.id -%>, data: m_form.getValues()},	
+				             	
+									success: function(result, request) {					
+										var returnData = Ext.JSON.decode(result.responseText);
+										
+										//error
+										if (returnData.success == false){
+											Ext.MessageBox.show({
+						                        title: 'EXCEPTION',
+						                        msg: returnData.message,
+						                        icon: Ext.MessageBox.ERROR,
+						                        buttons: Ext.Msg.OK
+					                    	})
+					                      return false;										
+										}								
+						 							
+						 				m_win.destroy();
+						 							
+									}, scope: this,
+									
+									failure: function(rec, op) {
+										Ext.MessageBox.show({
+					                        title: 'EXCEPTION',
+					                        msg: 'Errore',
+					                        buttons: Ext.Msg.OK
+				                    	})					
+									}, scope: this,						
+													 
+						    	});
+	            	      
+	             }
+	          }
+			]
+	}
+ ]
+}	  

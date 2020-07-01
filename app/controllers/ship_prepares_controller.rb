@@ -337,6 +337,28 @@ def combine_exe
   render json: {success: true}
 end
  
+
+
+ # POSIZIONA CON GRU #
+ def gru_place_in_bay
+ end
+ 
+ def reload_baia
+ end
   
-  
+ 
+ def select_gru
+ end
+ 
+ def container_ship_positions
+   @ship_prepare = ShipPrepare.find(params[:ship_prepare_id])
+ end
+ 
+ def exe_save_container_positions
+   sp = ShipPrepare.find(params[:item_id])
+   sp.container_positions = params[:data][:container_positions]
+   sp.save!
+   render json: {:success => true}
+ end 
+ 
 end

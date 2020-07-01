@@ -631,7 +631,47 @@
 			    	},
 
 
+				{text: 'Nave', iconCls: '', cls: 'btn', 
+			    		handler: function(){
+			    			acs_show_win_std('Elenco container/posizioni', <%= raw url_for(:controller=>'ship_prepares', 
+							 	 			  :action=>'container_ship_positions').to_json -%>,
+									     	  {ship_prepare_id: <%= @item.id -%>}, 800, 400);
+			    		}
+			   	},
+			    	
+
 <% end %>
+			    	
+			    	
+			    	
+			    	
+			    	
+			    	
+			    	
+			    	{text: 'Posiziona con GRU', iconCls: 'fa fa-eur fa-2x', cls: 'btn-ok', 
+			    		handler: function(){
+			    		
+			    			//chiedo la gru
+			    			acs_show_win_std('Seleziona gru', 
+			    				'<%= url_for(:controller=>'ship_prepares', :action=>'select_gru') -%>',
+			    				{ship_prepare_id: <%= @item.id -%>},
+			    				null, null, {
+			    					afterOk: function(from_win, gru_id){
+			    						
+										acs_show_win_std('Posiziona con GRU', <%= raw url_for(:controller=>'ship_prepares', 
+							 	 			  :action=>'gru_place_in_bay').to_json -%>,
+									     	  {ship_prepare_id: <%= @item.id -%>, gru_id: gru_id}, 800, 400, {
+									     	  	close: function(comp){
+									     	  		comp.destroy();
+									     	  	}
+									     	  }, null, 'Y');
+			    					}
+			    				}
+			    				);
+			    		
+			    					     	  				    					    			
+			    		}
+			    	},
 			    	
 			    	
 			    	

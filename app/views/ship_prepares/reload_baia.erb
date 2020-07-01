@@ -1,0 +1,21 @@
+<%
+
+if params[:simula] == 'Y'
+	c_ship = ActiveSupport::JSON.decode(params[:j_config]).with_indifferent_access
+else	
+	#da params[:ship_prepare_id] recupero la nave, da questa la configurazione baie
+	sp = ShipPrepare.find(params[:ship_prepare_id])
+	ship = sp.ship
+	
+	begin	
+		c_ship = ActiveSupport::JSON.decode(ship.j_config).with_indifferent_access
+	rescue
+		c_ship = {}
+	end	
+end
+%>
+{
+ success: true,
+ items: <%= raw bay(c_ship, params.to_h.with_indifferent_access).to_json %>
+}
+ 

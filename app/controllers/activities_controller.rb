@@ -62,6 +62,7 @@ class ActivitiesController < ApplicationController
     
     item.amount_setted = true  
     item.save!()
+    LogEvent.base(item, 'U', 'amount_setted')
     render json: {:success => true, :data=>[item.as_json(Activity.as_json_prop)]}    
   end
     

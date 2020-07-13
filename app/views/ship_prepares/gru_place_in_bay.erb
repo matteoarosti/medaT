@@ -21,6 +21,7 @@
  items: [
   {
    xtype: 'panel',
+   itemId: 'main_pos_panel',
    autoScroll: true, scroll: true, scrollable: 'y',
 			
     layout: {
@@ -48,13 +49,11 @@
 			console.log('stop');
 			Ext.TaskManager.stop(comp.task);
 		} else {
-			console.log('avvio refresh');
 			comp.reload_baia(comp);
 		}	
 	},
 	
 	reload_baia: function(comp){
-		console.log('reload_baia');
 			  Ext.Ajax.request({
                     url: <%= raw url_for(:controller=>'ship_prepares', :action=>'reload_baia').to_json -%>,
                     waitMsg: 'Salvataggio in corso....',

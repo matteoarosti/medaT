@@ -21,7 +21,8 @@
 			   defaults: {flex: 1, width: '100%', labelAlign: 'top'},  
 			     
 			   items: [
-			   	<%= raw extjs_std_textareafield('container_positions', @ship_prepare) -%>
+			   	<%= raw extjs_std_textareafield('container_positions_l', @ship_prepare, {fieldLabel: 'Container/Sequenza - IMBARCO'}, {fieldStyle: {fontFamily: 'courier new'}}) -%>,
+			   	<%= raw extjs_std_textareafield('container_positions_d', @ship_prepare, {fieldLabel: 'Container/Sequenza - SBARCO'}, {fieldStyle: {fontFamily: 'courier new'}}) -%>,
 			   	]
 			  }	
 		],

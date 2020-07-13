@@ -356,7 +356,8 @@ end
  
  def exe_save_container_positions
    sp = ShipPrepare.find(params[:item_id])
-   sp.container_positions = params[:data][:container_positions]
+   sp.container_positions_l = params[:data][:container_positions_l]
+   sp.container_positions_d = params[:data][:container_positions_d]
    sp.save!
    render json: {:success => true}
  end 

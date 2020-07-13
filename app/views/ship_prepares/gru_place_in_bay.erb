@@ -96,7 +96,7 @@
 	listeners: {
 	   afterrender: function(comp){
 	   
-	   <% if params[:simula] != 'Y' && !params[:gru_id].nil? %>
+	   <% if params[:simula] != 'Y' && !params[:gru_id].nil? && !params[:options][:spunta] %>
 	   
 	   	comp.task = {
 		    run: function(){

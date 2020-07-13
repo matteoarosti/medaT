@@ -45,13 +45,7 @@ class ShipPrepare < ActiveRecord::Base
   def find_container_position(container_number, operation_type)
      
     #in base a operatio_type (L o D) recupero la sequenza di imbarco/sbarco
-    case operation_type
-         when 'L' #Imbarco:
-           positions =  container_positions_l
-         when 'D' #Sbarco:
-           positions = container_positions_d
-        end #case 
-    
+    positions = get_container_positions(operation_type)
     return nil if positions.nil?
         
     positions.each_line do |line|
@@ -72,8 +66,11 @@ class ShipPrepare < ActiveRecord::Base
     #Per ora mi aspetto che l'elenco sia gia' in ordine di mossa/sequenza
     
     ar_seq = []
+      
+    positions = get_container_positions(operation_type)
+    return nil if positions.nil?
     
-    self.container_positions.each_line do |line|
+    positions.each_line do |line|
        r = line.split("\t")
        ar_seq << {container_number: r[0], pos: r[1], seq: r[2]}
     end
@@ -81,19 +78,25 @@ class ShipPrepare < ActiveRecord::Base
     
     ar_seq_sorted.each do |rl|   
        container_number = rl[:container_number].strip
-       
-       case operation_type
-       when 'L' #Imbarco: ritorno il primo che ha un movimento aperto
-         hh = HandlingHeader.container(container_number).where("handling_status = ?", "OPEN").first
-         return container_number if !hh.nil?
-       when 'D' #Sbarco: ritorno il primo che NON ha un movimento aperto
-         hh = HandlingHeader.container(container_number).where("handling_status = ?", "OPEN").first
-         return container_number if hh.nil?
-       end #case
-       
-    end
+       executed = is_executed(container_number, operation_type)  
+       return container_number if !executed       
+    end    
     return nil #non trovato
   end
+  
+  
+  def is_executed(container_number, operation_type)
+    case operation_type
+     when 'L' #Imbarco: ritorno true se NON ha un movimento aperto (e' gia' stato imbarcato)
+       hh = HandlingHeader.container(container_number).where("handling_status = ?", "OPEN").first
+       return true if hh.nil?
+     when 'D' #Sbarco: ritorno true se ha un movimento aperto (e' gia' stato sbarcato)
+       hh = HandlingHeader.container(container_number).where("handling_status = ?", "OPEN").first
+       return true if !hh.nil?
+     end #case
+    return false
+  end
+  
   
   
   def find_last_container_by_gru(operation_type, parameters)
@@ -107,6 +110,51 @@ class ShipPrepare < ActiveRecord::Base
   end
   
   
+  
+  def get_container_positions(operation_type)
+    case operation_type
+       when 'L' #Imbarco:
+         positions =  container_positions_l
+       when 'D' #Sbarco:
+         positions = container_positions_d
+      end #case 
+    positions
+  end
+  
+  
+  
+  def get_baia_status(operation_type, baia, c_ship)
+    
+    #dalla baia recupero i suoi numeri
+    baie = []
+    baie_name = []
+    c_ship[:bays].each do |b|
+      if b[:name].include?(baia)
+        baie << b
+        baie_name += b[:name] 
+      end
+    end
+    
+    ret = {}
+    #scorro tutte i container e per la baia ritorno lo posizione e lo stato di ogni container
+    positions = get_container_positions(operation_type)
+    positions.each_line do |line|
+       r = line.split("\t")
+       container_number = r[0].strip
+       pos = r[1].strip.to_s.rjust(6, '0')
+       baia = pos[0,2]
+       
+       #se la baia e' in una di quelle che sto mostrando
+       if baie_name.include?(baia)
+         ret[pos.to_s] = {
+           container_number: container_number,
+           executed: is_executed(container_number, operation_type)
+         }         
+       end
+    end
+    puts ret.to_yaml
+    return ret
+  end
   
   
   

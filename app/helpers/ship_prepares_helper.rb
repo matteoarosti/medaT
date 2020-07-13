@@ -2,7 +2,7 @@ module ShipPreparesHelper
   
   
   def bay(c_ship, parameters = {})
-    sp = ShipPrepare.find(parameters[:ship_prepare_id])
+    sp = ShipPrepare.find(parameters[:ship_prepare_id]) if !parameters[:ship_prepare_id].nil?
     m_items = []
       
     if parameters[:simula] != 'Y' && !parameters[:gru_id].nil?
@@ -19,6 +19,7 @@ module ShipPreparesHelper
                
        
        container_to_pos   = sp.find_first_container_to_pos(parameters[:options][:operation_type])
+       
         return {
                           xtype: 'panel', border: false,
                           layout: {type: 'vbox', pack: 'start', align: 'stretch'},
@@ -90,6 +91,9 @@ module ShipPreparesHelper
       #la posizione e' del tipo 090402
       baia = pos[0,2]
       
+      #per la stiva recupero la situazione dei container
+      baia_status = sp.get_baia_status(parameters[:options][:operation_type], baia, c_ship)
+        
       #lo mostro nella stiva
       
       #Info container da posizionare
@@ -117,12 +121,15 @@ module ShipPreparesHelper
                   iconCls: 'fa fa-check-circle fa-3x',
                   handler: lj("
                       function(b){
+                  
+                        b.mask('Wait ...');
                         
                         Ext.Ajax.request({
                            method: 'POST',
                            url: '#{url_for(:controller=>'import_items', :action=>'set_ok')}',
                            jsonData: #{jsonData.to_json},
                                    success: function(result, request) {
+                                      b.unmask();
                                       var jsonData = Ext.JSON.decode(result.responseText);
                                       
                                       if (jsonData.success == true){
@@ -135,6 +142,7 @@ module ShipPreparesHelper
                                       }                                  
                                    },
                                    failure: function(response, opts) {
+                                       b.unmask();
                                        Ext.MessageBox.show({
                                                   title: 'EXCEPTION',
                                                   msg: 'Errore sconosciuto',
@@ -177,7 +185,7 @@ module ShipPreparesHelper
       layout: {type: 'vbox', pack: 'start', align: 'stretch'},
       padding: 20, flex: 1,
       defaults: {width: 50, height: 50, border: true},
-      items: bay_rows(c_ship, parameters, baia, pos)
+      items: bay_rows(c_ship, parameters, baia, pos, baia_status)
     }
     m_items << baia
     
@@ -190,14 +198,13 @@ module ShipPreparesHelper
   
   
   
-  def bay_rows(c_ship, parameters, baia, pos)
+  def bay_rows(c_ship, parameters, baia, pos, baia_status)
     ret = []
       
     #dalla baia recupero la stiva
     if !baia.nil?
       baie = []
       c_ship[:bays].each do |b|
-        puts "baia: #{baia}"
         baie << b if b[:name].include?(baia)
       end
     else
@@ -223,7 +230,7 @@ module ShipPreparesHelper
         xtype: 'panel', border: false, height: 25,
         layout: {type: 'hbox', pack: 'center', align: 'left'},
         defaults: {width: 50, height: 25},
-        items: bay_cells('HEADER', baia_config, parameters, pos)       
+        items: bay_cells('HEADER', baia_config, parameters, pos, {})       
       }
       
       baia_config[:altezza].each do |a|
@@ -239,7 +246,7 @@ module ShipPreparesHelper
               xtype: 'panel', border: false,
               layout: {type: 'hbox', pack: 'center', align: 'left'},
               defaults: {width: 50, height: 50, border: false},
-              items: bay_cells(a, baia_config, parameters, pos)       
+              items: bay_cells(a, baia_config, parameters, pos, baia_status)       
             }
         end
       end
@@ -250,11 +257,12 @@ module ShipPreparesHelper
   
   
   
-  def bay_cells(altezza, baia_config, parameters, pos)
+  def bay_cells(altezza, baia_config, parameters, pos, baia_status)
    ret = []
    
    #ToDo: evidenziare la cella in base a pos  
-   c_style_pos =  ";background-color: red;" 
+   c_style_pos  =  ";background-color: red;" 
+   c_style_exec =  ";background-color: green;"
      
      
    #baia 2  (a sx)    
@@ -267,10 +275,15 @@ module ShipPreparesHelper
        if !pos.nil? && (cell_pos == pos || cell_pos_40 == pos)
          c_style_add = c_style_pos
        else
-         c_style_add = "";
+         #se e' stato gia' eseguito
+         if cell_executed(cell_pos, cell_pos_40, baia_status)
+           c_style_add = c_style_exec;
+         else
+           c_style_add = "";
+         end  
        end
        
-       ret << {html: altezza=='HEADER' ? b : '', bodyStyle: "background: #{altezza=='HEADER' ? 'white' : '#FCFCFC'}; text-align: center; #{c_style_add}", style: 'border: 1px solid grey'}
+       ret << {html: altezza=='HEADER' ? b : cell_text(cell_pos, cell_pos_40, baia_status, 2), bodyStyle: "background: #{altezza=='HEADER' ? 'white' : '#FCFCFC'}; text-align: center; #{c_style_add}", style: 'border: 1px solid grey'}
      else
        ret << {html: '', border: false} #non presente
      end
@@ -290,20 +303,45 @@ module ShipPreparesHelper
       cell_pos_40 = baia_config[:name][1] + b + altezza
  
       if !pos.nil? && (cell_pos == pos || cell_pos_40 == pos)
-          c_style_add = c_style_pos
-        else
-          c_style_add = "";
+        c_style_add = c_style_pos
+      else
+         #se e' stato gia' eseguito
+         if cell_executed(cell_pos, cell_pos_40, baia_status)
+           c_style_add = c_style_exec;
+         else
+           c_style_add = "";
+         end
       end
 
      
      if baia_config[:bay_1][:ab].nil? || baia_config[:bay_1][:ab]["a#{altezza}"].nil? || baia_config[:bay_1][:ab]["a#{altezza}"].include?(b)
-       ret << {html: altezza=='HEADER' ? b : '', bodyStyle: "background: #{altezza=='HEADER' ? 'white' : '#FCFCFC'}; text-align: center; #{c_style_add}", style: 'border: 1px solid grey'}
+       ret << {html: altezza=='HEADER' ? b : cell_text(cell_pos, cell_pos_40, baia_status, 1), bodyStyle: "background: #{altezza=='HEADER' ? 'white' : '#FCFCFC'}; text-align: center; #{c_style_add}", style: 'border: 1px solid grey'}
      else
        ret << {html: '', border: false} #non presente
      end
    end
     
    ret  
+  end
+  
+  
+  def cell_text(cell_pos, cell_pos_40, baia_status, principale_o_secondaria_1_2)
+    ret = "<h2>#{cell_text_char(cell_pos, cell_pos_40, baia_status, principale_o_secondaria_1_2)}</h2>"
+  end
+  
+  def cell_text_char(cell_pos, cell_pos_40, baia_status, principale_o_secondaria_1_2)
+    return '' if baia_status.nil?
+    return 'T' if baia_status[cell_pos.to_s] || (principale_o_secondaria_1_2 == 1 && baia_status[cell_pos_40.to_s])
+    return 'X' if (principale_o_secondaria_1_2 == 2 && baia_status[cell_pos_40.to_s])
+    return ''
+  end
+  
+  
+  def cell_executed(cell_pos, cell_pos_40, baia_status)
+    return false if baia_status.nil?
+    return true if baia_status[cell_pos.to_s] && baia_status[cell_pos.to_s][:executed]
+    return true if (baia_status[cell_pos_40.to_s] && baia_status[cell_pos_40.to_s][:executed])
+    return false
   end
   
 end

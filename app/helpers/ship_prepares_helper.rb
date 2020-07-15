@@ -204,7 +204,7 @@ module ShipPreparesHelper
           items: [
             {
               xtype: 'panel', flex: 1,
-              html: '<i><span style="font-size: 18px; font-weight: bold">medaT</span> by Simpling.App</i>',
+              html: '<i><span style="font-size: 18px; font-weight: bold">medaT</span> - Simpling.App</i>',
               bodyPadding: '50 0'
             }
           ]

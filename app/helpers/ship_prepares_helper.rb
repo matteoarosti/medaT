@@ -73,6 +73,7 @@ module ShipPreparesHelper
                   html: "Container<br><h1>#{container_to_pos}</h1>"
               }
         info_container_items << {xtype: 'panel', html: "Viaggio<br><h2>#{voyage}</h2>"}
+        
         info_container_items << {
                           xtype: 'panel',
                           html: "<h1><FONT COLOR=RED>POSIZIONE NON TROVATA SU NAVE</FONT></h1>"
@@ -95,6 +96,7 @@ module ShipPreparesHelper
       baia_status = sp.get_baia_status(parameters[:options][:operation_type], baia, c_ship)
         
       #lo mostro nella stiva
+      informazioni_container = baia_status[pos.to_s][:container_info]
       
       #Info container da posizionare
       info_container_items = []
@@ -102,6 +104,7 @@ module ShipPreparesHelper
           xtype: 'panel',
           html: "Container<br><h1>#{container_to_pos}</h1>"
       }
+      
       
       
       if parameters[:options][:spunta]
@@ -157,19 +160,64 @@ module ShipPreparesHelper
                     ")
               }
       end
+      
+      
+      
+      if informazioni_container[:weight]
+        info_container_items << {
+                  xtype: 'panel',
+                  html: "<h2>Peso: #{informazioni_container[:weight]}</h2>"
+              }
+      end
+      
+      if informazioni_container[:equipment_type]
+        info_container_items << {
+                  xtype: 'panel',
+                  html: "<h2>Tipologia: #{informazioni_container[:equipment_type]}</h2>"
+              }
+      end
+
+      
         
-      info_container_items << {xtype: 'panel', html: "Viaggio<br><h2>#{voyage}</h2>"}
+      #info_container_items << {xtype: 'panel', html: "Viaggio<br><h2>#{voyage}</h2>"}
       info_container_items << {
           xtype: 'panel',
           html: "<h2>Posizione #{pos}</h2>"
       }
+      
+      
+      info_container_items << {
+          xtype: 'container', layout: {type: 'hbox', pack: 'start', align: 'stretch'},
+          items: [
+            {
+              xtype: 'button',
+              text: 'Chiudi',
+              cls: 'btn-close', 
+              width: 100, scale: 'large',
+              handler: lj("function(){this.up('window').destroy();}")
+            }
+          ]
+      }
+      
+      info_container_items << {
+          xtype: 'container', layout: {type: 'hbox', pack: 'start', align: 'stretch'},
+          items: [
+            {
+              xtype: 'panel', flex: 1,
+              html: '<i><span style="font-size: 18px; font-weight: bold">medaT</span> by Simpling.App</i>',
+              bodyPadding: '50 0'
+            }
+          ]
+      }
+      
+      
       
       info_container = {
                  xtype: 'panel', border: false,
                  layout: {type: 'vbox', pack: 'start', align: 'stretch'},
                  items: info_container_items,
                  padding: 20,
-                 flex: 0.5
+                 flex: 0.5                 
                }
                 
       m_items << info_container
@@ -277,9 +325,9 @@ module ShipPreparesHelper
        else
          #se e' stato gia' eseguito
          if cell_executed(cell_pos, cell_pos_40, baia_status)
-           c_style_add = c_style_exec;
+           c_style_add = cell_bg_executed(cell_pos, cell_pos_40, baia_status, c_style_exec)
          else
-           c_style_add = "";
+           c_style_add = ""
          end  
        end
        
@@ -307,9 +355,9 @@ module ShipPreparesHelper
       else
          #se e' stato gia' eseguito
          if cell_executed(cell_pos, cell_pos_40, baia_status)
-           c_style_add = c_style_exec;
+           c_style_add = cell_bg_executed(cell_pos, cell_pos_40, baia_status, c_style_exec)
          else
-           c_style_add = "";
+           c_style_add = ""
          end
       end
 
@@ -342,6 +390,16 @@ module ShipPreparesHelper
     return true if baia_status[cell_pos.to_s] && baia_status[cell_pos.to_s][:executed]
     return true if (baia_status[cell_pos_40.to_s] && baia_status[cell_pos_40.to_s][:executed])
     return false
+  end
+  
+  
+  def cell_bg_executed(cell_pos, cell_pos_40, baia_status, c_style_exec)
+    if baia_status[cell_pos.to_s]
+      return baia_status[cell_pos.to_s][:container_info][:equipment_style] || c_style_exec  
+    end
+    if baia_status[cell_pos_40.to_s]
+      return baia_status[cell_pos_40.to_s][:container_info][:equipment_style] || c_style_exec  
+    end  
   end
   
 end

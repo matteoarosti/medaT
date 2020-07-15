@@ -97,6 +97,38 @@ class ShipPrepare < ActiveRecord::Base
     return false
   end
   
+  def container_info(container_number, operation_type)
+    case operation_type
+      when 'L' #Imbarco: ritorno info su ultimo hh del container
+        ret = {}      
+        hh = HandlingHeader.container(container_number).order('id desc').first
+        
+        if hh
+          
+          ret[:weight] = hh.weight_exp
+          
+          if hh.equipment
+            ret[:equipment_type] = hh.equipment ? hh.equipment.equipment_type : ''
+              
+            ar_style = []
+            if hh.equipment.sp_bg_color
+              ar_style << "background-color: #{hh.equipment.sp_bg_color}"
+            else
+              ar_style << "background-color: green"
+            end  
+            ar_style << "color: #{hh.equipment.sp_font_color}" if hh.equipment.sp_font_color
+                          
+            ret[:equipment_style] = ar_style.join(';')
+          end    
+        end
+        
+        return ret
+      when 'D' #Sbarco: #ToDo
+        return {}
+      end #case
+    return {}  
+  end
+  
   
   
   def find_last_container_by_gru(operation_type, parameters)
@@ -148,11 +180,11 @@ class ShipPrepare < ActiveRecord::Base
        if baie_name.include?(baia)
          ret[pos.to_s] = {
            container_number: container_number,
-           executed: is_executed(container_number, operation_type)
+           executed: is_executed(container_number, operation_type),
+           container_info: container_info(container_number, operation_type)
          }         
        end
     end
-    puts ret.to_yaml
     return ret
   end
   

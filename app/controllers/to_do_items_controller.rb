@@ -60,6 +60,7 @@ class ToDoItemsController < ApplicationController
       @item.carrier_id   = params[:carrier_id]
       @item.driver       = params[:driver]
       @item.plate        = params[:plate]
+      @item.notes        = params[:notes] if params[:notes] 
 
       hh = HandlingHeader.new
       hi = hh.handling_items.new()

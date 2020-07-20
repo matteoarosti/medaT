@@ -481,6 +481,7 @@ end
            :plate  => tdi.plate,
            :created_at => tdi.created_at,
            :booking_notes => b.nil? ? 'booking non trovato' : b.notes,
+           :notes => tdi.notes,
            :handling_header => {
               :container_number => "DA ASSEGNARE",
               :fila => '', :blocco => '', :tiro => '',

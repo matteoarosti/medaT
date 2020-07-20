@@ -34,7 +34,7 @@ class SendActivityCustomerReport
           if i.activity_op.exclude_from_dra != true
              puts "allego a DRA"
              #genero o recupero un documento intestato al cliente non ancora inviato
-             dh = find_or_create_open_customer_doc_h(customer)
+             dh = find_or_create_open_customer_doc_h(customer, 'STD')
             
              i.doc_h_notifica_id = dh.id
              i.save!
@@ -55,7 +55,7 @@ class SendActivityCustomerReport
                                    "Errore su addebito messa a disposizione - agenzia (shipowner: #{i.shipowner.name})", 'ToDo')
             
             else
-             dh_ag_customer = find_or_create_open_customer_doc_h(ag_customer)
+             dh_ag_customer = find_or_create_open_customer_doc_h(ag_customer, 'MSD')
              i.doc_h_notifica_make_available_id = dh_ag_customer.id
              i.save!
             end
@@ -69,7 +69,7 @@ class SendActivityCustomerReport
           if i.activity_op.exclude_from_dra != true
             puts "allego a DRA"
             #genero o recupero un documento intestato al cliente non ancora inviato
-            dh = find_or_create_open_customer_doc_h(customer)
+            dh = find_or_create_open_customer_doc_h(customer, 'STD')
                       
             i.doc_h_notifica_id = dh.id
             i.save!
@@ -103,7 +103,7 @@ class SendActivityCustomerReport
             if i.activity_op.exclude_from_dra != true
               puts "allego a DRA"
               #genero o recupero un documento intestato al cliente non ancora inviato
-              dh = find_or_create_open_customer_doc_h(customer)
+              dh = find_or_create_open_customer_doc_h(customer, 'STD')
                         
               i.doc_h_notifica_id = dh.id
               i.save!
@@ -347,13 +347,14 @@ class SendActivityCustomerReport
   ### UTILITY ####
   
   #ritorna un documento non ancora generato per il cliente, oppure ne crea uno nuovo
-  def find_or_create_open_customer_doc_h(customer)
+  def find_or_create_open_customer_doc_h(customer, subtype)
     dh = DocH.find_or_create_by!(
         customer: customer, 
         doc_type: DocType.find_by!(code: 'ADN'),
-        doc_file_file_name: nil
+        doc_file_file_name: nil,
+        subtype: subtype
     ) do |new_doc|
-      puts "Genero nuovo DRA"
+      puts "Genero nuovo DRA (#{subtype})"
       new_doc.d_reg = Time.zone.today
       new_doc.assign_num
     end

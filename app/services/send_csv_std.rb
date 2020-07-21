@@ -264,20 +264,20 @@ class SendCsvStd
       #nave/viaggio lo trovo in linea o eventualmente lo recupero dal booking
       if !row.ship.nil? || !row.voyage.to_s.empty?
        out_ship    = row.ship.name.to_s unless row.ship.nil?
-       out_voyage  = row.voyage.to_s 
+       out_voyage  = row.voyage.to_s.strip 
       else
       
        if is_import_export == 'E'
          #Export: provo a recuperare nave/viaggio da booking            
          if !bk.nil?
           out_ship   = "[#{bk.ship.name.to_s}]"
-          out_voyage = "[#{bk.voyage.to_s}]"
+          out_voyage = "[#{bk.voyage.to_s.strip}]"
          end
        else
           #Import: provo a recuperare nave/viaggio dal movimento di sbarco
             hi_discharge = row.search_hi_by_item_type('I_DISCHARGE')
             out_ship = "[#{hi_discharge.ship.name.to_s}]" unless hi_discharge.nil?
-            out_voyage = "[#{hi_discharge.voyage.to_s}]" unless hi_discharge.nil?
+            out_voyage = "[#{hi_discharge.voyage.to_s.strip}]" unless hi_discharge.nil?
        end
       end
       

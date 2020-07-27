@@ -10,7 +10,7 @@ module ShipPreparesHelper
           layout: {type: 'vbox', pack: 'start', align: 'stretch'},
           padding: 20, flex: 1,
           defaults: {width: 50, height: 50, border: true},
-          items: bay_rows(c_ship, parameters, nil, nil, '*AUTOLOAD*', sp)
+          items: bay_rows(c_ship, parameters, nil, nil, nil, sp, true)
         }
         m_items << baia
         
@@ -268,7 +268,7 @@ module ShipPreparesHelper
   
   
   
-  def bay_rows(c_ship, parameters, baia, pos, baia_status, sp)
+  def bay_rows(c_ship, parameters, baia, pos, baia_status, sp, baia_status_autoload = false)
     ret = []
       
     #dalla baia recupero la stiva
@@ -284,8 +284,8 @@ module ShipPreparesHelper
     
     baie.each do |baia_config|
       
-      if baia_status == '*AUTOLOAD*'
-        baia_status = sp.get_baia_status(parameters[:operation_type], '09', c_ship)
+      if baia_status_autoload
+        baia_status = sp.get_baia_status(parameters[:operation_type], baia_config[:name][0].to_s, c_ship)
       end
       
       #nome baia

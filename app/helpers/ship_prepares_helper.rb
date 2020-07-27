@@ -286,7 +286,7 @@ module ShipPreparesHelper
       
       if baia_status == '*AUTOLOAD*'
         puts baia_config.to_yaml
-        baia_status = sp.get_baia_status(parameters[:operation_type], baia_config[:name][0], c_ship)
+        baia_status = sp.get_baia_status(parameters[:operation_type], baia_config[:name][0].to_s, c_ship)
         puts " --- status ----"
         puts baia_status.to_yaml
       end

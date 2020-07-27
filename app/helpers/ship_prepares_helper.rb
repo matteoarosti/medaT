@@ -1,6 +1,28 @@
 module ShipPreparesHelper
   
   
+  
+  def ship(c_ship, parameters = {})
+    sp = ShipPrepare.find(parameters[:ship_prepare_id]) if !parameters[:ship_prepare_id].nil?
+    m_items = []
+    baia = {
+          xtype: 'panel', border: false, autoScroll: true, scroll: true, scrollable: 'y',
+          layout: {type: 'vbox', pack: 'start', align: 'stretch'},
+          padding: 20, flex: 1,
+          defaults: {width: 50, height: 50, border: true},
+          items: bay_rows(c_ship, parameters, nil, nil, '*AUTOLOAD*', sp)
+        }
+        m_items << baia
+        
+        {
+          xtype: 'panel', border: false, scroll: true, scrollable: 'y', autoScroll: true,
+          layout: {type: 'hbox', pack: 'start', align: 'stretch'},
+          items: m_items
+       } 
+  end
+  
+  
+  
   def bay(c_ship, parameters = {})
     sp = ShipPrepare.find(parameters[:ship_prepare_id]) if !parameters[:ship_prepare_id].nil?
     m_items = []
@@ -233,7 +255,7 @@ module ShipPreparesHelper
       layout: {type: 'vbox', pack: 'start', align: 'stretch'},
       padding: 20, flex: 1,
       defaults: {width: 50, height: 50, border: true},
-      items: bay_rows(c_ship, parameters, baia, pos, baia_status)
+      items: bay_rows(c_ship, parameters, baia, pos, baia_status, sp)
     }
     m_items << baia
     
@@ -246,7 +268,7 @@ module ShipPreparesHelper
   
   
   
-  def bay_rows(c_ship, parameters, baia, pos, baia_status)
+  def bay_rows(c_ship, parameters, baia, pos, baia_status, sp)
     ret = []
       
     #dalla baia recupero la stiva
@@ -261,6 +283,13 @@ module ShipPreparesHelper
     
     
     baie.each do |baia_config|
+      
+      if baia_status == '*AUTOLOAD*'
+        puts baia_config.to_yaml
+        baia_status = sp.get_baia_status(parameters[:operation_type], baia_config[:name][0], c_ship)
+        puts " --- status ----"
+        puts baia_status.to_yaml
+      end
       
       #nome baia
       ret << {

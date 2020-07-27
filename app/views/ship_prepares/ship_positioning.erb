@@ -1,0 +1,103 @@
+<%
+	if !params[:ship_prepare_id].nil?
+		sp = ShipPrepare.find(params[:ship_prepare_id])
+		ship = sp.ship
+		name_ship = ship.name
+		voyage = sp.voyage
+	else
+		name_ship = ''
+		voyage = ''
+	end
+%>
+{
+ success: true,
+ items: [
+  {
+   xtype: 'panel',
+   itemId: 'main_pos_panel',
+   autoScroll: true, scroll: true, scrollable: 'y',
+			
+    layout: {
+	    type: 'vbox',
+	    pack: 'start',
+	    align: 'stretch'
+	},
+	items: [
+		{
+			xtype: 'panel',
+			itemId: 'baia',
+			layout: {
+			    type: 'vbox',
+			    pack: 'start',
+			    align: 'stretch'
+			},
+			items: []
+	}
+	],
+	
+	
+	refresh: function(comp) {
+		if (comp.isDestroyed) {
+			console.log('stop');
+			Ext.TaskManager.stop(comp.task);
+		} else {
+			comp.reload_baia(comp);
+		}	
+	},
+	
+	reload_baia: function(comp){
+			  Ext.Ajax.request({
+                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'reload_ship').to_json -%>,
+                    waitMsg: 'Salvataggio in corso....',
+					method:'POST',                    
+                    jsonData: <%= raw params.to_json %>,	
+             	
+					success: function(result, request) {					
+						var returnData = Ext.JSON.decode(result.responseText);
+						
+						//error
+						if (returnData.success == false){
+							Ext.MessageBox.show({
+		                        title: 'EXCEPTION',
+		                        msg: returnData.message,
+		                        icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})
+	                      return false;										
+						}								
+
+						comp.down('#baia').removeAll();
+						comp.down('#baia').add(returnData.items);
+						comp.down('#baia').doLayout();
+
+					}, scope: this,
+					
+					failure: function(rec, op) {
+						var result = Ext.JSON.decode(op.getResponse().responseText);
+						Ext.MessageBox.show({
+	                        title: 'EXCEPTION',
+	                        msg: result.message,
+	                        //icon: Ext.MessageBox.ERROR,
+	                        buttons: Ext.Msg.OK
+                    	})					
+					}, scope: this,						
+									 
+		    	});
+	},
+	
+	listeners: {
+	   afterrender: function(comp){
+	   
+	   comp.task = {
+		    run: function(){
+		        comp.refresh(comp);
+		    },
+		    interval: 10*1000 //10 secondi (in millisecondi)
+		}
+		Ext.TaskManager.start(comp.task);
+		
+	   }
+	} //listeners
+  }
+ ]
+} 

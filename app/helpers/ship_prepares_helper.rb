@@ -9,7 +9,7 @@ module ShipPreparesHelper
           xtype: 'panel', border: false, autoScroll: true, scroll: true, scrollable: 'y',
           layout: {type: 'vbox', pack: 'start', align: 'stretch'},
           padding: 20, flex: 1,
-          defaults: {width: 50, height: 50, border: true},
+          defaults: {width: 40, height: 40, border: true},
           items: bay_rows(c_ship, parameters, nil, nil, nil, sp, true)
         }
         m_items << baia
@@ -254,7 +254,7 @@ module ShipPreparesHelper
       xtype: 'panel', border: false, autoScroll: true, scroll: true, scrollable: 'y',
       layout: {type: 'vbox', pack: 'start', align: 'stretch'},
       padding: 20, flex: 1,
-      defaults: {width: 50, height: 50, border: true},
+      defaults: {width: 40, height: 40, border: true},
       items: bay_rows(c_ship, parameters, baia, pos, baia_status, sp)
     }
     m_items << baia
@@ -293,9 +293,9 @@ module ShipPreparesHelper
               xtype: 'panel', border: false,
               layout: {type: 'hbox', pack: 'center', align: 'left'},
               items: [
-                {html: "<center><h1>Baia #{baia_config[:name][2]}</h1></center>", width: 50 * baia_config[:bay_2][:base].count},
+                {html: "<center><h1>Baia #{baia_config[:name][2]}</h1></center>", width: 40 * baia_config[:bay_2][:base].count},
                 {html: '', width: 40},
-                {html: "<center><h1>Baia #{baia_config[:name][0]}</h1></center>", width: 50 * baia_config[:bay_1][:base].count},                     
+                {html: "<center><h1>Baia #{baia_config[:name][0]}</h1></center>", width: 40 * baia_config[:bay_1][:base].count},                     
               ]       
             }
       
@@ -303,7 +303,7 @@ module ShipPreparesHelper
       ret << {
         xtype: 'panel', border: false, height: 25,
         layout: {type: 'hbox', pack: 'center', align: 'left'},
-        defaults: {width: 50, height: 25},
+        defaults: {width: 40, height: 25},
         items: bay_cells('HEADER', baia_config, parameters, pos, {})       
       }
       
@@ -312,14 +312,14 @@ module ShipPreparesHelper
           ret << {
                       xtype: 'panel', border: false, height: 12,
                       layout: {type: 'hbox', pack: 'center', align: 'left'},
-                      defaults: {width: 50, height: 10},
+                      defaults: {width: 40, height: 10},
                       items: []       
                     }
         else
         ret << {
               xtype: 'panel', border: false,
               layout: {type: 'hbox', pack: 'center', align: 'left'},
-              defaults: {width: 50, height: 50, border: false},
+              defaults: {width: 40, height: 40, border: false},
               items: bay_cells(a, baia_config, parameters, pos, baia_status)       
             }
         end

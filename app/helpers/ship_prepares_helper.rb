@@ -239,7 +239,7 @@ module ShipPreparesHelper
                  layout: {type: 'vbox', pack: 'start', align: 'stretch'},
                  items: info_container_items,
                  padding: 20,
-                 flex: 0.5                 
+                 flex: 0.3                 
                }
                 
       m_items << info_container

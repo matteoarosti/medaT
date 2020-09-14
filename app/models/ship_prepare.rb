@@ -193,19 +193,20 @@ class ShipPrepare < ActiveRecord::Base
   def update_positions_in_liste()
     #L - Load (imbarco)
     positions = get_container_positions('L')
+    ids_by_sp = ShipPrepareItem.select(:import_header_id).where(
+                  ship_prepare_id: self.id,
+                  item_type: 'LS',
+                  in_out_type: 'L').pluck(:import_header_id) 
     positions.each_line do |line|
        r = line.split("\t")
        container_number = r[0].strip
        pos = r[1].strip.to_s.rjust(6, '0')
        baia = pos[0,2]
-       mossa = r[2].strip.to_s
+       mossa = r[2] ? r[2].strip.to_s : ''
        
        #recupero l'id del record sulla lista di imbarco (tra quelle abbinate a ship_prepare)
        import_item = ImportItem.where(container_number: container_number)
-                        .where(import_header_id: ShipPrepareItem.select(:import_header_id).where(
-                                      ship_prepare_id: self.id,
-                                      item_type: 'LS',
-                                      in_out_type: 'L').pluck(:import_header_id)).first
+                        .where(import_header_id: ids_by_sp).first
                                       
        if import_item
          import_item.sp_pos   = pos
@@ -217,19 +218,20 @@ class ShipPrepare < ActiveRecord::Base
     
     #D - Discharge (sbarco)
     positions = get_container_positions('D')
+    ids_by_sp = ShipPrepareItem.select(:import_header_id).where(
+                  ship_prepare_id: self.id,
+                  item_type: 'LS',
+                  in_out_type: 'D').pluck(:import_header_id)
     positions.each_line do |line|
        r = line.split("\t")
        container_number = r[0].strip
        pos = r[1].strip.to_s.rjust(6, '0')
        baia = pos[0,2]
-       mossa = r[2].strip.to_s
+       mossa = r[2] ? r[2].strip.to_s : ''
        
        #recupero l'id del record sulla lista di imbarco (tra quelle abbinate a ship_prepare)
        import_item = ImportItem.where(container_number: container_number)
-                        .where(import_header_id: ShipPrepareItem.select(:import_header_id).where(
-                                      ship_prepare_id: self.id,
-                                      item_type: 'LS',
-                                      in_out_type: 'D').pluck(:import_header_id)).first
+                        .where(import_header_id: ids_by_sp).first
                                       
        if import_item
          import_item.sp_pos   = pos

@@ -7,9 +7,9 @@ module ShipPreparesHelper
     m_items = []
     baia = {
           xtype: 'panel', border: false, autoScroll: true, scroll: true, scrollable: 'y',
-          layout: {type: 'table', columns: 4, aapack: 'start', aaalign: 'stretch'},
+          layout: {type: 'table', columns: 3, aapack: 'start', aaalign: 'stretch'},
           padding: 20, flex: 1,
-          defaults: {flex: 1},
+          defaults: {flex: 1, margin: '0 10 0 0'},
           items: bay_rows(c_ship, parameters, nil, nil, nil, sp, true)
         }
         m_items << baia

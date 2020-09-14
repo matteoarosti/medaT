@@ -198,7 +198,7 @@ class ShipPrepare < ActiveRecord::Base
        container_number = r[0].strip
        pos = r[1].strip.to_s.rjust(6, '0')
        baia = pos[0,2]
-       mossa = r[2].strip.to_s
+       mossa = r[2] ? r[2].strip.to_s : ''
        
        #recupero l'id del record sulla lista di imbarco (tra quelle abbinate a ship_prepare)
        import_item = ImportItem.where(container_number: container_number)
@@ -222,7 +222,7 @@ class ShipPrepare < ActiveRecord::Base
        container_number = r[0].strip
        pos = r[1].strip.to_s.rjust(6, '0')
        baia = pos[0,2]
-       mossa = r[2].strip.to_s
+       mossa = r[2] ? r[2].strip.to_s : ''
        
        #recupero l'id del record sulla lista di imbarco (tra quelle abbinate a ship_prepare)
        import_item = ImportItem.where(container_number: container_number)

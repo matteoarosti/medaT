@@ -29,10 +29,18 @@
 		buttons: [
 			  {
 	            text: 'Salva<br><font size=2>(e aggiorna posizione e mossa nelle liste)</font>', scale: 'large',
-	            handler: function (btn, evt) {      
+	            handler: function (btn, evt) {     
+	                
+	                var myMask = new Ext.LoadMask({
+					    msg    : 'Please wait...',
+					    target : btn.up('window')
+					});
+					myMask.show();
+					
 	            	var m_win = btn.up('window');
 	            	var m_form = m_win.down('form').getForm();
 	            			Ext.Ajax.request({
+	            				    timeout: 100000,
 				                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'exe_save_container_positions').to_json -%>,
 				                    waitMsg: 'Salvataggio in corso....',
 									method:'POST',                    

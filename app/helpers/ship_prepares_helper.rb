@@ -7,9 +7,9 @@ module ShipPreparesHelper
     m_items = []
     baia = {
           xtype: 'panel', border: false, autoScroll: true, scroll: true, scrollable: 'y',
-          layout: {type: 'vbox', pack: 'start', align: 'stretch'},
+          layout: {type: 'table', columns: 4, aapack: 'start', aaalign: 'stretch'},
           padding: 20, flex: 1,
-          defaults: {width: 40, height: 40, border: true},
+          defaults: {flex: 1},
           items: bay_rows(c_ship, parameters, nil, nil, nil, sp, true)
         }
         m_items << baia
@@ -17,6 +17,7 @@ module ShipPreparesHelper
         {
           xtype: 'panel', border: false, scroll: true, scrollable: 'y', autoScroll: true,
           layout: {type: 'hbox', pack: 'start', align: 'stretch'},
+          flex: 1, height: '100%', width: '100%',
           items: m_items
        } 
   end
@@ -273,65 +274,82 @@ module ShipPreparesHelper
       
     #dalla baia recupero la stiva
     if !baia.nil?
+      
+      b_height = 700
+      b_cell_size = 40
+      
       baie = []
       c_ship[:bays].each do |b|
         baie << b if b[:name].include?(baia)
       end
     else
+      b_height = 350
+      b_cell_size = 20
       baie = c_ship[:bays]
     end  
     
     
     baie.each do |baia_config|
       
+      rb = {
+                    xtype: 'panel', border: false,
+                    height: b_height,
+                    padding: 10, flex: 1,
+                    layout: {type: 'vbox', pack: 'start', align: 'left'},
+                    items: []       
+                  }
+             
+      
       if baia_status_autoload
         baia_status = sp.get_baia_status(parameters[:operation_type], baia_config[:name][0].to_s, c_ship)
       end
       
       #nome baia
-      ret << {
-              xtype: 'panel', border: false,
+      rb[:items] << {
+              xtype: 'panel', border: false, height: 40,
               layout: {type: 'hbox', pack: 'center', align: 'left'},
               items: [
-                {html: "<center><h1>Baia #{baia_config[:name][2]}</h1></center>", width: 40 * baia_config[:bay_2][:base].count},
-                {html: '', width: 40},
-                {html: "<center><h1>Baia #{baia_config[:name][0]}</h1></center>", width: 40 * baia_config[:bay_1][:base].count},                     
+                {html: "<center><h2>Baia #{baia_config[:name][2]}</h2></center>", width: b_cell_size.to_i * baia_config[:bay_2][:base].count},
+                {html: '', width: b_cell_size},
+                {html: "<center><h2>Baia #{baia_config[:name][0]}</h2></center>", width: b_cell_size.to_i * baia_config[:bay_1][:base].count},                     
               ]       
             }
       
       #row intestazione
-      ret << {
+      rb[:items] << {
         xtype: 'panel', border: false, height: 25,
         layout: {type: 'hbox', pack: 'center', align: 'left'},
-        defaults: {width: 40, height: 25},
-        items: bay_cells('HEADER', baia_config, parameters, pos, {})       
+        defaults: {width: b_cell_size, height: 25},
+        items: bay_cells('HEADER', baia_config, parameters, pos, {}, b_cell_size)       
       }
       
       baia_config[:altezza].each do |a|
         if a == 'separa'
-          ret << {
+          rb[:items] << {
                       xtype: 'panel', border: false, height: 12,
                       layout: {type: 'hbox', pack: 'center', align: 'left'},
-                      defaults: {width: 40, height: 10},
+                      defaults: {width: b_cell_size, height: 10},
                       items: []       
                     }
         else
-        ret << {
+          rb[:items] << {
               xtype: 'panel', border: false,
               layout: {type: 'hbox', pack: 'center', align: 'left'},
-              defaults: {width: 40, height: 40, border: false},
-              items: bay_cells(a, baia_config, parameters, pos, baia_status)       
+              defaults: {width: b_cell_size, height: b_cell_size, border: false},
+              items: bay_cells(a, baia_config, parameters, pos, baia_status, b_cell_size)       
             }
         end
       end
-    end
+    
+     ret << rb     
+    end    
     
     ret
   end
   
   
   
-  def bay_cells(altezza, baia_config, parameters, pos, baia_status)
+  def bay_cells(altezza, baia_config, parameters, pos, baia_status, b_cell_size)
    ret = []
    
    #ToDo: evidenziare la cella in base a pos  
@@ -357,7 +375,7 @@ module ShipPreparesHelper
          end  
        end
        
-       ret << {html: altezza=='HEADER' ? b : cell_text(cell_pos, cell_pos_40, baia_status, 2), bodyStyle: "background: #{altezza=='HEADER' ? 'white' : '#FCFCFC'}; text-align: center; #{c_style_add}", style: 'border: 1px solid grey'}
+       ret << {html: altezza=='HEADER' ? b : cell_text(cell_pos, cell_pos_40, baia_status, 2, b_cell_size), bodyStyle: "background: #{altezza=='HEADER' ? 'white' : '#FCFCFC'}; text-align: center; #{c_style_add}", style: 'border: 1px solid grey'}
      else
        ret << {html: '', border: false} #non presente
      end
@@ -365,9 +383,10 @@ module ShipPreparesHelper
    
    #colonna separazione tra le due baia
    if altezza == 'HEADER'
-     ret << {html: '', width: 40}
+     ret << {html: '', width: b_cell_size}
    else
-     ret << {html: "<br>#{altezza}", width: 40, style: 'border-top: 1px solid white', bodyStyle: 'font-weight: bold; background: grey; text-align: center; color: white'}   
+     ret << {html: "#{altezza}", width: b_cell_size, style: 'border-top: 1px solid white', 
+              bodyStyle: 'font-weight: bold; background: grey; text-align: center; color: white'}   
    end
    
    #baia 1 (a dx)    
@@ -389,7 +408,7 @@ module ShipPreparesHelper
 
      
      if baia_config[:bay_1][:ab].nil? || baia_config[:bay_1][:ab]["a#{altezza}"].nil? || baia_config[:bay_1][:ab]["a#{altezza}"].include?(b)
-       ret << {html: altezza=='HEADER' ? b : cell_text(cell_pos, cell_pos_40, baia_status, 1), bodyStyle: "background: #{altezza=='HEADER' ? 'white' : '#FCFCFC'}; text-align: center; #{c_style_add}", style: 'border: 1px solid grey'}
+       ret << {html: altezza=='HEADER' ? b : cell_text(cell_pos, cell_pos_40, baia_status, 1, b_cell_size), bodyStyle: "background: #{altezza=='HEADER' ? 'white' : '#FCFCFC'}; text-align: center; #{c_style_add}", style: 'border: 1px solid grey'}
      else
        ret << {html: '', border: false} #non presente
      end
@@ -399,8 +418,15 @@ module ShipPreparesHelper
   end
   
   
-  def cell_text(cell_pos, cell_pos_40, baia_status, principale_o_secondaria_1_2)
-    ret = "<h2>#{cell_text_char(cell_pos, cell_pos_40, baia_status, principale_o_secondaria_1_2)}</h2>"
+  def cell_text(cell_pos, cell_pos_40, baia_status, principale_o_secondaria_1_2, b_cell_size)
+    if (b_cell_size >= 40)
+      hc = '<h2>'
+      hc_end = '</h2>'
+    else
+      hc = ''
+      hc_end = ''
+    end
+    ret = "#{hc}#{cell_text_char(cell_pos, cell_pos_40, baia_status, principale_o_secondaria_1_2)}#{hc_end}"
   end
   
   def cell_text_char(cell_pos, cell_pos_40, baia_status, principale_o_secondaria_1_2)

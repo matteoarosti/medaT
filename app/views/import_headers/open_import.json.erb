@@ -369,6 +369,19 @@
 			         
 			        }			        	        
 			    }, {
+			    	text: 'Posizione',
+			    	width: 120,
+			    	renderer: function(value, metaData, rec){
+			    		ret = '<h3>';
+			    		if (!Ext.isEmpty(rec.get('sp_pos')))
+			    			ret += '<font size=3><b>' + rec.get('sp_pos') + '</b></font>';
+			    		if (!Ext.isEmpty(rec.get('sp_mossa')))
+			    			ret += '<br>Mossa: ' + rec.get('sp_mossa');
+			    		ret += '</h3>';	
+			    		return ret;
+			    	}
+			    }
+			    , {
 			        text: 'Ok', width: 100, hidden: false, sortable: false,
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
 			        	var loc_grid = this;

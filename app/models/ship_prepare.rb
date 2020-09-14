@@ -190,6 +190,64 @@ class ShipPrepare < ActiveRecord::Base
   
   
   
+  def update_positions_in_liste()
+    #L - Load (imbarco)
+    positions = get_container_positions('L')
+    positions.each_line do |line|
+       r = line.split("\t")
+       container_number = r[0].strip
+       pos = r[1].strip.to_s.rjust(6, '0')
+       baia = pos[0,2]
+       mossa = r[2].strip.to_s
+       
+       #recupero l'id del record sulla lista di imbarco (tra quelle abbinate a ship_prepare)
+       import_item = ImportItem.where(container_number: container_number)
+                        .where(import_header_id: ShipPrepareItem.select(:import_header_id).where(
+                                      ship_prepare_id: self.id,
+                                      item_type: 'LS',
+                                      in_out_type: 'L').pluck(:import_header_id)).first
+                                      
+       if import_item
+         import_item.sp_pos   = pos
+         import_item.sp_mossa = mossa
+         import_item.save!
+       end
+    end
+    
+    
+    #D - Discharge (sbarco)
+    positions = get_container_positions('D')
+    positions.each_line do |line|
+       r = line.split("\t")
+       container_number = r[0].strip
+       pos = r[1].strip.to_s.rjust(6, '0')
+       baia = pos[0,2]
+       mossa = r[2].strip.to_s
+       
+       #recupero l'id del record sulla lista di imbarco (tra quelle abbinate a ship_prepare)
+       import_item = ImportItem.where(container_number: container_number)
+                        .where(import_header_id: ShipPrepareItem.select(:import_header_id).where(
+                                      ship_prepare_id: self.id,
+                                      item_type: 'LS',
+                                      in_out_type: 'D').pluck(:import_header_id)).first
+                                      
+       if import_item
+         import_item.sp_pos   = pos
+         import_item.sp_mossa = mossa
+         import_item.save!
+       end
+    end
+    
+      
+  end
+  
+  
+  
+  
+  
+  
+  
+  
 #valori per combo
 def status_get_data_json
  [

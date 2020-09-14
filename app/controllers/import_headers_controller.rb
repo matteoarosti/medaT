@@ -128,7 +128,7 @@ def get_import_row
    items = items.where(import_headers: {import_type: @ih.import_type, import_status: @ih.import_status, ship_id: @ih.ship_id})
    items = items.where("status IS NULL") unless params[:show_imported].to_i == 1
    items = items.where("container_number LIKE ?", "%#{params[:flt_num_container].upcase}%") if !params[:flt_num_container].to_s.empty?
-   ret[:items] = items.order(:container_number).as_json(ImportItem.as_json_prop)
+   ret[:items] = items.order(:sp_mossa, :container_number).as_json(ImportItem.as_json_prop)
    ret[:success] = true
    render json: ret 
 end

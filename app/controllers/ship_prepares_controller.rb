@@ -359,6 +359,9 @@ end
    sp.container_positions_l = params[:data][:container_positions_l]
    sp.container_positions_d = params[:data][:container_positions_d]
    sp.save!
+   
+   sp.update_positions_in_liste()
+   
    render json: {:success => true}
  end 
  

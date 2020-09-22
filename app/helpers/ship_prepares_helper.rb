@@ -2,7 +2,10 @@ module ShipPreparesHelper
   
   
   
+  
+  
   def ship(c_ship, parameters = {})
+    @cont = {"load" => {"tot" => 0, "exe" => 0}}
     sp = ShipPrepare.find(parameters[:ship_prepare_id]) if !parameters[:ship_prepare_id].nil?
     m_items = []
     baia = {
@@ -18,8 +21,16 @@ module ShipPreparesHelper
           xtype: 'panel', border: false, scroll: true, scrollable: 'y', autoScroll: true,
           layout: {type: 'hbox', pack: 'start', align: 'stretch'},
           flex: 1, height: '100%', width: '100%',
-          items: m_items
-       } 
+          items: m_items,
+          tbar: {
+            xtype: 'panel',
+            html: "<h2>Eseguiti: #{@cont["load"]["exe"]} / #{@cont["load"]["tot"]}</h2>",
+            height: 40,
+            bodyStyle: 'background-color: #dddddd; padding: 1px 5px'
+            }
+
+       }
+          
   end
   
   
@@ -364,11 +375,14 @@ module ShipPreparesHelper
        cell_pos    = baia_config[:name][2] + b + altezza
        cell_pos_40 = baia_config[:name][1] + b + altezza
 
-       if !pos.nil? && (cell_pos == pos || cell_pos_40 == pos)
+       @cont["load"]["tot"]+=1 if cell_text(cell_pos, cell_pos_40, baia_status, 2, b_cell_size) == 'T'
+         
+       if !pos.nil? && (cell_pos == pos || cell_pos_40 == pos)         
          c_style_add = c_style_pos
        else
          #se e' stato gia' eseguito
          if cell_executed(cell_pos, cell_pos_40, baia_status)
+           @cont["load"]["exe"]+=1 if cell_text(cell_pos, cell_pos_40, baia_status, 2, b_cell_size) == 'T'
            c_style_add = cell_bg_executed(cell_pos, cell_pos_40, baia_status, c_style_exec)
          else
            c_style_add = ""
@@ -391,15 +405,18 @@ module ShipPreparesHelper
    
    #baia 1 (a dx)    
    baia_config[:bay_1][:base].each do |b|
-     
+         
       cell_pos    = baia_config[:name][0] + b + altezza
       cell_pos_40 = baia_config[:name][1] + b + altezza
  
+      @cont["load"]["tot"]+=1 if cell_text(cell_pos, cell_pos_40, baia_status, 1, b_cell_size) == 'T'        
+        
       if !pos.nil? && (cell_pos == pos || cell_pos_40 == pos)
         c_style_add = c_style_pos
       else
          #se e' stato gia' eseguito
          if cell_executed(cell_pos, cell_pos_40, baia_status)
+           @cont["load"]["exe"]+=1 if cell_text(cell_pos, cell_pos_40, baia_status, 1, b_cell_size) == 'T'
            c_style_add = cell_bg_executed(cell_pos, cell_pos_40, baia_status, c_style_exec)
          else
            c_style_add = ""

@@ -102,13 +102,31 @@
 				          
 				     
 				     , {
-								width: 180, labelWidth: 100, padding: '0 0 0 10', margin: '0 0 0 30',
+								width: 180, labelWidth: 80, padding: '0 0 0 10', margin: '0 0 0 10',
 								xtype: 'textfield',
 								fieldStyle: 'font-size: 16px; text-transform: uppercase;',
-				                fieldLabel: 'Ricerca cont.',
+				                fieldLabel: 'Container',
+				                labelAlign: 'right',
 				                name: 'flt_num_container'
 				      }
-				     									     
+				      
+				      , {
+								width: 120, labelWidth: 40, padding: '0 0 0 10', margin: '0 0 0 10',
+								xtype: 'textfield',
+								fieldStyle: 'font-size: 16px; text-transform: uppercase;',
+				                fieldLabel: 'Stiva',
+								labelAlign: 'right',
+				                name: 'flt_pos'
+				      }
+				     
+				     , {
+								width: 120, labelWidth: 40, padding: '0 0 0 10', margin: '0 0 0 10',
+								xtype: 'textfield',
+								fieldStyle: 'font-size: 16px; text-transform: uppercase;',
+				                fieldLabel: 'Mossa',
+								labelAlign: 'right',
+				                name: 'flt_mossa'
+				      }									     
 				    ]
 				    
 				    , listeners: {
@@ -305,7 +323,10 @@
 				    			else
 				    			 show_imported_out = 0;
 				    			this.up('grid').store.proxy.extraParams.show_imported = show_imported_out;
-				    			this.up('grid').store.proxy.extraParams.flt_num_container = header_form.findField('flt_num_container').getValue();								    					 
+				    			this.up('grid').store.proxy.extraParams.flt_num_container = header_form.findField('flt_num_container').getValue();
+				    			this.up('grid').store.proxy.extraParams.flt_pos = header_form.findField('flt_pos').getValue();
+				    			this.up('grid').store.proxy.extraParams.flt_mossa = header_form.findField('flt_mossa').getValue();
+				    											    					 
 				 				this.up('grid').getStore().load();
 				 		}
 				 	}

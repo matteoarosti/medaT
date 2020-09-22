@@ -684,7 +684,7 @@
 			    	},
 			    	{text: 'Avanz. Sbarco', yyyiconCls: 'fa fa-eur fa-2x', cls: 'btn-ok', 
 			    		handler: function(){			    						
-							acs_show_win_std('Avanzamento imbarco', <%= raw url_for(:controller=>'ship_prepares', 
+							acs_show_win_std('Avanzamento sbarco', <%= raw url_for(:controller=>'ship_prepares', 
 				 	 			  :action=>'ship_positioning').to_json -%>,
 						     	   {ship_prepare_id: <%= @item.id -%>, operation_type: 'D'}, 800, 400, 
 						     	   {}, null, 'Y');

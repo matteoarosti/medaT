@@ -250,7 +250,7 @@
 				 	
 				 	
 <% if User.current.admin_can?(:import, :verify) && @ih.handling_type == 'TMOV' %>
-				 , {iconCls: 'fa fa-question-circle-o fa-2x', scale: 'large',
+				 , {    scale: 'large',
 				 		text: 'Test', 
 				 		//cls: 'btn-ok',
 						handler: function(event, toolEl, panel){

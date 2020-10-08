@@ -128,7 +128,17 @@ def get_import_row
    items = items.where(import_headers: {import_type: @ih.import_type, import_status: @ih.import_status, ship_id: @ih.ship_id})
    items = items.where("status IS NULL") unless params[:show_imported].to_i == 1
    items = items.where("container_number LIKE ?", "%#{params[:flt_num_container].upcase}%") if !params[:flt_num_container].to_s.empty?
-   ret[:items] = items.order(:sp_mossa, :container_number).as_json(ImportItem.as_json_prop)
+   items = items.where("sp_pos LIKE ?", "#{params[:flt_pos].upcase}%") if !params[:flt_pos].to_s.empty?
+   
+   
+   #la mossa la uso come punto iniziale di ordinamento (a partire da quella mossa)  
+   if !params[:flt_mossa].to_s.empty?
+    items = items.order("case when sp_mossa IS NULL then 9 when sp_mossa >= '#{params[:flt_mossa]}' then 1 else 2 end")  
+   end
+   
+   items = items.order(:sp_mossa, :container_number)
+   
+   ret[:items] = items.as_json(ImportItem.as_json_prop)
    ret[:success] = true
    render json: ret 
 end

@@ -122,6 +122,7 @@ group_shipowner = items.group_by { |d| d.handling_header.shipowner_id }
 			  if is_import_export == 'E'
 			  	#Export: provo a recuperare nave/viaggio da booking			 			 
 				  if !bk.nil?
+				   raise "ship nil in booking #{bk.num_booking}" if bk.ship.nil?
 				   out_ship 	= "[#{bk.ship.name.to_s}]"
 				   out_voyage	= "[#{bk.voyage.to_s}]"
 				  end

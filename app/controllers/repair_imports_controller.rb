@@ -35,10 +35,10 @@ class RepairImportsController < ApplicationController
       shipowner_id = 3
       if !ss.row(i)[10].to_s.empty?
        n_p = RepairPrice.find_or_create_by(repair_processing_id: ss.row(i)[0].to_i, shipowner_id: shipowner_id)
-       n_p.customer_time            = ss.row(i)[10]
-       n_p.customer_material_price  = ss.row(i)[11]
-       n_p.provider_time            = ss.row(i)[12]
-       n_p.provider_material_price  = ss.row(i)[13]
+       n_p.customer_time            = ss.row(i)[12]
+       n_p.customer_material_price  = ss.row(i)[13]
+       n_p.provider_time            = ss.row(i)[10]
+       n_p.provider_material_price  = ss.row(i)[11]
        n_p.code1                    = ss.row(i)[14].to_s
        n_p.code2                    = ss.row(i)[15].to_s
        n_p.save!
@@ -49,10 +49,10 @@ class RepairImportsController < ApplicationController
       shipowner_id = 2
       if !ss.row(i)[16].to_s.empty?
        n_p = RepairPrice.find_or_create_by(repair_processing_id: ss.row(i)[0].to_i, shipowner_id: shipowner_id)
-       n_p.customer_time            = ss.row(i)[16]
-       n_p.customer_material_price  = ss.row(i)[17]
-       n_p.provider_time            = ss.row(i)[18]
-       n_p.provider_material_price  = ss.row(i)[19]
+       n_p.customer_time            = ss.row(i)[18]
+       n_p.customer_material_price  = ss.row(i)[19]
+       n_p.provider_time            = ss.row(i)[16]
+       n_p.provider_material_price  = ss.row(i)[17]
        n_p.code1                    = ss.row(i)[20].to_s
        n_p.code2                    = ss.row(i)[21].to_s
        n_p.save!

@@ -33,10 +33,6 @@ end
 items = items.where("repair_completed_at >= ?", date_from) unless formValues['date_op_from'].blank?
 items = items.where("repair_completed_at <= ?", date_to) unless formValues['date_op_to'].blank?
 
-if formValues['show_only_internal']==true
-	items = items.where({repair_estimate_items: {is_internal: true}})	
-end
-
 items = items.joins({:handling_item => :handling_header})
 items = items.joins(:repair_estimate_items)
 
@@ -87,12 +83,44 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 			num_containers = op_val.count
 			tot_a_compagnia = 0
 			tot_da_fornitore = 0
-
+			tot_a_compagnia_material = 0
+			tot_a_compagnia_time = 0
+			tot_da_fornitore_material = 0
+			tot_da_fornitore_time = 0
+			
+			tot_a_compagnia_material_int = 0
+			tot_a_compagnia_time_int = 0
+			tot_da_fornitore_material_int = 0
+			tot_da_fornitore_time_int = 0
 		
-			op_val.group_by { |d| d }.each do |a, a_opyy| 
-		   		tot_a_compagnia += a.total_cost_customer_authorized.to_f 
-		   		tot_da_fornitore += a.total_cost_provider_authorized.to_f
+			op_val.group_by { |d| d }.each do |a, a_opyy|
+			
+				#leggo righe autorizzate
+				a_op = a.repair_estimate_items.where("confirmed IS NULL or confirmed != false")
+				
+				a_op.each do |r|
+					#a compagnia
+					tot_a_compagnia_time += r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f
+				 	tot_a_compagnia_material += r.quantity.to_f * r.customer_material_price.to_f
+				 	
+				 	tot_da_fornitore_time += r.quantity.to_f * r.provider_time.to_f * r.provider_hourly_cost.to_f
+        			tot_da_fornitore_material += r.quantity.to_f * r.provider_material_price.to_f
+        			
+        			if r.is_internal
+        				tot_a_compagnia_time_int += r.quantity.to_f * r.customer_time.to_f * r.customer_hourly_cost.to_f
+				 		tot_a_compagnia_material_int += r.quantity.to_f * r.customer_material_price.to_f
+				 	
+				 		tot_da_fornitore_time_int += r.quantity.to_f * r.provider_time.to_f * r.provider_hourly_cost.to_f
+        				tot_da_fornitore_material_int += r.quantity.to_f * r.provider_material_price.to_f
+        			end
+        			
+				end
+				
+
 		   	end		
+		   	
+		   	tot_a_compagnia = tot_a_compagnia_material + tot_a_compagnia_time
+		   	tot_da_fornitore = tot_da_fornitore_material + tot_da_fornitore_time
 		%> 		 			
 			
 		
@@ -103,8 +131,36 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 				<td class=n align=right><%= number_to_currency(tot_a_compagnia) -%></td>
 				<td class=n align=right><%= number_to_currency(tot_a_compagnia - tot_da_fornitore) -%></td>
 			</tr>
-
+			
+			
+			<tr><th colspan=4>Di cui</th></tr>			
+			<tr>
+				<td class=n align=right>Materiale</td>				
+				<td class=n align=right><%= number_to_currency(tot_da_fornitore_material) -%></td>
+				<td class=n align=right><%= number_to_currency(tot_a_compagnia_material) -%></td>
+				<td class=n align=right><%= number_to_currency(tot_a_compagnia_material - tot_da_fornitore_material) -%></td>
+			</tr>
+			<tr>
+				<td class=n align=right>Manodopera</td>				
+				<td class=n align=right><%= number_to_currency(tot_da_fornitore_time) -%></td>
+				<td class=n align=right><%= number_to_currency(tot_a_compagnia_time) -%></td>
+				<td class=n align=right><%= number_to_currency(tot_a_compagnia_time - tot_da_fornitore_time) -%></td>
+			</tr>
 		
+			<tr><th colspan=4>Di cui lavorazioni interne</th></tr>			
+			<tr>
+				<td class=n align=right>Materiale</td>				
+				<td class=n align=right><%= number_to_currency(tot_da_fornitore_material_int) -%></td>
+				<td class=n align=right><%= number_to_currency(tot_a_compagnia_material_int) -%></td>
+				<td class=n align=right><%= number_to_currency(tot_a_compagnia_material_int - tot_da_fornitore_material_int) -%></td>
+			</tr>
+			<tr>
+				<td class=n align=right>Manodopera</td>				
+				<td class=n align=right><%= number_to_currency(tot_da_fornitore_time_int) -%></td>
+				<td class=n align=right><%= number_to_currency(tot_a_compagnia_time_int) -%></td>
+				<td class=n align=right><%= number_to_currency(tot_a_compagnia_time_int - tot_da_fornitore_time_int) -%></td>
+			</tr>
+
 		
 		
 		</table>

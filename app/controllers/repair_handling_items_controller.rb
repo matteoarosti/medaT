@@ -1,6 +1,6 @@
 class RepairHandlingItemsController < ApplicationController
   
-  layout "application_report", only: [:print_estimate, :repair_report_analytic, :print_list]
+  layout "application_report", only: [:print_estimate, :repair_report_analytic, :repair_report_margine, :print_list]
         
   def extjs_sc_model
    'RepairHandlingItem'

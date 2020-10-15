@@ -46,6 +46,28 @@
 	],
     
    buttons: [
+   
+<% if User.current.admin_can?(:repair, :price) %>
+    {
+        text: '<i class="fa fa-navicon fa"></i> Verifica margine',
+        handler: function(){
+        	fp = this.up('form');
+            if(fp.getForm().isValid()){
+                fp.getForm().submit({
+                    method: 'POST',
+                    url: '<%= url_for(:controller=>'repair_handling_items', :action=>'repair_report_margine') -%>',             
+                    params: {formValues: Ext.encode(fp.getValues())},
+                    method: 'POST',
+                    standardSubmit: true,
+                    target: '_blank'
+                });
+            }
+        }
+    }, {
+    	xtype: 'tbfill'
+    },
+<% end %>   
+   
     {
         text: '<i class="fa fa-navicon fa"></i> Stampa',
         handler: function(){

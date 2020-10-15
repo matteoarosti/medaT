@@ -55,3 +55,8 @@ end
 every 1.hours, :at => '00:20' do
   command "/usr/local/bin/wput -R /share_fe/fe_*.csv ftp://Fatturazione:Sc@mbi01234\\!@192.168.200.5/"
 end
+
+#report a commerciale@ con i containers da ispezionare...
+every 1.day, :at => '05:02 pm' do
+  runner "SendReportToInspect.new.call"
+end

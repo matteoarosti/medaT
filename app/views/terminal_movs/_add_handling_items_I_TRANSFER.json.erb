@@ -17,11 +17,7 @@
    items: [
     {xtype: 'hiddenfield', name: 'handling_header_id', value: <%= @new_rec.handling_header_id -%>},
     {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},  
-    {xtype: 'hiddenfield', name: 'handling_type', value: 'I'},
-    
-    <% if !@new_rec.handling_header.with_booking %>
-      {xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: false},
-    <% end %>
+    {xtype: 'hiddenfield', name: 'handling_type', value: 'I'},   
     
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},   
 
@@ -62,6 +58,11 @@
        
        <%= raw extjs_to_be_moved('to_be_moved', @hh, @new_rec) -%>,
        <%= raw extjs_posizionamento('da_posizionare', @hh, @new_rec) -%>,
+       
+       
+       <% if !@new_rec.handling_header.with_booking %>
+      	  {xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: true},
+       <% end %>
        
        {xtype: 'displayfield', fieldLabel: 'Attenzione', value: '<font color=red>Indicare nelle note il booking di provenienza</b>'},
 

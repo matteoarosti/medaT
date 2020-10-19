@@ -363,12 +363,17 @@ def validate_insert_item(hi, name_function = '')
   #se ha "booking_copy" = true verifico l'esistenza, la validita' e l'ammissibilita' del booking
   op_config_set = op_config['set'] || {}
   if name_function != 'get_operations' && op_config_set['booking_copy'] == true
-    
+   
    #segnalo errore: booking non presente (in O_LOAD imbarco con VUOTO posso non avere il booking)
    if hi.booking.nil? && !self.with_booking && (hi.container_FE != 'E' || hi.handling_item_type!= 'O_LOAD')
-    ret[:is_valid] = false
-    ret[:message]  = "Booking non presente" 
-    return ret      
+
+	#verifico se l'inserimento del booking era opzionale (aggiunto in I_TRANSFER)
+	if op_config_set['booking_copy_is_not_mandatory'] == true
+	else		
+	    ret[:is_valid] = false
+	    ret[:message]  = "Booking non presente!" 
+	    return ret      
+	end
    end
    
    if !hi.booking.nil? && !self.with_booking 

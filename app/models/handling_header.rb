@@ -506,6 +506,13 @@ def sincro_set_booking_copy(value, hi, copy_params_data = {})
 end
 
 ################################################################
+def sincro_set_booking_copy_is_not_mandatory(value, hi, copy_params_data = {})
+################################################################ 
+end
+
+
+
+################################################################
 def sincro_set_booking_reset(value, hi, copy_params_data = {})
 ################################################################
  if value == true

@@ -55,17 +55,17 @@ class WeighCedolinoPdf < Prawn::Document
     
     riga_from = riga_to + 2
     riga_to   = riga_from      
-    grid([riga_from, 1], [riga_to, 10]).bounding_box do text "Pesa ponte Mod. 3590E matr. 83627533", :size => 12 end     
+    grid([riga_from, 1], [riga_to, 10]).bounding_box do text TabConfig.get_notes('WEIGH', 'PESA_I').to_s, :size => 12 end     
       
     riga_from = riga_to + 2
     riga_to   = riga_from      
     grid([riga_from, 1], [riga_to,  6]).bounding_box do text "Scadenza", :size => 12 end     
-    grid([riga_from, 7], [riga_to, 10]).bounding_box do text "Giugno/2022", :size => 12 end
+    grid([riga_from, 7], [riga_to, 10]).bounding_box do text TabConfig.get_notes('WEIGH', 'PESA_S').to_s, :size => 12 end
     
     
     
     #TARA ------------------------------------------    
-	riga_from = riga_to + 2
+	riga_from = riga_to + 3
     riga_to   = riga_from  
     grid([riga_from, 1], [riga_to,  6]).bounding_box do text "TARA", :size => 16 end
     draw_h_line

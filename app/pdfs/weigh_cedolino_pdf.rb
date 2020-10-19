@@ -65,6 +65,8 @@ class WeighCedolinoPdf < Prawn::Document
     
     
     #TARA ------------------------------------------    
+	riga_from = riga_to + 2
+    riga_to   = riga_from  
     grid([riga_from, 1], [riga_to,  6]).bounding_box do text "TARA", :size => 16 end
     draw_h_line
     

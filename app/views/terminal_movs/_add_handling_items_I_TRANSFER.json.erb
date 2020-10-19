@@ -19,6 +19,10 @@
     {xtype: 'hiddenfield', name: 'handling_item_type', value: '<%= @new_rec.handling_item_type -%>'},  
     {xtype: 'hiddenfield', name: 'handling_type', value: 'I'},
     
+    <% if !@new_rec.handling_header.with_booking %>
+      {xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: false},
+    <% end %>
+    
    // {xtype: 'hiddenfield', name: 'id', value: '<%= @new_rec.id -%>'},   
 
        <%= raw extjs_std_datetimefield('datetime_op', @new_rec) -%>,

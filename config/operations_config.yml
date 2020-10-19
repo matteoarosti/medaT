@@ -115,6 +115,7 @@ TMOV:
    seal_imp_copy: true  
    container_in_terminal: true
    container_FE_copy: true
+   booking_copy: true
    operation_type: 'MT'
    lock_INSPECT: IF_EMPTY
    start_reefer_connection: IF_FULL

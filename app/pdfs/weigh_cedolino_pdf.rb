@@ -19,7 +19,7 @@ class WeighCedolinoPdf < Prawn::Document
 
     
     repeat(:all) do  
-      draw_text "medaT - Terminsal Service Software, #item_weigh: #{item_weigh.id}", :at => [0, 0], :size => 5
+      draw_text "medaT - Terminsal Service Software, #item_weigh: #{item_weigh.id}, created on #{Time.zone.now}", :at => [0, 0], :size => 5
       riga_from = 0
       riga_to   = 1
       grid([riga_from, 0], [riga_to, 10]).bounding_box do

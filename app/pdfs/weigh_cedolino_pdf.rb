@@ -19,7 +19,7 @@ class WeighCedolinoPdf < Prawn::Document
 
     
     repeat(:all) do  
-      draw_text "medaT - Terminsal Software", :at => [0, 0], :size => 4
+      draw_text "medaT - Terminsal Service Software", :at => [0, 0], :size => 4
       riga_from = 0
       riga_to   = 1
       grid([riga_from, 0], [riga_to, 10]).bounding_box do
@@ -45,6 +45,23 @@ class WeighCedolinoPdf < Prawn::Document
     
     riga_from = riga_to + 2
     riga_to   = riga_from 
+
+
+    #DATI PESA ------------------------------------------    
+    grid([riga_from, 1], [riga_to,  6]).bounding_box do text "DATI PESA", :size => 16 end
+    draw_h_line
+    
+    peso_tara = @data['TARA'][:ev_data][:weigh].to_i
+    
+    riga_from = riga_to + 2
+    riga_to   = riga_from      
+    grid([riga_from, 1], [riga_to, 10]).bounding_box do text "Pesa ponte Mod. 3590E matr. 83627533", :size => 12 end     
+      
+    riga_from = riga_to + 2
+    riga_to   = riga_from      
+    grid([riga_from, 1], [riga_to,  6]).bounding_box do text "Scadenza", :size => 12 end     
+    grid([riga_from, 7], [riga_to, 10]).bounding_box do text "Giugno/2022", :size => 12 end
+    
     
     
     #TARA ------------------------------------------    

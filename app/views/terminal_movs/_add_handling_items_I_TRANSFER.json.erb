@@ -64,7 +64,7 @@
       	  {xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: true},
        <% end %>
        
-       {xtype: 'displayfield', fieldLabel: 'Attenzione', value: '<font color=red>Indicare nelle note il booking di provenienza</b>'},
+       {xtype: 'displayfield', fieldLabel: 'Attenzione', value: '<font color=red>Indicare nelle note il booking di provenienza, se non indicato sopra</b>'},
 
        <%= raw extjs_notes('notes', @hh, @new_rec, :allowBlank => false) -%>
    ],

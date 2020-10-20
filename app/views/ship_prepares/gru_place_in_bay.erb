@@ -15,101 +15,321 @@
 	else
 		name_gru = ''
 	end
+	
+	tab_title = 'Baia corrente'
+	case (params[:options] || {})[:operation_type]
+		when 'D'
+		tab_title += ' (Sbarco)'
+		when 'L'
+		tab_title += ' (Imbarco)'
+	end
+	
 %>
 {
  success: true,
  items: [
+ 
+  //lavorazione baia corrente (in base a ultimo container da spuntare/posizionare
   {
-   xtype: 'panel',
-   itemId: 'main_pos_panel',
-   autoScroll: true, scroll: true, scrollable: 'y',
-			
-    layout: {
-	    type: 'vbox',
-	    pack: 'start',
-	    align: 'stretch'
-	},
-	items: [
-		{
-			xtype: 'panel',
-			itemId: 'baia',
-			layout: {
-			    type: 'vbox',
-			    pack: 'start',
-			    align: 'stretch'
-			},
-			items: []
-	}
-	],
+   xtype: 'tabpanel',
+   flex: 1,
+   defaults: {
+   	width: '100%', 
+   	height: '100%'
+   },
+   items: [
+	  {
+	   title: <%= raw tab_title.to_json -%>,
+	   xtype: 'panel',
+	   itemId: 'main_pos_panel',
+	   autoScroll: true, scroll: true, scrollable: 'y',
+				
+	    layout: {
+		    type: 'vbox',
+		    pack: 'start',
+		    align: 'stretch'
+		},
+		items: [
+			{
+				xtype: 'panel',
+				itemId: 'baia',
+				layout: {
+				    type: 'vbox',
+				    pack: 'start',
+				    align: 'stretch'
+				},
+				items: []
+		}
+		],
+		
+		
+		refresh: function(comp) {
+			if (comp.isDestroyed) {
+				console.log('stop');
+				Ext.TaskManager.stop(comp.task);
+			} else {
+				comp.reload_baia(comp);
+			}	
+		},
+		
+		reload_baia: function(comp){
+				  Ext.Ajax.request({
+	                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'reload_baia').to_json -%>,
+	                    waitMsg: 'Salvataggio in corso....',
+						method:'POST',                    
+	                    jsonData: <%= raw params.to_json %>,	
+	             	
+						success: function(result, request) {					
+							var returnData = Ext.JSON.decode(result.responseText);
+							
+							//error
+							if (returnData.success == false){
+								Ext.MessageBox.show({
+			                        title: 'EXCEPTION',
+			                        msg: returnData.message,
+			                        icon: Ext.MessageBox.ERROR,
+			                        buttons: Ext.Msg.OK
+		                    	})
+		                      return false;										
+							}								
 	
+							comp.down('#baia').removeAll();
+							comp.down('#baia').add(returnData.items);
+							comp.down('#baia').doLayout();
 	
-	refresh: function(comp) {
-		if (comp.isDestroyed) {
-			console.log('stop');
-			Ext.TaskManager.stop(comp.task);
-		} else {
-			comp.reload_baia(comp);
-		}	
-	},
-	
-	reload_baia: function(comp){
-			  Ext.Ajax.request({
-                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'reload_baia').to_json -%>,
-                    waitMsg: 'Salvataggio in corso....',
-					method:'POST',                    
-                    jsonData: <%= raw params.to_json %>,	
-             	
-					success: function(result, request) {					
-						var returnData = Ext.JSON.decode(result.responseText);
+						}, scope: this,
 						
-						//error
-						if (returnData.success == false){
+						failure: function(rec, op) {
+							var result = Ext.JSON.decode(op.getResponse().responseText);
 							Ext.MessageBox.show({
 		                        title: 'EXCEPTION',
-		                        msg: returnData.message,
-		                        icon: Ext.MessageBox.ERROR,
+		                        msg: result.message,
+		                        //icon: Ext.MessageBox.ERROR,
 		                        buttons: Ext.Msg.OK
-	                    	})
-	                      return false;										
-						}								
-
-						comp.down('#baia').removeAll();
-						comp.down('#baia').add(returnData.items);
-						comp.down('#baia').doLayout();
-
-					}, scope: this,
-					
-					failure: function(rec, op) {
-						var result = Ext.JSON.decode(op.getResponse().responseText);
-						Ext.MessageBox.show({
-	                        title: 'EXCEPTION',
-	                        msg: result.message,
-	                        //icon: Ext.MessageBox.ERROR,
-	                        buttons: Ext.Msg.OK
-                    	})					
-					}, scope: this,						
-									 
-		    	});
-	},
-	
-	listeners: {
-	   afterrender: function(comp){
-	   
-	   <% if params[:simula] != 'Y' && !params[:gru_id].nil? && !params[:options][:spunta] %>
-	   
-	   	comp.task = {
-		    run: function(){
-		        comp.refresh(comp);
-		    },
-		    interval: 10*1000 //10 secondi (in millisecondi)
-		}
-		Ext.TaskManager.start(comp.task);
-		<% else %>
-			comp.refresh(comp)
-		<% end %>
+	                    	})					
+						}, scope: this,						
+										 
+			    	});
+		},
 		
-	   }
-	} //listeners
-  }
+		listeners: {
+		   afterrender: function(comp){
+		   
+		   <% if params[:simula] != 'Y' && !params[:gru_id].nil? && !params[:options][:spunta] %>
+		   
+		   	comp.task = {
+			    run: function(){
+			        comp.refresh(comp);
+			    },
+			    interval: 10*1000 //10 secondi (in millisecondi)
+			}
+			Ext.TaskManager.start(comp.task);
+			<% else %>
+				comp.refresh(comp)
+			<% end %>
+			
+		   }
+		} //listeners
+	  },
+	  
+	  
+	  
+	  //AVANZAMENTO IMBARCO
+	  {
+	   xtype: 'panel',
+	   title: 'Avanzamento IMBARCO',
+	   itemId: 'main_pos_panel_imbarco',
+	   autoScroll: true, scroll: true, scrollable: 'y',
+				
+	    layout: {
+		    type: 'vbox',
+		    pack: 'start',
+		    align: 'stretch'
+		},
+		items: [
+			{
+				xtype: 'panel',
+				itemId: 'baia',
+				layout: {
+				    type: 'vbox',
+				    pack: 'start',
+				    align: 'stretch'
+				},
+				items: []
+		}
+		],
+		
+		
+		refresh: function(comp) {
+			if (comp.isDestroyed) {
+				Ext.TaskManager.stop(comp.task);
+			} else {
+				comp.reload_baia(comp);
+			}	
+		},
+		
+		reload_baia: function(comp){
+				  Ext.Ajax.request({
+	                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'reload_ship').to_json -%>,
+	                    waitMsg: 'Salvataggio in corso....',
+						method:'POST',                    
+	                    jsonData: <%= 
+	                    
+	                    m_params = {
+	                    	operation_type: 'L',
+	                    	ship_prepare_id: params[:ship_prepare_id]
+	                    } 
+	                    
+	                    raw m_params.to_json %>,	
+	             	
+						success: function(result, request) {					
+							var returnData = Ext.JSON.decode(result.responseText);
+							
+							//error
+							if (returnData.success == false){
+								Ext.MessageBox.show({
+			                        title: 'EXCEPTION',
+			                        msg: returnData.message,
+			                        icon: Ext.MessageBox.ERROR,
+			                        buttons: Ext.Msg.OK
+		                    	})
+		                      return false;										
+							}								
+	
+							comp.down('#baia').removeAll();
+							comp.down('#baia').add(returnData.items);
+							comp.down('#baia').doLayout();
+	
+						}, scope: this,
+						
+						failure: function(rec, op) {
+							var result = Ext.JSON.decode(op.getResponse().responseText);
+							Ext.MessageBox.show({
+		                        title: 'EXCEPTION',
+		                        msg: result.message,
+		                        //icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})					
+						}, scope: this,						
+										 
+			    	});
+		},
+		
+		listeners: {
+		   afterrender: function(comp){
+		   
+		   comp.task = {
+			    run: function(){
+			        comp.refresh(comp);
+			    },
+			    interval: 10*1000 //10 secondi (in millisecondi)
+			}
+			Ext.TaskManager.start(comp.task);
+			
+		   }
+		} //listeners
+	  },	  
+	  
+	  //AVANZAMENTO SBARCO	
+	  {
+	   xtype: 'panel',
+	   title: 'Avanzamento SBARCO',
+	   itemId: 'main_pos_panel_sbarco',
+	   autoScroll: true, scroll: true, scrollable: 'y',
+				
+	    layout: {
+		    type: 'vbox',
+		    pack: 'start',
+		    align: 'stretch'
+		},
+		items: [
+			{
+				xtype: 'panel',
+				itemId: 'baia',
+				layout: {
+				    type: 'vbox',
+				    pack: 'start',
+				    align: 'stretch'
+				},
+				items: []
+		}
+		],
+		
+		
+		refresh: function(comp) {
+			if (comp.isDestroyed) {
+				Ext.TaskManager.stop(comp.task);
+			} else {
+				comp.reload_baia(comp);
+			}	
+		},
+		
+		reload_baia: function(comp){
+				  Ext.Ajax.request({
+	                    url: <%= raw url_for(:controller=>'ship_prepares', :action=>'reload_ship').to_json -%>,
+	                    waitMsg: 'Salvataggio in corso....',
+						method:'POST',                    
+	                    jsonData: <%= 
+	                    
+	                    m_params = {
+	                    	operation_type: 'D',
+	                    	ship_prepare_id: params[:ship_prepare_id]
+	                    } 
+	                    
+	                    raw m_params.to_json %>,	
+	             	
+						success: function(result, request) {					
+							var returnData = Ext.JSON.decode(result.responseText);
+							
+							//error
+							if (returnData.success == false){
+								Ext.MessageBox.show({
+			                        title: 'EXCEPTION',
+			                        msg: returnData.message,
+			                        icon: Ext.MessageBox.ERROR,
+			                        buttons: Ext.Msg.OK
+		                    	})
+		                      return false;										
+							}								
+	
+							comp.down('#baia').removeAll();
+							comp.down('#baia').add(returnData.items);
+							comp.down('#baia').doLayout();
+	
+						}, scope: this,
+						
+						failure: function(rec, op) {
+							var result = Ext.JSON.decode(op.getResponse().responseText);
+							Ext.MessageBox.show({
+		                        title: 'EXCEPTION',
+		                        msg: result.message,
+		                        //icon: Ext.MessageBox.ERROR,
+		                        buttons: Ext.Msg.OK
+	                    	})					
+						}, scope: this,						
+										 
+			    	});
+		},
+		
+		listeners: {
+		   afterrender: function(comp){
+		   
+		   comp.task = {
+			    run: function(){
+			        comp.refresh(comp);
+			    },
+			    interval: 10*1000 //10 secondi (in millisecondi)
+			}
+			Ext.TaskManager.start(comp.task);
+			
+		   }
+		} //listeners
+	  }	  
+	  
+	  
+	  
+	]
+  } //tabpanel  
+		  
  ]
 } 

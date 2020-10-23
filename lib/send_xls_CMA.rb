@@ -6,6 +6,7 @@ r_email_to = %w(
  ssc.itequipment@cma-cgm.com
  m.galli@globalservice.an.it
  m.galli@fmg.eu
+ m.testini@fmg.eu
 )
 
 SendCsvStd.new.send_TMOV(3, [3], r_email_to, Time.zone.yesterday.at_beginning_of_day, Time.zone.yesterday.at_end_of_day, true)

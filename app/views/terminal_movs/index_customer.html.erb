@@ -198,7 +198,7 @@ s = Ext.create('Ext.container.Viewport',{
 					       
 					      , {xtype : "button",
 					      	scale: 'large',					       
-					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Richiedi nuova visita doganale</span>', height: 60,					    	
+					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Richiedi nuova visita doganale / attivit&agrave;</span>', height: 60,					    	
 					    	 handler: function(){
 					    	 	//prima verifico che non abbia richieste in sospeso (che deve posticipare/annullare/confermare)
 					    	 	std_ajax_request.call(this, <%= raw url_for(:controller=>'custom_inspections', :action=>'verify_not_pending_exists').to_json -%>, {}, 'open_win_new_request');					    	 	
@@ -209,11 +209,18 @@ s = Ext.create('Ext.container.Viewport',{
 					      }
 					      , {xtype : "button",
 					      	scale: 'large',					       
-					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Conferma/gestisci visite doganali</span>', height: 60,					    	
+					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Conferma/gestisci visite doganali / attivit&agrave;</span>', height: 60,					    	
 					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'custom_inspections', :action=>'list_to_confirm') -%>', {}, 'tttt');}
 					      }
 					      
 					      
+					      <% if User.current.username == 'secomar2' %> 
+					      , {xtype : "button",
+					      	scale: 'large',					       
+					    	text : '<i class="fa fa-cubes fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Avanzamento lavorazione navi</span>', height: 60,					    	
+					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'ship_prepares', :action=>'list', :filtered_type => 'OPEN') -%>', {}, 'tttt');}
+					      }
+					      <% end %>
 					      
 					      
 					    ]

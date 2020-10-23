@@ -9,6 +9,35 @@ class ShipPrepare < ActiveRecord::Base
   
   scope :not_closed, -> {where("ship_prepare_status NOT IN('CLOSE', 'PREP')")}
   
+  scope :extjs_default_scope, -> {}
+  
+  #gestione permessi in base a utente
+  def self.default_scope
+    
+    sql_where = []
+    ar_params = {}
+       
+    if !User.current.nil? && !User.current.customer_flt.blank?
+     if User.current.customer_flt.include?(',')
+       sql_where << "ship_prepares.customer_id IN (#{User.current.customer_flt})"
+     else
+       sql_where << "ship_prepares.customer_id = :customer_id"
+       ar_params[:customer_id] = User.current.customer_flt
+     end
+    end
+    
+    if !sql_where.empty?
+      return self.where(sql_where.join(' OR '), ar_params)
+    end      
+        
+    return nil
+  end
+  
+  
+  
+  
+  
+  
   
   def self.price_range(dt)    
     # Fascia B: da sabato alle 12 a domenica alle 24 (36 ore)

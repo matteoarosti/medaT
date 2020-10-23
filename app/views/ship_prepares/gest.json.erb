@@ -467,8 +467,8 @@
 			    margin: '40 10 10 10',
 			    items: [
 			    
-
-<% if params[:op] == 'EDIT' %>			    			    
+<% if !User.current.customer? %>
+		<% if params[:op] == 'EDIT' %>			    			    
 			    
 			    	{text: 'Lista imbarco/sbarco', iconCls: 'fa fa-plus fa-2x', cls: 'btn-add', 
 			    		handler: function(){
@@ -640,7 +640,7 @@
 			   	},
 			    	
 
-<% end %>
+		<% end %>
 			    	
 			    	
 			    	
@@ -710,11 +710,18 @@
 			    		}
 			    	},
 			    	
+			    	
+<% end %>			    	
+			    	
+			    	
+			    	
 			    	{text: 'Refresh', iconCls: 'fa fa-refresh fa-2x', cls: 'btn-close', 
 			    		handler: function(){
 				    		this.up('grid').store.load();			    			
 			    		}
 			    	} 
+			    	
+			    	
 			    	
 			    ]
 			  }

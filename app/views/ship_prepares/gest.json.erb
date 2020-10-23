@@ -748,7 +748,7 @@
                             new Ext.menu.Menu({
                                 items : [
                                 
-                                
+<% if User.current.admin_can?(:ship_prepare, :gest) %>                                 
                                          {
                                             text : '<i class="fa fa-edit fa-1x"> Modifica</i>',                                                                                                        
                                             handler: function(){
@@ -762,7 +762,7 @@
                                             }, scope: this
                                           }
                                           
-<% if User.current.admin_can?(:ship_prepare, :gest) %>                                          
+                                         
                                           , {
                                             text : '<i class="fa fa-trash-o fa-1x"> Elimina</i>',                                                                                                        
                                             handler: function(){

@@ -33,8 +33,8 @@ end
 items = items.where("repair_completed_at >= ?", date_from) unless formValues['date_op_from'].blank?
 items = items.where("repair_completed_at <= ?", date_to) unless formValues['date_op_to'].blank?
 
-items = items.joins({:handling_item => :handling_header})
-items = items.joins(:repair_estimate_items)
+items = items.eager_load({:handling_item => :handling_header})
+items = items.eager_load(:repair_estimate_items)
 
 
 group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner_id }
@@ -96,7 +96,7 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 			op_val.group_by { |d| d }.each do |a, a_opyy|
 			
 				#leggo righe autorizzate
-				a_op = a.repair_estimate_items.where("confirmed IS NULL or confirmed != false")
+				a_op = a.repair_estimate_items.select { |rei|  rei.confirmed.nil? || rei.confirmed  } #.where("confirmed IS NULL or confirmed != false")
 				
 				a_op.each do |r|
 					#a compagnia

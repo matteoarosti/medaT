@@ -19,7 +19,7 @@ formValues = JSON.parse params['formValues']
 
 items = RepairHandlingItem.all
 items = items.where({handling_headers: {shipowner_id: formValues['shipowner_id']}}) unless formValues['shipowner_id'].blank?
-
+items = items.where("handling_headers.id IS NOT NULL")
 
 #gestione campi data/ora
 if !formValues['date_op_from'].blank?

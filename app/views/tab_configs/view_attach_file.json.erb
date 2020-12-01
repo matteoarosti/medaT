@@ -1,0 +1,89 @@
+{
+ "success": true,
+ "items": [
+  {
+   xtype: 'panel',
+   flex: 1,
+   layout: 'fit',
+     defaults: {
+     	 xtype: 'textfield',
+     	 margin: '10 10 0 10',
+     },	  
+   autoScroll: true,
+   
+   
+   listeners: {
+   	afterrender: function(comp){
+   	  <% if @item.attach_file_content_type != 'application/pdf' %>   	
+   		//comp.up('window').maximize();
+   		comp.down('container').down('panel').setHeight(900);
+   		comp.down('container').down('panel').setWidth('auto');
+   		comp.up('window').setHeight(450);
+   		comp.up('window').doLayout();
+   	  <% else %>
+   	  	//comp.up('window').destroy();
+   	  <% end  -%>	   		   		
+    }
+   },
+   
+   
+      items: [    	
+    	    {
+     			xtype: 'container',
+     			flex: 1,
+     			height: '100%',
+     			autoScroll: true,
+     			items: [
+     			
+     			<% if @item.attach_file_content_type != 'application/pdf' %>
+     			  
+		    	    {
+		     			xtype: 'panel',
+		     			html: '<img src=<%= raw @item.attach_file.url(:original).to_json %> style="max-height: 900px; width: auto;">',
+		     			mode : 'image'
+		    		}
+		    	  
+		    	<% else %>	
+		    		{
+		    		  xtype: 'panel',
+		    		  layout: 'fit',
+		    		  items: 
+			    		{
+			    			xtype: 'component',
+				            autoEl: {
+				                tag: 'iframe',
+				                style: 'height: 100%; width: 100%; border: none',
+				                src: <%= raw @item.attach_file.url(:original).to_json %>
+				            }
+			    		}
+			    	}
+			     <% end %>		
+     			]
+    		}
+	], 
+   
+   
+	
+	buttons: [
+	<% if @item.attach_file_content_type != 'application/pdf' %>   	
+		{
+            text : '<i class="fa fa-print" style="color:white;"></i> Stampa',            
+            handler: function (btn, evt) {
+            	tmp_win = this.up('window').down('panel').down('container').down('panel');
+            	tmp_html = Ext.dom.Query.selectNode('#' + tmp_win.id);
+				plugin.Printer.print(tmp_html, true);
+    		}
+	     },
+	 <% end %>    
+	     
+	      {
+            text: 'Chiudi',
+            handler: function (btn, evt) {
+            	this.up('window').close();
+    		}
+	     }	
+	]
+	
+  }
+ ]
+}	

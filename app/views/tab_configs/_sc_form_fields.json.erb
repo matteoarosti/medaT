@@ -7,5 +7,122 @@
 	{"xtype": "textarea", "fieldLabel":"Notes","bind":"{rec.notes}"},
 	
 	{"fieldLabel":"created_at","bind":"{rec.created_at}", disabled: true},
-	{"fieldLabel":"updated_at","bind":"{rec.updated_at}", disabled: true}
+	{"fieldLabel":"updated_at","bind":"{rec.updated_at}", disabled: true},
+	
+	
+	{xtype: 'displayfield', fieldLabel: '', value: ''},
+	{xtype: 'displayfield', fieldLabel: '', value: ''},
+	{xtype: 'displayfield', fieldLabel: '>', value: 'Allega file a recod'},
+	
+	{xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>', bind: {hidden: '{!rec.id}'}},
+
+	{
+        xtype: 'filefield',
+        bind: {hidden: '{!rec.id}'},
+        width: 500,
+        allowBlank: true,
+        emptyText: 'Seleziona file da allegare a record',
+        fieldLabel: 'File',
+        name: 'file',
+        buttonText: '',
+        buttonConfig: {
+            iconCls: 'upload-icon'
+        }
+    },			
+	
+	{xtype: 'button', text: 'Allega',
+	          bind: {hidden: '{!rec.id}'},
+	  flex: 1, 
+	  handler: function(btn){
+		var form = this.up('form').getForm(),
+			m_form = this.up('form');		
+			
+			if (Ext.isEmpty(form.findField('file').getValue())){
+				alert('Selezionare prima un allegato');
+				return false;
+			}
+			
+             if (form.isValid()) {
+	                
+                    form.submit({
+                        url: '<%= url_for(:action=>'attach_file_updload_exe') -%>',
+                        params: {rec_id: m_form.getViewModel().data.rec.data.id},
+                    	method: 'POST',
+                        waitMsg: 'Salvataggio in corso....',
+                        success: function(fp, o) {
+						      
+						      //ricarico i dettagli del movimento
+						      m_form.getViewModel().data.rec.set({attach_file_file_size: 10}); //cosi' mostra "Visualizza allegato"
+						 	   											                            
+                        },
+						failure: function(fp, o) {
+                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+                            Ext.Msg.alert('Import non eseguito. ', o.result.message);
+                            console.log('Failure!');	                            
+                        }	                        
+                    });
+                    return false;                          
+             } //for isValid  
+	}},
+	
+	
+	{xtype: 'container',
+	 layout: 'hbox',
+
+	 items: [
+	
+		{xtype: 'button', text : '<i class="fa fa-search" style="color:white;"></i>',
+		  cls: 'btn-confirm',
+		  bind: {hidden: '{!rec.attach_file_file_size}'},
+		  flex: 1, 
+		  handler: function(btn){
+			var form = this.up('form').getForm(),
+				m_form = this.up('form'),
+				m_rec_id = m_form.getViewModel().data.rec.data.id;
+				
+				acs_show_win_std('Allegato', <%= raw url_for(:controller=>'tab_configs', 
+						:action=>'view_attach_file').to_json -%>,
+						{rec_id: m_rec_id}, 800, 400);			
+		}},
+		
+		{xtype: 'panel', width: 3},
+		
+		{xtype: 'button', text : '<i class="fa fa-trash" style="color:white;"></i>',
+				  cls: 'btn-del',
+		          bind: {hidden: '{!rec.attach_file_file_size}'},
+		  flex: 1, 
+		  handler: function(btn){
+			var form = this.up('form').getForm(),
+				m_form = this.up('form');
+				
+				Ext.MessageBox.confirm('Richieta conferma', 'Eliminazione allegato?', function(btnC){												
+					if(btnC === 'yes'){
+			             if (form.isValid()) {
+				                
+			                    form.submit({
+			                        url: '<%= url_for(:action=>'attach_file_remove_exe') -%>',
+			                        params: {rec_id: m_form.getViewModel().data.rec.data.id},
+			                    	method: 'POST',
+			                        waitMsg: 'Salvataggio in corso....',
+			                        success: function(fp, o) {
+									      
+									      //ricarico i dettagli del movimento
+									      m_form.getViewModel().data.rec.set({attach_file_file_size: null}); //cosi' non mostra "Visualizza allegato"
+									 	   											                            
+			                        },
+									failure: function(fp, o) {
+			                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+			                            Ext.Msg.alert('Import non eseguito. ', o.result.message);
+			                            console.log('Failure!');	                            
+			                        }	                        
+			                    });
+			                    return false;                          
+			             } //for isValid  
+			        }
+			    });     
+		}}
+	]
+   }
+
+
 ]

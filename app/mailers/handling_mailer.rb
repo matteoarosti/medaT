@@ -24,7 +24,7 @@ class HandlingMailer < ActionMailer::Base
     #genero pdf da allegare
     tmp_file_name = Tempfile.new(['to_carrier_email', '.pdf']).path
     print "\nGenero #{tmp_file_name}"    
-    pdf = CarrierMovimPdf.new()
+    pdf = CarrierMovimPdf.new() #Interchange
     pdf.m_draw(hi)
     pdf.render_file(tmp_file_name)
     print "\nGenerato"
@@ -49,9 +49,21 @@ class HandlingMailer < ActionMailer::Base
     end
     
     print "\nInvio email a #{send_email_to}\n"
+    
     #allego il file e invio
     attachments["ICOP_movimento_#{hi.id.to_s}.pdf"] = File.read(tmp_file_name)
+      
+    #se devo aggiungere attachments aggiuntivi da TabConfig
+    add_attach = TabConfig.find_by(tab: 'INTERC', sez1: 'ATTACH_01')
+    if add_attach && add_attach.attach_file_file_size.to_i > 0
+      attachments[add_attach.attach_file_file_name] = File.binread(add_attach.attach_file.path('original'))
+    end
+    
+    #se devo aggiungere BCC (da TabConfig)
+    bcc_interchange = TabConfig.get_notes('INTERC', 'BCC')
+    
     mail(:to => send_email_to, 
+          :bcc => bcc_interchange,
           :subject => "Notifica movimento #{hi.id.to_s}, container #{@hi.handling_header.container_number}, #{text_IO}, #{text_FE}"
         )
   end

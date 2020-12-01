@@ -61,8 +61,7 @@ class HandlingMailer < ActionMailer::Base
     
     #se devo aggiungere BCC (da TabConfig)
     cc_interchange = TabConfig.get_notes('INTERC', 'CC')
-    puts "cc_interchange: #{cc_interchange.to_s}"
-    
+    puts "cc_interchange (da TabConfig): #{cc_interchange.to_s}"    
     
     mail(:to => send_email_to, 
           :cc => cc_interchange,

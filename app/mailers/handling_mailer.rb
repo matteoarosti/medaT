@@ -60,10 +60,12 @@ class HandlingMailer < ActionMailer::Base
     end
     
     #se devo aggiungere BCC (da TabConfig)
-    bcc_interchange = TabConfig.get_notes('INTERC', 'BCC')
+    cc_interchange = TabConfig.get_notes('INTERC', 'CC')
+    puts "cc_interchange: #{cc_interchange.to_s}"
+    
     
     mail(:to => send_email_to, 
-          :bcc => bcc_interchange,
+          :cc => cc_interchange,
           :subject => "Notifica movimento #{hi.id.to_s}, container #{@hi.handling_header.container_number}, #{text_IO}, #{text_FE}"
         )
   end

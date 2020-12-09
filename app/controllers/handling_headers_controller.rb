@@ -608,6 +608,30 @@ end
   render json: {success: ret, hi_id: item.id}  
  end
 
+
+ def list_in_terminal_data
+   if params[:data][:shipowner_id].to_i == 0 || params[:data][:equipment_id].to_i == 0
+     render json: {success: false, message: 'Parametri non completi'}
+     return
+   end
+   
+  #conteggio
+  items = HandlingHeader.is_in_terminal().not_closed()
+  items = items.where(handling_headers: {shipowner_id: params[:data][:shipowner_id]})
+  items = items.where(handling_headers: {equipment_id: params[:data][:equipment_id]})
   
+  ret = []
+  items.each do |hh|
+    r = {}
+    r[:id]               = hh.id
+    r[:container_number] = hh.container_number
+    r[:entrato_il]       = hh.last_IN().datetime_op
+    r[:lock_type]        = hh.lock_type
+    ret << r
+  end
+  ret = ret.sort_by { |k| k[:entrato_il]}
+  render json: {success: true, items: ret}       
+ end
+   
 
 end

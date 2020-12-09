@@ -11,13 +11,26 @@
 	}, 
      defaults: {
      	 xtype: 'textfield',
-     	 margin: '10 10 0 10',
+     	 margin: '10 10 0 10'
      },	  
+            
      
    items: [
     	{xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: false},
-    	<%= raw extjs_std_combo_model('shipowner', @item) -%>,
-    	<%= raw extjs_std_combo_model('equipment', @item) -%>,
+    	<%= raw extjs_std_combo_model('shipowner', @item,
+				:listeners => "change: function(combo, record, index) {
+								  var p_form = this.up('form'),
+								  	  m_form = p_form.getForm();
+								  p_form.verify_container(p_form, m_form.getValues());
+							    }"    	
+    	) -%>,
+    	<%= raw extjs_std_combo_model('equipment', @item,
+				:listeners => "change: function(combo, record, index) {
+								  var p_form = this.up('form'),
+								  	  m_form = p_form.getForm();
+								  p_form.verify_container(p_form, m_form.getValues());
+							    }"        	
+    	) -%>,
     	<%= raw extjs_std_combo_model('carrier', @item) -%>,
     	{xtype: 'textfield', name: 'driver', fieldLabel: 'Autista', allowBlank: false, maxLength: 15},
     	{xtype: 'textfield', name: 'plate', fieldLabel: 'Targa', allowBlank: false, maxLength: 15},
@@ -26,15 +39,32 @@
 	
 	
 	buttons: [
+	
+			{
+            text: 'Verifica container in terminal',            
+            itemId: 'b_verify_empty_container',
+            handler: function (btn, evt) {
+                 var m_win = this.up('window'),              
+             	 	 m_form = this.up('form').getForm();
+             	
+					acs_show_win_std('Container in terminal (EMPTY)', 
+							'<%= url_for(:controller=>'handling_headers', :action=>'list_in_terminal') -%>',
+							{data: m_form.getValues()});	                    
+			 
+			}
+	     },
+	
+		'->',
+	
 		{
             text: 'Salva',
             handler: function (btn, evt) {
-             m_win = this.up('window');              
-             form = this.up('form').getForm();
-             if (form.isValid()) {
+             var m_win = this.up('window'),              
+             	 m_form = this.up('form').getForm();
+             if (m_form.isValid()) {
              	btn.disable();
              	
-						form.submit({
+						m_form.submit({
 	                        url: '<%= url_for(:controller => 'to_do_items', :action=>'new_O_FILLING', :exe_save => 'Y') -%>',
 	                        //waitMsg: 'Importazione in corso....',
 	                        success: function(fp, o) {
@@ -66,6 +96,60 @@
 	     }	
 	]
 	
-  }
+	
+  , verify_container: function(panel_form, form_values){
+  		
+  		//se ho compagnia e tipologia -> verifico il numero dei container in terminal e quello con data piu' vecchia
+  		
+  		if (Ext.isEmpty(form_values.shipowner_id) || Ext.isEmpty(form_values.equipment_id)){
+  			return false;
+  		} 
+  		
+  		Ext.Ajax.request({
+            url: <%= raw url_for(:controller=>'to_do_items', :action=>'verify_empty_container_in_terminal').to_json -%>,
+            method:'POST',                    
+            jsonData: {data: form_values},	
+     	
+			success: function(result, request) {					
+				var returnData = Ext.JSON.decode(result.responseText);
+				
+				//error
+				if (returnData.success == false){
+					Ext.MessageBox.show({
+                        title: 'EXCEPTION',
+                        msg: returnData.message,
+                        icon: Ext.MessageBox.ERROR,
+                        buttons: Ext.Msg.OK
+                	})
+                  return false;										
+				}								
+ 							
+ 				//ok
+ 				console.log('todooooo - success');
+ 				var b_verify = panel_form.down('#b_verify_empty_container');
+ 				b_verify.setText(returnData.count + ' container in terminal');
+ 				
+ 				b_verify.removeCls('btn-del');
+ 				if (returnData.count == 0 || returnData.g_days > 30) { 				
+ 					b_verify.addCls('btn-del');
+ 				}	
+ 							
+			}, scope: this,
+			
+			failure: function(rec, op) {
+				var result = Ext.JSON.decode(op.getResponse().responseText);
+				Ext.MessageBox.show({
+                    title: 'EXCEPTION',
+                    msg: result.message,
+                    //icon: Ext.MessageBox.ERROR,
+                    buttons: Ext.Msg.OK
+            	})					
+			}, scope: this,						
+							 
+    	});	
+  	
+  }	
+	
+  } //form
  ]
 }	

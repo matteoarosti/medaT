@@ -6,6 +6,36 @@ class ToDoItemsController < ApplicationController
   
   
   
+  def verify_empty_container_in_terminal
+    #params[:data]
+    
+    if params[:data][:shipowner_id].to_i == 0 || params[:data][:equipment_id].to_i == 0
+      render json: {success: false, message: 'Parametri non completi'}
+      return
+    end
+    
+    #conteggio
+    items = HandlingHeader.is_in_terminal().not_closed()
+    items = items.where(handling_headers: {shipowner_id: params[:data][:shipowner_id]})
+    items = items.where(handling_headers: {equipment_id: params[:data][:equipment_id]})
+    
+    min_entrato_il = Time.zone.now - 10.years
+    items.each do |hi|
+      min_entrato_il = [hi.last_IN().datetime_op, min_entrato_il].min
+    end  
+      
+    #giorni max vecchiaia
+    g_days = (Time.zone.now - min_entrato_il).to_i / 1.day
+      
+    render json: {success: true, count: items.count, min_entrato_il: min_entrato_il, g_days: g_days}
+    
+  end
+  
+  
+  
+  
+  
+  
   #come lista mostro solo le liste aperte
   ##########################################
    def extjs_sc_list

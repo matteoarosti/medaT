@@ -1,0 +1,82 @@
+{
+ success: true,
+ items: [
+       
+   // grid con righe import
+		 {
+				flex: 1,
+				layout: 'fit',        	    
+        	    tools: [
+                ],
+        	    xtype: 'gridpanel',
+        	    		        		        
+				autoScroll: true,  
+				scroll: true,      	    
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'handling_headers/list_in_terminal_data').to_json -%>,
+        	            extraParams: {data: <%= raw params[:data].to_json -%>},
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	        
+        	    }),
+        	   
+ 		        	   
+        	           	   
+        	           	    
+        	    
+			    columns: [{
+			        dataIndex: 'container_number',
+			        text: 'Container',
+			        flex: 1,
+			    }, {
+			    	dataIndex: 'entrato_il',
+			        text: 'Entrato il',
+			        width: 100, xtype:  'datecolumn'
+			    },
+			    {header: 'Lock', dataIndex: 'lock_type', width: 50, renderer: pb_get_image_lock}
+			    
+			    				    
+        ], //columns
+
+
+
+			    listeners: {
+					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
+
+									var new_rec = HandlingHeader.load(rec.get('id'));
+							        newPanel = Ext.create('FeedViewer.MovimentoPanel', {
+										title: 'Mov. ' + rec.get('container_number'),
+										closable: true			
+							        });
+							        
+			                		newPanel.getViewModel().setData({rec: new_rec, 
+			                			is_handling_editable: false,
+			                			is_container_editable: false
+			                		});
+			                    	myApp.feedInfo.add(newPanel).show();
+						            myApp.feedInfo.setActiveTab(myApp.feedInfo.items.length - 1);    
+					 
+					    }
+					}
+
+
+
+ }
+ ]
+}

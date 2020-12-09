@@ -19,7 +19,7 @@ class ToDoItemsController < ApplicationController
     items = items.where(handling_headers: {shipowner_id: params[:data][:shipowner_id]})
     items = items.where(handling_headers: {equipment_id: params[:data][:equipment_id]})
     
-    min_entrato_il = Time.zone.now - 10.years
+    min_entrato_il = Time.zone.now
     items.each do |hi|
       min_entrato_il = [hi.last_IN().datetime_op, min_entrato_il].min
     end  

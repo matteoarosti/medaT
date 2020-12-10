@@ -18,6 +18,7 @@ class ToDoItemsController < ApplicationController
     items = HandlingHeader.is_in_terminal().not_closed()
     items = items.where(handling_headers: {shipowner_id: params[:data][:shipowner_id]})
     items = items.where(handling_headers: {equipment_id: params[:data][:equipment_id]})
+    items = items.where(handling_headers: {container_FE: 'E'})
     
     min_entrato_il = Time.zone.now
     items.each do |hi|

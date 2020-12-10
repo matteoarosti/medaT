@@ -619,6 +619,7 @@ end
   items = HandlingHeader.is_in_terminal().not_closed()
   items = items.where(handling_headers: {shipowner_id: params[:data][:shipowner_id]})
   items = items.where(handling_headers: {equipment_id: params[:data][:equipment_id]})
+  items = items.where(handling_headers: {container_FE: 'E'})
   
   ret = []
   items.each do |hh|

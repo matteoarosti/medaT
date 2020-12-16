@@ -23,12 +23,17 @@
 			items: [  
   				{xtype: 'datefield', fieldLabel: 'Da data', labelAlign: 'right', name: 'flt_date_from', width: 240},
   				{xtype: 'datefield', fieldLabel: 'A data', labelAlign: 'right' , name: 'flt_date_to'  , width: 240},
+  				
   				{xtype: 'button', text: 'Aggiorna', text: 'Applica <i class="fa fa-search"></i>', handler: function(){
   						var me = this,
   							m_form  = me.up('form'),
-  							m_graph = me.up('#stats_dashboard').down('cartesian');
-  						m_graph.getStore().proxy.extraParams.formValues = m_form.getValues();
-  						m_graph.getStore().load();
+  							m_graph = me.up('#stats_dashboard').query('cartesian');
+  							
+  						console.log('aaaaa');
+  						Ext.Array.each(me.up('#stats_dashboard').query('polar, chart', 'cartesian'), function(grafico){
+				        	grafico.getStore().proxy.extraParams.formValues = m_form.getValues();
+  							grafico.getStore().load();
+				        });				        	
   					}
   				}
   			]
@@ -38,7 +43,7 @@
   items: [
   
 	 {
-	  xtype: 'panel',
+	  xtype: 'tabpanel',
 	  flex: 0.4,
 	  	layout: {
 		    type: 'hbox',
@@ -51,6 +56,7 @@
 		//andamenvo movimentazioni per ora
 		{
             xtype: 'cartesian',
+            title: 'Per orario',
             border: true,        
 			flex: 1,	
 			legend: {
@@ -58,7 +64,7 @@
 			},			
 			store: {
 				xtype: 'store',
-				autoLoad: true,	
+				autoLoad: false,	
 				proxy: {
 					url: '<%= url_for(:controller=>'stats_movs', :action=>'graph_data_movs_by_hours') -%>',
 					 
@@ -120,6 +126,87 @@
             }]            
             	   
 		  }	   
+	   
+	   
+	   
+	   
+	   //per trasportatore
+	   , {
+            xtype: 'cartesian',
+            title: 'Per trasportatore',
+            border: true,        
+			flex: 1,	
+			legend: {
+    			docked: 'right'
+			},			
+			store: {
+				xtype: 'store',
+				autoLoad: false,	
+				proxy: {
+					url: '<%= url_for(:controller=>'stats_movs', :action=>'graph_date_movs_by_carrier') -%>',
+					 
+					method: 'POST', type: 'ajax',		
+					actionMethods: {read: 'POST'},
+		
+					reader: {
+						type: 'json',
+						method: 'POST',
+						rootProperty: 'items'
+					}, 
+					paramsAsJson: true
+				},
+					
+				fields: [] //serve
+			}, //store
+	   
+	   
+	   
+			axes: [{
+                type: 'numeric',
+                position: 'left',
+                adjustByMajorUnit: true,
+                grid: true,
+                fields: ['IE'],
+                minimum: 0,
+                label: {
+                	fontSize: 12
+                }
+            }, {
+                type: 'category',
+                position: 'bottom',
+                grid: true,
+                fields: ['op'],	//quale campo verra' visualizzato nella legenda
+                renderer: function(v){ return v; },
+                label: {
+                	fontSize: 9,
+                    rotate: {degrees: -55}
+                }
+            }],
+            
+            
+            
+			series: [{
+                type: 'bar',
+                axis: 'left',
+                //title: [ 'Entrata Vuoto', 'Uscita Vuoto', 'Sbarco Vuoto', 'Imbarco Vuoto',  'Entrata Pieno', 'Uscita Pieno', 'Sbarco Pieno', 'Imbarco Pieno'],
+                title: [ 'Entrata Vuoto', 'Uscita Vuoto', 'Entrata Pieno', 'Uscita Pieno'],
+                xField: 'op',
+                //yField: [ 'IE', 'OE', 'DE', 'LE', 'IF', 'OF', 'DF', 'LF' ],
+                yField: [ 'IE', 'OE', 'IF', 'OF' ],
+                stacked: true,
+                style: {
+                    opacity: 0.80
+                },
+                highlight: {
+                    fillStyle: 'yellow'
+                },
+            }]            
+            	   
+		  }	
+	   
+	   
+	   
+	   
 	   
 	   
 	   ]

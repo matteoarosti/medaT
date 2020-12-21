@@ -110,10 +110,13 @@ class ImportItemsController < ApplicationController
      ret = import_D(rec, params)
    end
 
-   rec.status = ret[:success]==true ? 'OK' : nil
-   rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
-   rec.created_handling_header_id = ret[:created_handling_header_id]
-   rec.save!
+   if ret[:success] == true
+   	rec.status = 'OK'
+   	rec.notes  = params[:check_form][:notes] unless params[:check_form][:notes].blank?
+   	rec.created_handling_header_id = ret[:created_handling_header_id]
+   	rec.save!
+   end	
+	
    ret[:data] = rec.as_json()
    render json: ret
   end
@@ -131,10 +134,13 @@ class ImportItemsController < ApplicationController
       ret = import_D(rec, params, 'DAMAGED')
     end
  
-    rec.status = ret[:success]==true ? 'DAMAGED' : nil
-    rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
-    rec.created_handling_header_id = ret[:created_handling_header_id]
-    rec.save!
+	if ret[:success] == true
+    	rec.status =  'DAMAGED'
+    	rec.notes = params[:check_form][:notes] unless params[:check_form][:notes].blank?
+    	rec.created_handling_header_id = ret[:created_handling_header_id]
+    	rec.save!
+	end
+	
     ret[:data] = rec.as_json()
     render json: ret
   end
@@ -294,7 +300,7 @@ class ImportItemsController < ApplicationController
          ret_status  = validate_insert_item[:is_valid]
          message     = validate_insert_item[:message]         
      end
-    return {:success => ret_status, :message => message}
+    return {:success => ret_status, :message => message, :created_handling_header_id => hh.id}
    end
 
 end

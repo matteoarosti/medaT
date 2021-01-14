@@ -259,7 +259,11 @@ class ToDoItemsController < ApplicationController
      end
      
 
-    hi.datetime_op = Time.now
+    #hi.datetime_op = Time.now
+    hi.datetime_op   = tdi.created_at
+    hi.moved_at      = Time.now
+    
+    
     hi.notes = params[:data][:notes] unless params[:data][:notes].blank?
     hi.handling_item_type = tdi.handling_item_type
     hi.handling_type = tdi.handling_type

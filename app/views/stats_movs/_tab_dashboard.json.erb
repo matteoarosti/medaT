@@ -123,6 +123,13 @@
                 highlight: {
                     fillStyle: 'yellow'
                 },
+                label: {
+                	display: 'under',
+                	field: 'avg_moved_in',
+                	renderer: function (text) {
+                		return 'Attesa: ' + text + '\'';
+                	}
+                }
             }]            
             	   
 		  }	   

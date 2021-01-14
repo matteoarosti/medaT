@@ -21,9 +21,9 @@ class StatsMovsController < ApplicationController
   def graph_data_movs_grouping(grouping = 'HOURS')
 	###logger.info Time.zone.formatted_offset
     ret = {}
-	ar_op = {}
+	  ar_op = {}
     ret[:items] = []
-    r = {'IE' => {}, 'OE' => {}, 'LE' => {}, 'DE' => {}, 'IF' => {}, 'OF' => {}, 'LF' => {}, 'DF' => {}}
+    r = {'IE' => {}, 'OE' => {}, 'LE' => {}, 'DE' => {}, 'IF' => {}, 'OF' => {}, 'LF' => {}, 'DF' => {}, 'sum_moved_in' => {}}
 
 =begin          
     #raggruppo i movimenti aperti in base al lock
@@ -51,12 +51,14 @@ class StatsMovsController < ApplicationController
 
     gcs = HandlingHeader.find_by_sql("
       SELECT
-        dd.op_h, dd.handling_type, dd.handling_item_type, dd.container_FE, sum(dd.t_cont) as t_cont
+        dd.op_h, dd.handling_type, dd.handling_item_type, dd.container_FE, sum(dd.t_cont) as t_cont,
+        sum(dd.sum_moved_in) as sum_moved_in
       FROM (        
           SELECT 
 			#{group_by_field} as op_h, 
 			hi.handling_type, hi.handling_item_type, hi.container_FE, 
-           count(*) as t_cont 
+           count(*) as t_cont,
+           sum(TIMESTAMPDIFF(MINUTE, hi.datetime_op, hi.moved_at)) as sum_moved_in 
           FROM handling_headers hh 
           INNER JOIN handling_items hi ON hh.id = hi.handling_header_id
 		  WHERE (hi.operation_type='MT' and hi.container_FE <>'')
@@ -71,11 +73,11 @@ class StatsMovsController < ApplicationController
      
      gcs.each do |gc|
 
-	   #correggo timezone
-	   if grouping == 'HOURS'
-		   tt = Time.new(1, 1, 1, gc.op_h, 0, 00, "+00:00")		
-		   gc.op_h = tt.localtime.hour	
-	   end
+  	   #correggo timezone
+  	   if grouping == 'HOURS'
+  		   tt = Time.new(1, 1, 1, gc.op_h, 0, 00, "+00:00")		
+  		   gc.op_h = tt.localtime.hour	
+  	   end
 
        if gc.handling_item_type == 'O_LOAD'
          r["L#{gc.container_FE}"]["#{gc.op_h}"] = r["L#{gc.container_FE}"]["#{gc.op_h}"].to_i + gc.t_cont;
@@ -85,8 +87,9 @@ class StatsMovsController < ApplicationController
         r["#{gc.handling_type}#{gc.container_FE}"]["#{gc.op_h}"] = r["#{gc.handling_type}#{gc.container_FE}"]["#{gc.op_h}"].to_i + gc.t_cont;
        end
 
-	   ar_op["#{gc.op_h}"] = 1
-
+       ar_op["#{gc.op_h}"] = 1
+         
+       r["sum_moved_in"]["#{gc.op_h}"] = r["sum_moved_in"]["#{gc.op_h}"].to_i + gc.sum_moved_in.to_i
      end
 
  
@@ -95,13 +98,23 @@ class StatsMovsController < ApplicationController
 	    #array per le 24 ore          
 	     24.times do |h|
 	       s = {}
-	       s[:op] = h
+	       s[:op]  = h
+	          
+	       
 	       s[:IE]  = r["IE"]["#{h}"] || 0
 	       s[:OE]  = r["OE"]["#{h}"] || 0
-	       #s[:LE]  = r["LE"]["#{h}"] || 0
-	       #s[:DE]  = r["DE"]["#{h}"] || 0
+
 	       s[:IF]  = r["IF"]["#{h}"] || 0
 	       s[:OF]  = r["OF"]["#{h}"] || 0
+         s[:global_sum] = s[:IE] + s[:OE] + s[:IF] + s[:OF]
+          
+         if s[:global_sum] > 0
+           s[:avg_moved_in] = r["sum_moved_in"]["#{h}"] / s[:global_sum]
+         end
+          
+	         
+         #s[:LE]  = r["LE"]["#{h}"] || 0
+         #s[:DE]  = r["DE"]["#{h}"] || 0
 	       #s[:LF]  = r["LF"]["#{h}"] || 0
 	       #s[:DF]  = r["DF"]["#{h}"] || 0         
 	       ret[:items] << s       
@@ -116,7 +129,7 @@ class StatsMovsController < ApplicationController
 	       s[:OE]  = r["OE"]["#{h}"] || 0
 	       s[:IF]  = r["IF"]["#{h}"] || 0
 	       s[:OF]  = r["OF"]["#{h}"] || 0
-		   s[:global_sum] = s[:IE] + s[:OE] + s[:IF] + s[:OF]
+		     s[:global_sum] = s[:IE] + s[:OE] + s[:IF] + s[:OF]
 	       ret[:items] << s
 		end
 		ret[:items] = ret[:items].sort_by { |k| -k[:global_sum] }

@@ -259,9 +259,13 @@ class ToDoItemsController < ApplicationController
      end
      
 
-    #hi.datetime_op = Time.now
-    hi.datetime_op   = tdi.created_at
-    hi.moved_at      = Time.now
+    hi.datetime_op = Time.now
+    hi.moved_at    = hi.datetime_op
+    
+    #se volessi impostae datetime_op con la data di creazione del ToDo, e moved_at = now
+    #ma rischierei che datetime_op sia inferire all'ultimo hi
+    #hi.datetime_op   = tdi.created_at
+    #hi.moved_at      = Time.now
     
     
     hi.notes = params[:data][:notes] unless params[:data][:notes].blank?

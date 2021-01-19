@@ -39,7 +39,7 @@ class StatsMovsController < ApplicationController
 	if grouping == 'CARRIER'
 			group_by_field = " carrier_id "			
 	else
-		group_by_field = " hour(datetime_op) "
+		group_by_field = " hour(datetime_op_it) "
 	end
 
     unless params[:formValues].nil?  
@@ -58,10 +58,10 @@ class StatsMovsController < ApplicationController
 			#{group_by_field} as op_h, 
 			hi.handling_type, hi.handling_item_type, hi.container_FE, 
            count(*) as t_cont,
-           sum(TIMESTAMPDIFF(MINUTE, hi.datetime_op, hi.moved_at)) as sum_moved_in 
+           sum(moved_in) as sum_moved_in 
           FROM handling_headers hh 
           INNER JOIN handling_items hi ON hh.id = hi.handling_header_id
-		  WHERE (hi.operation_type='MT' and hi.container_FE <>'')
+		  WHERE (hi.operation_type='MT' and hi.container_FE <>'' and moved_in IS NOT NULL)
             #{where_by_form_values}
           GROUP BY #{group_by_field}, 
 		  hi.handling_type, hi.handling_item_type, container_FE
@@ -74,10 +74,10 @@ class StatsMovsController < ApplicationController
      gcs.each do |gc|
 
   	   #correggo timezone
-  	   if grouping == 'HOURS'
-  		   tt = Time.new(1, 1, 1, gc.op_h, 0, 00, "+00:00")		
-  		   gc.op_h = tt.localtime.hour	
-  	   end
+  	   #if grouping == 'HOURS'
+  	   #	   tt = Time.new(1, 1, 1, gc.op_h, 0, 00, "+00:00")		
+  	   #	   gc.op_h = tt.localtime.hour	
+  	   #end
 
        if gc.handling_item_type == 'O_LOAD'
          r["L#{gc.container_FE}"]["#{gc.op_h}"] = r["L#{gc.container_FE}"]["#{gc.op_h}"].to_i + gc.t_cont;

@@ -61,8 +61,13 @@ items = items.order("activities.expiration_date desc").limit(200)
 				<%= raw "<p>#{rec.activity.customer.name}</p>"  -%>
 			</td>
 			
-			<td>				
-				<%= raw "<p>#{rec.activity.expiration_date.strftime("%d/%m/%y")}</p>"  -%>
+			<td>
+				<% if rec.status == 'ANN' %>
+				 <%= raw "<p><font color=red>Richiesta</br>Annullata</font></p>" -%>
+				<% else %>			
+				 <%= raw "<p>#{rec.activity.expiration_date.strftime("%d/%m/%y")}</p>"  -%>
+				<% end %>
+				
 				<% if rec.activity.to_be_made_available == true %>
 				  <% if rec.make_available_at %> 				  
 				    <%= raw "Messa a disposizione il #{rec.make_available_at.strftime("%d/%m/%y")}</p>"  -%>

@@ -194,7 +194,12 @@
 			        text: 'Da effetturare il',
 			        width: 150, align: 'center',
 			        renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
-			         var me = this; //me = grid;			          			         
+			         var me = this; //me = grid;
+			         
+			           if (rec.get('status') == 'ANN'){
+			           	return '<h3><font color=red>Richiesta</br>Annullata</font></h3>';
+			           }
+			         			          			         
 			           ret = '<h3>' + Ext.util.Format.date(rec.get('activity').expiration_date, 'd/m/y') + '</h3>';
 			           
 			           if (rec.get('activity').to_be_made_available == true){

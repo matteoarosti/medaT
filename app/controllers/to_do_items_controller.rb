@@ -261,6 +261,7 @@ class ToDoItemsController < ApplicationController
 
     hi.datetime_op = Time.now
     hi.moved_at    = hi.datetime_op
+    hi.to_be_moved = false	#e' appena stato movimentato
     
     #se volessi impostae datetime_op con la data di creazione del ToDo, e moved_at = now
     #ma rischierei che datetime_op sia inferire all'ultimo hi

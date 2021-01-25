@@ -18,6 +18,32 @@
 			      , <%= raw extjs_std_combo_model('customer', @item) -%>
 			      , <%= raw extjs_std_datefield('expiration_date', @item, {:allowBlank=>true, :fieldLabel => 'Data scadenza'}) -%>
 			      , <%= raw extjs_std_combo_model('activity_op', @item,
+			      
+			      			:store => "Ext.create('Ext.data.Store', {
+						          model: 'ActivityOp',
+						          autoLoad: true,
+						          proxy: {
+						              type: 'ajax',
+						              url: '#{root_path}activity_ops/get_combo_data_escludi_non_usare',
+						              extraParams: {
+						              	id_selected: #{@item.activity_op_id}
+						              },              
+						              reader: {
+						                  type: 'json',
+						                  method: 'POST', 
+						                  rootProperty: 'items'                  
+						              },
+						              paramsAsJson: true,
+										method: 'POST',
+										type: 'ajax',
+							
+										//Add these two properties
+										actionMethods: {
+											read: 'POST'
+										},        
+						          },          
+						      })",
+			      
       						:listeners => "change: function(combo, record, index) {
 						      var me = this;
 						      if (Ext.isEmpty(me.valueModels[0]) || Ext.isEmpty(me.valueModels[0].get('gest_code'))) {

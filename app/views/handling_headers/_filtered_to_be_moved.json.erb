@@ -1091,6 +1091,18 @@
 			    listeners: {
 					    celldblclick: function(gridView,htmlElement,columnIndex,rec){
 
+							if (columnIndex == 0) { //abbino foto
+								acs_show_win_std('Abbina foto', 
+										'<%= url_for(:controller=>'tab_notes', :action=>'add_photo') -%>', 
+										    {
+										    	rsc_type: 'HI', 
+										    	rsc_id: rec.get('id'),
+										    	container_number: rec.get('handling_header').container_number
+										    	}, 800, 500, {											
+										}, null, 'Y');
+					        }	//abbino foto
+
+
 					        if (columnIndex == 1) { //doppio click sul num_container... apro il movimento aperto
 
 									new_rec = HandlingHeader.load(rec.get('handling_header_id'));

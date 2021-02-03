@@ -672,6 +672,18 @@ Ext.define('FeedViewer.MovimentoPanel', {
 						 
 						 
 					        {xtype: 'tbfill', height: '30px'}, 
+					        
+					        { xtype : "button", text: '<i class="fa fa-photo">&nbsp;Foto</i>', width: '100%',
+					        	cls: 'btn-used', scale: 'medium',
+	 							
+	 							handler: function(){
+	 								acs_show_win_std('Foto', 
+	 										 myApp.railsBaseUri + 'tab_notes/list_images',
+	 				                		 {container_number: this.getViewModel().getData().rec.get('container_number')},
+	 				                		 null, null, null, null, 'Y');
+							    }, scope: this
+							},
+					        
 						 
 	 						{ xtype : "button", text : 'Chiudi', width: '100%',
 					        	cls: 'btn-used', scale: 'medium',

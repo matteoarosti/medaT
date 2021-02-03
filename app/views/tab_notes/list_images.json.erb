@@ -1,0 +1,74 @@
+{
+	success: true,
+	items: [
+		{
+			xtype: 'gridpanel',
+			layout: 'fit',
+			autoScroll: true,
+			scroll: true,
+			
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'tab_notes/get_list_data').to_json -%>,
+        	            extraParams: <%= raw params.to_json -%>,
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	    }),
+        	    
+        	    
+        	dockedItems: { 
+        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar',
+        	    items: [
+	        	    <% if params[:container_number] %>
+	        	    	{iconCls: 'fa fa-upload fa-2x', text: 'Carica nuova immagine', scale: 'large', 
+					 			handler: function(event, toolEl, panel){			                    				 				
+					 				acs_show_win_std('Abbina foto', 
+										'<%= url_for(:controller=>'tab_notes', :action=>'add_photo') -%>', 
+								    	{container_number: <%= raw params[:container_number].to_json -%>}, 800, 500, {}, null, 'Y');
+							 			}
+					 	},        	    
+					<% end %> 	
+        	    	'->',
+        	    	{iconCls: 'fa fa-refresh fa-2x', text: 'Refresh', scale: 'large', 
+				 			handler: function(event, toolEl, panel){			                    				 				
+				 				this.up('grid').getStore().load();
+				 			}
+				 	},			
+				 	{iconCls: 'fa fa-close fa-2x', scale: 'large', 
+						 		handler: function(event, toolEl, panel){ 
+				 						this.up('window').destroy();
+						 			}
+						 		}
+        	     ]
+        	 },        	   
+			
+			columns: [
+				{
+					header: 'Foto', dataIndex: 'num_booking', flex: 1,
+					xtype: 'templatecolumn',
+				    tpl: [
+				        '<div>Immagine caricata il <b>{created_at:date("d/m/Y")}</b> alle ore <b>{created_at:date("H:i")}</b> da <b>{created_user_name}</b></div>',
+				        '<br>&nbsp<br>',
+				        '<img src="{attach_absolute_path}" height=700></img>'			        
+				    ]
+				}
+			]			
+
+		}
+	]
+}

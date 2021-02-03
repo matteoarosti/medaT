@@ -1,0 +1,91 @@
+{
+	success: true,
+	items: [
+		{
+			xtype: 'form',
+			layout: 'vbox',
+			padding: 30,
+			items: [
+				
+				<% if params[:container_number] %>
+				{
+					xtype: 'panel',
+					html: 'Container<h1><%= params[:container_number] -%></h1>'
+				},				
+				<% end %>
+				
+				, {xtype: 'hiddenfield', name: 'authenticity_token', value: '<%= form_authenticity_token %>'}
+				, {xtype: 'hiddenfield', name: 'container_number', value: '<%= params['container_number'] %>'}
+				, {xtype: 'hiddenfield', name: 'rsc_type', value: '<%= params['rsc_type'] %>'}
+				, {xtype: 'hiddenfield', name: 'rsc_id', value: '<%= params['rsc_id'] %>'}
+					
+/*					
+				, {
+					xtype: 'container',
+					//aggiungere capture per forzare scatto foto
+					html: '<input type="file" name=file accept="image/*" >'
+				}
+*/				
+				
+				, 	{
+			        xtype: 'filefield',
+			        width: '90%',
+			        allowBlank: true,
+			        emptyText: 'Seleziona file',
+			        //fieldLabel: 'File',
+			        name: 'file',
+			        buttonText: 'Seleziona',
+			        buttonConfig: {
+			            iconCls: 'upload-icon'
+			        }
+			    }
+			    			    			    
+			],
+			
+			
+			buttons: [
+				{
+					text: 'Chiudi',
+					scale: 'large', cls: 'btn-confirm',
+					handler: function(b){
+						b.up('window').destroy();
+					}
+				},
+				'->',
+				{
+					text: 'Invia',
+					scale: 'large',
+					handler: function(b) {
+										
+						 var form = b.up('form');		
+			             if (form.isValid()) {
+				                
+			                    form.submit({
+			                        url: '<%= url_for(:action=>'attach_file_updload_exe') -%>',
+			                        params: {
+			                        	
+			                        },
+			                    	method: 'POST',
+			                        waitMsg: 'Salvataggio in corso....',
+			                        success: function(fp, o) {
+									    Ext.MessageBox.show({
+					                        title: 'Eseguito',
+					                        buttons: Ext.Msg.OK
+				                    	})										                            
+			                        },
+									failure: function(fp, o) {
+			                            //msg('Success', 'Processed file "' + o.result.file + '" on the server');
+			                            Ext.Msg.alert('Import non eseguito. ', o.result.message);			                            	                            
+			                        }	                        
+			                    });
+			                    return false;                          
+			             } //for isValid  
+
+						
+					}
+				}
+			]
+			
+		}
+	]
+}

@@ -364,5 +364,23 @@ end
    
    render json: {:success => true}
  end 
+
+
+
+  #memorizzo gruista attualmente sulla grui (gruista)
+  #user_id
+  #gru_id
+  def set_gruista_in_gru
+	r = TabConfig.find_or_initialize_by(
+		tab: 'GRUISTA',
+		sez1: params[:gru_id]
+	)
+	r.sez2 = params[:user_id]
+	r.save!
+	render json: {:success => true}
+  end
+
+
+
  
 end

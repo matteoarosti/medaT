@@ -102,6 +102,9 @@ module ShipPreparesHelper
       
       if pos.nil?
         info_container_items = []
+		###info_container_items << add_combo_gruista
+
+
         info_container_items << {
                   xtype: 'panel',
                   html: "Container<br><h1>#{container_to_pos}</h1>"
@@ -134,6 +137,9 @@ module ShipPreparesHelper
       
       #Info container da posizionare
       info_container_items = []
+	  ####info_container_items << add_combo_gruista
+
+
       info_container_items << {
           xtype: 'panel',
           html: "Container<br><h1>#{container_to_pos}</h1>"
@@ -470,5 +476,50 @@ module ShipPreparesHelper
       return baia_status[cell_pos_40.to_s][:container_info][:equipment_style] || c_style_exec  
     end  
   end
+
+
+
+  def add_combo_gruista
+	rec_gruista_attuale = TabConfig.find_by(tab: 'GRUISTA', sez1: params[:gru_id])	
+	id_gruista_attuale = rec_gruista_attuale.nil? ? nil : rec_gruista_attuale.sez2.to_i
+	
+	rec_ids_gruisti = TabConfig.find_by(tab: 'GRUISTI')
+	ids_gruisti = rec_ids_gruisti.nil? ? [] : rec_ids_gruisti.notes.split(',') 
+	
+    {
+		xtype: 'combo', 
+		fieldLabel: 'Gruista', 
+		name: 'user_id' , 
+		allowBlank: false,
+		displayField: 'descr', valueField: 'cod',
+		fieldStyle: 'font-size: 20px',
+		style: 'font-size: 30px',
+		value: id_gruista_attuale,
+		store: {
+			fields: ['cod', 'descr'],
+			data: User.where(id: ids_gruisti).map {|user| {cod: user.id, descr: "#{user.username.upcase}"}}
+		},
+		tpl: '<tpl for=".">' +
+            '<div style="font-size: 20px; padding: 5px" class="x-boundlist-item">{descr}</div>' +
+            '</tpl>',
+		listeners: {
+			change: lj("function(combo, record, index) {
+					//memorizzo utente sulla gru
+					Ext.Ajax.request({
+	                    url: #{raw url_for(:controller=> 'ship_prepares', :action=>'set_gruista_in_gru').to_json},
+	                    method:'POST',                     
+	                    jsonData: {
+							user_id: record,
+							gru_id: #{params[:gru_id]}
+						},										             	
+						success: function(op, opts) {															 											 							
+						}				 
+			    	});
+				}")
+		}
+	}
+  end
+
+
   
 end

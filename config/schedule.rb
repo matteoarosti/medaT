@@ -54,6 +54,7 @@ every 1.day, :at => '11:32 pm' do
 end
 every 1.hours, :at => '00:20' do
   command "/usr/local/bin/wput -R /share_fe/fe_*.csv ftp://Fatturazione:Sc@mbi01234\\!@192.168.200.5/"
+  runner "SetMovedIn.new.correct_date"   #tempo attesa su ingresso/uscita movimentazioni terminal
 end
 
 #report a commerciale@ con i containers da ispezionare...

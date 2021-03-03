@@ -1,0 +1,97 @@
+{
+	success: true,
+	items: [
+		{
+			xtype: 'gridpanel',
+			title: 'Seleziona container',
+			layout: 'fit',
+			autoScroll: true,
+			scroll: true,
+			
+        	    store: new Ext.data.Store({
+        	    	autoLoad: true,
+        	    	fields: [],
+        	    	proxy: {
+        	            url: <%= raw  (root_path + 'tab_notes/search_container').to_json -%>,
+        	            extraParams: {},
+        	            reader: {
+        	                type: 'json',
+							method: 'POST',        	                
+        	                rootProperty: 'items'
+        	            },
+        	            paramsAsJson: true,
+						method: 'POST',
+						type: 'ajax',
+			
+						//Add these two properties
+						actionMethods: {
+							read: 'POST'
+						},        	            
+        	            
+        	        }
+        	    }),
+        	    
+        	    
+        	dockedItems: { 
+        	    xtype: 'toolbar', dock: 'top', itemId: 'toptoolbar', 
+        	    layout: {
+					    type: 'hbox',
+					    pack: 'start',
+					    align: 'stretch'
+					},
+        	    items: [        	    
+    	    	  {
+				    xtype: 'form', flex: 1, layout: 'fit', 							
+				    items: [                	    
+		        	    {emptyText: 'Ricerca container', hasfocus:true,
+	        				"name":"container_number", "xtype": "textfield", flex: 1, width: '100%',
+							listeners: {
+							    'change': function(){ 
+							    	var l_form = this.up('form');							
+				    	            var l_grid = this.up('grid');
+				    	            
+						            if (l_form.isValid()) {
+			    					  l_grid.store.proxy.extraParams = {}	            	
+			    			          l_grid.store.proxy.extraParams = l_form.getValues();
+			    			          l_grid.store.load();				             
+						            }									      
+							    }								    									    
+							  }			        			
+	        			}
+        			 ]
+        			},        			        	    		
+				 	{iconCls: 'fa fa-close fa-2x', scale: 'large', width: 35,
+						 		handler: function(event, toolEl, panel){ 
+				 						this.up('panel').destroy();
+						 			}
+						 		}
+        	     ]
+        	 },        	   
+			
+			columns: [
+				{
+					header: 'Risultati', dataIndex: 'container_number', flex: 1,
+					renderer: function(value, metaData, rec, rowIndex, colIndex, store) {
+						return '<h2>' + value + '</h2>';
+					}
+				}
+			],
+			
+			listeners: {
+					    celldblclick: function(gridView,htmlElement,columnIndex, rec){
+							
+								acs_show_win_std('Abbina foto', 
+										'<%= url_for(:controller=>'tab_notes', :action=>'add_photo') -%>', 
+										    {
+										    	container_number: rec.get('container_number')
+										    	}, 800, 500, {											
+										}, null, 'Y');
+					        
+
+
+					    }
+					}			
+
+		}
+	]
+}

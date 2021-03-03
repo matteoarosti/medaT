@@ -5,6 +5,21 @@ class TabNotesController < ApplicationController
  end 
   
  
+ 
+ def search_container
+   if params[:container_number].to_s.empty?
+    render json: {items: []}
+    return
+   end
+   hhs = HandlingHeader.all
+   hhs.select("DISTINCT container_number")
+   hhs = hhs.where('container_number LIKE ?', "%#{params[:container_number]}%") unless params[:container_number].blank?     
+   hhs = hhs.limit(100)
+   render json: {items: hhs}  
+ end
+ 
+ 
+ 
  def attach_file_updload_exe
    item = TabNote.new
    item.container_number = params[:container_number] if params[:container_number]

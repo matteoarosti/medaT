@@ -237,7 +237,12 @@ s = Ext.create('Ext.container.Viewport',{
 					    	text : '<i class="fa fa-truck fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Visita doganale</span>', 
 					    	height: 60,
 					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'handling_headers', :action=>'list_by_filtered_type', :filtered_type => 'to_be_cust_inspect') -%>', {}, 'tttt');}
-					      }					      
+					      }, {xtype : "button",
+					      	scale: 'large',					       
+					    	text : '<i class="fa fa-photo fa-3x" style="color:white;"></i><span style="margin-left: 20px;">Carica foto</span>', 
+					    	height: 60,
+					    	 handler: function(){acs_show_panel_std(Ext.getCmp('main-panel'), '<%= url_for(:controller=>'tab_notes', :action=>'add_photo_select_container') -%>', {}, 'tttt');}
+					      }				      
 					    ]
 					}
 

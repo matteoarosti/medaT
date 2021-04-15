@@ -183,6 +183,9 @@
 			         if (!Ext.isEmpty(rec.get('notes')))
 			             ret += '<tr><th>Note</th><td>' + rec.get('notes').replace(/(?:\r\n|\r|\n)/g, '<br />') + '</td></tr>';
 			         
+			         if (!Ext.isEmpty(rec.get('booking_notes')))
+			             ret += '<tr><th>Note su Booking</th><td>' + rec.get('booking_notes').replace(/(?:\r\n|\r|\n)/g, '<br />') + '</td></tr>';
+			         
 			         
 			         ret += '</table>';
 			         

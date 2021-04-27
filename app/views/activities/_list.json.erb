@@ -199,7 +199,7 @@
 			        	     Ext.each(rec.get('activity_dett_containers'), function(dett_container) {			        	     	
 								ret += '<br/>&nbsp;- ' + dett_container.container_number;
 								if (dett_container.status == 'ANN')
-								  ret += ' [ANN]';
+								  ret += ' <span style="font-weight:bold; color: red">[ANN]</span>';
 								  
 								if (!Ext.isEmpty(dett_container.make_available_at))
 								  ret += ' [Dis]';

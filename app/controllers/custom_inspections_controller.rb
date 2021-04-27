@@ -153,6 +153,7 @@ Utente: #{item.execution_user_name}<br/>
     params[:data].permit!
     item.update(params[:data])
     ret = item.save!  
+	LogEvent.base(item, 'U', 'exe_modify_record', item.attributes)
     render json: {success: ret}
    end   
    

@@ -62,11 +62,11 @@
        
        <% if !@new_rec.handling_header.with_booking %>
       	  {xtype: 'textfield', name: 'num_booking', fieldLabel: 'Booking', allowBlank: true},
+      	  {xtype: 'displayfield', fieldLabel: 'Attenzione', value: '<font color=red>Per i PIENI: indicare obbligatoriamente il booking</b>'},
        <% end %>
-       
-       {xtype: 'displayfield', fieldLabel: 'Attenzione', value: '<font color=red>Indicare nelle note il booking di provenienza, se non indicato sopra</b>'},
+              
 
-       <%= raw extjs_notes('notes', @hh, @new_rec, :allowBlank => false) -%>
+       <%= raw extjs_notes('notes', @hh, @new_rec, :allowBlank => true) -%>
    ],
    
    

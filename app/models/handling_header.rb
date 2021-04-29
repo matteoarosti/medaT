@@ -370,7 +370,8 @@ def validate_insert_item(hi, name_function = '')
 		#verifico se l'inserimento del booking era opzionale (aggiunto in I_TRANSFER)
 		if op_config_set['booking_copy_is_not_mandatory'] == true ||
 		   (op_config_set['booking_copy_is_not_mandatory'] == 'E' && hi.container_FE == 'E') ||
-		   (op_config_set['booking_copy_is_not_mandatory'] == 'F' && hi.container_FE == 'F') ||
+		   (op_config_set['booking_copy_is_not_mandatory'] == 'F' && hi.container_FE == 'F')
+
 			#passo avanti, segnalo mancanza booking
 		else		
 		    ret[:is_valid] = false

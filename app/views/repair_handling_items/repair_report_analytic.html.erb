@@ -42,6 +42,9 @@ items = items.joins(:repair_estimate_items)
 
 
 group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner_id }
+
+tot_provider_op_dettagliate = 0
+tot_customer_op_dettagliate = 0
 %>
 
 
@@ -112,10 +115,17 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 		<!-- dettagli operazioni preventivo -->		
 		<%
 		 	a_op = a.repair_estimate_items
+		 	a_op = a_op.where("confirmed is null or confirmed <> 0")
    			a_op = a_op.where(is_internal: true) if formValues['show_only_internal']==true
 		%>
 		
 		<% a_op.each do |aop| %>
+		
+		  <% 
+		  	tot_provider_op_dettagliate += (aop.provider_time * aop.provider_hourly_cost) + aop.provider_material_price
+		  	tot_customer_op_dettagliate += (aop.customer_time.to_f * aop.customer_hourly_cost.to_f).to_f + aop.customer_material_price.to_f
+		  %>
+		  
 		  <tr class=liv_d>
 				<td>&nbsp;</td>				
 				<td>&nbsp; &nbsp; > <%= aop.quantity.to_i.to_s -%> <%= aop.repair_processing_name %></td>
@@ -141,13 +151,15 @@ group_shipowner = items.group_by { |d| d.handling_item.handling_header.shipowner
 
 
 	<% end %>
-
-
-
-
-
-
-
-
  
+<% end %>
+
+
+
+<% if formValues['show_op'] == true %>
+<h2>Tot operazione dettagliate (fornitore): <%= number_to_currency(tot_provider_op_dettagliate) -%>
+
+	<% if User.current.admin_can?(:repair, :price) && formValues['show_customer_prices']==true %>	
+		<h2>Tot operazione dettagliate (compagnia): <%= number_to_currency(tot_customer_op_dettagliate) -%>
+	<% end %>
 <% end %>

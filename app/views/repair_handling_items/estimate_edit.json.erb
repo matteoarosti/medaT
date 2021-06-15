@@ -31,6 +31,19 @@
       },
 	
 	  items: [
+	  
+		{ xtype : "button", text: '<i class="fa fa-photo">&nbsp;Foto</i>', width: 70, height: '100%',
+        	cls: 'btn-used', scale: 'medium',
+				
+				handler: function(b){
+					acs_show_win_std('Foto', 
+							 myApp.railsBaseUri + 'tab_notes/list_images',
+	                		 {container_number: <%= raw "#{@item.handling_header.container_number.to_json}}" -%>},
+	                		 null, null, null, null, 'Y');
+		    }, scope: this
+		},						 
+
+	  
 	     <%= raw "{flex: 1, labelAlign: 'right', xtype: 'textfield', fieldLabel: 'Container', value: #{@item.handling_header.container_number.to_json}}" -%>,
 		 <%= raw "{flex: 1, labelAlign: 'right', xtype: 'textfield', fieldLabel: 'Compagnia', value: #{@item.handling_header.shipowner.name.to_json}}" -%>,	     
 	     <%= raw "{flex: 1, labelAlign: 'right', xtype: 'textfield', fieldLabel: 'Equipment', value: #{@item.handling_header.equipment.equipment_type.to_json}}" -%>

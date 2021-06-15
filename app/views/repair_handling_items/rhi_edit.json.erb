@@ -100,7 +100,19 @@
 	                bodyStyle: 'background-color: #e0e0e0;',
 	                defaults: {labelAlign: 'top', xtype: 'displayfield', width: 150, margin: '5 10 5 10'},
 	                items: [	  	 
+					      { xtype : "button", text: '<i class="fa fa-photo">&nbsp;Foto</i>', width: 70, height: '100%',
+					        	cls: 'btn-used', scale: 'medium',
+	 							
+	 							handler: function(b){
+	 								acs_show_win_std('Foto', 
+	 										 myApp.railsBaseUri + 'tab_notes/list_images',
+	 				                		 {container_number: b.up('#tab_panel').getViewModel().getData().rec.handling_header.container_number},
+	 				                		 null, null, null, null, 'Y');
+							    }, scope: this
+							},						 
+
 					     <%= raw "{flex: 1, fieldLabel: 'Container', value: #{@item.handling_header.container_number.to_json}}" -%>,
+						 
 						 <%= raw "{flex: 1, fieldLabel: 'Compagnia', value: #{@item.handling_header.shipowner.name.to_json}}" -%>,	     
 					     <%= raw "{flex: 1, fieldLabel: 'Equipment', value: #{@item.handling_header.equipment.equipment_type.to_json}}" -%>
 				    ]

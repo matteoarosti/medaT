@@ -53,7 +53,7 @@
 			     , <%= raw extjs_std_booleanfield('to_be_made_available', Activity.new, {}, {hidden: true,readOnly: false, fieldLabel: 'Messa a disposizione', width: 300, labelWidth: 260, disabled: false}) -%>			     
 				 , <%= raw extjs_std_combo_model('terminal', Activity.new, {}, {flex: 1, fieldLabel: 'Terminal'}) -%>				 			     
 			     
-			     , {xtype: 'textfield',   fieldLabel: 'Booking', flex: 1, name: 'booking_number', limit: 10}			     
+			     , {xtype: 'textfield',   fieldLabel: 'Booking', flex: 1, name: 'booking_number', maxLength: 10}			     
 			     , {xtype: 'numberfield', fieldLabel: 'Quantit&agrave;', flex: 1, name: 'quantity', hideTrigger: true, width: '40%', allowBlank: false}
 			     , <%= raw extjs_std_datefield('expiration_date', Activity.new, {}, {fieldLabel: 'Da effettuare il'}) -%>
 			     , {xtype: 'textarea',   fieldLabel: 'Note', name: 'notes', fieldStyle: 'font-size: 1em;'}
